@@ -218,8 +218,11 @@ Plug 'puremourning/vimspector'
 
 
 " lsp
-Plug 'neovim/nvim-lspconfig'
-Plug 'williamboman/nvim-lsp-installer'
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'williamboman/nvim-lsp-installer'
+
+" debug
+" Plug 'mfussenegger/nvim-dap'
 
 
 call plug#end()
@@ -458,6 +461,7 @@ let g:coc_global_extensions = [
     \'coc-python',
     \'coc-json',
     \'coc-java',
+    \'coc-java-debug',
     \'coc-xml',
     \'coc-html',
     \'coc-flutter',
@@ -689,16 +693,18 @@ nnoremap <space>el :CocList explPresets
 "==============================================================================
 "  coc-java-debug 配置
 "==============================================================================
-function! JavaStartDebugCallback(err, port)
-  execute "cexpr! 'Java debug started on port: " . a:port . "'"
-  call vimspector#LaunchWithSettings({ "configuration": "Java Attach", "AdapterPort": a:port })
-endfunction
+nmap <F1> :CocCommand java.debug.vimspector.start<CR>
 
-function JavaStartDebug()
-  call CocActionAsync('runCommand', 'vscode.java.startDebugSession', function('JavaStartDebugCallback'))
-endfunction
-
-nmap <F1> :call JavaStartDebug()<CR>
+" function! JavaStartDebugCallback(err, port)
+"   execute "cexpr! 'Java debug started on port: " . a:port . "'"
+"   call vimspector#LaunchWithSettings({ "configuration": "Java Attach", "AdapterPort": a:port })
+" endfunction
+" 
+" function JavaStartDebug()
+"   call CocActionAsync('runCommand', 'vscode.java.startDebugSession', function('JavaStartDebugCallback'))
+" endfunction
+" 
+" nmap <F5> :call JavaStartDebug()<CR>
 
 "==============================================================================
 "  asynctasks异步执行任务插件 配置
@@ -741,6 +747,8 @@ let g:Lf_ShortcutF = '<C-P>'
 "  voldikss/vim-floaterm 配置
 "==============================================================================
 let g:floaterm_keymap_new = '<Leader>ft'
+nnoremap   <silent>   <F12>   :FloatermToggle<CR>
+tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
 
 " Set floaterm window's background to black
 " hi Floaterm guibg=black
@@ -753,6 +761,7 @@ let g:floaterm_keymap_new = '<Leader>ft'
 autocmd User FloatermOpen        " triggered after opening a new/existed floaterm
 
 let g:floaterm_position='bottomright'
+let g:floaterm_autoclose=1
 let g:floaterm_wintype='float'
 let g:floaterm_width=0.6
 let g:floaterm_height=0.4
