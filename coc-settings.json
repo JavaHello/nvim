@@ -1,0 +1,37 @@
+{
+  "java.configuration.maven.userSettings": "/opt/software/apache-maven-3.6.3/conf/settings.xml",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-1.8",
+      "path": "/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home"
+    },
+    {
+      "name": "JavaSE-11",
+      "path": "/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home"
+    }
+  ],
+  "java.home": "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home",
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m -javaagent:\"/Users/kailuo/.vscode/extensions/gabrielbb.vscode-lombok-1.0.1/server/lombok.jar\"",
+
+  "explorer.icon.enableNerdfont": true,
+  "explorer.width": 31,
+  "explorer.quitOnOpen": true,
+  "explorer.sources": [
+    {
+      "name": "bookmark",
+      "expand": false
+    },
+    {
+      "name": "buffer",
+      "expand": false
+    },
+    {
+      "name": "file",
+      "expand": true
+    }
+  ],
+  "explorer.file.showHiddenFiles": true,
+  "explorer.git.showIgnored": true,
+  "java.format.settings.url": "/Users/kailuo/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml",
+  "rust-analyzer.server.path": "~/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rust-analyzer"
+}
