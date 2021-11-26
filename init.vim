@@ -357,9 +357,9 @@ highlight Normal guibg=NONE ctermbg=None
 "==============================================================================
 " ctrlp-funky 插件配置
 "==============================================================================
-map <F6> :CtrlPFunky<cr>
-let g:ctrlp_extensions = ['funky']
-let g:ctrlp_funky_syntax_highlight = 1
+" map <F6> :CtrlPFunky<cr>
+" let g:ctrlp_extensions = ['funky']
+" let g:ctrlp_funky_syntax_highlight = 1
 
 
 
@@ -709,6 +709,13 @@ nmap <F1> :CocCommand java.debug.vimspector.start<CR>
 " 
 " nmap <F5> :call JavaStartDebug()<CR>
 
+
+"==============================================================================
+"  coc-highlight 配置
+"==============================================================================
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
 "==============================================================================
 "  asynctasks异步执行任务插件 配置
 "==============================================================================
@@ -728,7 +735,7 @@ nnoremap <silent> <space>t  :<C-u>CocList tasks<cr>
 "==============================================================================
 " default 0
 let g:blamer_enabled = 1
-let g:blamer_delay = 500
+let g:blamer_delay = 400
 let g:blamer_show_in_visual_modes = 0
 let g:blamer_show_in_insert_modes = 0
 " let g:blamer_prefix = ' > '

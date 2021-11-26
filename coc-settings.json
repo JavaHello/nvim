@@ -9,6 +9,7 @@
   "java.templates.fileHeader": ["${user}"],
   "java.templates.typeComment": ["${user}"],
   "java.configuration.maven.userSettings": "/opt/software/apache-maven-3.6.3/conf/settings.xml",
+  "java.maven.downloadSources": true,
   "java.maven.updateSnapshots": true,
   "java.format.enabled": true,
   "java.saveActions.organizeImports": true,
@@ -16,6 +17,12 @@
   "java.sources.organizeImports.starThreshold": 99,
   "java.sources.organizeImports.staticStarThreshold": 99,
   "java.format.settings.url": "/Users/kailuo/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml",
+  "java.project.resourceFilters": [
+    "node_modules",
+    ".git",
+    ".idea",
+    "target"
+  ],
   "java.configuration.runtimes": [
     {
       "name": "JavaSE-1.8",
@@ -51,5 +58,7 @@
   "explorer.file.showHiddenFiles": true,
   "explorer.git.showIgnored": true,
 
-  "rust-analyzer.server.path": "~/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rust-analyzer"
+  "rust-analyzer.server.path": "~/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rust-analyzer",
+
+  "coc.preferences.colorSupport": false 
 }
