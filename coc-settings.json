@@ -1,5 +1,21 @@
 {
+  "codeLens.enable": true,
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "diagnostic.errorSign": "\ufc65",
+  "diagnostic.warningSign": "\uf06a",
+  "diagnostic.infoSign": "\uf05a",
+  "diagnostic.hintSign": "\uf864",
+
+  "java.templates.fileHeader": ["${user}"],
+  "java.templates.typeComment": ["${user}"],
   "java.configuration.maven.userSettings": "/opt/software/apache-maven-3.6.3/conf/settings.xml",
+  "java.maven.updateSnapshots": true,
+  "java.format.enabled": true,
+  "java.saveActions.organizeImports": true,
+  "java.selectionRange.enabled": true,
+  "java.sources.organizeImports.starThreshold": 99,
+  "java.sources.organizeImports.staticStarThreshold": 99,
+  "java.format.settings.url": "/Users/kailuo/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml",
   "java.configuration.runtimes": [
     {
       "name": "JavaSE-1.8",
@@ -14,7 +30,6 @@
   "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m -javaagent:\"/Users/kailuo/.vscode/extensions/gabrielbb.vscode-lombok-1.0.1/server/lombok.jar\"",
   "java.referencesCodeLens.enabled": true,
   "java.implementationsCodeLens.enabled": true,
-  "codeLens.enable": true,
 
   "explorer.icon.enableNerdfont": true,
   "explorer.width": 31,
@@ -35,6 +50,6 @@
   ],
   "explorer.file.showHiddenFiles": true,
   "explorer.git.showIgnored": true,
-  "java.format.settings.url": "/Users/kailuo/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml",
+
   "rust-analyzer.server.path": "~/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rust-analyzer"
 }
