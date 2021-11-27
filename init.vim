@@ -479,8 +479,11 @@ let g:coc_global_extensions = [
     \'coc-project',
     \'coc-gitignore',
     \'coc-word',
+    \'coc-sh',
+    \'coc-imselect',
     \'coc-css']
-
+" 插件列表备注
+" coc-imselect 输入法中英显示 Mac 下专用
 
 " TextEdit might fail if hidden is not set.
 set hidden
