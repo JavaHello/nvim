@@ -191,7 +191,7 @@ Plug 'tpope/vim-surround'
 " 最近打开文件
 Plug 'mhinz/vim-startify'
 
-" 全局查找插件
+" 全局查找替换插件
 Plug 'brooth/far.vim'
 
 " 异步执行任务插件
