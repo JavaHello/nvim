@@ -60,5 +60,8 @@
 
   "rust-analyzer.server.path": "~/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rust-analyzer",
 
+  "highlight.colors.enable": true,
+  "highlight.colorNames.enable": true,
+  "highlight.document.enable": true,
   "coc.preferences.colorSupport": false 
 }

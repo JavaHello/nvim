@@ -24,9 +24,9 @@ set showcmd " 显示命令
 set wildmenu " 可选菜单
 
 " 可以在buffer的任何地方使用鼠标（类似office中在工作区双击鼠标定位）
-set mouse=a
-set selection=exclusive
-set selectmode=mouse,key
+" set mouse=a
+" set selection=exclusive
+" set selectmode=mouse,key
 
 " 在被分割的窗口间显示空白，便于阅读
 set fillchars=vert:│
@@ -472,6 +472,7 @@ let g:coc_global_extensions = [
     \'coc-floaterm',
     \'coc-translator',
     \'coc-toml',
+    \'coc-markdownlint',
     \'coc-css']
 
 
@@ -487,7 +488,7 @@ set nowritebackup
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=100
+set updatetime=400
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -709,11 +710,6 @@ nmap <F1> :CocCommand java.debug.vimspector.start<CR>
 " 
 " nmap <F5> :call JavaStartDebug()<CR>
 
-
-"==============================================================================
-"  coc-highlight 配置
-"==============================================================================
-autocmd CursorHold * silent call CocActionAsync('highlight')
 
 
 "==============================================================================
