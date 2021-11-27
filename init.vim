@@ -226,6 +226,9 @@ Plug 'puremourning/vimspector'
 " debug
 " Plug 'mfussenegger/nvim-dap'
 
+" 数据库客户端
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui'
 
 call plug#end()
 " 主题设置
@@ -473,6 +476,9 @@ let g:coc_global_extensions = [
     \'coc-translator',
     \'coc-toml',
     \'coc-markdownlint',
+    \'coc-project',
+    \'coc-gitignore',
+    \'coc-word',
     \'coc-css']
 
 
@@ -633,9 +639,16 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " nnoremap <silent> <C-p>@ :<C-u>CocList outline<CR>
 
 
+"==============================================================================
+"  coc-translator 配置
+"==============================================================================
 nmap <Leader>t <Plug>(coc-translator-p)
 vmap <Leader>t <Plug>(coc-translator-pv)
 
+"==============================================================================
+"  coc-floaterm 配置
+"==============================================================================
+nnoremap <silent> <space>ft  :<C-u>CocList floaterm<cr>
 
 "==============================================================================
 "  coc.explorer 配置
