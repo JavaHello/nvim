@@ -24,9 +24,9 @@ set showcmd " 显示命令
 set wildmenu " 可选菜单
 
 " 可以在buffer的任何地方使用鼠标（类似office中在工作区双击鼠标定位）
-" set mouse=a
-" set selection=exclusive
-" set selectmode=mouse,key
+set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
 
 " 在被分割的窗口间显示空白，便于阅读
 set fillchars=vert:│
@@ -481,6 +481,7 @@ let g:coc_global_extensions = [
     \'coc-word',
     \'coc-sh',
     \'coc-imselect',
+    \'coc-clangd',
     \'coc-css']
 " 插件列表备注
 " coc-imselect 输入法中英显示 Mac 下专用
@@ -834,3 +835,9 @@ let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 
 
 
+"==============================================================================
+"  自定义配置
+"==============================================================================
+
+" %bd 删除所有缓冲区, e# 打开最后一个缓冲区, bd# 关闭[No Name]
+noremap <Leader>o :%bd\|e#\|bd#<CR>

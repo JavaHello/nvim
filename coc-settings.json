@@ -60,6 +60,9 @@
 
   "rust-analyzer.server.path": "~/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/rust-analyzer",
 
+  "clangd.path": "/opt/homebrew/Cellar/llvm/13.0.0_1/bin/clangd",
+  
+
   "highlight.colors.enable": true,
   "highlight.colorNames.enable": true,
   "highlight.document.enable": true,
