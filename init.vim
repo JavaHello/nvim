@@ -476,7 +476,6 @@ let g:coc_global_extensions = [
     \'coc-translator',
     \'coc-toml',
     \'coc-markdownlint',
-    \'coc-project',
     \'coc-gitignore',
     \'coc-word',
     \'coc-sh',
