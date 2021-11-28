@@ -239,6 +239,11 @@ colorscheme gruvbox
 " hi Normal ctermfg=252 ctermbg=none
 highlight Normal guibg=NONE ctermbg=None
 
+
+
+" 退出 terminal 模式
+tnoremap <Esc> <C-\><C-N>
+
 " "==============================================================================
 " " nerdtree 文件列表插件配置
 " "==============================================================================
