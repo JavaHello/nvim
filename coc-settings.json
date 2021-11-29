@@ -16,7 +16,7 @@
   "java.selectionRange.enabled": true,
   "java.sources.organizeImports.starThreshold": 99,
   "java.sources.organizeImports.staticStarThreshold": 99,
-  "java.format.settings.url": "/Users/kailuo/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml",
+  "java.format.settings.url": "/opt/software/java-format-style/eclipse-java-google-style.xml",
   "java.project.resourceFilters": [
     "node_modules",
     ".git",
