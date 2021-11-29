@@ -74,6 +74,9 @@ set background=dark
 set nobackup
 set noswapfile
 
+" 恢复上次光标位置
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
 
 " ============================================================================
 " 快捷键配置
@@ -640,7 +643,8 @@ nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 " Show commands.
 nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document.
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" see Vista.vim plugin
+" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
@@ -853,6 +857,8 @@ let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 "==============================================================================
 "  liuchengxu/vista.vim 配置
 "==============================================================================
+nnoremap <silent> <space>o  :<C-u>Vista!!<cr>
+
 function! NearestMethodOrFunction() abort
   return get(b:, 'vista_nearest_method_or_function', '')
 endfunction
@@ -899,3 +905,4 @@ let g:vista#renderer#icons = {
 
 " %bd 删除所有缓冲区, e# 打开最后一个缓冲区, bd# 关闭[No Name]
 noremap <Leader>o :%bd\|e#\|bd#<CR>
+
