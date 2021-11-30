@@ -243,6 +243,14 @@ Plug 'junegunn/vim-easy-align'
 " LSP 大纲插件
 Plug 'liuchengxu/vista.vim'
 
+" 彩虹括号
+Plug 'luochen1990/rainbow'
+
+" plantuml 语法高亮
+Plug 'aklt/plantuml-syntax'
+
+" markdown 预览插件
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 call plug#end()
 " 主题设置
@@ -779,6 +787,7 @@ let g:blamer_date_format = '%Y-%m-%d %H:%M:%S'
 "==============================================================================
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_ShortcutF = '<C-P>'
+" 不使用缓存(大型项目不推荐)
 let g:Lf_UseCache=0
 let g:Lf_UseMemoryCache=0
 
@@ -898,6 +907,16 @@ let g:vista#renderer#icons = {
 \  }
 
 
+"==============================================================================
+"  vim-dadbod-ui 配置
+"==============================================================================
+let g:db_ui_use_nerd_fonts = 1
+
+"==============================================================================
+"  luochen1990/rainbow 配置
+"==============================================================================
+" 彩虹括号不太习惯，暂时关闭
+let g:rainbow_active = 0
 
 "==============================================================================
 "  自定义配置
