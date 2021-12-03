@@ -444,7 +444,7 @@ let g:NERDSpaceDelims = 1 " 默认情况下，在注释分割符后添加空格
 let g:NERDCompactSexyComs = 1 " 使用紧凑语法进行美化的多行s注释
 let g:NERDDefaultAlign = 'left' " 让对齐向注释分割符向左而不是跟随代码缩进
 let g:NERDAltDelims_java = 1 " 默认情况，将语言设置为使用其备用分割符
-let g:NERDCustomDelimiters = { 'c': { 'left': '/**', 'right': '*/'}} " 添加自定义格式
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**', 'right': '*/'}, 'java': { 'left': '//', 'right': ''}} " 添加自定义格式
 let g:NERDCommentEmptyLines = 1 " 允许注释和反转空行(在注释区域时很有用)
 let g:NERDTrimTrailingWhitespace = 1 " 在取消s注释时启用尾部空格的修剪
 let g:NERDToggleCheckAllLines = 1 " 启用检查是否以注释
@@ -491,7 +491,7 @@ let g:coc_global_extensions = [
     \'coc-vetur',
     \'coc-tsserver',
     \'coc-rust-analyzer',
-    \'coc-python',
+    \'coc-pyright',
     \'coc-json',
     \'coc-java',
     \'coc-java-debug',
@@ -925,3 +925,4 @@ let g:rainbow_active = 0
 " %bd 删除所有缓冲区, e# 打开最后一个缓冲区, bd# 关闭[No Name]
 noremap <Leader>o :%bd\|e#\|bd#<CR>
 
+let g:python3_host_prog='/opt/homebrew/bin/python3'
