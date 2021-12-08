@@ -817,7 +817,7 @@ noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
 
 " search visually selected text literally, don't quit LeaderF after accepting an entry
 " xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F --stayOpen -e %s ", leaderf#Rg#visual())<CR>
-xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -e %s ", leaderf#Rg#visual())<CR>
+xnoremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", leaderf#Rg#visual())<CR>
 
 " recall last search. If the result window is closed, reopen it.
 noremap go :<C-U>Leaderf! rg --recall<CR>
