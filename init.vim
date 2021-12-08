@@ -29,7 +29,7 @@ set selection=exclusive
 set selectmode=mouse,key
 
 " 在被分割的窗口间显示空白，便于阅读
-set fillchars=vert:│
+set fillchars="vert:│,fold:·,sep:│"
 " set fillchars=vert:\
 " ,stl:\ ,stlnc:\
 " set ambiwidth=double
@@ -924,5 +924,6 @@ let g:rainbow_active = 0
 
 " %bd 删除所有缓冲区, e# 打开最后一个缓冲区, bd# 关闭[No Name]
 noremap <Leader>o :%bd\|e#\|bd#<CR>
+noremap <Leader>w :bw<CR>
 
 let g:python3_host_prog='/opt/homebrew/bin/python3'

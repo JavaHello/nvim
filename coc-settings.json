@@ -6,8 +6,6 @@
   "diagnostic.infoSign": "\uf05a",
   "diagnostic.hintSign": "\uf864",
 
-  "java.templates.fileHeader": ["${user}"],
-  "java.templates.typeComment": ["${user}"],
   "java.configuration.maven.userSettings": "/opt/software/apache-maven-3.6.3/conf/settings.xml",
   "java.maven.downloadSources": true,
   "java.maven.updateSnapshots": true,
@@ -16,7 +14,7 @@
   "java.selectionRange.enabled": true,
   "java.sources.organizeImports.starThreshold": 99,
   "java.sources.organizeImports.staticStarThreshold": 99,
-  "java.format.settings.url": "/opt/software/java-format-style/eclipse-java-google-style.xml",
+  "java.format.settings.url": "/opt/software/java-format-style/alibaba/eclipse-codestyle.xml",
   "java.project.resourceFilters": [
     "node_modules",
     ".git",
