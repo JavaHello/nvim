@@ -10,7 +10,7 @@
   "java.maven.downloadSources": true,
   "java.maven.updateSnapshots": true,
   "java.format.enabled": true,
-  "java.saveActions.organizeImports": true,
+  "java.saveActions.organizeImports": false,
   "java.selectionRange.enabled": true,
   "java.sources.organizeImports.starThreshold": 99,
   "java.sources.organizeImports.staticStarThreshold": 99,
