@@ -55,6 +55,7 @@ autocmd Filetype html setlocal ts=2 sw=2 expandtab
 autocmd Filetype css setlocal ts=2 sw=2 expandtab
 autocmd Filetype javascript setlocal ts=2 sw=2 expandtab
 autocmd Filetype json setlocal ts=2 sw=2 expandtab
+autocmd Filetype lua setlocal ts=2 sw=2 expandtab
 
 syntax enable " 语法高亮
 syntax on
@@ -107,6 +108,17 @@ noremap <right> :vertical resize -2<CR>
 
 " 分割线
 " set fillchars=vert:'│'
+
+if exists('g:neovide')
+    let g:neovide_cursor_vfx_mode = "railgun"
+    set guifont=DejaVuSansMono\ Nerd\ Font:h14
+    let g:neovide_transparency=0.8
+    " let g:neovide_fullscreen=v:true
+    let g:neovide_remember_window_size = v:true
+    let g:neovide_input_use_logo=v:true
+else
+endif
+
 
 " 插件配置
 call plug#begin('~/.vim/plugged')
@@ -929,6 +941,7 @@ let g:rainbow_active = 0
 noremap <Leader>o :%bd\|e#\|bd#<CR>
 noremap <Leader>w :bw<CR>
 
+let g:python_host_prog='/usr/bin/python'
 let g:python3_host_prog='/opt/homebrew/bin/python3'
 
 
