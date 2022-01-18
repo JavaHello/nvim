@@ -33,7 +33,7 @@
   ],
   "java.home": "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home",
   "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m -javaagent:\"/Users/kailuo/.vscode/extensions/gabrielbb.vscode-lombok-1.0.1/server/lombok.jar\"",
-  "java.referencesCodeLens.enabled": true,
+  "java.referencesCodeLens.enabled": false,
   "java.implementationsCodeLens.enabled": true,
 
   "explorer.icon.enableNerdfont": true,

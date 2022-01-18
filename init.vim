@@ -146,6 +146,10 @@ Plug 'vim-airline/vim-airline-themes'
 " 类似 ctrlp 功能
 " Plug 'Shougo/denite.nvim', {'do': ':UpdateRemotePlugins' }
 
+" 文件管理
+" Plug 'kyazdani42/nvim-web-devicons' " for file icons
+" Plug 'kyazdani42/nvim-tree.lua'
+
 " 大纲
 Plug 'majutsushi/tagbar'
 
@@ -519,7 +523,6 @@ let g:coc_global_extensions = [
     \'coc-toml',
     \'coc-markdownlint',
     \'coc-gitignore',
-    \'coc-word',
     \'coc-sh',
     \'coc-imselect',
     \'coc-clangd',
@@ -697,7 +700,7 @@ vmap <Leader>t <Plug>(coc-translator-pv)
 nnoremap <silent> <space>ft  :<C-u>CocList floaterm<cr>
 
 "==============================================================================
-"  coc.explorer 配置
+"  coc-explorer 配置
 "==============================================================================
 let g:coc_explorer_global_presets = {
 \   '.vim': {
@@ -869,7 +872,7 @@ autocmd User FloatermOpen        " triggered after opening a new/existed floater
 let g:floaterm_position='bottomright'
 let g:floaterm_autoclose=1
 let g:floaterm_wintype='float'
-let g:floaterm_width=0.6
+let g:floaterm_width=1.0
 let g:floaterm_height=0.4
 let g:floaterm_rootmarkers=['.project', '.git', '.hg', '.svn', '.root', '.gitignore']
 
@@ -909,7 +912,7 @@ let g:vista_default_executive = 'coc'
 " To enable fzf's preview window set g:vista_fzf_preview.
 " The elements of g:vista_fzf_preview will be passed as arguments to fzf#vim#with_preview()
 " For example:
-let g:vista_fzf_preview = ['right:50%']
+" let g:vista_fzf_preview = ['right:50%']
 
 
 " Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
@@ -945,6 +948,9 @@ let g:python_host_prog='/usr/bin/python'
 let g:python3_host_prog='/opt/homebrew/bin/python3'
 
 
+"==============================================================================
+"  nvim-treesitter 配置
+"==============================================================================
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
   -- One of "all", "maintained" (parsers with maintainers), or a list of languages
