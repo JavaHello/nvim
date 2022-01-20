@@ -157,6 +157,8 @@ Plug 'akinsho/bufferline.nvim'
 " blankline
 Plug 'lukas-reineke/indent-blankline.nvim'
 
+"
+Plug 'andymass/vim-matchup'
 
 " 大纲
 Plug 'majutsushi/tagbar'
@@ -983,6 +985,10 @@ require'nvim-treesitter.configs'.setup {
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
+  matchup = {
+    enable = true,
+    disable = { "c", "rust" },
+  },
 }
 EOF
 
@@ -1013,3 +1019,9 @@ require("indent_blankline").setup {
 --    show_current_context_start = true,
 }
 EOF
+
+
+"==============================================================================
+"  andymass/vim-matchup 配置
+"==============================================================================
+" let g:loaded_matchit = 1
