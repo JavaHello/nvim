@@ -146,9 +146,17 @@ Plug 'vim-airline/vim-airline-themes'
 " 类似 ctrlp 功能
 " Plug 'Shougo/denite.nvim', {'do': ':UpdateRemotePlugins' }
 
+Plug 'kyazdani42/nvim-web-devicons' " for file icons
 " 文件管理
-" Plug 'kyazdani42/nvim-web-devicons' " for file icons
 " Plug 'kyazdani42/nvim-tree.lua'
+
+" 缓冲区标题栏
+Plug 'akinsho/bufferline.nvim'
+
+
+" blankline
+Plug 'lukas-reineke/indent-blankline.nvim'
+
 
 " 大纲
 Plug 'majutsushi/tagbar'
@@ -975,5 +983,33 @@ require'nvim-treesitter.configs'.setup {
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
+}
+EOF
+
+"==============================================================================
+"  akinsho/bufferline.nvim 配置
+"==============================================================================
+lua << EOF
+require("bufferline").setup{
+  options = {
+    diagnostics = "coc",
+  }
+}
+EOF
+
+
+"==============================================================================
+"  backlien 配置
+"==============================================================================
+lua << EOF
+vim.opt.list = true
+-- vim.opt.listchars:append("space:⋅")
+-- vim.opt.listchars:append("eol:↴")
+
+require("indent_blankline").setup {
+--    show_end_of_line = true,
+--    space_char_blankline = " ",
+    show_current_context = true,
+--    show_current_context_start = true,
 }
 EOF
