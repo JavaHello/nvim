@@ -226,7 +226,7 @@ Plug 'brooth/far.vim'
 " 异步执行任务插件
 Plug 'skywind3000/asynctasks.vim'
 Plug 'skywind3000/asyncrun.vim'
-Plug 'skywind3000/asyncrun.extra'
+" Plug 'skywind3000/asyncrun.extra'
 
 " jsx 插件
 Plug 'chemzqm/vim-jsx-improve'
@@ -242,6 +242,7 @@ Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 
 " 浮动终端
 Plug 'voldikss/vim-floaterm'
+Plug 'voldikss/LeaderF-floaterm'
 
 " debug 插件
 Plug 'puremourning/vimspector'
@@ -536,6 +537,7 @@ let g:coc_global_extensions = [
     \'coc-sh',
     \'coc-imselect',
     \'coc-clangd',
+    \'coc-sql',
     \'coc-css']
 " 插件列表备注
 " coc-imselect 输入法中英显示 Mac 下专用
