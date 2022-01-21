@@ -282,6 +282,9 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 " 代码高亮
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+" 快捷键提示
+Plug 'folke/which-key.nvim'
+
 call plug#end()
 " 主题设置
 colorscheme gruvbox
@@ -1027,3 +1030,16 @@ EOF
 "  andymass/vim-matchup 配置
 "==============================================================================
 " let g:loaded_matchit = 1
+
+
+"==============================================================================
+"  folke/which-key.nvim 配置
+"==============================================================================
+
+lua << EOF
+  require("which-key").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
+EOF
