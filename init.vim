@@ -285,6 +285,9 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " 快捷键提示
 Plug 'folke/which-key.nvim'
 
+" 颜色显示 
+Plug 'norcalli/nvim-colorizer.lua'
+
 call plug#end()
 " 主题设置
 colorscheme gruvbox
@@ -1042,4 +1045,11 @@ lua << EOF
     -- or leave it empty to use the default settings
     -- refer to the configuration section below
   }
+EOF
+
+"==============================================================================
+"  norcalli/nvim-colorizer.lua 配置
+"==============================================================================
+lua << EOF
+require'colorizer'.setup()
 EOF
