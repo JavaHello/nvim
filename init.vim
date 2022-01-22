@@ -1129,7 +1129,7 @@ require'nvim-tree'.setup {
   },
   update_focused_file = {
     enable      = true,
-    update_cwd  = false,
+    update_cwd  = true,
     ignore_list = {}
   },
   system_open = {
@@ -1244,3 +1244,4 @@ set termguicolors " this variable must be enabled for colors to be applied prope
 highlight NvimTreeFolderIcon guibg=blue
 
 nnoremap <space>n :NvimTreeToggle<CR>
+
