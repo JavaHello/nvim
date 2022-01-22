@@ -823,7 +823,7 @@ let g:asynctasks_term_pos = 'floaterm'
 let g:asyncrun_term_pos = 'floaterm'
 
 " Search workspace tasks.
-nnoremap <silent> <space>t  :<C-u>CocList tasks<cr>
+nnoremap <silent> <space>r  :<C-u>CocList tasks<cr>
 
 
 
@@ -894,7 +894,7 @@ noremap go :<C-U>Leaderf! rg --recall<CR>
 "==============================================================================
 "  voldikss/vim-floaterm 配置
 "==============================================================================
-let g:floaterm_keymap_new = '<Leader>ft'
+let g:floaterm_keymap_new = '<space>t'
 nnoremap   <silent>   <F12>   :FloatermToggle<CR>
 tnoremap   <silent>   <F12>   <C-\><C-n>:FloatermToggle<CR>
 
