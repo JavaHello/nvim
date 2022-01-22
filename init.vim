@@ -291,6 +291,24 @@ Plug 'norcalli/nvim-colorizer.lua'
 " 消息通知
 Plug 'rcarriga/nvim-notify'
 
+" wildmenu 补全美化
+if has('nvim')
+  function! UpdateRemotePlugins(...)
+    " Needed to refresh runtime files
+    let &rtp=&rtp
+    UpdateRemotePlugins
+  endfunction
+
+  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+else
+  Plug 'gelguy/wilder.nvim'
+
+  " To use Python remote plugin features in Vim, can be skipped
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+
 call plug#end()
 " 主题设置
 colorscheme gruvbox
@@ -1095,3 +1113,46 @@ require("notify").setup({
   },
 })
 EOF
+
+"==============================================================================
+"  wilder 配置
+"==============================================================================
+" Default keys
+call wilder#setup({
+      \ 'modes': [':', '/', '?'],
+      \ 'next_key': '<Tab>',
+      \ 'previous_key': '<S-Tab>',
+      \ 'accept_key': '<Down>',
+      \ 'reject_key': '<Up>',
+      \ })
+
+
+let s:popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
+      \ 'highlighter': wilder#basic_highlighter(),
+      \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
+      \ 'pumblend': 10,
+      \ 'left': [
+      \   ' ', wilder#popupmenu_devicons(),
+      \ ],
+      \ 'right': [
+      \   ' ', wilder#popupmenu_scrollbar(),
+      \ ],
+      \ 'highlights': {
+      \   'border': 'Normal',
+      \ },
+      \ 'border': 'rounded',
+      \ }))
+
+let s:wildmenu_renderer = wilder#wildmenu_renderer({
+      \ 'highlighter': wilder#basic_highlighter(),
+      \ 'separator': ' | ',
+      \ 'left': [' ', wilder#wildmenu_spinner(), ' '],
+      \ 'right': [' ', wilder#wildmenu_index()],
+      \ })
+
+call wilder#set_option('renderer', wilder#renderer_mux({
+      \ ':': s:popupmenu_renderer,
+      \ '/': s:wildmenu_renderer,
+      \ 'substitute': s:wildmenu_renderer,
+      \ }))
+
