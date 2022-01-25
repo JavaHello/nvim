@@ -561,7 +561,6 @@ let g:coc_global_extensions = [
     \'coc-markdownlint',
     \'coc-gitignore',
     \'coc-sh',
-    \'coc-imselect',
     \'coc-clangd',
     \'coc-sql',
     \'coc-css']
