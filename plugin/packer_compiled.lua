@@ -74,6 +74,21 @@ _G.packer_plugins = {
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/LeaderF",
     url = "https://github.com/Yggdroot/LeaderF"
   },
+  ["LeaderF-floaterm"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/LeaderF-floaterm",
+    url = "https://github.com/voldikss/LeaderF-floaterm"
+  },
+  ["asyncrun.vim"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/asyncrun.vim",
+    url = "https://github.com/skywind3000/asyncrun.vim"
+  },
+  ["asynctasks.vim"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/asynctasks.vim",
+    url = "https://github.com/skywind3000/asynctasks.vim"
+  },
   ["bufferline.nvim"] = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/bufferline.nvim",
@@ -104,6 +119,11 @@ _G.packer_plugins = {
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/cmp-vsnip",
     url = "https://github.com/hrsh7th/cmp-vsnip"
   },
+  ["feline.nvim"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/feline.nvim",
+    url = "https://github.com/feline-nvim/feline.nvim"
+  },
   ["friendly-snippets"] = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/friendly-snippets",
@@ -118,6 +138,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/gruvbox",
     url = "https://github.com/morhetz/gruvbox"
+  },
+  ["indent-blankline.nvim"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
+    url = "https://github.com/lukas-reineke/indent-blankline.nvim"
   },
   ["lspkind-nvim"] = {
     loaded = true,
@@ -169,15 +194,35 @@ _G.packer_plugins = {
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
   },
+  ["vim-floaterm"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vim-floaterm",
+    url = "https://github.com/voldikss/vim-floaterm"
+  },
   ["vim-fugitive"] = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vim-fugitive",
     url = "https://github.com/tpope/vim-fugitive"
   },
+  ["vim-matchup"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vim-matchup",
+    url = "https://github.com/andymass/vim-matchup"
+  },
+  ["vim-visual-multi"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vim-visual-multi",
+    url = "https://github.com/mg979/vim-visual-multi"
+  },
   ["vim-vsnip"] = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vim-vsnip",
     url = "https://github.com/hrsh7th/vim-vsnip"
+  },
+  ["vista.vim"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vista.vim",
+    url = "https://github.com/liuchengxu/vista.vim"
   }
 }
 

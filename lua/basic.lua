@@ -6,7 +6,7 @@ vim.wo.relativenumber = true
 vim.wo.cursorline = true
 
 -- 右侧参考线，超过表示代码太长了，考虑换行
-vim.wo.colorcolumn = "80"
+-- vim.wo.colorcolumn = "80"
 
 
 vim.g.encoding = "UTF-8"

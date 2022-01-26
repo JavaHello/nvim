@@ -5,7 +5,7 @@ local map = vim.api.nvim_set_keymap
 local opt = {noremap = true, silent = true }
 
 -- nvimTree
-map('n', '<space>et', ':NvimTreeToggle<CR>', opt)
+map('n', '<space>n', ':NvimTreeToggle<CR>', opt)
 -- n 模式下复制内容到系统剪切板
 map('n', '<Leader>c', '"+yy', opt)
 -- v 模式下复制内容到系统剪切板
@@ -17,6 +17,18 @@ map('n', '<Leader><CR>', ':nohlsearch<CR>', opt)
 -- %bd 删除所有缓冲区, e# 打开最后一个缓冲区, bd# 关闭[No Name]
 map('n', '<Leader>o', ':%bd|e#|bd#<CR>', opt)
 map('n', '<Leader>w', ':bw<CR>', opt)
+-- " 退出 terminal 模式
+map('t', '<Esc>', '<C-\\><C-N>', opt)
+
+-- Leaderf
+vim.g.Lf_ShortcutF = '<C-P>'
+map('n', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>', {})
+map('v', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", leaderf#Rg#visual())<CR>', {})
+
+-- vim-floaterm
+vim.g.floaterm_keymap_new = '<space>t'
+map('n', '<F12>', ':FloatermToggle<CR>', opt)
+map('t', '<F12>   <C-\\><C-n>', ':<C-\\><C-n>:FloatermToggle<CR>', opt)
 
 local pluginKeys = {}
 
@@ -52,9 +64,9 @@ end
 pluginKeys.cmp = function(cmp)
     return {
         -- 上一个
-        ['<C-k>'] = cmp.mapping.select_prev_item(),
+        -- ['<C-k>'] = cmp.mapping.select_prev_item(),
         -- 下一个
-        ['<C-j>'] = cmp.mapping.select_next_item(),
+        ['<Tab>'] = cmp.mapping.select_next_item(),
         -- 出现补全
         ['<A-.>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
         -- 取消
