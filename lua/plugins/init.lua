@@ -77,6 +77,7 @@ require('packer').startup(function()
   use 'andymass/vim-matchup'
   -- 大纲插件
   use 'liuchengxu/vista.vim'
+
 end)
 
 require('plugins/config/bufferline')
