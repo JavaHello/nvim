@@ -42,6 +42,14 @@ require('packer').startup(function()
 
     -- LeaderF
     use 'Yggdroot/LeaderF'
+
+    use {
+      'lewis6991/gitsigns.nvim',
+      requires = {
+        'nvim-lua/plenary.nvim'
+      },
+      -- tag = 'release' -- To use the latest release
+    }
 end)
 
 require('plugins/config/bufferline')
@@ -49,3 +57,4 @@ require('plugins/config/nvim-tree')
 require('plugins/config/nvim-treesitter')
 require('plugins/config/nvim-cmp')
 require('plugins/config/LeaderF')
+require('plugins/config/gitsigns-nvim')
