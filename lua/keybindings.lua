@@ -44,7 +44,7 @@ pluginKeys.maplsp = function(mapbuf)
     -- rename
     mapbuf('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opt)
     -- code action
-    mapbuf('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opt)
+    mapbuf('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opt)
     -- go xx
     mapbuf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
     mapbuf('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
@@ -72,6 +72,7 @@ pluginKeys.cmp = function(cmp)
         -- ['<C-k>'] = cmp.mapping.select_prev_item(),
         -- 下一个
         ['<Tab>'] = cmp.mapping.select_next_item(),
+        ["<S-Tab>"] = cmp.mapping.select_prev_item(),
         -- 确认
         -- Accept currently selected item. If none selected, `select` first item.
         -- Set `select` to `false` to only confirm explicitly selected items.
