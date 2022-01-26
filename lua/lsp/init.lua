@@ -19,6 +19,9 @@ for name, _ in pairs(servers) do
   end
 end
 
+ -- Setup lspconfig.
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 lsp_installer.on_server_ready(function(server)
   local opts = servers[server.name]
   if opts then
@@ -31,6 +34,7 @@ lsp_installer.on_server_ready(function(server)
     opts.flags = {
       debounce_text_changes = 150,
     }
+    opts.capabilities = capabilities;
     server:setup(opts)
   end
 end)
