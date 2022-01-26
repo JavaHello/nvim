@@ -24,11 +24,16 @@ map('t', '<Esc>', '<C-\\><C-N>', opt)
 vim.g.Lf_ShortcutF = '<C-P>'
 map('n', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>', {})
 map('v', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", leaderf#Rg#visual())<CR>', {})
+map('n', '<space>r', ':Leaderf --nowrap task<CR>', {})
 
 -- vim-floaterm
 vim.g.floaterm_keymap_new = '<space>t'
 map('n', '<F12>', ':FloatermToggle<CR>', opt)
 map('t', '<F12>   <C-\\><C-n>', ':<C-\\><C-n>:FloatermToggle<CR>', opt)
+
+
+-- vista
+map('n', '<space>o', ':<C-u>Vista!!<CR>', opt)
 
 local pluginKeys = {}
 
@@ -79,7 +84,6 @@ pluginKeys.cmp = function(cmp)
         -- Set `select` to `false` to only confirm explicitly selected items.
         ['<CR>'] = cmp.mapping.confirm({
             select = true ,
-            behavior = cmp.ConfirmBehavior.Replace
         }),
         -- ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
         ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),

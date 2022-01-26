@@ -75,6 +75,7 @@ require('packer').startup(function()
 
   -- <>()等匹配插件
   use 'andymass/vim-matchup'
+  -- 大纲插件
   use 'liuchengxu/vista.vim'
 end)
 
@@ -88,3 +89,4 @@ require('plugins/config/vim-floaterm')
 require('plugins/config/asynctasks')
 require('plugins/config/feline')
 require('plugins/config/indent-blankline')
+require('plugins/config/vista')

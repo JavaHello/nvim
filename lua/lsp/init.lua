@@ -5,13 +5,13 @@ local lsp_installer = require "nvim-lsp-installer"
 -- { key: 语言 value: 配置文件 }
 local servers = {
   sumneko_lua = require "lsp.lua", -- /lua/lsp/lua.lua
-  -- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
+  jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
 }
 
 -- 自动安装 LanguageServers
 for name, _ in pairs(servers) do
-  local server_is_found, server = lsp_installer.get_server(name)
-  if server_is_found then
+  local server_available, server = lsp_installer.get_server(name)
+  if server_available then
     if not server:is_installed() then
       print("Installing " .. name)
       server:install()
