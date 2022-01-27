@@ -49,8 +49,7 @@ cmp.setup {
         nvim_lsp = "[LSP]",
         vsnip = "[Vsnip]",
         path = "[Path]",
-        buffer = "[Buffer]",
-        emoji = "[Emoji]",
+       -- buffer = "[Buffer]",
       },
     })
   },
