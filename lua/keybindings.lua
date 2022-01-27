@@ -39,7 +39,8 @@ map('n', '<space>o', ':<C-u>Vista!!<CR>', opt)
 map('n', '<space>x', '<cmd>Trouble<cr>', opt)
 
 -- lspsaga
--- map('n', 'K', ':Lspsaga hover_doc<CR>', opt)
+map('n', 'K', ':Lspsaga hover_doc<CR>', opt)
+map('n', 'gr', ':Lspsaga lsp_finder<CR>', opt)
 
 -- Telescope
 map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', {})
@@ -51,12 +52,21 @@ map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', {})
 map('n', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 map('v', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 
+-- vim-easy-align
+vim.cmd([[
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+]])
+
 local pluginKeys = {}
 
 -- lsp 回调函数快捷键设置
 pluginKeys.maplsp = function(mapbuf)
 
-    mapbuf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
+    -- mapbuf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
     -- rename
     mapbuf('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opt)
     -- code action

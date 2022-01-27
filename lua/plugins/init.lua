@@ -18,12 +18,14 @@ require('packer').startup(function()
   use 'rafamadriz/friendly-snippets'
   -- lspkind
   use 'onsails/lspkind-nvim'
-  -- use 'glepnir/lspsaga.nvim'
 
   -- lsp 相关
   use 'folke/lsp-colors.nvim'
   use 'folke/trouble.nvim'
+  use 'glepnir/lspsaga.nvim'
 
+  -- use 'RishabhRD/popfix'
+  -- use 'RishabhRD/nvim-lsputils'
 
   -- 主题
   use 'morhetz/gruvbox'
@@ -130,10 +132,14 @@ require('packer').startup(function()
   -- 仪表盘
   use {'glepnir/dashboard-nvim'}
 
-  use 'RishabhRD/popfix'
-  use 'RishabhRD/nvim-lsputils'
-  
+  -- 翻译插件
   use 'voldikss/vim-translator'
+
+  -- 自动对齐插件
+  use 'junegunn/vim-easy-align'
+
+  -- 表格模式插件
+  use 'dhruvasagar/vim-table-mode'
 end)
 
 require('plugins/config/bufferline')
@@ -154,9 +160,9 @@ require('plugins/config/nvim-notify')
 require('plugins/config/wilder')
 require('plugins/config/nvim-colorizer')
 require('plugins/config/comment')
--- require('plugins/config/lspsaga')
+require('plugins/config/lspsaga')
 -- require('plugins/config/formatter')
 require('plugins/config/telescope')
 require('plugins/config/dashboard-nvim')
-require('plugins/config/nvim-lsputils')
+-- require('plugins/config/nvim-lsputils')
 

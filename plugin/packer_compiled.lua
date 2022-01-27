@@ -159,6 +159,11 @@ _G.packer_plugins = {
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/lspkind-nvim",
     url = "https://github.com/onsails/lspkind-nvim"
   },
+  ["lspsaga.nvim"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/lspsaga.nvim",
+    url = "https://github.com/glepnir/lspsaga.nvim"
+  },
   ["lualine.nvim"] = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/lualine.nvim",
@@ -202,11 +207,6 @@ _G.packer_plugins = {
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
-  ["nvim-lsputils"] = {
-    loaded = true,
-    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/nvim-lsputils",
-    url = "https://github.com/RishabhRD/nvim-lsputils"
-  },
   ["nvim-notify"] = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/nvim-notify",
@@ -242,11 +242,6 @@ _G.packer_plugins = {
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
   },
-  popfix = {
-    loaded = true,
-    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/popfix",
-    url = "https://github.com/RishabhRD/popfix"
-  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/telescope.nvim",
@@ -256,6 +251,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/trouble.nvim",
     url = "https://github.com/folke/trouble.nvim"
+  },
+  ["vim-easy-align"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vim-easy-align",
+    url = "https://github.com/junegunn/vim-easy-align"
   },
   ["vim-floaterm"] = {
     loaded = true,
@@ -271,6 +271,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vim-matchup",
     url = "https://github.com/andymass/vim-matchup"
+  },
+  ["vim-table-mode"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vim-table-mode",
+    url = "https://github.com/dhruvasagar/vim-table-mode"
   },
   ["vim-translator"] = {
     loaded = true,
