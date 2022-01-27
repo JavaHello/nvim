@@ -44,7 +44,14 @@ cmp.setup {
         -- Source 显示提示来源
         vim_item.menu = "["..string.upper(entry.source.name).."]"
         return vim_item
-      end
+      end,
+      menu = {
+        nvim_lsp = "[LSP]",
+        vsnip = "[Vsnip]",
+        path = "[Path]",
+        buffer = "[Buffer]",
+        emoji = "[Emoji]",
+      },
     })
   },
 }
