@@ -101,7 +101,12 @@ require('packer').startup(function()
     'numToStr/Comment.nvim',
   }
 
+  -- mackdown 预览插件
   use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
+
+  -- 格式化插件
+  -- use 'mhartington/formatter.nvim'
+  use 'sbdchd/neoformat'
 
 end)
 
@@ -124,4 +129,5 @@ require('plugins/config/wilder')
 require('plugins/config/nvim-colorizer')
 require('plugins/config/comment')
 -- require('plugins/config/lspsaga')
+-- require('plugins/config/formatter')
 

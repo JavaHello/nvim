@@ -6,6 +6,7 @@ local lsp_installer = require "nvim-lsp-installer"
 local servers = {
   sumneko_lua = require "lsp.lua", -- /lua/lsp/lua.lua
   jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
+  jsonls = {}, 
 }
 
 -- 自动安装 LanguageServers
