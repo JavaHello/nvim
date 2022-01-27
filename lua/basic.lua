@@ -26,6 +26,10 @@ vim.o.shiftwidth=4
 vim.bo.shiftwidth=4
 
 vim.cmd('autocmd Filetype lua setlocal ts=2 sw=2 expandtab')
+vim.cmd('autocmd Filetype js setlocal ts=2 sw=2 expandtab')
+vim.cmd('autocmd Filetype json setlocal ts=2 sw=2 expandtab')
+vim.cmd('autocmd Filetype css setlocal ts=2 sw=2 expandtab')
+vim.cmd('autocmd Filetype html setlocal ts=2 sw=2 expandtab')
 
 -- 新行对齐当前行，空格替代tab
 vim.o.expandtab = true

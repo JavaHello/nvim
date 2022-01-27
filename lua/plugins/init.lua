@@ -3,12 +3,15 @@ require('packer').startup(function()
   use 'wbthomason/packer.nvim'
   use {'neovim/nvim-lspconfig', 'williamboman/nvim-lsp-installer'}
 
+  use 'kyazdani42/nvim-web-devicons'
+
   -- nvim-cmp
   use 'hrsh7th/cmp-nvim-lsp' -- { name = nvim_lsp }
   use 'hrsh7th/cmp-buffer'   -- { name = 'buffer' },
   use 'hrsh7th/cmp-path'     -- { name = 'path' }
   use 'hrsh7th/cmp-cmdline'  -- { name = 'cmdline' }
   use 'hrsh7th/nvim-cmp'
+
   -- vsnip
   use 'hrsh7th/cmp-vsnip'    -- { name = 'vsnip' }
   use 'hrsh7th/vim-vsnip'
@@ -18,7 +21,9 @@ require('packer').startup(function()
   -- use 'glepnir/lspsaga.nvim'
 
   -- lsp 相关
-  --  use 'folke/lsp-colors.nvim'
+  use 'folke/lsp-colors.nvim'
+  use 'folke/trouble.nvim'
+
 
   -- 主题
   use 'morhetz/gruvbox'
@@ -96,3 +101,6 @@ require('plugins/config/asynctasks')
 require('plugins/config/lualine')
 require('plugins/config/indent-blankline')
 require('plugins/config/vista')
+require('plugins/config/lsp-colors')
+require('plugins/config/trouble')
+

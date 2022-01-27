@@ -35,6 +35,9 @@ map('t', '<F12>   <C-\\><C-n>', ':<C-\\><C-n>:FloatermToggle<CR>', opt)
 -- vista
 map('n', '<space>o', ':<C-u>Vista!!<CR>', opt)
 
+-- trouble.nvim
+map('n', '<space>x', ':<C-u>Trouble<CR>', opt)
+
 local pluginKeys = {}
 
 -- lsp 回调函数快捷键设置
