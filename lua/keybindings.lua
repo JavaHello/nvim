@@ -36,7 +36,7 @@ map('t', '<F12>   <C-\\><C-n>', ':<C-\\><C-n>:FloatermToggle<CR>', opt)
 map('n', '<space>o', ':<C-u>Vista!!<CR>', opt)
 
 -- trouble.nvim
-map('n', '<space>x', ':<C-u>Trouble<CR>', opt)
+map('n', '<space>x', '<cmd>Trouble<cr>', opt)
 
 -- lspsaga
 -- map('n', 'K', ':Lspsaga hover_doc<CR>', opt)
@@ -46,6 +46,10 @@ map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', {})
 map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', {})
 map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', {})
 map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', {})
+
+-- translate
+map('n', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
+map('v', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 
 local pluginKeys = {}
 

@@ -13,7 +13,7 @@ vim.notify.setup({
   render = "default",
 
   -- Default timeout for notifications
-  timeout = 5000,
+  timeout = 3000,
 
   -- For stages that change opacity this is treated as the highlight behind the window
   -- Set this to either a highlight group, an RGB hex value e.g. "#000000" or a function returning an RGB code for dynamic values

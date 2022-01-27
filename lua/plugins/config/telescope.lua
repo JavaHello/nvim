@@ -1,3 +1,5 @@
+local actions = require("telescope.actions")
+local trouble = require("trouble.providers.telescope")
 require('telescope').setup{
   defaults = {
     -- Default configuration for telescope goes here:
@@ -7,7 +9,12 @@ require('telescope').setup{
         -- map actions.which_key to <C-h> (default: <C-/>)
         -- actions.which_key shows the mappings for your picker,
         -- e.g. git_{create, delete, ...}_branch for the git_branches picker
-        ["<C-h>"] = "which_key"
+        ["<C-h>"] = "which_key",
+        -- ["<esc>"] = actions.close,
+        -- ["<c-t>"] = trouble.open_with_trouble,
+      },
+      n = {
+        -- ["<c-t>"] = trouble.open_with_trouble,
       }
     }
   },

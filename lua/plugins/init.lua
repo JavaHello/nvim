@@ -108,6 +108,8 @@ require('packer').startup(function()
   -- use 'mhartington/formatter.nvim'
   use 'sbdchd/neoformat'
 
+
+  -- 快捷键查看
   use {
     "folke/which-key.nvim",
     config = function()
@@ -119,15 +121,19 @@ require('packer').startup(function()
     end
   }
 
+  -- 搜索插件
   use {
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
-  use { 
-    'glepnir/dashboard-nvim',
-  }
+  -- 仪表盘
+  use {'glepnir/dashboard-nvim'}
 
+  use 'RishabhRD/popfix'
+  use 'RishabhRD/nvim-lsputils'
+  
+  use 'voldikss/vim-translator'
 end)
 
 require('plugins/config/bufferline')
@@ -152,4 +158,5 @@ require('plugins/config/comment')
 -- require('plugins/config/formatter')
 require('plugins/config/telescope')
 require('plugins/config/dashboard-nvim')
+require('plugins/config/nvim-lsputils')
 
