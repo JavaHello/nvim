@@ -24,6 +24,8 @@ require('packer').startup(function()
   use 'folke/trouble.nvim'
   use 'glepnir/lspsaga.nvim'
 
+  -- use 'ray-x/lsp_signature.nvim'
+
   -- use 'RishabhRD/popfix'
   -- use 'RishabhRD/nvim-lsputils'
 
@@ -169,4 +171,5 @@ require('plugins/config/telescope')
 require('plugins/config/dashboard-nvim')
 -- require('plugins/config/nvim-lsputils')
 require('plugins/config/nvim-autopairs')
+-- require('plugins/config/lsp_signature')
 
