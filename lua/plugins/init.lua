@@ -87,6 +87,9 @@ require('packer').startup(function()
   -- 大纲插件
   use 'liuchengxu/vista.vim'
 
+  -- 消息通知
+  use 'rcarriga/nvim-notify'
+
 end)
 
 require('plugins/config/bufferline')
@@ -103,4 +106,5 @@ require('plugins/config/indent-blankline')
 require('plugins/config/vista')
 require('plugins/config/lsp-colors')
 require('plugins/config/trouble')
+require('plugins/config/nvim-notify')
 

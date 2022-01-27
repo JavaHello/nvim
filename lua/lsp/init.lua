@@ -21,6 +21,8 @@ end
 
  -- Setup lspconfig.
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- 没有确定使用效果参数
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 lsp_installer.on_server_ready(function(server)
   local opts = servers[server.name]

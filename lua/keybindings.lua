@@ -56,8 +56,8 @@ pluginKeys.maplsp = function(mapbuf)
     mapbuf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
     -- diagnostic
     mapbuf('n', 'go', '<cmd>lua vim.diagnostic.open_float()<CR>', opt)
-    mapbuf('n', 'gp', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opt)
-    mapbuf('n', 'gn', '<cmd>lua vim.diagnostic.goto_next()<CR>', opt)
+    mapbuf('n', '[g', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opt)
+    mapbuf('n', ']g', '<cmd>lua vim.diagnostic.goto_next()<CR>', opt)
     -- mapbuf('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opt)
     -- leader + =
     mapbuf('n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt)
