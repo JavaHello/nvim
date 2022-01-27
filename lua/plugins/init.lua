@@ -18,6 +18,7 @@ require('packer').startup(function()
   -- use 'glepnir/lspsaga.nvim'
 
   -- lsp 相关
+  --  use 'folke/lsp-colors.nvim'
 
   -- 主题
   use 'morhetz/gruvbox'
@@ -68,7 +69,10 @@ require('packer').startup(function()
   use 'mg979/vim-visual-multi'
 
   -- 状态栏插件
-  use 'feline-nvim/feline.nvim'
+  -- use 'feline-nvim/feline.nvim'
+  use {
+  'nvim-lualine/lualine.nvim',
+  }
 
   -- blankline
   use "lukas-reineke/indent-blankline.nvim"
@@ -88,6 +92,7 @@ require('plugins/config/LeaderF')
 require('plugins/config/gitsigns-nvim')
 require('plugins/config/vim-floaterm')
 require('plugins/config/asynctasks')
-require('plugins/config/feline')
+-- require('plugins/config/feline')
+require('plugins/config/lualine')
 require('plugins/config/indent-blankline')
 require('plugins/config/vista')
