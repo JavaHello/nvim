@@ -43,6 +43,7 @@ require('packer').startup(function()
 
   -- treesitter (新增)
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
 
   -- java
   use 'mfussenegger/nvim-jdtls'
