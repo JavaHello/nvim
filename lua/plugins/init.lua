@@ -93,6 +93,13 @@ require('packer').startup(function()
   -- wildmenu 补全美化
   use 'gelguy/wilder.nvim'
 
+  -- 颜色显示
+  use 'norcalli/nvim-colorizer.lua'
+
+  use {
+    'numToStr/Comment.nvim',
+  }
+
 end)
 
 require('plugins/config/bufferline')
@@ -111,4 +118,6 @@ require('plugins/config/lsp-colors')
 require('plugins/config/trouble')
 require('plugins/config/nvim-notify')
 require('plugins/config/wilder')
+require('plugins/config/nvim-colorizer')
+require('plugins/config/comment')
 
