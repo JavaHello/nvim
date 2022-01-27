@@ -140,6 +140,9 @@ require('packer').startup(function()
 
   -- 表格模式插件
   use 'dhruvasagar/vim-table-mode'
+
+  -- () 自动补全
+  use 'windwp/nvim-autopairs'
 end)
 
 require('plugins/config/bufferline')
@@ -165,4 +168,5 @@ require('plugins/config/lspsaga')
 require('plugins/config/telescope')
 require('plugins/config/dashboard-nvim')
 -- require('plugins/config/nvim-lsputils')
+require('plugins/config/nvim-autopairs')
 
