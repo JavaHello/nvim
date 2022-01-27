@@ -101,6 +101,8 @@ require('packer').startup(function()
     'numToStr/Comment.nvim',
   }
 
+  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
+
 end)
 
 require('plugins/config/bufferline')
