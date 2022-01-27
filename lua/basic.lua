@@ -69,8 +69,17 @@ vim.o.wildmenu = true
 -- vim.g.python_host_prog='/opt/homebrew/bin/python3'
 vim.g.python3_host_prog='/opt/homebrew/bin/python3'
 
-vim.api.nvim_exec([[
+vim.cmd([[
+if exists('g:neovide')
+    let g:neovide_cursor_vfx_mode = "railgun"
+    set guifont=DejaVuSansMono\ Nerd\ Font:h14
+    let g:neovide_transparency=0.8
+    " let g:neovide_fullscreen=v:true
+    let g:neovide_remember_window_size = v:true
+    let g:neovide_input_use_logo=v:true
+else
+endif
 if has("autocmd")
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
-]], true)
+]])
