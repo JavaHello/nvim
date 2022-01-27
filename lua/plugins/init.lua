@@ -90,6 +90,9 @@ require('packer').startup(function()
   -- 消息通知
   use 'rcarriga/nvim-notify'
 
+  -- wildmenu 补全美化
+  use 'gelguy/wilder.nvim'
+
 end)
 
 require('plugins/config/bufferline')
@@ -107,4 +110,5 @@ require('plugins/config/vista')
 require('plugins/config/lsp-colors')
 require('plugins/config/trouble')
 require('plugins/config/nvim-notify')
+require('plugins/config/wilder')
 

@@ -238,6 +238,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/vista.vim",
     url = "https://github.com/liuchengxu/vista.vim"
+  },
+  ["wilder.nvim"] = {
+    loaded = true,
+    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/wilder.nvim",
+    url = "https://github.com/gelguy/wilder.nvim"
   }
 }
 
