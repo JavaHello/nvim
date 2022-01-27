@@ -13,8 +13,8 @@ vim.g.encoding = "UTF-8"
 
 vim.o.fileencoding= "UTF-8"
 -- jk移动时光标下上方保留8行
-vim.o.scrolloff = 8
-vim.o.sidescrolloff = 8
+vim.o.scrolloff = 3
+vim.o.sidescrolloff = 3
 
 -- 缩进配置
 vim.o.tabstop=4

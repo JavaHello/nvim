@@ -41,6 +41,12 @@ map('n', '<space>x', ':<C-u>Trouble<CR>', opt)
 -- lspsaga
 -- map('n', 'K', ':Lspsaga hover_doc<CR>', opt)
 
+-- Telescope
+map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', {})
+map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', {})
+map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', {})
+map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', {})
+
 local pluginKeys = {}
 
 -- lsp 回调函数快捷键设置

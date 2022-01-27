@@ -108,7 +108,6 @@ require('packer').startup(function()
   -- use 'mhartington/formatter.nvim'
   use 'sbdchd/neoformat'
 
-  -- Lua
   use {
     "folke/which-key.nvim",
     config = function()
@@ -118,6 +117,15 @@ require('packer').startup(function()
         -- refer to the configuration section below
       }
     end
+  }
+
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
+
+  use { 
+    'glepnir/dashboard-nvim',
   }
 
 end)
@@ -142,4 +150,6 @@ require('plugins/config/nvim-colorizer')
 require('plugins/config/comment')
 -- require('plugins/config/lspsaga')
 -- require('plugins/config/formatter')
+require('plugins/config/telescope')
+require('plugins/config/dashboard-nvim')
 
