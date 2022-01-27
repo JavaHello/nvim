@@ -38,6 +38,9 @@ map('n', '<space>o', ':<C-u>Vista!!<CR>', opt)
 -- trouble.nvim
 map('n', '<space>x', ':<C-u>Trouble<CR>', opt)
 
+-- lspsaga
+-- map('n', 'K', ':Lspsaga hover_doc<CR>', opt)
+
 local pluginKeys = {}
 
 -- lsp 回调函数快捷键设置

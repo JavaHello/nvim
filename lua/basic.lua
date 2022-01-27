@@ -54,7 +54,7 @@ vim.o.swapfile = false
 vim.o.updatetime = 300
 
 -- split window 从下边和右边出现
-vim.o.splitbelow = true
+vim.o.splitbelow = false
 vim.o.splitright = true
 
 -- 样式
@@ -68,3 +68,9 @@ vim.o.wildmenu = true
 
 -- vim.g.python_host_prog='/opt/homebrew/bin/python3'
 vim.g.python3_host_prog='/opt/homebrew/bin/python3'
+
+vim.api.nvim_exec([[
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+]], true)
