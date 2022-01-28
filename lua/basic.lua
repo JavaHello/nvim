@@ -70,6 +70,10 @@ vim.o.wildmenu = true
 vim.g.python3_host_prog='/opt/homebrew/bin/python3'
 
 vim.cmd([[
+" 始终显示符号列
+set signcolumn=yes
+" set signcolumn=number
+set mouse=n
 if exists('g:neovide')
     let g:neovide_cursor_vfx_mode = "railgun"
     set guifont=DejaVuSansMono\ Nerd\ Font:h14
