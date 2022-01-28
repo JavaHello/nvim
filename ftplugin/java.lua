@@ -15,7 +15,7 @@ local config = {
     '-Dlog.protocol=true',
     '-Dlog.level=ALL',
     '-Xms1g',
-    '-Xmx1g',
+    '-Xmx2g',
     "-javaagent:/opt/software/lsp/lombok.jar",
     '--add-modules=ALL-SYSTEM',
     '--add-opens', 'java.base/java.util=ALL-UNNAMED',
