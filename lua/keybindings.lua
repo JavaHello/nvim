@@ -49,8 +49,8 @@ map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', {})
 map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', {})
 
 -- translate
-map('n', '<Leader>fy', ':TranslateW --engines=google<cr>', opt)
-map('v', '<Leader>fy', ':TranslateW --engines=google<cr>', opt)
+map('n', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
+map('v', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 
 -- vim-easy-align
 vim.cmd([[
