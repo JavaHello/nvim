@@ -74,6 +74,11 @@ nnoremap <silent> <leader>dr :lua require'dap'.repl.open()<CR>
 nnoremap <silent> <leader>dl :lua require'dap'.run_last()<CR>
 ]])
 
+-- nvim-dap-ui
+vim.cmd([[
+nnoremap <silent> <space>dr :lua require("dapui").float_element(vim.Nil, { enter = true}) <CR>
+]])
+
 local pluginKeys = {}
 
 -- lsp 回调函数快捷键设置
