@@ -39,8 +39,8 @@ map('n', '<space>o', ':<C-u>Vista!!<CR>', opt)
 map('n', '<space>x', '<cmd>Trouble<cr>', opt)
 
 -- lspsaga
-map('n', 'K', ':Lspsaga hover_doc<CR>', opt)
-map('n', 'gr', ':Lspsaga lsp_finder<CR>', opt)
+-- map('n', 'K', ':Lspsaga hover_doc<CR>', opt)
+-- map('n', 'gr', ':Lspsaga lsp_finder<CR>', opt)
 
 -- Telescope
 map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', {})

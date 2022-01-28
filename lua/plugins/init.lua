@@ -22,7 +22,7 @@ require('packer').startup(function()
   -- lsp 相关
   use 'folke/lsp-colors.nvim'
   use 'folke/trouble.nvim'
-  use 'glepnir/lspsaga.nvim'
+  -- use 'glepnir/lspsaga.nvim'
 
   -- use 'ray-x/lsp_signature.nvim'
 
@@ -165,7 +165,7 @@ require('plugins/config/nvim-notify')
 require('plugins/config/wilder')
 require('plugins/config/nvim-colorizer')
 require('plugins/config/comment')
-require('plugins/config/lspsaga')
+-- require('plugins/config/lspsaga')
 -- require('plugins/config/formatter')
 require('plugins/config/telescope')
 require('plugins/config/dashboard-nvim')
