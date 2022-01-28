@@ -54,6 +54,7 @@ require('packer').startup(function()
 
   -- debug
   use 'mfussenegger/nvim-dap'
+  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
 
   -- git
   use 'tpope/vim-fugitive'
@@ -176,4 +177,5 @@ require('plugins/config/dashboard-nvim')
 -- require('plugins/config/nvim-lsputils')
 require('plugins/config/nvim-autopairs')
 -- require('plugins/config/lsp_signature')
+require('plugins/config/nvim-dap')
 
