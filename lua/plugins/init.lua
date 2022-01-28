@@ -110,7 +110,7 @@ require('packer').startup(function()
   }
 
   -- mackdown 预览插件
-  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
+  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
 
   -- 格式化插件
   -- use 'mhartington/formatter.nvim'
@@ -178,4 +178,5 @@ require('plugins/config/dashboard-nvim')
 require('plugins/config/nvim-autopairs')
 -- require('plugins/config/lsp_signature')
 require('plugins/config/nvim-dap')
+require('plugins/config/markdown-preview')
 
