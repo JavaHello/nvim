@@ -52,6 +52,9 @@ require('packer').startup(function()
   -- java
   use 'mfussenegger/nvim-jdtls'
 
+  -- debug
+  use 'mfussenegger/nvim-dap'
+
   -- git
   use 'tpope/vim-fugitive'
 
@@ -130,6 +133,7 @@ require('packer').startup(function()
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
+  use {'nvim-telescope/telescope-ui-select.nvim' }
 
   -- 仪表盘
   use {'glepnir/dashboard-nvim'}

@@ -74,11 +74,34 @@ local config = {
   -- See https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
   --
   -- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
-  init_options = {
-    bundles = {},
-    workspace = workspace_dir
-  },
+  -- init_options = {
+  --   bundles = {
+  --     vim.fn.glob("/opt/software/lsp/java/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.35.0.jar")
+  --   },
+  --   workspace = workspace_dir
+  -- },
 }
+
+
+-- This bundles definition is the same as in the previous section (java-debug installation)
+local bundles = {
+  vim.fn.glob("/opt/software/lsp/java/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar")
+};
+
+-- /opt/software/lsp/java/vscode-java-test/server
+vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"))
+config['init_options'] = {
+  bundles = bundles;
+}
+
+config['on_attach'] = function(client, bufnr)
+  -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
+  -- you make during a debug session immediately.
+  -- Remove the option if you do not want that.
+  require('jdtls').setup_dap({ hotcodereplace = 'auto' })
+end
+
+
 local jdtls = require('jdtls')
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 config.capabilities = capabilities;
@@ -105,4 +128,27 @@ map('n', ']g', '<cmd>lua vim.diagnostic.goto_next()<CR>', opt)
 -- map('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opt)
 -- leader + =
 map('n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt)
+
+
+vim.cmd([[
+command! -nargs=0 OR   :lua require'jdtls'.organize_imports()
+command! -nargs=0 Format  :lua vim.lsp.buf.formatting()
+nnoremap crv <Cmd>lua require('jdtls').extract_variable()<CR>
+vnoremap crv <Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>
+nnoremap crc <Cmd>lua require('jdtls').extract_constant()<CR>
+vnoremap crc <Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>
+vnoremap crm <Esc><Cmd>lua require('jdtls').extract_method(true)<CR>
+
+command! -nargs=0 TestClass  :lua require'jdtls'.test_class()
+command! -nargs=0 TestMethod  :lua require'jdtls'.test_nearest_method()
+nnoremap <leader>dc <Cmd>lua require'jdtls'.test_class()<CR>
+nnoremap <leader>dm <Cmd>lua require'jdtls'.test_nearest_method()<CR>
+
+command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
+command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
+command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
+command! -buffer JdtJol lua require('jdtls').jol()
+command! -buffer JdtBytecode lua require('jdtls').javap()
+command! -buffer JdtJshell lua require('jdtls').jshell()
+]])
 
