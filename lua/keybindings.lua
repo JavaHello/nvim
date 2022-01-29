@@ -15,7 +15,8 @@ map('n', '<Leader>v', '"+p', opt)
 -- 取消搜索高亮显示
 map('n', '<Leader><CR>', ':nohlsearch<CR>', opt)
 -- %bd 删除所有缓冲区, e# 打开最后一个缓冲区, bd# 关闭[No Name]
-map('n', '<Leader>o', ':%bd|e#|bd#<CR>', opt)
+-- map('n', '<Leader>o', ':%bd|e#|bd#<CR>', opt)
+map('n', '<Leader>o', '<cmd>lua require("my_tools").close_other_buf()<CR>', opt)
 map('n', '<Leader>w', ':bw<CR>', opt)
 -- " 退出 terminal 模式
 map('t', '<Esc>', '<C-\\><C-N>', opt)
