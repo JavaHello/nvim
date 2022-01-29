@@ -3,9 +3,9 @@ local env = {
   MAVEN_SETTINGS = os.getenv 'MAVEN_SETTINGS',
 }
 
-local maven_settings = "/opt/software/apache-maven-3.6.3/conf/settings.xml"
+local maven_settings = '/opt/software/apache-maven-3.6.3/conf/settings.xml'
 local function get_maven_settings()
-  return env.MAVEN_SETTINGS  or maven_settings 
+  return env.MAVEN_SETTINGS and env.MAVEN_SETTINGS or maven_settings 
 end
 
 
