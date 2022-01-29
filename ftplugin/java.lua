@@ -13,7 +13,7 @@ end
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 
 -- local workspace_dir = '/Users/kailuo/jdtls-workspace/' .. project_name
-local workspace_dir = '/Users/kailuo/jdtls-workspace/'
+local workspace_dir = '/Users/kailuo/jdtls-workspace/' .. project_name
 
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
 local config = {
@@ -26,9 +26,13 @@ local config = {
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
     '-Dlog.protocol=true',
     '-Dlog.level=ALL',
-    '-Xms1g',
+    '-XX:+UseParallelGC',
+    '-XX:GCTimeRatio=4',
+    '-XX:AdaptiveSizePolicyWeight=90',
+    '-Dsun.zip.disableMemoryMapping=true',
+    '-Xms100m',
     '-Xmx2g',
-    "-javaagent:/opt/software/lsp/lombok.jar",
+    '-javaagent:/opt/software/lsp/lombok.jar',
     '--add-modules=ALL-SYSTEM',
     '--add-opens', 'java.base/java.util=ALL-UNNAMED',
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
