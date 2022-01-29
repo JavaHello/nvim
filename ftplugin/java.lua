@@ -1,3 +1,15 @@
+local env = {
+  -- HOME = vim.loop.os_homedir(),
+  MAVEN_SETTINGS = os.getenv 'MAVEN_SETTINGS',
+}
+
+local maven_settings = "/opt/software/apache-maven-3.6.3/conf/settings.xml"
+local function get_maven_settings()
+  return env.MAVEN_SETTINGS  or maven_settings 
+end
+
+
+
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 
 -- local workspace_dir = '/Users/kailuo/jdtls-workspace/' .. project_name
@@ -50,8 +62,8 @@ local config = {
         maven = {
 --          userSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
 --          globalSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
-          userSettings = "/Users/kailuo/workspace/paylabs/maven/settings.xml",
-          globalSettings = "/Users/kailuo/workspace/paylabs/maven/settings.xml",
+          userSettings = get_maven_settings(),
+          globalSettings = get_maven_settings(),
         },
         runtimes = {
           {
@@ -156,7 +168,7 @@ nnoremap <leader>dc <Cmd>lua require'jdtls'.test_class()<CR>
 nnoremap <leader>dm <Cmd>lua require'jdtls'.test_nearest_method()<CR>
 
 
-
+command! -nargs=0 JdtRefreshDebugConfigs :lua require('jdtls.dap').setup_dap_main_class_configs()
 
 command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
 command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
