@@ -85,7 +85,7 @@ local pluginKeys = {}
 -- lsp 回调函数快捷键设置
 pluginKeys.maplsp = function(mapbuf)
 
-    -- mapbuf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
+    mapbuf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
     -- rename
     mapbuf('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opt)
     -- code action
