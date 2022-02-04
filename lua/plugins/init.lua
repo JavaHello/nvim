@@ -150,6 +150,12 @@ require('packer').startup(function()
 
   -- () 自动补全
   use 'windwp/nvim-autopairs'
+
+  -- 任务插件
+  use 'itchyny/calendar.vim'
+
+  -- rust
+  use 'simrat39/rust-tools.nvim'
 end)
 
 require('plugins/config/bufferline')
@@ -179,4 +185,5 @@ require('plugins/config/nvim-autopairs')
 -- require('plugins/config/lsp_signature')
 require('plugins/config/nvim-dap')
 require('plugins/config/markdown-preview')
+require('plugins/config/rust-tools')
 

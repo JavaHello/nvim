@@ -124,27 +124,7 @@ config.capabilities = capabilities;
 jdtls.start_or_attach(config)
 
 local map = vim.api.nvim_set_keymap
-local opt = {noremap = true, silent = true }
-
-map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
--- rename
-map('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opt)
--- code action
-map('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opt)
--- go xx
-map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
-map('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
-map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opt)
-map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opt)
-map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
--- diagnostic
-map('n', 'go', '<cmd>lua vim.diagnostic.open_float()<CR>', opt)
-map('n', '[g', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opt)
-map('n', ']g', '<cmd>lua vim.diagnostic.goto_next()<CR>', opt)
--- map('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opt)
--- leader + =
-map('n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt)
-
+require('keybindings').maplsp(map)
 
 vim.cmd([[
 command! -nargs=0 OR   :lua require'jdtls'.organize_imports()
