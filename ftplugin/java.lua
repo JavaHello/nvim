@@ -120,6 +120,15 @@ end
 
 local jdtls = require('jdtls')
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- capabilities.experimental = {
+--   hoverActions = true,
+--   hoverRange = true,
+--   serverStatusNotification = true,
+--   snippetTextEdit = true,
+--   codeActionGroup = true,
+--   ssr = true,
+-- }
+
 config.capabilities = capabilities;
 jdtls.start_or_attach(config)
 
