@@ -4,15 +4,21 @@ require'nvim-tree'.setup {
   open_on_setup       = false,
   ignore_ft_on_setup  = {},
   auto_close          = true,
+  auto_reload_on_write = true,
   open_on_tab         = false,
   hijack_cursor       = false,
   update_cwd          = false,
+  actions             = {
+    open_file = {
+      quit_on_open = true,
+    },
+  },
   update_to_buf_dir   = {
-    enable = true,
-    auto_open = true,
+    enable = false,
+    auto_open = false,
   },
   diagnostics = {
-    enable = false,
+    enable = true,
     icons = {
       hint = "",
       info = "",
@@ -31,7 +37,7 @@ require'nvim-tree'.setup {
   },
   filters = {
     dotfiles = false,
-    custom = {}
+    custom = {".git"}
   },
   git = {
     enable = true,
@@ -58,5 +64,4 @@ require'nvim-tree'.setup {
   }
 }
 
-vim.g.nvim_tree_quit_on_open = 1
 
