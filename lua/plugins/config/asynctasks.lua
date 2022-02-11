@@ -4,7 +4,7 @@ vim.g.asynctasks_term_pos = 'floaterm'
 -- 此配置无效(无效变量)
 vim.g.asyncrun_term_pos = 'floaterm'
 
-local result = vim.api.nvim_exec(
+vim.cmd(
 [[
 function! s:lf_task_source(...)
 	let rows = asynctasks#source(&columns * 48 / 100)
@@ -55,6 +55,10 @@ let g:Lf_Extensions.task = {
 			\ },
 			\ 'help' : 'navigate available tasks from asynctasks.vim',
 		\ }
-]],
-true)
+let g:asynctasks_extra_config = [
+  \ '~/.config/nvim/config/local_tasks.ini',
+  \ ]
+]])
+-- 未实现
+vim.g.asynctask_template = '~/.config/nvim/template/task_template.ini'
 
