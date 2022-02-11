@@ -78,6 +78,10 @@ local config = {
             name = "JavaSE-11",
             path = "/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home",
           },
+          {
+            name = "JavaSE-17",
+            path = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home",
+          },
         }
       },
     }

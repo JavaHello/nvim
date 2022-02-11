@@ -8,6 +8,12 @@ vim.wo.cursorline = true
 -- 右侧参考线，超过表示代码太长了，考虑换行
 -- vim.wo.colorcolumn = "80"
 
+-- 边搜索边高亮
+vim.o.incsearch = true
+-- 忽悠大小写
+vim.o.ignorecase = true
+-- 智能大小写
+vim.o.smartcase = true
 
 vim.g.encoding = "UTF-8"
 
