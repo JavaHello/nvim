@@ -60,5 +60,5 @@ let g:asynctasks_extra_config = [
   \ ]
 ]])
 -- 未实现
-vim.g.asynctask_template = '~/.config/nvim/template/task_template.ini'
+vim.g.asynctask_template = '~/.config/nvim/config/task_template.ini'
 
