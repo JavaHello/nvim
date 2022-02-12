@@ -40,8 +40,8 @@ require'nvim-tree'.setup {
     custom = {".git"}
   },
   git = {
-    enable = false,
-    ignore = false,
+    enable = true,
+    ignore = true,
     timeout = 500,
   },
   view = {
