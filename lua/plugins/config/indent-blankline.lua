@@ -9,7 +9,7 @@ require("indent_blankline").setup {
   --    show_current_context_start = true,
   disable_with_nolist = true,
   -- filetype_exclude = { "help", "terminal", "packer", "NvimTree", "git", "text" },
-  filetype_exclude = { "help", "terminal", "packer", "markdown", "git", "text" },
+  filetype_exclude = { "help", "terminal", "packer", "markdown", "git", "text", "NvimTree", "dashboard" },
   buftype_exclude = { "terminal" },
   use_treesitter = true,
   context_patterns = {
