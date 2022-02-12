@@ -20,7 +20,7 @@ require('packer').startup(function()
   use 'onsails/lspkind-nvim'
 
   -- lsp 相关
-  use 'folke/lsp-colors.nvim'
+  -- use 'folke/lsp-colors.nvim'
   use 'folke/trouble.nvim'
   -- use 'glepnir/lspsaga.nvim'
 
@@ -170,7 +170,7 @@ require('plugins/config/asynctasks')
 require('plugins/config/lualine')
 require('plugins/config/indent-blankline')
 require('plugins/config/vista')
-require('plugins/config/lsp-colors')
+-- require('plugins/config/lsp-colors')
 require('plugins/config/trouble')
 require('plugins/config/nvim-notify')
 require('plugins/config/wilder')
