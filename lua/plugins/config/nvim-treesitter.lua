@@ -6,14 +6,14 @@ require'nvim-treesitter.configs'.setup {
   sync_install = false,
 
   -- List of parsers to ignore installing
-  ignore_install = { "javascript" },
+  ignore_install = { },
 
   highlight = {
     -- `false` will disable the whole extension
     enable = true,
 
     -- list of language that will be disabled
-    disable = { "c", "rust" },
+    disable = { },
 
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
@@ -23,7 +23,7 @@ require'nvim-treesitter.configs'.setup {
   },
   matchup = {
     enable = true,
-    disable = { "c", "rust" },
+    disable = { },
   },
   textobjects = {
     move = {
