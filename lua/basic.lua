@@ -1,3 +1,5 @@
+vim.opt.title = true
+
 -- 行号
 vim.wo.number = true
 vim.wo.relativenumber = true
