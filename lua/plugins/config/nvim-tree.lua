@@ -20,10 +20,10 @@ require'nvim-tree'.setup {
   diagnostics = {
     enable = false,
     icons = {
-      hint = "",
-      info = "",
-      warning = "",
-      error = "",
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
     }
   },
   update_focused_file = {
