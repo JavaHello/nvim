@@ -96,6 +96,7 @@ pluginKeys.maplsp = function(mapbuf)
     mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opt)
     mapbuf('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opt)
     mapbuf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
+    mapbuf('n', '<space>s', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opt)
     -- diagnostic
     mapbuf('n', 'go', '<cmd>lua vim.diagnostic.open_float()<CR>', opt)
     mapbuf('n', '[g', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opt)

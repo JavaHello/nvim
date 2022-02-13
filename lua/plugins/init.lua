@@ -26,8 +26,8 @@ require('packer').startup(function()
 
   -- use 'ray-x/lsp_signature.nvim'
 
-  -- use 'RishabhRD/popfix'
-  -- use 'RishabhRD/nvim-lsputils'
+  use 'RishabhRD/popfix'
+  use 'RishabhRD/nvim-lsputils'
 
   -- 主题
   use 'morhetz/gruvbox'
@@ -180,7 +180,7 @@ require('plugins/config/comment')
 -- require('plugins/config/formatter')
 require('plugins/config/telescope')
 require('plugins/config/dashboard-nvim')
--- require('plugins/config/nvim-lsputils')
+require('plugins/config/nvim-lsputils')
 require('plugins/config/nvim-autopairs')
 -- require('plugins/config/lsp_signature')
 require('plugins/config/nvim-dap')
