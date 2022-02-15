@@ -8,6 +8,7 @@ local servers = {
   -- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
   jsonls = {},
   clangd = require 'lsp.c',
+  tsserver = {},
   -- rust_analyzer = require 'lsp.rust',
 }
 
