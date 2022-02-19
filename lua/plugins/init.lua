@@ -9,13 +9,18 @@ require('packer').startup(function()
   use 'hrsh7th/cmp-nvim-lsp' -- { name = nvim_lsp }
   use 'hrsh7th/cmp-buffer'   -- { name = 'buffer' },
   use 'hrsh7th/cmp-path'     -- { name = 'path' }
-  use 'hrsh7th/cmp-cmdline'  -- { name = 'cmdline' }
+  -- use 'hrsh7th/cmp-cmdline'  -- { name = 'cmdline' }
   use 'hrsh7th/nvim-cmp'
 
   -- vsnip
-  use 'hrsh7th/cmp-vsnip'    -- { name = 'vsnip' }
-  use 'hrsh7th/vim-vsnip'
+  -- use 'hrsh7th/cmp-vsnip'    -- { name = 'vsnip' }
+  -- use 'hrsh7th/vim-vsnip'
+
   use 'rafamadriz/friendly-snippets'
+  -- LuaSnip
+  use 'L3MON4D3/LuaSnip'
+  use { 'saadparwaiz1/cmp_luasnip' }
+
   -- lspkind
   use 'onsails/lspkind-nvim'
 
@@ -161,6 +166,8 @@ end)
 require('plugins/config/bufferline')
 require('plugins/config/nvim-tree')
 require('plugins/config/nvim-treesitter')
+
+require('plugins/config/luasnip')
 require('plugins/config/nvim-cmp')
 require('plugins/config/LeaderF')
 require('plugins/config/gitsigns-nvim')
