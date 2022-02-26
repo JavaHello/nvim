@@ -40,6 +40,7 @@ local config = {
     '-configuration', '/opt/software/jdtls/config_mac',
     '-data', workspace_dir,
   },
+  filetypes = {"java"},
 
   -- 💀
   -- This is the default if not provided, you can remove it. Or adjust as needed.
@@ -109,7 +110,10 @@ local bundles = {
 };
 
 -- /opt/software/lsp/java/vscode-java-test/server
-vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"))
+vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
+
+-- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
+vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
 config['init_options'] = {
   bundles = bundles;
 }
@@ -173,5 +177,7 @@ command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
 command! -buffer JdtJol lua require('jdtls').jol()
 command! -buffer JdtBytecode lua require('jdtls').javap()
 command! -buffer JdtJshell lua require('jdtls').jshell()
+
+" nnoremap <silent> <space>p <cmd>call lighttree#plugin#jdt#toggle_win()<cr>
 ]])
 

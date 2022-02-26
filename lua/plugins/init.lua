@@ -27,12 +27,12 @@ require('packer').startup(function()
   -- lsp 相关
   -- use 'folke/lsp-colors.nvim'
   use 'folke/trouble.nvim'
-  -- use 'glepnir/lspsaga.nvim'
+  use 'glepnir/lspsaga.nvim'
 
   -- use 'ray-x/lsp_signature.nvim'
 
-  use 'RishabhRD/popfix'
-  use 'RishabhRD/nvim-lsputils'
+  -- use 'RishabhRD/popfix'
+  -- use 'RishabhRD/nvim-lsputils'
 
   -- 主题
   use 'morhetz/gruvbox'
@@ -56,6 +56,7 @@ require('packer').startup(function()
 
   -- java
   use 'mfussenegger/nvim-jdtls'
+  use 'NiYanhhhhh/lighttree-java'
 
   -- debug
   use 'mfussenegger/nvim-dap'
@@ -183,11 +184,11 @@ require('plugins/config/nvim-notify')
 require('plugins/config/wilder')
 require('plugins/config/nvim-colorizer')
 require('plugins/config/comment')
--- require('plugins/config/lspsaga')
+require('plugins/config/lspsaga')
 -- require('plugins/config/formatter')
 require('plugins/config/telescope')
 require('plugins/config/dashboard-nvim')
-require('plugins/config/nvim-lsputils')
+-- require('plugins/config/nvim-lsputils')
 require('plugins/config/nvim-autopairs')
 -- require('plugins/config/lsp_signature')
 require('plugins/config/nvim-dap')

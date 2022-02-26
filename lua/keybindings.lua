@@ -87,15 +87,18 @@ pluginKeys.maplsp = function(mapbuf)
 
     mapbuf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
     -- rename
-    mapbuf('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opt)
+    -- mapbuf('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opt)
+    mapbuf('n', '<leader>rn', '<cmd>lua require("lspsaga.rename").rename()<CR>', opt)
     -- code action
     mapbuf('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opt)
+     -- mapbuf('n', '<leader>ca', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opt)
     -- go xx
     mapbuf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
     mapbuf('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
     mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opt)
     mapbuf('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opt)
-    mapbuf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
+    -- mapbuf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
+    mapbuf('n', 'gr', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opt)
     mapbuf('n', '<space>s', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opt)
     -- diagnostic
     mapbuf('n', 'go', '<cmd>lua vim.diagnostic.open_float()<CR>', opt)
