@@ -9,6 +9,7 @@ local servers = {
   jsonls = {},
   clangd = require 'lsp.c',
   tsserver = {},
+  html = {},
   -- rust_analyzer = require 'lsp.rust',
 }
 
