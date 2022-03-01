@@ -56,7 +56,7 @@ require('packer').startup(function()
 
   -- java
   use 'mfussenegger/nvim-jdtls'
-  use 'NiYanhhhhh/lighttree-java'
+  -- use 'NiYanhhhhh/lighttree-java'
 
   -- debug
   use 'mfussenegger/nvim-dap'

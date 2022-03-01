@@ -154,11 +154,6 @@ _G.packer_plugins = {
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
     url = "https://github.com/lukas-reineke/indent-blankline.nvim"
   },
-  ["lighttree-java"] = {
-    loaded = true,
-    path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/lighttree-java",
-    url = "https://github.com/NiYanhhhhh/lighttree-java"
-  },
   ["lspkind-nvim"] = {
     loaded = true,
     path = "/Users/kailuo/.local/share/nvim/site/pack/packer/start/lspkind-nvim",
