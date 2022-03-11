@@ -97,4 +97,9 @@ endif
 if has("autocmd")
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+
+" set grepprg=rg\ --vimgrep
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+" set grepformat^=%f:%l:%c:%m
+set grepformat=%f:%l:%c:%m,%f:%l:%m
 ]])
