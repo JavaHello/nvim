@@ -85,6 +85,8 @@ local pluginKeys = {}
 -- lsp 回调函数快捷键设置
 pluginKeys.maplsp = function(mapbuf)
 
+    vim.api.nvim_buf_set_option(mapbuf, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
     mapbuf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
     -- rename
     -- mapbuf('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opt)
@@ -95,7 +97,8 @@ pluginKeys.maplsp = function(mapbuf)
     -- go xx
     mapbuf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
     mapbuf('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
-    mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opt)
+    -- mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opt)
+    mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opt)
     mapbuf('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opt)
     -- mapbuf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
     mapbuf('n', 'gr', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opt)
