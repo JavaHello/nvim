@@ -123,6 +123,8 @@ config['on_attach'] = function(client, bufnr)
   -- you make during a debug session immediately.
   -- Remove the option if you do not want that.
   require('jdtls').setup_dap({ hotcodereplace = 'auto' })
+  require('jdtls.setup').add_commands();
+  -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
 end
 
 
@@ -169,14 +171,14 @@ nnoremap <leader>dc <Cmd>lua require'jdtls'.test_class()<CR>
 nnoremap <leader>dm <Cmd>lua require'jdtls'.test_nearest_method()<CR>
 
 
-command! -nargs=0 JdtRefreshDebugConfigs :lua require('jdtls.dap').setup_dap_main_class_configs()
-
-command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
-command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
-command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
-command! -buffer JdtJol lua require('jdtls').jol()
-command! -buffer JdtBytecode lua require('jdtls').javap()
-command! -buffer JdtJshell lua require('jdtls').jshell()
+" command! -nargs=0 JdtRefreshDebugConfigs :lua require('jdtls.dap').setup_dap_main_class_configs()
+"
+" command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
+" command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
+" command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
+" command! -buffer JdtJol lua require('jdtls').jol()
+" command! -buffer JdtBytecode lua require('jdtls').javap()
+" command! -buffer JdtJshell lua require('jdtls').jshell()
 
 " nnoremap <silent> <space>p <cmd>call lighttree#plugin#jdt#toggle_win()<cr>
 ]])
