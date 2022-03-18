@@ -43,7 +43,7 @@ lsp_installer.on_server_ready(function(server)
       if m.on_attach then
         m.on_attach(client, bufnr)
       end
-      vim.notify(string.format("Starting [%s] server", server.name), vim.log.levels.INFO)
+      -- vim.notify(string.format("Starting [%s] server", server.name), vim.log.levels.INFO)
     end
     opts.flags = {
       debounce_text_changes = 150,
