@@ -20,6 +20,7 @@ for name, _ in pairs(servers) do
   if server_available then
     if not server:is_installed() then
       print("Installing " .. name)
+      vim.notify(string.format("Installing [%s] server", name), vim.log.levels.INFO)
       server:install()
     end
   end
@@ -42,6 +43,7 @@ lsp_installer.on_server_ready(function(server)
       if m.on_attach then
         m.on_attach(client, bufnr)
       end
+      vim.notify(string.format("Starting [%s] server", server.name), vim.log.levels.INFO)
     end
     opts.flags = {
       debounce_text_changes = 150,
