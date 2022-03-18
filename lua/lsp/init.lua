@@ -6,10 +6,11 @@ local lsp_installer = require "nvim-lsp-installer"
 local servers = {
   sumneko_lua = require "lsp.lua", -- /lua/lsp/lua.lua
   -- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
-  jsonls = {},
+  jsonls = require("lsp.jsonls"),
   clangd = require 'lsp.c',
-  tsserver = {},
-  html = {},
+  tsserver = require("lsp.tsserver"),
+  html = require("lsp.html"),
+  pyright = require("lsp.pyright")
   -- rust_analyzer = require 'lsp.rust',
 }
 
@@ -30,13 +31,17 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 lsp_installer.on_server_ready(function(server)
-  local opts = servers[server.name]
+  local m = servers[server.name]
+  local opts = m.config;
   if opts then
-    opts.on_attach = function(_, bufnr)
+    opts.on_attach = function(client, bufnr)
       local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
       -- local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
       -- 绑定快捷键
       require('keybindings').maplsp(buf_set_keymap)
+      if m.on_attach then
+        m.on_attach(client, bufnr)
+      end
     end
     opts.flags = {
       debounce_text_changes = 150,

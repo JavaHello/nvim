@@ -195,3 +195,4 @@ require('plugins/config/nvim-dap')
 require('plugins/config/markdown-preview')
 require('plugins/config/rust-tools')
 
+require("telescope").load_extension("notify")

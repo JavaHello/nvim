@@ -1,7 +1,8 @@
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
-return {
+local M = {}
+ M.config = {
     settings = {
         Lua = {
             runtime = {
@@ -25,3 +26,7 @@ return {
         },
     },
 }
+M.on_attach = function (_, bufnr)
+    
+end
+return M;
