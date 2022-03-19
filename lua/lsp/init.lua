@@ -10,8 +10,8 @@ local servers = {
   clangd = require 'lsp.c',
   tsserver = require("lsp.tsserver"),
   html = require("lsp.html"),
-  pyright = require("lsp.pyright")
-  -- rust_analyzer = require 'lsp.rust',
+  pyright = require("lsp.pyright"),
+  rust_analyzer = require 'lsp.rust_analyzer',
 }
 
 -- 自动安装 LanguageServers
@@ -49,6 +49,22 @@ lsp_installer.on_server_ready(function(server)
       debounce_text_changes = 150,
     }
     opts.capabilities = capabilities;
+  end
+
+  if server.name == "rust_analyzer" then
+    -- Initialize the LSP via rust-tools instead
+    require("rust-tools").setup {
+      -- The "server" property provided in rust-tools setup function are the
+      -- settings rust-tools will provide to lspconfig during init.            -- 
+      -- We merge the necessary settings from nvim-lsp-installer (server:get_default_options())
+      -- with the user's own settings (opts).
+      dap = m.dap, 
+      server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
+    }
+    server:attach_buffers()
+    -- Only if standalone support is needed
+    require("rust-tools").start_standalone_if_required()
+  else
     server:setup(opts)
   end
 end)
