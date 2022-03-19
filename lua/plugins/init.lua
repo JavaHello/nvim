@@ -28,6 +28,8 @@ require('packer').startup(function()
   -- use 'folke/lsp-colors.nvim'
   use 'folke/trouble.nvim'
   use 'glepnir/lspsaga.nvim'
+  use 'arkav/lualine-lsp-progress'
+  -- use 'nvim-lua/lsp-status.nvim'
 
   -- use 'ray-x/lsp_signature.nvim'
 
