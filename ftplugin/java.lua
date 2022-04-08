@@ -5,7 +5,7 @@ local env = {
 
 local maven_settings = '/opt/software/apache-maven-3.6.3/conf/settings.xml'
 local function get_maven_settings()
-  return env.MAVEN_SETTINGS and env.MAVEN_SETTINGS or maven_settings 
+  return env.MAVEN_SETTINGS and env.MAVEN_SETTINGS or maven_settings
 end
 
 
@@ -64,6 +64,25 @@ local config = {
         downloadSources = true,
         updateSnapshots = true,
       },
+      signatureHelp = { enabled = true },
+      contentProvider = { preferred = 'fernflower' },
+      completion = {
+        favoriteStaticMembers = {
+          "org.hamcrest.MatcherAssert.assertThat",
+          "org.hamcrest.Matchers.*",
+          "org.hamcrest.CoreMatchers.*",
+          "org.junit.jupiter.api.Assertions.*",
+          "java.util.Objects.requireNonNull",
+          "java.util.Objects.requireNonNullElse",
+          "org.mockito.Mockito.*"
+        }
+      };
+      sources = {
+        organizeImports = {
+          starThreshold = 9999;
+          staticStarThreshold = 9999;
+        },
+      },
       configuration = {
         maven = {
 --          userSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
@@ -112,6 +131,9 @@ local bundles = {
 
 -- /opt/software/lsp/java/vscode-java-test/server
 vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
+
+-- /opt/software/lsp/java/vscode-java-decompiler/server/
+vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-decompiler/server/*.jar"), "\n"));
 
 -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
