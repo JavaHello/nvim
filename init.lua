@@ -8,5 +8,5 @@ vim.cmd[[
 colorscheme gruvbox
 set background=dark
 "  丢失配色, 变为透明
-highlight Normal guibg=NONE ctermbg=None
+" highlight Normal guibg=NONE ctermbg=None
 ]]
