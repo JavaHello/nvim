@@ -37,7 +37,8 @@ map('t', '<F12>   <C-\\><C-n>', ':<C-\\><C-n>:FloatermToggle<CR>', opt)
 map('n', '<space>o', ':<C-u>Vista!!<CR>', opt)
 
 -- trouble.nvim
-map('n', '<space>x', '<cmd>Trouble<cr>', opt)
+-- see lsp map
+-- map('n', '<space>x', '<cmd>Trouble<cr>', opt)
 
 -- lspsaga
 -- map('n', 'K', ':Lspsaga hover_doc<CR>', opt)
@@ -113,7 +114,8 @@ pluginKeys.maplsp = function(mapbuf)
     -- mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opt)
     mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opt)
     mapbuf('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opt)
-    mapbuf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
+    -- mapbuf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
+     mapbuf('n', 'gr', '<cmd>Trouble lsp_references<CR>', opt)
     -- mapbuf('n', 'gr', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opt)
     -- mapbuf('n', '<space>s', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opt)
     mapbuf('n', '<space>s', '<cmd>lua require"telescope.builtin".lsp_workspace_symbols({ query = vim.fn.input("Query> ") })<CR>', opt)
@@ -130,6 +132,10 @@ pluginKeys.maplsp = function(mapbuf)
     -- mapbuf('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opt)
     -- mapbuf('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opt)
     -- mapbuf('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opt)
+    mapbuf('n', '<leader>xx', '<cmd>Trouble<CR>', opt)
+    mapbuf('n', '<leader>xw', '<cmd>Trouble workspace_diagnostics<CR>', opt)
+    mapbuf('n', '<leader>xd', '<cmd>Trouble document_diagnostics<CR>', opt)
+    mapbuf('n', '<leader>xq', '<cmd>Trouble quickfix<CR>', opt)
 end
 
 -- nvim-cmp 自动补全
