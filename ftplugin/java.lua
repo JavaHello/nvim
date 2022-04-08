@@ -142,8 +142,15 @@ vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-ja
 
 -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
+
+local jdtls = require('jdtls')
+
+local extendedClientCapabilities = jdtls.extendedClientCapabilities;
+extendedClientCapabilities.resolveAdditionalTextEditsSupport = true;
+
 config['init_options'] = {
   bundles = bundles;
+  extendedClientCapabilities = extendedClientCapabilities;
 }
 
 config['on_attach'] = function(client, bufnr)
@@ -156,7 +163,6 @@ config['on_attach'] = function(client, bufnr)
 end
 
 
-local jdtls = require('jdtls')
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- capabilities.experimental = {
 --   hoverActions = true,
@@ -168,6 +174,8 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
 -- }
 
 config.capabilities = capabilities;
+
+
 jdtls.start_or_attach(config)
 
 local map = vim.api.nvim_set_keymap
