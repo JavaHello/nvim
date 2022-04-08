@@ -130,7 +130,12 @@ local bundles = {
 };
 
 -- /opt/software/lsp/java/vscode-java-test/server
-vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
+-- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
+for _, bundle in ipairs(vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n")) do
+  if not vim.endswith(bundle, 'com.microsoft.java.test.runner-jar-with-dependencies.jar') then
+    table.insert(bundles, bundle)
+  end
+end
 
 -- /opt/software/lsp/java/vscode-java-decompiler/server/
 vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-decompiler/server/*.jar"), "\n"));
