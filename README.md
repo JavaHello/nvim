@@ -13,7 +13,7 @@
 - 查看实现
   ![002](https://javahello.github.io/dev/nvim-lean/images/java-impl-002.gif)
 - 搜索`class`,`method`,`field`等
-  ![003](https://javahello.github.io/dev/nvim-lean/images/java-impl-002.gif)
+  ![003](https://javahello.github.io/dev/nvim-lean/images/java-symbols-003.gif)
 
 ## VIM 插件列表
 
