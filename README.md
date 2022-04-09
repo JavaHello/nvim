@@ -6,6 +6,13 @@
 
 [NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE.html)
 
+### 功能演示
+
+- 查看引用
+  ![001](https://javahello.github.io/dev/nvim-lean/images/java-ref-001.gif)
+- 查看实现
+  ![002](https://javahello.github.io/dev/nvim-lean/images/java-impl-002.gif)
+
 ## VIM 插件列表
 
 | 插件名称                                                           | 插件描述               | 推荐等级 | 备注 |
