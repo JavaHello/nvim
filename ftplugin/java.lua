@@ -60,6 +60,16 @@ local config = {
           ".git",
         },
       },
+      import = {
+        exclusions = {
+          "**/node_modules/**",
+          "**/.metadata/**",
+          "**/archetype-resources/**",
+          "**/META-INF/maven/**",
+          "**/.git/**",
+          "**/.idea/**",
+        },
+      },
       templates = {
         fileHeader = {
           "/**",
