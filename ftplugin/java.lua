@@ -54,6 +54,26 @@ local config = {
   settings = {
     java = {
       home = "/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home",
+      project = {
+        resourceFilters = {
+          "node_modules",
+          ".git",
+        },
+      },
+      templates = {
+        fileHeader = {
+          "/**",
+          " * ${type_name}",
+          " * @author ${user}",
+          " */",
+        },
+        typeComment = {
+          "/**",
+          " * ${type_name}",
+          " * @author ${user}",
+          " */",
+        },
+      },
       eclipse = {
         downloadSources = true,
       },
