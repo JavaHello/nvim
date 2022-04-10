@@ -58,6 +58,7 @@ local config = {
         resourceFilters = {
           "node_modules",
           ".git",
+          ".idea"
         },
       },
       import = {
@@ -70,6 +71,8 @@ local config = {
           "**/.idea/**",
         },
       },
+      -- referenceCodeLens = { enabled = true },
+      -- implementationsCodeLens = { enabled = true },
       templates = {
         fileHeader = {
           "/**",
