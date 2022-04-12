@@ -23,6 +23,7 @@ require('gitsigns').setup {
     delay = 400,
     ignore_whitespace = false,
   },
+  current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d %T> - <summary>',
   current_line_blame_formatter_opts = {
     relative_time = false
   },
