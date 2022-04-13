@@ -6,7 +6,7 @@ require'nvim-tree'.setup {
   -- auto_close          = true,
   auto_reload_on_write = true,
   open_on_tab         = false,
-  hijack_cursor       = false,
+  hijack_cursor       = true,
   update_cwd          = false,
   actions             = {
     use_system_clipboard = true,
