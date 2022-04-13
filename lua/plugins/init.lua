@@ -166,6 +166,8 @@ require('packer').startup(function()
 
   -- rust
   use 'simrat39/rust-tools.nvim'
+
+  use "Pocco81/AutoSave.nvim"
 end)
 
 require('plugins/config/bufferline')
@@ -197,5 +199,6 @@ require('plugins/config/nvim-autopairs')
 -- require('plugins/config/lsp_signature')
 require('plugins/config/nvim-dap')
 require('plugins/config/markdown-preview')
+require('plugins/config/autosave')
 
 require("telescope").load_extension("notify")

@@ -17,8 +17,14 @@ require("bufferline").setup {
       text = function()
         return vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
       end,
+      padding= 1,
       highlight = "Directory",
       text_align = "left"
-    }}
-  }
+    }},
+  },
+  color_icons = true,
+  show_buffer_close_icons = true,
+  show_buffer_default_icon = true,
+  show_close_icon = false,
+  show_tab_indicators = true,
 }
