@@ -25,4 +25,8 @@ M.close_other_buf = function ()
   end
 end
 
+M.close_other_bufline = function ()
+  vim.fn.execute('BufferLineCloseLeft')
+  vim.fn.execute('BufferLineCloseRight')
+end
 return M
