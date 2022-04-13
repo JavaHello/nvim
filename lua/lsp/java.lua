@@ -156,103 +156,103 @@ M.setup = function ()
         --   },
         --   workspace = workspace_dir
         -- },
-      }
+  }
 
 
-      -- This bundles definition is the same as in the previous section (java-debug installation)
-      local bundles = {
-        vim.fn.glob("/opt/software/lsp/java/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar")
-      };
+  -- This bundles definition is the same as in the previous section (java-debug installation)
+  local bundles = {
+    vim.fn.glob("/opt/software/lsp/java/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar")
+  };
 
-      -- /opt/software/lsp/java/vscode-java-test/server
-      -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
-      for _, bundle in ipairs(vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n")) do
-        if not vim.endswith(bundle, 'com.microsoft.java.test.runner-jar-with-dependencies.jar') then
-          table.insert(bundles, bundle)
-        end
-      end
+  -- /opt/software/lsp/java/vscode-java-test/server
+  -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
+  for _, bundle in ipairs(vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n")) do
+    if not vim.endswith(bundle, 'com.microsoft.java.test.runner-jar-with-dependencies.jar') then
+      table.insert(bundles, bundle)
+    end
+  end
 
-      -- /opt/software/lsp/java/vscode-java-decompiler/server/
-      vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-decompiler/server/*.jar"), "\n"));
+  -- /opt/software/lsp/java/vscode-java-decompiler/server/
+  vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-decompiler/server/*.jar"), "\n"));
 
-      -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
-      -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
+  -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
+  -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
 
-      local jdtls = require('jdtls')
+  local jdtls = require('jdtls')
 
-      local extendedClientCapabilities = jdtls.extendedClientCapabilities;
-      extendedClientCapabilities.resolveAdditionalTextEditsSupport = true;
+  local extendedClientCapabilities = jdtls.extendedClientCapabilities;
+  extendedClientCapabilities.resolveAdditionalTextEditsSupport = true;
 
-      config['init_options'] = {
-        bundles = bundles;
-        extendedClientCapabilities = extendedClientCapabilities;
-      }
+  config['init_options'] = {
+    bundles = bundles;
+    extendedClientCapabilities = extendedClientCapabilities;
+  }
 
-      config['on_attach'] = function(client, bufnr)
-        -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
-        -- you make during a debug session immediately.
-        -- Remove the option if you do not want that.
-        require('jdtls').setup_dap({ hotcodereplace = 'auto' })
-        require('jdtls.setup').add_commands();
-        -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
-      end
-
-
-      local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-      -- capabilities.experimental = {
-        --   hoverActions = true,
-        --   hoverRange = true,
-        --   serverStatusNotification = true,
-        --   snippetTextEdit = true,
-        --   codeActionGroup = true,
-        --   ssr = true,
-        -- }
-
-        config.capabilities = capabilities;
+  config['on_attach'] = function(client, bufnr)
+    -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
+    -- you make during a debug session immediately.
+    -- Remove the option if you do not want that.
+    require('jdtls').setup_dap({ hotcodereplace = 'auto' })
+    require('jdtls.setup').add_commands();
+    -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
+  end
 
 
-        jdtls.start_or_attach(config)
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  -- capabilities.experimental = {
+    --   hoverActions = true,
+    --   hoverRange = true,
+    --   serverStatusNotification = true,
+    --   snippetTextEdit = true,
+    --   codeActionGroup = true,
+    --   ssr = true,
+    -- }
 
-        local map = vim.api.nvim_set_keymap
-        require('keybindings').maplsp(map)
-
-        vim.cmd([[
-        command! -nargs=0 OR   :lua require'jdtls'.organize_imports()
-        command! -nargs=0 Format  :lua vim.lsp.buf.formatting()
-        nnoremap crv <Cmd>lua require('jdtls').extract_variable()<CR>
-        vnoremap crv <Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>
-        nnoremap crc <Cmd>lua require('jdtls').extract_constant()<CR>
-        vnoremap crc <Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>
-        vnoremap crm <Esc><Cmd>lua require('jdtls').extract_method(true)<CR>
+    config.capabilities = capabilities;
 
 
-        function! s:jdtls_test_class_ui()
-        lua require'jdtls'.test_class()
-        lua require'dapui'.open()
-        endfunction
-        function! s:jdtls_test_method_ui()
-        lua require'jdtls'.test_nearest_method()
-        lua require'dapui'.open()
-        endfunction
-        command! -nargs=0 TestClass  :lua require'jdtls'.test_class()
-        command! -nargs=0 TestMethod  :lua require'jdtls'.test_nearest_method()
-        command! -nargs=0 TestClassUI  :call s:jdtls_test_class_ui()
-        command! -nargs=0 TestMethodUI :call s:jdtls_test_method_ui()
-        nnoremap <leader>dc <Cmd>lua require'jdtls'.test_class()<CR>
-        nnoremap <leader>dm <Cmd>lua require'jdtls'.test_nearest_method()<CR>
+    jdtls.start_or_attach(config)
+
+    local map = vim.api.nvim_set_keymap
+    require('keybindings').maplsp(map)
+
+    vim.cmd([[
+    command! -nargs=0 OR   :lua require'jdtls'.organize_imports()
+    command! -nargs=0 Format  :lua vim.lsp.buf.formatting()
+    nnoremap crv <Cmd>lua require('jdtls').extract_variable()<CR>
+    vnoremap crv <Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>
+    nnoremap crc <Cmd>lua require('jdtls').extract_constant()<CR>
+    vnoremap crc <Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>
+    vnoremap crm <Esc><Cmd>lua require('jdtls').extract_method(true)<CR>
 
 
-        " command! -nargs=0 JdtRefreshDebugConfigs :lua require('jdtls.dap').setup_dap_main_class_configs()
-        "
-        " command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
-        " command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
-        " command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
-        " command! -buffer JdtJol lua require('jdtls').jol()
-        " command! -buffer JdtBytecode lua require('jdtls').javap()
-        " command! -buffer JdtJshell lua require('jdtls').jshell()
+    function! s:jdtls_test_class_ui()
+    lua require'jdtls'.test_class()
+    lua require'dapui'.open()
+    endfunction
+    function! s:jdtls_test_method_ui()
+    lua require'jdtls'.test_nearest_method()
+    lua require'dapui'.open()
+    endfunction
+    command! -nargs=0 TestClass  :lua require'jdtls'.test_class()
+    command! -nargs=0 TestMethod  :lua require'jdtls'.test_nearest_method()
+    command! -nargs=0 TestClassUI  :call s:jdtls_test_class_ui()
+    command! -nargs=0 TestMethodUI :call s:jdtls_test_method_ui()
+    nnoremap <leader>dc <Cmd>lua require'jdtls'.test_class()<CR>
+    nnoremap <leader>dm <Cmd>lua require'jdtls'.test_nearest_method()<CR>
 
-        " nnoremap <silent> <space>p <cmd>call lighttree#plugin#jdt#toggle_win()<cr>
-        ]])
 
-      end
-      return M
+    " command! -nargs=0 JdtRefreshDebugConfigs :lua require('jdtls.dap').setup_dap_main_class_configs()
+    "
+    " command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
+    " command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
+    " command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
+    " command! -buffer JdtJol lua require('jdtls').jol()
+    " command! -buffer JdtBytecode lua require('jdtls').javap()
+    " command! -buffer JdtJshell lua require('jdtls').jshell()
+
+    " nnoremap <silent> <space>p <cmd>call lighttree#plugin#jdt#toggle_win()<cr>
+    ]])
+end
+
+return M
