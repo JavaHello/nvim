@@ -70,7 +70,7 @@ require('packer').startup(function()
   use 'tpope/vim-fugitive'
 
   -- LeaderF
-  use 'Yggdroot/LeaderF'
+  -- use 'Yggdroot/LeaderF'
 
   -- git edit 状态显示插件
   use {
@@ -87,7 +87,7 @@ require('packer').startup(function()
 
   -- 浮动窗口插件
   use 'voldikss/vim-floaterm'
-  use 'voldikss/LeaderF-floaterm'
+  -- use 'voldikss/LeaderF-floaterm'
 
   -- 多光标插件
   use 'mg979/vim-visual-multi'
@@ -170,6 +170,7 @@ require('packer').startup(function()
   use "Pocco81/AutoSave.nvim"
 
   -- use "nathom/filetype.nvim"
+  use 'GustavoKatel/telescope-asynctasks.nvim'
 end)
 
 require('plugins/config/bufferline')
@@ -178,7 +179,7 @@ require('plugins/config/nvim-treesitter')
 
 require('plugins/config/luasnip')
 require('plugins/config/nvim-cmp')
-require('plugins/config/LeaderF')
+-- require('plugins/config/LeaderF')
 require('plugins/config/gitsigns-nvim')
 require('plugins/config/vim-floaterm')
 require('plugins/config/asynctasks')

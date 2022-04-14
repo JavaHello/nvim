@@ -22,10 +22,10 @@ map('n', '<Leader>w', ':bdelete!<CR>', opt)
 map('t', '<Esc>', '<C-\\><C-N>', opt)
 
 -- Leaderf
-vim.g.Lf_ShortcutF = '<C-P>'
-map('n', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>', {})
-map('v', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", leaderf#Rg#visual())<CR>', {})
-map('n', '<space>r', ':Leaderf --nowrap task<CR>', {})
+-- vim.g.Lf_ShortcutF = '<C-P>'
+-- map('n', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>', {})
+-- map('v', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", leaderf#Rg#visual())<CR>', {})
+-- map('n', '<space>r', ':Leaderf --nowrap task<CR>', {})
 
 -- vim-floaterm
 vim.g.floaterm_keymap_new = '<space>t'
@@ -45,10 +45,12 @@ map('n', '<space>o', ':<C-u>Vista!!<CR>', opt)
 -- map('n', 'gr', ':Lspsaga lsp_finder<CR>', opt)
 
 -- Telescope
-map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', {})
-map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', {})
-map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', {})
-map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', {})
+map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', opt)
+map('n', '<C-p>', '<cmd>Telescope find_files<cr>', opt)
+map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', opt)
+map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', opt)
+map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', opt)
+map('n', '<space>r', '<cmd>Telescope asynctasks all<cr>', opt)
 
 -- translate
 map('n', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
