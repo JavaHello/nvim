@@ -168,6 +168,8 @@ require('packer').startup(function()
   use 'simrat39/rust-tools.nvim'
 
   use "Pocco81/AutoSave.nvim"
+
+  -- use "nathom/filetype.nvim"
 end)
 
 require('plugins/config/bufferline')
