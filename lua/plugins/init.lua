@@ -179,10 +179,10 @@ require('packer').startup(function()
   use "Pocco81/AutoSave.nvim"
 
   -- use "nathom/filetype.nvim"
-  use {
-    "nvim-neorg/neorg",
-    requires = "nvim-lua/plenary.nvim"
-  }
+  -- use {
+  --   "nvim-neorg/neorg",
+  --   requires = "nvim-lua/plenary.nvim"
+  -- }
 end)
 
 require('plugins/config/bufferline')
@@ -215,5 +215,5 @@ require('plugins/config/nvim-autopairs')
 require('plugins/config/nvim-dap')
 require('plugins/config/markdown-preview')
 require('plugins/config/autosave')
-require('plugins/config/nvim-neorg')
+-- require('plugins/config/nvim-neorg')
 
