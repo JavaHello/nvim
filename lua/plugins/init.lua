@@ -147,6 +147,13 @@ require('packer').startup(function()
   use {'nvim-telescope/telescope-ui-select.nvim' }
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
+  use 'GustavoKatel/telescope-asynctasks.nvim'
+  use 'aloussase/telescope-gradle.nvim'
+  use 'aloussase/telescope-mvnsearch'
+  use { "LinArcX/telescope-env.nvim" }
+
+
+
   -- 仪表盘
   use {'glepnir/dashboard-nvim'}
 
@@ -171,7 +178,6 @@ require('packer').startup(function()
   use "Pocco81/AutoSave.nvim"
 
   -- use "nathom/filetype.nvim"
-  use 'GustavoKatel/telescope-asynctasks.nvim'
 end)
 
 require('plugins/config/bufferline')
