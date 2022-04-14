@@ -183,6 +183,10 @@ require('packer').startup(function()
   --   "nvim-neorg/neorg",
   --   requires = "nvim-lua/plenary.nvim"
   -- }
+  --
+  -- Is using a standard Neovim install, i.e. built from source or using a
+  -- provided appimage.
+  use 'lewis6991/impatient.nvim'
 end)
 
 require('plugins/config/bufferline')

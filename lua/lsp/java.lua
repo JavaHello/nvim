@@ -214,7 +214,7 @@ M.setup = function ()
     jdtls.start_or_attach(config)
 
     local map = vim.api.nvim_set_keymap
-    require('keybindings').maplsp(map)
+    require('core.keybindings').maplsp(map)
 
     vim.cmd([[
     command! -nargs=0 OR   :lua require'jdtls'.organize_imports()
