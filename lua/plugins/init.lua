@@ -145,6 +145,7 @@ require('packer').startup(function()
     requires = { {'nvim-lua/plenary.nvim'} }
   }
   use {'nvim-telescope/telescope-ui-select.nvim' }
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
   -- 仪表盘
   use {'glepnir/dashboard-nvim'}
