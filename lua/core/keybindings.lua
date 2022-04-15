@@ -18,6 +18,9 @@ map('n', '<Leader><CR>', ':nohlsearch<CR>', opt)
 -- map('n', '<Leader>o', ':%bd|e#|bd#<CR>', opt)
 map('n', '<Leader>o', '<cmd>lua require("utils").close_other_bufline()<CR>', opt)
 map('n', '<Leader>w', ':bdelete!<CR>', opt)
+map("n", '<TAB>', ":BufferLineCycleNext <CR>", opt)
+map("n", '<S-TAB>', ":BufferLineCyclePrev <CR>", opt)
+
 -- " 退出 terminal 模式
 map('t', '<Esc>', '<C-\\><C-N>', opt)
 
