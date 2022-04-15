@@ -1,4 +1,4 @@
-require('packer').startup(function()
+require('packer').startup({function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
   use {'neovim/nvim-lspconfig', 'williamboman/nvim-lsp-installer'}
@@ -187,7 +187,12 @@ require('packer').startup(function()
   -- Is using a standard Neovim install, i.e. built from source or using a
   -- provided appimage.
   use 'lewis6991/impatient.nvim'
-end)
+end,
+config = {
+  display = {
+    open_fn = require('packer.util').float,
+  }
+}})
 
 require('plugins/config/bufferline')
 require('plugins/config/nvim-tree')
