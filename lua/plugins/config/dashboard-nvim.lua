@@ -5,3 +5,15 @@ local g = vim.g
 g.dashboard_default_executive = "telescope"
 -- g.dashboard_custom_header = {
 -- }
+
+local startify_ascii_header = {
+  '                                        ▟▙            ',
+  '                                        ▝▘            ',
+  '██▃▅▇█▆▖  ▗▟████▙▖   ▄████▄   ██▄  ▄██  ██  ▗▟█▆▄▄▆█▙▖',
+  '██▛▔ ▝██  ██▄▄▄▄██  ██▛▔▔▜██  ▝██  ██▘  ██  ██▛▜██▛▜██',
+  '██    ██  ██▀▀▀▀▀▘  ██▖  ▗██   ▜█▙▟█▛   ██  ██  ██  ██',
+  '██    ██  ▜█▙▄▄▄▟▊  ▀██▙▟██▀   ▝████▘   ██  ██  ██  ██',
+  '▀▀    ▀▀   ▝▀▀▀▀▀     ▀▀▀▀       ▀▀     ▀▀  ▀▀  ▀▀  ▀▀',
+  '',
+ }
+g.dashboard_custom_header = startify_ascii_header
