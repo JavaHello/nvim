@@ -16,7 +16,7 @@ map('n', '<Leader>v', '"+p', opt)
 map('n', '<Leader><CR>', ':nohlsearch<CR>', opt)
 -- %bd 删除所有缓冲区, e# 打开最后一个缓冲区, bd# 关闭[No Name]
 -- map('n', '<Leader>o', ':%bd|e#|bd#<CR>', opt)
-map('n', '<Leader>o', '<cmd>lua require("utils").close_other_bufline()<CR>', opt)
+map('n', '<Leader>o', '<cmd>lua require("core.utils").close_other_bufline()<CR>', opt)
 map('n', '<Leader>w', ':bdelete!<CR>', opt)
 map("n", '<TAB>', ":BufferLineCycleNext <CR>", opt)
 map("n", '<S-TAB>', ":BufferLineCyclePrev <CR>", opt)
