@@ -1,6 +1,12 @@
 require('packer').startup({function()
+
+
+  use { 'nvim-lua/plenary.nvim' }
+  use { 'lewis6991/impatient.nvim' }
+  use { 'nathom/filetype.nvim' }
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
+
   use {'neovim/nvim-lspconfig', 'williamboman/nvim-lsp-installer'}
 
   use 'kyazdani42/nvim-web-devicons'
@@ -75,10 +81,6 @@ require('packer').startup({function()
   -- git edit 状态显示插件
   use {
     'lewis6991/gitsigns.nvim',
-    requires = {
-      'nvim-lua/plenary.nvim'
-    },
-    -- tag = 'release' -- To use the latest release
   }
 
   -- 异步任务执行插件
@@ -142,7 +144,6 @@ require('packer').startup({function()
   -- 搜索插件
   use {
     'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
   }
   use {'nvim-telescope/telescope-ui-select.nvim' }
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
@@ -178,19 +179,9 @@ require('packer').startup({function()
 
   use "Pocco81/AutoSave.nvim"
 
-  -- use "nathom/filetype.nvim"
-  -- use {
-  --   "nvim-neorg/neorg",
-  --   requires = "nvim-lua/plenary.nvim"
-  -- }
-  --
-  -- Is using a standard Neovim install, i.e. built from source or using a
-  -- provided appimage.
-  use 'lewis6991/impatient.nvim'
 
   use {
     "NTBBloodbath/rest.nvim",
-    requires = { "nvim-lua/plenary.nvim" },
   }
 end,
 config = {

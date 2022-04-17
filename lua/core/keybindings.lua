@@ -111,7 +111,7 @@ local pluginKeys = {}
 -- lsp 回调函数快捷键设置
 pluginKeys.maplsp = function(mapbuf)
 
-    vim.api.nvim_buf_set_option(mapbuf, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     mapbuf('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
     -- rename
