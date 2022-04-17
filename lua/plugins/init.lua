@@ -199,7 +199,13 @@ config = {
   }
 }})
 
+
 require('plugins/config/bufferline')
+require('plugins/config/indent-blankline')
+require('plugins/config/dashboard-nvim')
+require('plugins/config/lualine')
+-- 异步加载
+vim.defer_fn(function()
 require('plugins/config/nvim-tree')
 require('plugins/config/nvim-treesitter')
 
@@ -210,8 +216,6 @@ require('plugins/config/gitsigns-nvim')
 require('plugins/config/vim-floaterm')
 require('plugins/config/asynctasks')
 -- require('plugins/config/feline')
-require('plugins/config/lualine')
-require('plugins/config/indent-blankline')
 require('plugins/config/vista')
 -- require('plugins/config/lsp-colors')
 require('plugins/config/trouble')
@@ -222,7 +226,6 @@ require('plugins/config/comment')
 -- require('plugins/config/lspsaga')
 -- require('plugins/config/formatter')
 require('plugins/config/telescope')
-require('plugins/config/dashboard-nvim')
 -- require('plugins/config/nvim-lsputils')
 require('plugins/config/nvim-autopairs')
 -- require('plugins/config/lsp_signature')
@@ -232,3 +235,4 @@ require('plugins/config/autosave')
 -- require('plugins/config/nvim-neorg')
 require('plugins/config/rest-nvim')
 
+end, 0)
