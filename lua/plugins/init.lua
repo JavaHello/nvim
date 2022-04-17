@@ -204,9 +204,9 @@ require('plugins/config/bufferline')
 require('plugins/config/indent-blankline')
 require('plugins/config/dashboard-nvim')
 require('plugins/config/lualine')
+require('plugins/config/nvim-tree')
 -- 异步加载
 vim.defer_fn(function()
-require('plugins/config/nvim-tree')
 require('plugins/config/nvim-treesitter')
 
 require('plugins/config/luasnip')
