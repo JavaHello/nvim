@@ -81,6 +81,9 @@ require('packer').startup({function()
   -- git edit 状态显示插件
   use {
     'lewis6991/gitsigns.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
   }
 
   -- 异步任务执行插件
@@ -144,6 +147,9 @@ require('packer').startup({function()
   -- 搜索插件
   use {
     'nvim-telescope/telescope.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
   }
   use {'nvim-telescope/telescope-ui-select.nvim' }
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
@@ -182,6 +188,9 @@ require('packer').startup({function()
 
   use {
     "NTBBloodbath/rest.nvim",
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
   }
 end,
 config = {
