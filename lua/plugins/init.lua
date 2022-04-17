@@ -233,7 +233,17 @@ require('plugins/config/nvim-dap')
 require('plugins/config/markdown-preview')
 require('plugins/config/autosave')
 -- require('plugins/config/nvim-neorg')
-require('plugins/config/rest-nvim')
+
+vim.cmd[[
+function RestNvimLoad() 
+  lua require('plugins/config/rest-nvim')
+  lua require('core.keybindings').rest_nvim()
+endfunction
+augroup rest_http
+    autocmd!
+    autocmd FileType http :call RestNvimLoad()<CR>
+augroup end
+]]
 
 require('core.keybindings').setup()
 end, 0)
