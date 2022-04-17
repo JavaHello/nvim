@@ -235,4 +235,5 @@ require('plugins/config/autosave')
 -- require('plugins/config/nvim-neorg')
 require('plugins/config/rest-nvim')
 
+require('core.keybindings').setup()
 end, 0)

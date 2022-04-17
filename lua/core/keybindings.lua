@@ -4,6 +4,9 @@
 local map = vim.api.nvim_set_keymap
 local opt = {noremap = true, silent = true }
 
+local M = {}
+
+M.setup = function ()
 -- nvimTree
 map('n', '<space>n', ':NvimTreeToggle<CR>', opt)
 -- n 模式下复制内容到系统剪切板
@@ -106,10 +109,10 @@ nnoremap <silent><leader>8 <Cmd>BufferLineGoToBuffer 8<CR>
 nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
 ]]
 
-local pluginKeys = {}
+end
 
 -- lsp 回调函数快捷键设置
-pluginKeys.maplsp = function(mapbuf)
+M.maplsp = function(mapbuf)
 
     -- vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -158,7 +161,7 @@ pluginKeys.maplsp = function(mapbuf)
 end
 
 -- nvim-cmp 自动补全
-pluginKeys.cmp = function(cmp)
+M.cmp = function(cmp)
 
 local luasnip = require('luasnip');
 local has_words_before = function()
@@ -208,4 +211,4 @@ return {
 }
 end
 
-return pluginKeys
+return M
