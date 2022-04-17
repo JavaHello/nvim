@@ -187,6 +187,11 @@ require('packer').startup({function()
   -- Is using a standard Neovim install, i.e. built from source or using a
   -- provided appimage.
   use 'lewis6991/impatient.nvim'
+
+  use {
+    "NTBBloodbath/rest.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+  }
 end,
 config = {
   display = {
@@ -225,4 +230,5 @@ require('plugins/config/nvim-dap')
 require('plugins/config/markdown-preview')
 require('plugins/config/autosave')
 -- require('plugins/config/nvim-neorg')
+require('plugins/config/rest-nvim')
 

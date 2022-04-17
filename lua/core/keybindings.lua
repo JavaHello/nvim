@@ -59,6 +59,13 @@ map('n', '<space>r', '<cmd>Telescope asynctasks all<cr>', opt)
 map('n', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 map('v', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 
+-- rest-nvim
+vim.cmd[[
+  command! -nargs=0 Http  :lua require'rest-nvim'.run()
+  command! -nargs=0 HttpCurl  :lua require'rest-nvim'.run(true)
+  command! -nargs=0 HttpLast  :lua require'rest-nvim'.last()
+]]
+
 -- vim-easy-align
 vim.cmd([[
 " Start interactive EasyAlign in visual mode (e.g. vipga)
