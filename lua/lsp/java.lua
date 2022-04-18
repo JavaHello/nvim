@@ -194,6 +194,7 @@ M.setup = function ()
     -- Remove the option if you do not want that.
     require('jdtls').setup_dap({ hotcodereplace = 'auto' })
     require('jdtls.setup').add_commands();
+    require('core.keybindings').maplsp(bufnr)
     -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
   end
 
@@ -213,8 +214,6 @@ M.setup = function ()
 
     jdtls.start_or_attach(config)
 
-    local map = vim.api.nvim_set_keymap
-    require('core.keybindings').maplsp(map)
 
     vim.cmd([[
     command! -nargs=0 OR   :lua require'jdtls'.organize_imports()

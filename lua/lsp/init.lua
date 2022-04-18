@@ -36,10 +36,9 @@ lsp_installer.on_server_ready(function(server)
   local opts = m.config;
   if opts then
     opts.on_attach = function(client, bufnr)
-      local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
       -- local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
       -- 绑定快捷键
-      require('core.keybindings').maplsp(buf_set_keymap)
+      require('core.keybindings').maplsp( bufnr)
       if m.on_attach then
         m.on_attach(client, bufnr)
       end
