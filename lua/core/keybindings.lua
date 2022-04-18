@@ -62,18 +62,6 @@ map('n', '<space>r', '<cmd>Telescope asynctasks all<cr>', opt)
 map('n', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 map('v', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 
--- rest-nvim
-vim.cmd[[
-function! s:http_rest_key() abort
-  command! -buffer Http  :lua require'rest-nvim'.run()
-  command! -buffer HttpCurl  :lua require'rest-nvim'.run(true)
-  command! -buffer HttpLast  :lua require'rest-nvim'.last()
-endfunction
-augroup http_rest
-    autocmd!
-    autocmd FileType http call s:http_rest_key()
-augroup end
-]]
 
 -- vim-easy-align
 vim.cmd([[
@@ -215,6 +203,15 @@ return {
     end
   end, { "i", "s" }),
 }
+end
+
+M.rest_nvim = function ()
+-- rest-nvim
+vim.cmd[[
+command! -buffer Http  :lua require'rest-nvim'.run()
+command! -buffer HttpCurl  :lua require'rest-nvim'.run(true)
+command! -buffer HttpLast  :lua require'rest-nvim'.last()
+]]
 end
 
 return M
