@@ -163,7 +163,11 @@ require('packer').startup({function()
 
 
   -- 仪表盘
-  use {'glepnir/dashboard-nvim'}
+  -- use {'glepnir/dashboard-nvim'}
+  use {
+    'goolord/alpha-nvim',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+  }
 
   -- 翻译插件
   use 'voldikss/vim-translator'
@@ -202,7 +206,8 @@ config = {
 
 require('plugins/config/bufferline')
 require('plugins/config/indent-blankline')
-require('plugins/config/dashboard-nvim')
+-- require('plugins/config/dashboard-nvim')
+require('plugins/config/alpha-nvim')
 require('plugins/config/lualine')
 require('plugins/config/nvim-tree')
 -- 异步加载
