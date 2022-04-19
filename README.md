@@ -30,3 +30,5 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
 | [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | 模糊查找插件，窗口预览 | 8        |      |
 | [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)       | 状态栏插件             | 8        |      |
 | [vim-table-mode](https://github.com/dhruvasagar/vim-table-mode)    | table 模式插件         | 10       |      |
+
+感谢[NvChad](https://github.com/NvChad/NvChad), 部分插件和配置参考了 `NvChad`
