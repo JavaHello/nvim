@@ -42,6 +42,7 @@ vim.cmd('autocmd Filetype html setlocal ts=2 sw=2 expandtab')
 vim.cmd('autocmd Filetype xml setlocal ts=2 sw=2 expandtab')
 vim.cmd('autocmd Filetype yaml setlocal ts=2 sw=2 expandtab')
 vim.cmd('autocmd Filetype http setlocal ts=2 sw=2 expandtab')
+vim.cmd('autocmd Filetype markdown setlocal ts=2 sw=2 expandtab')
 
 -- 新行对齐当前行，空格替代tab
 vim.o.expandtab = true
