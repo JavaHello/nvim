@@ -129,6 +129,7 @@ M.setup = function ()
             {
               name = "JavaSE-1.8",
               path = "/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home",
+              default = true,
             },
             {
               name = "JavaSE-11",
