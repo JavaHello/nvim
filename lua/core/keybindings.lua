@@ -21,11 +21,12 @@ map('n', '<Leader><CR>', ':nohlsearch<CR>', opt)
 -- map('n', '<Leader>o', ':%bd|e#|bd#<CR>', opt)
 map('n', '<Leader>o', '<cmd>lua require("core.utils").close_other_bufline()<CR>', opt)
 map('n', '<Leader>w', ':bdelete!<CR>', opt)
-map("n", '<TAB>', ":BufferLineCycleNext <CR>", opt)
-map("n", '<S-TAB>', ":BufferLineCyclePrev <CR>", opt)
+map("n", '<Leader>p', ":BufferLineCycleNext <CR>", opt)
+map("n", '<Leader>n', ":BufferLineCyclePrev <CR>", opt)
 
 -- " 退出 terminal 模式
 map('t', '<Esc>', '<C-\\><C-N>', opt)
+map('t', 'jk', '<C-\\><C-N>', opt)
 
 -- Leaderf
 -- vim.g.Lf_ShortcutF = '<C-P>'
@@ -34,7 +35,7 @@ map('t', '<Esc>', '<C-\\><C-N>', opt)
 -- map('n', '<space>r', ':Leaderf --nowrap task<CR>', {})
 
 -- vim-floaterm
-vim.g.floaterm_keymap_new = '<space>t'
+-- vim.g.floaterm_keymap_new = '<leader>ft'
 map('n', '<F12>', ':FloatermToggle<CR>', opt)
 map('t', '<F12>   <C-\\><C-n>', ':<C-\\><C-n>:FloatermToggle<CR>', opt)
 
@@ -101,6 +102,11 @@ nnoremap <silent><leader>6 <Cmd>BufferLineGoToBuffer 6<CR>
 nnoremap <silent><leader>7 <Cmd>BufferLineGoToBuffer 7<CR>
 nnoremap <silent><leader>8 <Cmd>BufferLineGoToBuffer 8<CR>
 nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 ]]
 
 end
@@ -119,7 +125,8 @@ M.maplsp = function(bufnr)
     -- mapbuf('n', '<leader>ca', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opt)
     -- go xx
     -- mapbuf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
-    map('n', 'gd', '<cmd>Trouble lsp_definitions<CR>', opt)
+    -- map('n', 'gd', '<cmd>Trouble lsp_definitions<CR>', opt)
+    map('n', 'gd', '<cmd>Telescope lsp_definitions<CR>', opt)
     map('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opt)
     -- mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opt)
     -- mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opt)
@@ -174,6 +181,8 @@ return {
   -- Set `select` to `false` to only confirm explicitly selected items.
   -- ["<C-d>"] = cmp.mapping.scroll_docs(-4),
   -- ["<C-f>"] = cmp.mapping.scroll_docs(4),
+  ["<C-p>"] = cmp.mapping.select_prev_item(),
+  ["<C-n>"] = cmp.mapping.select_next_item(),
   ["<C-Space>"] = cmp.mapping.complete(),
   ["<C-e>"] = cmp.mapping.close(),
   ["<CR>"] = cmp.mapping.confirm {
