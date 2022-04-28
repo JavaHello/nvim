@@ -61,6 +61,9 @@ M.char_size = function(c)
 end
 
 M.camel_case = function (word)
+  if word == '' or word == nil then
+    return
+  end
   if word:find('_')  then
     return M.camel_case_c(word)
   else
@@ -121,7 +124,10 @@ M.camel_case_start = function (r, l1, l2)
   local word
   if r == 0 then
     word = vim.fn.expand('<cword>')
-    vim.fn.setreg('"', M.camel_case(word))
+    local cw = M.camel_case(word)
+    if cw then
+      vim.fn.setreg('"', M.camel_case(word))
+    end
   elseif l1 == l2 then
     word = vim.fn.getline('.')
     local ln1 = vim.fn.getpos("'<")
