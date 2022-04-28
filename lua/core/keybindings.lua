@@ -63,6 +63,8 @@ map('n', '<space>r', '<cmd>Telescope asynctasks all<cr>', opt)
 map('n', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 map('v', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
 
+-- camel_case
+require('core.utils').camel_case_init()
 
 -- vim-easy-align
 vim.cmd([[
