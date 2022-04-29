@@ -74,14 +74,21 @@ M.camel_case_u = function (word)
   local result = {}
   local len = word:len()
   local i = 1
+  local f = true
   while i <= len do
     local c = word:byte(i)
     local cs = M.char_size(c)
+    local cf = f
     if cs == nil then
       return word
     end
-    if cs == 1 and M.is_upper(c) and i ~= 1 then
-      table.insert(result, '_')
+    if cs == 1 and M.is_upper(c) then
+      f = false;
+      if cf and i ~= 1 then
+        table.insert(result, '_')
+      end
+    else
+      f = true
     end
     local e = i + cs;
     table.insert(result, word:sub(i, e -1))
