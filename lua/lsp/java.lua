@@ -39,7 +39,7 @@ M.setup = function ()
       -- '-XX:AdaptiveSizePolicyWeight=90',
       '-XX:+UseG1GC',
       '-XX:+UseStringDeduplication',
-      '-Xms1g',
+      '-Xms512m',
       '-Xmx2g',
       '-javaagent:/opt/software/lsp/lombok.jar',
       '--add-modules=ALL-SYSTEM',
