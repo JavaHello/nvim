@@ -1,4 +1,5 @@
-local lsp_installer = require "nvim-lsp-installer"
+local lsp_installer = require('nvim-lsp-installer')
+local lspconfig = require('lspconfig')
 
 -- 安装列表
 -- https://github.com/williamboman/nvim-lsp-installer#available-lsps
@@ -30,9 +31,8 @@ end
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- 没有确定使用效果参数
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-lsp_installer.on_server_ready(function(server)
-  local m = servers[server.name]
+lsp_installer.setup({})
+for name, m in pairs(servers) do
   local opts = m.config;
   if opts then
     opts.on_attach = function(client, bufnr)
@@ -50,24 +50,23 @@ lsp_installer.on_server_ready(function(server)
     opts.capabilities = capabilities;
   end
 
-  if server.name == "rust_analyzer" then
+  if name == "rust_analyzer" then
     -- Initialize the LSP via rust-tools instead
     require("rust-tools").setup {
       -- The "server" property provided in rust-tools setup function are the
-      -- settings rust-tools will provide to lspconfig during init.            -- 
+      -- settings rust-tools will provide to lspconfig during init.            --
       -- We merge the necessary settings from nvim-lsp-installer (server:get_default_options())
       -- with the user's own settings (opts).
-      dap = m.dap, 
-      server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
+      dap = m.dap,
+      server = opts,
     }
-    server:attach_buffers()
     -- Only if standalone support is needed
     require("rust-tools").start_standalone_if_required()
   else
-    server:setup(opts)
+    lspconfig[name].setup(opts)
   end
-end)
 
+end
 -- LSP 相关美化参考 https://github.com/NvChad/NvChad
 local function lspSymbol(name, icon)
   local hl = "DiagnosticSign" .. name
