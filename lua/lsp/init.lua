@@ -58,10 +58,10 @@ for name, m in pairs(servers) do
       -- We merge the necessary settings from nvim-lsp-installer (server:get_default_options())
       -- with the user's own settings (opts).
       dap = m.dap,
-      server = opts,
+      server = { on_attach = opts.on_attach },
     }
     -- Only if standalone support is needed
-    require("rust-tools").start_standalone_if_required()
+    -- require("rust-tools").start_standalone_if_required()
   else
     lspconfig[name].setup(opts)
   end
