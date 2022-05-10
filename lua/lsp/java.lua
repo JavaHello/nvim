@@ -6,6 +6,7 @@ local env = {
   MAVEN_SETTINGS = os.getenv('MAVEN_SETTINGS'),
   JDTLS_HOME = os.getenv('JDTLS_HOME'),
   JDTLS_WORKSPACE = os.getenv('JDTLS_WORKSPACE'),
+  JDTLS_EXTENSIONS = os.getenv('JDTLS_EXTENSIONS'),
   LOMBOK_JAR = os.getenv('LOMBOK_JAR'),
 }
 
@@ -36,6 +37,10 @@ end
 
 local function get_lombok_jar()
   return or_default(env.LOMBOK_JAR, '/opt/software/lsp/lombok.jar')
+end
+
+local function get_jdtls_extensions()
+  return or_default(env.JDTLS_EXTENSIONS, '/opt/software/lsp/java')
 end
 
 M.setup = function ()
@@ -196,19 +201,19 @@ M.setup = function ()
 
   -- This bundles definition is the same as in the previous section (java-debug installation)
   local bundles = {
-    vim.fn.glob("/opt/software/lsp/java/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar")
+    vim.fn.glob(get_jdtls_extensions() .. "/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar")
   };
 
   -- /opt/software/lsp/java/vscode-java-test/server
   -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
-  for _, bundle in ipairs(vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n")) do
+  for _, bundle in ipairs(vim.split(vim.fn.glob(get_jdtls_extensions() .. "/vscode-java-test/server/*.jar"), "\n")) do
     if not vim.endswith(bundle, 'com.microsoft.java.test.runner-jar-with-dependencies.jar') then
       table.insert(bundles, bundle)
     end
   end
 
   -- /opt/software/lsp/java/vscode-java-decompiler/server/
-  vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-decompiler/server/*.jar"), "\n"));
+  vim.list_extend(bundles, vim.split(vim.fn.glob(get_jdtls_extensions() .. "/vscode-java-decompiler/server/*.jar"), "\n"));
 
   -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
   -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
