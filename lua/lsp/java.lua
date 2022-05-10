@@ -1,34 +1,62 @@
 local M = {}
 local env = {
   -- HOME = vim.loop.os_homedir(),
-  MAVEN_SETTINGS = os.getenv 'MAVEN_SETTINGS',
+  JAVA_HOME = os.getenv('JAVA_HOME'),
+  MAVEN_HOME = os.getenv('MAVEN_HOME'),
+  MAVEN_SETTINGS = os.getenv('MAVEN_SETTINGS'),
+  JDTLS_HOME = os.getenv('JDTLS_HOME'),
+  JDTLS_WORKSPACE = os.getenv('JDTLS_WORKSPACE'),
+  LOMBOK_JAR = os.getenv('LOMBOK_JAR'),
 }
 
-local maven_settings = '/opt/software/apache-maven-3.6.3/conf/settings.xml'
-local function get_maven_settings()
-  return env.MAVEN_SETTINGS and env.MAVEN_SETTINGS or maven_settings
+local function or_default(a, v)
+  return a and a or v
 end
 
+local maven_settings = env.MAVEN_HOME .. '/conf/settings.xml'
+local function get_maven_settings()
+  return or_default(env.MAVEN_SETTINGS, maven_settings)
+end
+
+local function get_java_home()
+  return or_default(env.JAVA_HOME, '/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home')
+end
+local function get_java()
+  return get_java_home() .. '/bin/java'
+end
+
+local jdtls_root = "/Users/kailuo/workspace/JavaProjects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
+local function get_jdtls_home()
+  return or_default(env.JDTLS_HOME, jdtls_root)
+end
+
+local function get_jdtls_workspace()
+  return or_default(env.JDTLS_WORKSPACE, '/Users/kailuo/jdtls-workspace/')
+end
+
+local function get_lombok_jar()
+  return or_default(env.LOMBOK_JAR, '/opt/software/lsp/lombok.jar')
+end
 
 M.setup = function ()
 
   local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 
   -- local workspace_dir = '/Users/kailuo/jdtls-workspace/' .. project_name
-  local workspace_dir = '/Users/kailuo/jdtls-workspace/' .. project_name
+  local workspace_dir = get_jdtls_workspace() .. project_name
 
-  local jdtls_launcher = vim.fn.glob("/opt/software/lsp/jdtls/plugins/org.eclipse.equinox.launcher_*.jar");
+  local jdtls_launcher = vim.fn.glob(get_jdtls_home() .. "/plugins/org.eclipse.equinox.launcher_*.jar");
   -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
   local config = {
     -- The command that starts the language server
     -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
     cmd = {
-      '/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home/bin/java', -- or '/path/to/java11_or_newer/bin/java'
+      get_java(), -- or '/path/to/java11_or_newer/bin/java'
       '-Declipse.application=org.eclipse.jdt.ls.core.id1',
       '-Dosgi.bundles.defaultStartLevel=4',
       '-Declipse.product=org.eclipse.jdt.ls.core.product',
       "-Dosgi.configuration.cascaded=true",
-      "-Dosgi.sharedConfiguration.area=/opt/software/lsp/jdtls/config_mac",
+      "-Dosgi.sharedConfiguration.area=" .. get_jdtls_home() .. "/config_mac",
       "-Dosgi.sharedConfiguration.area.readOnly=true",
       '-Dlog.protocol=true',
       '-Dlog.level=ALL',
@@ -41,7 +69,7 @@ M.setup = function ()
       '-XX:+UseStringDeduplication',
       '-Xms512m',
       '-Xmx2g',
-      '-javaagent:/opt/software/lsp/lombok.jar',
+      '-javaagent:' .. get_lombok_jar(),
       '--add-modules=ALL-SYSTEM',
       '--add-opens', 'java.base/java.util=ALL-UNNAMED',
       '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
@@ -61,7 +89,7 @@ M.setup = function ()
     -- for a list of options
     settings = {
       java = {
-        home = "/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home",
+        home = get_java_home(),
         project = {
           resourceFilters = {
             "node_modules",
