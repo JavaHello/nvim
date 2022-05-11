@@ -234,7 +234,7 @@ M.setup = function ()
     -- Remove the option if you do not want that.
     require('jdtls').setup_dap({ hotcodereplace = 'auto' })
     require('jdtls.setup').add_commands();
-    require('core.keybindings').maplsp(bufnr)
+    require('core.keybindings').maplsp(client, bufnr)
     -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
   end
 

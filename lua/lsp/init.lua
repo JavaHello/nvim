@@ -38,7 +38,7 @@ for name, m in pairs(servers) do
     opts.on_attach = function(client, bufnr)
       -- local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
       -- 绑定快捷键
-      require('core.keybindings').maplsp( bufnr)
+      require('core.keybindings').maplsp(client, bufnr)
       if m.on_attach then
         m.on_attach(client, bufnr)
       end
