@@ -62,6 +62,18 @@ for name, m in pairs(servers) do
         on_attach = opts.on_attach,
         capabilities = opts.capabilities,
         standalone = false,
+        settings = {
+          ["rust-analyzer"] = {
+            completion = {
+              postfix = {
+                enable = false
+              }
+            },
+            checkOnSave = {
+              command = "clippy"
+            },
+          }
+        }
       },
     }
     -- Only if standalone support is needed
