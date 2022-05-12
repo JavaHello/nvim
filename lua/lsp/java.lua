@@ -257,7 +257,6 @@ M.setup = function ()
 
     vim.cmd([[
     command! -nargs=0 OR   :lua require'jdtls'.organize_imports()
-    command! -nargs=0 Format  :lua vim.lsp.buf.formatting()
     nnoremap crv <Cmd>lua require('jdtls').extract_variable()<CR>
     vnoremap crv <Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>
     nnoremap crc <Cmd>lua require('jdtls').extract_constant()<CR>

@@ -152,6 +152,8 @@ M.maplsp = function(client, bufnr)
   -- mapbuf('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opt)
   -- leader + =
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt)
+  -- vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>=', '<cmd>lua vim.lsp.buf.range_formatting()<CR>', opt)
+  vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>=', '<cmd>lua require("core.utils").format_range_operator()<CR>', opt)
   -- mapbuf('v', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt)
   -- mapbuf('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opt)
   -- mapbuf('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opt)

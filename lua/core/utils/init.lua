@@ -1,9 +1,8 @@
-
 local M = {}
 --  69 %a   "test.lua"                     第 6 行
 --  76 #h   "README.md"                    第 1 行
 --  78  h   "init.lua"                     第 1 行
-M.close_other_buf = function ()
+M.close_other_buf = function()
   -- local cur_winnr = vim.fn.winnr()
   local cur_buf = vim.fn.bufnr('%')
   if cur_buf == -1 then
@@ -25,52 +24,52 @@ M.close_other_buf = function ()
   end
 end
 
-M.close_other_bufline = function ()
+M.close_other_bufline = function()
   vim.fn.execute('BufferLineCloseLeft')
   vim.fn.execute('BufferLineCloseRight')
 end
 
 M.packer_lazy_load = function(plugin, timer)
-   if plugin then
-      timer = timer or 0
-      vim.defer_fn(function()
-         require("packer").loader(plugin)
-      end, timer)
-   end
+  if plugin then
+    timer = timer or 0
+    vim.defer_fn(function()
+      require("packer").loader(plugin)
+    end, timer)
+  end
 end
 
-M.is_upper = function (c)
+M.is_upper = function(c)
   return c >= 65 and c <= 90
 end
 
-M.is_lower = function (c)
+M.is_lower = function(c)
   return c >= 97 and c <= 122
 end
 M.char_size = function(c)
-   local code = c;
-   if code < 127 then
-      return 1
-   elseif code <= 223 then
-      return 2
-   elseif code <= 239 then
-      return 3
-   elseif code <= 247 then
-      return 4
-   end
-   return nil
+  local code = c;
+  if code < 127 then
+    return 1
+  elseif code <= 223 then
+    return 2
+  elseif code <= 239 then
+    return 3
+  elseif code <= 247 then
+    return 4
+  end
+  return nil
 end
 
-M.camel_case = function (word)
+M.camel_case = function(word)
   if word == '' or word == nil then
     return
   end
-  if word:find('_')  then
+  if word:find('_') then
     return M.camel_case_c(word)
   else
     return M.camel_case_u(word)
   end
 end
-M.camel_case_u = function (word)
+M.camel_case_u = function(word)
   local result = {}
   local len = word:len()
   local i = 1
@@ -91,12 +90,12 @@ M.camel_case_u = function (word)
       f = true
     end
     local e = i + cs;
-    table.insert(result, word:sub(i, e -1))
+    table.insert(result, word:sub(i, e - 1))
     i = e
   end
   return table.concat(result, ''):upper()
 end
-M.camel_case_c = function (word)
+M.camel_case_c = function(word)
   local w = word:lower()
   local result = {}
   local sc = 95
@@ -120,14 +119,14 @@ M.camel_case_c = function (word)
       if cs == 1 and cf then
         table.insert(result, string.char(c):upper())
       else
-        table.insert(result, w:sub(i, e -1))
+        table.insert(result, w:sub(i, e - 1))
       end
     end
     i = e
   end
   return table.concat(result, '')
 end
-M.camel_case_start = function (r, l1, l2)
+M.camel_case_start = function(r, l1, l2)
   local word
   if r == 0 then
     word = vim.fn.expand('<cword>')
@@ -154,17 +153,29 @@ M.camel_case_start = function (r, l1, l2)
     vim.notify('请选择单行字符', vim.log.levels.WARN)
   end
 end
-M.test = function (a)
+M.test = function(a)
   print(a)
 end
-M.camel_case_init = function ()
-  vim.cmd[[
+M.camel_case_init = function()
+  vim.cmd [[
   " command! -complete=customlist,coreutils#cmdline#complete -nargs=* -bang -range
   command!  -nargs=* -range
   \ CamelCase
   \ lua require('core.utils').camel_case_start(<range>, <line1>, <line2>)
 ]]
-end 
+end
 -- print(M.camel_case("helloWorldAaAaAxC"))
 
+M.format_range_operator = function()
+  local old_func = vim.go.operatorfunc
+  _G.op_func_formatting = function()
+    local start = vim.api.nvim_buf_get_mark(0, '[')
+    local finish = vim.api.nvim_buf_get_mark(0, ']')
+    vim.lsp.buf.range_formatting({}, start, finish)
+    vim.go.operatorfunc = old_func
+    _G.op_func_formatting = nil
+  end
+  vim.go.operatorfunc = 'v:lua.op_func_formatting'
+  vim.api.nvim_feedkeys('g@', 'n', false)
+end
 return M
