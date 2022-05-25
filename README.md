@@ -26,7 +26,7 @@ cd ~/.config
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
-# Windows
+### Windows
 
 ```sh
 cd $env:LOCALAPPDATA
