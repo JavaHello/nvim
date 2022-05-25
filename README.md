@@ -4,15 +4,32 @@
 
 ## Packer 插件管理器安装
 
+### Linux, Mac
+
 ```sh
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 ```
 
+### Windows
+
+```sh
+git clone https://github.com/wbthomason/packer.nvim "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\packer.nvim"
+```
+
 ## 安装
+
+### Linux, Mac
 
 ```sh
 cd ~/.config
+git clone  https://github.com/JavaHello/nvim.git
+```
+
+# Windows
+
+```sh
+cd $env:LOCALAPPDATA
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
