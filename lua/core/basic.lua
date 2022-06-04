@@ -1,3 +1,4 @@
+vim.g.mapleader = " "
 vim.opt.title = true
 
 -- 行号

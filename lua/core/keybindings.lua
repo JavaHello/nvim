@@ -8,7 +8,7 @@ local M = {}
 
 M.setup = function()
   -- nvimTree
-  map('n', '<space>n', ':NvimTreeToggle<CR>', opt)
+  map('n', '<leader>e', ':NvimTreeToggle<CR>', opt)
   -- n 模式下复制内容到系统剪切板
   map('n', '<Leader>c', '"+yy', opt)
   -- v 模式下复制内容到系统剪切板
@@ -57,7 +57,7 @@ M.setup = function()
   map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', opt)
   map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', opt)
   map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', opt)
-  map('n', '<space>r', '<cmd>Telescope asynctasks all<cr>', opt)
+  map('n', '<leader>fr', '<cmd>Telescope asynctasks all<cr>', opt)
 
   -- translate
   map('n', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
