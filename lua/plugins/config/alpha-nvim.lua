@@ -16,11 +16,11 @@ dashboard.section.header.val = {
 
 -- Set menu
 dashboard.section.buttons.val = {
-    dashboard.button("\\ ff", "  Find File", ":Telescope find_files<CR>"),
-    dashboard.button("\\ fg", "  Find Word  ", ":Telescope live_grep<CR>"),
-    dashboard.button("\\ fo", "  Recent File"   , ":Telescope oldfiles<CR>"),
-    dashboard.button("\\ es", "  Settings" , ":e $MYVIMRC | :cd %:p:h <CR>"),
-    dashboard.button("\\ q ", "  Quit NVIM", ":qa<CR>"),
+    dashboard.button("<leader>  ff", "  Find File", ":Telescope find_files<CR>"),
+    dashboard.button("<leader>  fg", "  Find Word  ", ":Telescope live_grep<CR>"),
+    dashboard.button("<leader>  fo", "  Recent File"   , ":Telescope oldfiles<CR>"),
+    dashboard.button("<leader>  es", "  Settings" , ":e $MYVIMRC | :cd %:p:h <CR>"),
+    dashboard.button("<leader>  q ", "  Quit NVIM", ":qa<CR>"),
 }
 
 -- Set footer
