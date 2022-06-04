@@ -20,9 +20,8 @@ for name, _ in pairs(servers) do
   local server_available, server = lsp_installer.get_server(name)
   if server_available then
     if not server:is_installed() then
-      print("Installing " .. name)
-      vim.notify(string.format("Installing [%s] server", name), vim.log.levels.INFO)
-      server:install()
+      vim.notify(string.format("请安装 [%s] LSP server", name), vim.log.levels.WARN)
+      -- server:install()
     end
   end
 end
