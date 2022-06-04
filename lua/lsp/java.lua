@@ -20,7 +20,7 @@ local function get_maven_settings()
 end
 
 local function get_java_home()
-  return or_default(env.JAVA_HOME, '/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home')
+  return or_default(env.JAVA_HOME, '/opt/software/java/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64')
 end
 local function get_java()
   return get_java_home() .. '/bin/java'
@@ -167,16 +167,16 @@ M.setup = function ()
           runtimes = {
             {
               name = "JavaSE-1.8",
-              path = "/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home",
+              path = "/opt/software/java/zulu8.62.0.19-ca-jdk8.0.332-macosx_aarch64",
               default = true,
             },
             {
               name = "JavaSE-11",
-              path = "/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home",
+              path = "/opt/software/java/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64",
             },
             {
               name = "JavaSE-17",
-              path = "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home",
+              path = "/opt/software/java/zulu17.34.19-ca-jdk17.0.3-macosx_aarch64",
             },
           }
         },
