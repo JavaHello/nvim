@@ -21,6 +21,7 @@ M.setup = function()
   -- map('n', '<Leader>o', ':%bd|e#|bd#<CR>', opt)
   map('n', '<Leader>o', '<cmd>lua require("core.utils").close_other_bufline()<CR>', opt)
   map('n', '<Leader>w', ':bdelete!<CR>', opt)
+  map('n', '<Leader>q', ':q<CR>', opt)
   map("n", '<Leader>n', ":BufferLineCycleNext <CR>", opt)
   map("n", '<Leader>p', ":BufferLineCyclePrev <CR>", opt)
 
