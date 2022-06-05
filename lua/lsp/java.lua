@@ -26,13 +26,13 @@ local function get_java()
   return get_java_home() .. '/bin/java'
 end
 
-local jdtls_root = "/Users/kailuo/workspace/JavaProjects/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository"
+local jdtls_root = "/opt/software/lsp/java/jdt-language-server"
 local function get_jdtls_home()
   return or_default(env.JDTLS_HOME, jdtls_root)
 end
 
 local function get_jdtls_workspace()
-  return or_default(env.JDTLS_WORKSPACE, '/Users/kailuo/jdtls-workspace/')
+  return or_default(env.JDTLS_WORKSPACE, '/Users/luokai/jdtls-workspace/')
 end
 
 local function get_lombok_jar()
@@ -47,7 +47,6 @@ M.setup = function ()
 
   local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 
-  -- local workspace_dir = '/Users/kailuo/jdtls-workspace/' .. project_name
   local workspace_dir = get_jdtls_workspace() .. project_name
 
   local jdtls_launcher = vim.fn.glob(get_jdtls_home() .. "/plugins/org.eclipse.equinox.launcher_*.jar");
