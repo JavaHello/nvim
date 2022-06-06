@@ -71,6 +71,7 @@ require('packer').startup({function()
   -- debug
   use 'mfussenegger/nvim-dap'
   use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+  use 'theHamsta/nvim-dap-virtual-text'
 
   -- git
   use 'tpope/vim-fugitive'

@@ -55,3 +55,5 @@ vim.fn.sign_define('DapBreakpoint', {text='', texthl='Debug', linehl='', numh
 -- vim.fn.sign_define('DapBreakpointRejected', {text='R', texthl='', linehl='', numhl=''})
 -- vim.fn.sign_define('DapLogPoint', {text='L', texthl='', linehl='', numhl=''})
 -- vim.fn.sign_define('DapStopped', {text='→', texthl='', linehl='debugPC', numhl=''})
+
+require("nvim-dap-virtual-text").setup()
