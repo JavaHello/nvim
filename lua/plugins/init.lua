@@ -196,6 +196,9 @@ require('packer').startup({function()
       'nvim-lua/plenary.nvim'
     },
   }
+
+  -- 选择高亮插件
+  use "RRethy/vim-illuminate"
 end,
 config = {
   display = {
@@ -210,6 +213,7 @@ require('plugins/config/indent-blankline')
 require('plugins/config/alpha-nvim')
 require('plugins/config/lualine')
 require('plugins/config/nvim-tree')
+require('plugins/config/vim-illuminate')
 -- 异步加载
 vim.defer_fn(function()
 require('plugins/config/nvim-treesitter')
