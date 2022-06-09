@@ -1,6 +1,8 @@
 vim.g.mapleader = " "
 vim.opt.title = true
 
+vim.opt.clipboard = "unnamedplus"
+
 -- 行号
 vim.wo.number = true
 vim.wo.relativenumber = true
