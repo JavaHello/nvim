@@ -7,15 +7,12 @@ local lspconfig = require('lspconfig')
 local servers = {
   sumneko_lua = require "lsp.lua", -- /lua/lsp/lua.lua
   -- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
-  jsonls = require("lsp.jsonls"),
+  -- jsonls = require("lsp.jsonls"),
   clangd = require 'lsp.c',
   tsserver = require("lsp.tsserver"),
   html = require("lsp.html"),
   pyright = require("lsp.pyright"),
   rust_analyzer = require 'lsp.rust_analyzer',
-  prosemd_lsp = {
-    config = {}
-  },
 }
 
 -- 自动安装 LanguageServers
@@ -29,7 +26,7 @@ for name, _ in pairs(servers) do
   end
 end
 
- -- Setup lspconfig.
+-- Setup lspconfig.
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- 没有确定使用效果参数
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -123,7 +120,7 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
 --     vim.api.nvim_echo({ { msg } }, true, {})
 --   end
 -- end
-vim.cmd[[
+vim.cmd [[
 augroup jdtls_lsp
     autocmd!
     autocmd FileType java lua require'lsp.java'.setup()

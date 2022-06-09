@@ -129,8 +129,8 @@ require('packer').startup({function()
   use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
 
   -- 格式化插件
-  -- use 'mhartington/formatter.nvim'
-  use 'sbdchd/neoformat'
+  use 'mhartington/formatter.nvim'
+  -- use 'sbdchd/neoformat'
 
 
   -- 快捷键查看
@@ -234,7 +234,7 @@ require('plugins/config/wilder')
 require('plugins/config/nvim-colorizer')
 require('plugins/config/comment')
 -- require('plugins/config/lspsaga')
--- require('plugins/config/formatter')
+require('plugins/config/formatter')
 require('plugins/config/telescope')
 -- require('plugins/config/nvim-lsputils')
 require('plugins/config/nvim-autopairs')
