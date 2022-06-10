@@ -22,6 +22,7 @@ end
 local function get_java_home()
   return or_default(env.JAVA_HOME, '/opt/software/java/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64')
 end
+
 local function get_java()
   return get_java_home() .. '/bin/java'
 end
@@ -43,7 +44,7 @@ local function get_jdtls_extensions()
   return or_default(env.JDTLS_EXTENSIONS, '/opt/software/lsp/java')
 end
 
-M.setup = function ()
+M.setup = function()
 
   local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 
@@ -81,12 +82,12 @@ M.setup = function ()
       -- '-configuration', '/opt/software/lsp/jdtls/config_mac',
       '-data', workspace_dir,
     },
-    filetypes = {"java"},
+    filetypes = { "java" },
 
     -- 💀
     -- This is the default if not provided, you can remove it. Or adjust as needed.
     -- One dedicated LSP server & client will be started per unique root_dir
-    root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
+    root_dir = require('jdtls.setup').find_root({ '.git', 'mvnw', 'gradlew' }),
 
     -- Here you can configure eclipse.jdt.ls specific settings
     -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
@@ -148,7 +149,14 @@ M.setup = function ()
             "java.util.Objects.requireNonNull",
             "java.util.Objects.requireNonNullElse",
             "org.mockito.Mockito.*"
-          }
+          },
+          filteredTypes = {
+            "com.sun.*",
+            "io.micrometer.shaded.*",
+            "java.awt.*",
+            "jdk.*",
+            "sun.*",
+          },
         };
         sources = {
           organizeImports = {
@@ -190,11 +198,11 @@ M.setup = function ()
     --
     -- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
     -- init_options = {
-      --   bundles = {
-        --     vim.fn.glob("/opt/software/lsp/java/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.35.0.jar")
-        --   },
-        --   workspace = workspace_dir
-        -- },
+    --   bundles = {
+    --     vim.fn.glob("/opt/software/lsp/java/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.35.0.jar")
+    --   },
+    --   workspace = workspace_dir
+    -- },
   }
 
 
@@ -240,21 +248,21 @@ M.setup = function ()
 
   local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
   -- capabilities.experimental = {
-    --   hoverActions = true,
-    --   hoverRange = true,
-    --   serverStatusNotification = true,
-    --   snippetTextEdit = true,
-    --   codeActionGroup = true,
-    --   ssr = true,
-    -- }
+  --   hoverActions = true,
+  --   hoverRange = true,
+  --   serverStatusNotification = true,
+  --   snippetTextEdit = true,
+  --   codeActionGroup = true,
+  --   ssr = true,
+  -- }
 
-    config.capabilities = capabilities;
-
-
-    jdtls.start_or_attach(config)
+  config.capabilities = capabilities;
 
 
-    vim.cmd([[
+  jdtls.start_or_attach(config)
+
+
+  vim.cmd([[
     command! -nargs=0 OR   :lua require'jdtls'.organize_imports()
     nnoremap crv <Cmd>lua require('jdtls').extract_variable()<CR>
     vnoremap crv <Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>
