@@ -16,7 +16,13 @@ require("formatter").setup(
       typescript = { prettierConfig },
       typescriptreact = { prettierConfig },
       markdown = { prettierConfig },
-      sql = { exe = "sql-formatter" }
+      sql = { function()
+        return {
+          exe = "sql-formatter",
+          args = { vim.fn.shellescape(vim.api.nvim_buf_get_name(0)) },
+          stdin = true,
+        }
+      end }
     }
   }
 )
