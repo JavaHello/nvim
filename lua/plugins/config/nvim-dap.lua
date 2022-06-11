@@ -1,3 +1,11 @@
+local dap = require('dap')
+-- dap.defaults.fallback.terminal_win_cmd = '50vsplit new'
+-- dap.defaults.fallback.focus_terminal = true
+-- dap.defaults.fallback.external_terminal = {
+--   command = '/opt/homebrew/bin/alacritty';
+--   args = { '-e' };
+-- }
+
 require("dapui").setup({
   icons = { expanded = "▾", collapsed = "▸" },
   mappings = {
@@ -39,7 +47,7 @@ require("dapui").setup({
   windows = { indent = 1 },
 })
 
-local dap, dapui = require("dap"), require("dapui")
+local dapui = require("dapui")
 dap.listeners.after.event_initialized["dapui_config"] = function()
   --dapui.open()
 end
