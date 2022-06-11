@@ -183,7 +183,7 @@ M.setup = function()
             },
             {
               name = "JavaSE-17",
-              path = "/opt/software/java/zulu17.34.19-ca-jdk17.0.3-macosx_aarch64",
+              path = "/opt/software/java/graalvm-ce-java17-22.1.0/Contents/Home",
             },
           }
         },
