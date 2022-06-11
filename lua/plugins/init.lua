@@ -54,6 +54,7 @@ require('packer').startup({ function()
 
   -- 主题
   use 'morhetz/gruvbox'
+  -- use 'sainnhe/gruvbox-material'
 
 
   -- 文件管理
