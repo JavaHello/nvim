@@ -37,8 +37,9 @@ M.setup = function()
 
   -- vim-floaterm
   -- vim.g.floaterm_keymap_new = '<leader>ft'
-  map('n', '<F12>', ':FloatermToggle<CR>', opt)
-  map('t', '<F12>   <C-\\><C-n>', ':<C-\\><C-n>:FloatermToggle<CR>', opt)
+  -- map('n', '<F12>', ':FloatermToggle<CR>', opt)
+  -- map('t', '<F12>   <C-\\><C-n>', ':<C-\\><C-n>:FloatermToggle<CR>', opt)
+  map('n', '<F12>', ':ToggleTerm<CR>', opt)
 
 
   -- vista

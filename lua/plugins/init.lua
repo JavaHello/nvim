@@ -1,4 +1,4 @@
-require('packer').startup({function()
+require('packer').startup({ function()
 
 
   use { 'nvim-lua/plenary.nvim' }
@@ -7,14 +7,14 @@ require('packer').startup({function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
-  use {'neovim/nvim-lspconfig', 'williamboman/nvim-lsp-installer'}
+  use { 'neovim/nvim-lspconfig', 'williamboman/nvim-lsp-installer' }
 
   use 'kyazdani42/nvim-web-devicons'
 
   -- nvim-cmp
   use 'hrsh7th/cmp-nvim-lsp' -- { name = nvim_lsp }
-  use 'hrsh7th/cmp-buffer'   -- { name = 'buffer' },
-  use 'hrsh7th/cmp-path'     -- { name = 'path' }
+  use 'hrsh7th/cmp-buffer' -- { name = 'buffer' },
+  use 'hrsh7th/cmp-path' -- { name = 'path' }
   -- use 'hrsh7th/cmp-cmdline'  -- { name = 'cmdline' }
   use 'hrsh7th/nvim-cmp'
 
@@ -44,6 +44,14 @@ require('packer').startup({function()
   -- use 'RishabhRD/popfix'
   -- use 'RishabhRD/nvim-lsputils'
 
+  use({
+    "jose-elias-alvarez/null-ls.nvim",
+    config = function()
+      require("null-ls").setup()
+    end,
+    requires = { "nvim-lua/plenary.nvim" },
+  })
+
   -- 主题
   use 'morhetz/gruvbox'
 
@@ -57,7 +65,7 @@ require('packer').startup({function()
   }
 
   -- using packer.nvim
-  use {'akinsho/bufferline.nvim', requires = 'kyazdani42/nvim-web-devicons'}
+  use { 'akinsho/bufferline.nvim', requires = 'kyazdani42/nvim-web-devicons' }
 
 
   -- treesitter (新增)
@@ -70,7 +78,7 @@ require('packer').startup({function()
 
   -- debug
   use 'mfussenegger/nvim-dap'
-  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
   use 'theHamsta/nvim-dap-virtual-text'
 
   -- git
@@ -92,8 +100,11 @@ require('packer').startup({function()
   use 'skywind3000/asyncrun.vim'
 
   -- 浮动窗口插件
-  use 'voldikss/vim-floaterm'
+  -- use 'voldikss/vim-floaterm'
   -- use 'voldikss/LeaderF-floaterm'
+  use { "akinsho/toggleterm.nvim", tag = 'v2.*', config = function()
+    require("toggleterm").setup()
+  end }
 
   -- 多光标插件
   use 'mg979/vim-visual-multi'
@@ -101,7 +112,7 @@ require('packer').startup({function()
   -- 状态栏插件
   -- use 'feline-nvim/feline.nvim'
   use {
-  'nvim-lualine/lualine.nvim',
+    'nvim-lualine/lualine.nvim',
   }
 
   -- blankline
@@ -126,7 +137,7 @@ require('packer').startup({function()
   }
 
   -- mackdown 预览插件
-  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install'}
+  use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install' }
 
   -- 格式化插件
   use 'mhartington/formatter.nvim'
@@ -152,9 +163,9 @@ require('packer').startup({function()
       'nvim-lua/plenary.nvim'
     },
   }
-  use {'nvim-telescope/telescope-ui-select.nvim' }
+  use { 'nvim-telescope/telescope-ui-select.nvim' }
   -- use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-  use {'nvim-telescope/telescope-dap.nvim'}
+  use { 'nvim-telescope/telescope-dap.nvim' }
 
   use 'GustavoKatel/telescope-asynctasks.nvim'
   -- use 'aloussase/telescope-gradle.nvim'
@@ -205,7 +216,7 @@ config = {
   display = {
     open_fn = require('packer.util').float,
   }
-}})
+} })
 
 
 require('plugins/config/bufferline')
@@ -217,33 +228,33 @@ require('plugins/config/nvim-tree')
 require('plugins/config/vim-illuminate')
 -- 异步加载
 vim.defer_fn(function()
-require('plugins/config/nvim-treesitter')
+  require('plugins/config/nvim-treesitter')
 
-require('plugins/config/luasnip')
-require('plugins/config/nvim-cmp')
--- require('plugins/config/LeaderF')
-require('plugins/config/gitsigns-nvim')
-require('plugins/config/vim-floaterm')
-require('plugins/config/asynctasks')
--- require('plugins/config/feline')
-require('plugins/config/vista')
--- require('plugins/config/lsp-colors')
-require('plugins/config/trouble')
-require('plugins/config/nvim-notify')
-require('plugins/config/wilder')
-require('plugins/config/nvim-colorizer')
-require('plugins/config/comment')
--- require('plugins/config/lspsaga')
-require('plugins/config/formatter')
-require('plugins/config/telescope')
--- require('plugins/config/nvim-lsputils')
-require('plugins/config/nvim-autopairs')
--- require('plugins/config/lsp_signature')
-require('plugins/config/nvim-dap')
-require('plugins/config/markdown-preview')
-require('plugins/config/autosave')
--- require('plugins/config/nvim-neorg')
-vim.cmd[[
+  require('plugins/config/luasnip')
+  require('plugins/config/nvim-cmp')
+  -- require('plugins/config/LeaderF')
+  require('plugins/config/gitsigns-nvim')
+  require('plugins/config/vim-floaterm')
+  require('plugins/config/asynctasks')
+  -- require('plugins/config/feline')
+  require('plugins/config/vista')
+  -- require('plugins/config/lsp-colors')
+  require('plugins/config/trouble')
+  require('plugins/config/nvim-notify')
+  require('plugins/config/wilder')
+  require('plugins/config/nvim-colorizer')
+  require('plugins/config/comment')
+  -- require('plugins/config/lspsaga')
+  require('plugins/config/formatter')
+  require('plugins/config/telescope')
+  -- require('plugins/config/nvim-lsputils')
+  require('plugins/config/nvim-autopairs')
+  -- require('plugins/config/lsp_signature')
+  require('plugins/config/nvim-dap')
+  require('plugins/config/markdown-preview')
+  require('plugins/config/autosave')
+  -- require('plugins/config/nvim-neorg')
+  vim.cmd [[
 function! s:http_rest_init() abort
   lua require('plugins/config/rest-nvim')
   lua require('core.keybindings').rest_nvim()
@@ -254,5 +265,5 @@ augroup http_rest
 augroup end
 ]]
 
-require('core.keybindings').setup()
+  require('core.keybindings').setup()
 end, 0)
