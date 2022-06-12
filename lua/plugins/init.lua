@@ -237,6 +237,9 @@ require('packer').startup({ function()
     end
   }
 
+  -- ASCII 图
+  use 'jbyuki/venn.nvim'
+
 end,
 config = {
   display = {
