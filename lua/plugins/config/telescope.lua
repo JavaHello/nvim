@@ -3,15 +3,15 @@ local trouble = require("trouble.providers.telescope")
 local telescope = require('telescope');
 telescope.setup {
   defaults = {
-    vimgrep_arguments = {
-      "rg",
-      "--color=never",
-      "--no-heading",
-      "--with-filename",
-      "--line-number",
-      "--column",
-      "--smart-case",
-    },
+    -- vimgrep_arguments = {
+    --   "rg",
+    --   "--color=never",
+    --   "--no-heading",
+    --   "--with-filename",
+    --   "--line-number",
+    --   "--column",
+    --   "--smart-case",
+    -- },
     -- prompt_prefix = "   ",
     prompt_prefix = "   ",
     selection_caret = "  ",
@@ -33,8 +33,8 @@ telescope.setup {
       height = 0.80,
       preview_cutoff = 120,
     },
-    winblend = 0,
-    border = {},
+    winblend = 20,
+    -- border = {},
     -- borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
     -- borderchars = {
     --   prompt = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
@@ -47,17 +47,17 @@ telescope.setup {
       preview = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
     },
     color_devicons = true,
-    use_less = true,
+    -- use_less = true,
     -- set_env = { ["COLORTERM"] = "gruvbox" }, -- default = nil,
-    file_sorter = require("telescope.sorters").get_fuzzy_file,
+    -- file_sorter = require("telescope.sorters").get_fuzzy_file,
     file_ignore_patterns = { "node_modules" },
-    generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
-    path_display = { "truncate" },
-    file_previewer = require("telescope.previewers").vim_buffer_cat.new,
-    grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
-    qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
+    -- generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
+    -- path_display = { "truncate" },
+    -- file_previewer = require("telescope.previewers").vim_buffer_cat.new,
+    -- grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
+    -- qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
     -- Developer configurations: Not meant for general override
-    buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
+    -- buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
 
 
 
@@ -97,13 +97,13 @@ telescope.setup {
         -- even more opts
       }
     },
-    fzf = {
-      fuzzy = true, -- false will only do exact matching
-      override_generic_sorter = true, -- override the generic sorter
-      override_file_sorter = true, -- override the file sorter
-      case_mode = "smart_case", -- or "ignore_case" or "respect_case"
-      -- the default case_mode is "smart_case"
-    }
+    -- fzf = {
+    --   fuzzy = true, -- false will only do exact matching
+    --   override_generic_sorter = true, -- override the generic sorter
+    --   override_file_sorter = true, -- override the file sorter
+    --   case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+    --   -- the default case_mode is "smart_case"
+    -- }
   },
 }
 telescope.load_extension("notify")
