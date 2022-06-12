@@ -53,7 +53,8 @@ require('packer').startup({ function()
   })
 
   -- 主题
-  use 'morhetz/gruvbox'
+  -- use 'morhetz/gruvbox'
+  use { "ellisonleao/gruvbox.nvim" }
   -- use 'sainnhe/gruvbox-material'
 
 

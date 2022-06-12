@@ -1,7 +1,7 @@
 local actions = require("telescope.actions")
 local trouble = require("trouble.providers.telescope")
 local telescope = require('telescope');
-telescope.setup{
+telescope.setup {
   defaults = {
     vimgrep_arguments = {
       "rg",
@@ -12,7 +12,8 @@ telescope.setup{
       "--column",
       "--smart-case",
     },
-    prompt_prefix = "   ",
+    -- prompt_prefix = "   ",
+    prompt_prefix = "   ",
     selection_caret = "  ",
     entry_prefix = "  ",
     initial_mode = "insert",
@@ -34,7 +35,17 @@ telescope.setup{
     },
     winblend = 0,
     border = {},
-    borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+    -- borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+    -- borderchars = {
+    --   prompt = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
+    --   results = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
+    --   preview = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
+    -- },
+    borderchars = {
+      prompt = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
+      results = { ' ', '▐', '▄', '▌', '▌', '▐', '▟', '▙' };
+      preview = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
+    },
     color_devicons = true,
     use_less = true,
     -- set_env = { ["COLORTERM"] = "gruvbox" }, -- default = nil,
@@ -87,11 +98,11 @@ telescope.setup{
       }
     },
     fzf = {
-      fuzzy = true,                    -- false will only do exact matching
-      override_generic_sorter = true,  -- override the generic sorter
-      override_file_sorter = true,     -- override the file sorter
-      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-                                       -- the default case_mode is "smart_case"
+      fuzzy = true, -- false will only do exact matching
+      override_generic_sorter = true, -- override the generic sorter
+      override_file_sorter = true, -- override the file sorter
+      case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+      -- the default case_mode is "smart_case"
     }
   },
 }
