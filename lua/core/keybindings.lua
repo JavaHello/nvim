@@ -141,8 +141,8 @@ map('o', 'F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.
 -- nvim-spectre
 map('n', '<leader>S', "<cmd>lua require('spectre').open()<CR>", opt)
 -- search current word
-map('n', '<leader>sw', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
-map('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opt)
+map('n', '<leader>sr', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
+map('v', '<leader>sr', "<cmd>lua require('spectre').open_visual()<CR>", opt)
 --  search in current file
 map('n', '<leader>sp', "viw:lua require('spectre').open_file_search()<cr>", opt)
 -- run command :Spectre
@@ -178,6 +178,14 @@ M.maplsp = function(client, bufnr)
   -- mapbuf('n', '<space>s', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opt)
   -- mapbuf('n', '<space>s', '<cmd>lua require"telescope.builtin".lsp_workspace_symbols({ query = vim.fn.input("Query> ") })<CR>', opt)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>sw', '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>', opt)
+  local keymap = vim.keymap.set
+  keymap('v', '<leader>sw', function()
+    local tb = require('telescope.builtin')
+    local text = require('core.utils').get_visual_selection()
+    tb.lsp_workspace_symbols({ default_text = text, query = text })
+  end, opt)
+
+
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>sd', '<cmd>Telescope lsp_document_symbols<CR>', opt)
   -- diagnostic
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'go', '<cmd>lua vim.diagnostic.open_float()<CR>', opt)
