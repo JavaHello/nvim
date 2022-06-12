@@ -210,9 +210,10 @@ require('packer').startup({ function()
     },
   }
 
-  -- 选择高亮插件
+  -- 选中高亮插件
   use "RRethy/vim-illuminate"
 
+  -- 快速跳转
   use {
     'phaazon/hop.nvim',
     branch = 'v1', -- optional but strongly recommended
@@ -222,9 +223,17 @@ require('packer').startup({ function()
     end
   }
 
+  -- LSP 进度
   use { 'j-hui/fidget.nvim',
     config = function()
       require "fidget".setup {}
+    end
+  }
+
+  -- 查找替换
+  use { 'windwp/nvim-spectre',
+    config = function()
+      require('spectre').setup()
     end
   }
 

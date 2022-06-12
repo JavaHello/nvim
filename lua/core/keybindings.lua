@@ -138,6 +138,15 @@ map('o', 'F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.
 -- map('v', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END })<cr>", opt)
 -- map('o', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END, inclusive_jump = true })<cr>", opt)
 
+-- nvim-spectre
+map('n', '<leader>S', "<cmd>lua require('spectre').open()<CR>", opt)
+-- search current word
+map('n', '<leader>sw', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
+map('v', '<leader>s', "<cmd>lua require('spectre').open_visual()<CR>", opt)
+--  search in current file
+map('n', '<leader>sp', "viw:lua require('spectre').open_file_search()<cr>", opt)
+-- run command :Spectre
+
 -- lsp 回调函数快捷键设置
 M.maplsp = function(client, bufnr)
 
