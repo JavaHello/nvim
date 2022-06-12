@@ -20,7 +20,7 @@ M.setup = function()
   -- %bd 删除所有缓冲区, e# 打开最后一个缓冲区, bd# 关闭[No Name]
   -- map('n', '<Leader>o', ':%bd|e#|bd#<CR>', opt)
   -- map('n', '<Leader>o', '<cmd>lua require("core.utils").close_other_bufline()<CR>', opt)
-  vim.api.nvim_create_user_command("BufferCloseOther", function ()
+  vim.api.nvim_create_user_command("BufferCloseOther", function()
     require("core.utils").close_other_bufline()
   end, {})
   map('n', '<Leader>w', ':bdelete!<CR>', opt)
@@ -123,6 +123,20 @@ nnoremap <C-l> <C-w>l
 ]]
 
 end
+
+-- hop.nvim
+-- place this in one of your configuration file(s)
+map('n', 'f', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", opt)
+map('v', 'f', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", opt)
+map('n', 'F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>", opt)
+map('v', 'F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>", opt)
+map('o', 'f', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, inclusive_jump = true })<cr>", opt)
+map('o', 'F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, inclusive_jump = true })<cr>", opt)
+-- map('', 't', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", opt)
+-- map('', 'T', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>", opt)
+-- map('n', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END })<cr>", opt)
+-- map('v', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END })<cr>", opt)
+-- map('o', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END, inclusive_jump = true })<cr>", opt)
 
 -- lsp 回调函数快捷键设置
 M.maplsp = function(client, bufnr)
