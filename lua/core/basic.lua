@@ -81,6 +81,7 @@ vim.opt.termguicolors = true
 -- 补全增强
 vim.o.wildmenu = true
 
+vim.opt.confirm = true
 
 -- vim.g.python_host_prog='/opt/homebrew/bin/python3'
 vim.g.python3_host_prog='/opt/homebrew/bin/python3'

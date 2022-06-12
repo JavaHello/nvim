@@ -20,4 +20,5 @@ set background=dark
 colorscheme gruvbox
 "  丢失配色, 变为透明
 " highlight Normal guibg=NONE ctermbg=None
+" autocmd vimenter * hi Normal guibg=#282828
 ]]

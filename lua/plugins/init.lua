@@ -36,7 +36,7 @@ require('packer').startup({ function()
 
   -- java 不友好
   -- use 'glepnir/lspsaga.nvim'
-  use 'arkav/lualine-lsp-progress'
+  -- use 'arkav/lualine-lsp-progress'
   -- use 'nvim-lua/lsp-status.nvim'
 
   -- use 'ray-x/lsp_signature.nvim'
@@ -221,6 +221,13 @@ require('packer').startup({ function()
       require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
     end
   }
+
+  use { 'j-hui/fidget.nvim',
+    config = function()
+      require "fidget".setup {}
+    end
+  }
+
 end,
 config = {
   display = {
