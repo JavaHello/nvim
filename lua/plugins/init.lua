@@ -241,6 +241,7 @@ require('packer').startup({ function()
   -- ASCII 图
   use 'jbyuki/venn.nvim'
 
+  use "tversteeg/registers.nvim"
 end,
 config = {
   display = {
