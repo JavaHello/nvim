@@ -123,7 +123,8 @@ require('packer').startup({ function()
   -- <>()等匹配插件
   use 'andymass/vim-matchup'
   -- 大纲插件
-  use 'liuchengxu/vista.vim'
+  -- use 'liuchengxu/vista.vim'
+  use 'simrat39/symbols-outline.nvim'
 
   -- 消息通知
   use 'rcarriga/nvim-notify'
@@ -186,7 +187,8 @@ require('packer').startup({ function()
   }
 
   -- 翻译插件
-  use 'voldikss/vim-translator'
+  -- use 'voldikss/vim-translator'
+  use 'uga-rosa/translate.nvim'
 
   -- 自动对齐插件
   use 'junegunn/vim-easy-align'
@@ -270,7 +272,8 @@ vim.defer_fn(function()
   -- require('plugins/config/vim-floaterm')
   require('plugins/config/asynctasks')
   -- require('plugins/config/feline')
-  require('plugins/config/vista')
+  -- require('plugins/config/vista')
+  require('plugins/config/symbols-outline')
   -- require('plugins/config/lsp-colors')
   require('plugins/config/trouble')
   require('plugins/config/nvim-notify')
@@ -285,6 +288,7 @@ vim.defer_fn(function()
   -- require('plugins/config/lsp_signature')
   require('plugins/config/nvim-dap')
   require('plugins/config/markdown-preview')
+  require('plugins/config/translate')
   require('plugins/config/autosave')
   -- require('plugins/config/nvim-neorg')
   vim.cmd [[

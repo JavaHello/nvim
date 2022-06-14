@@ -45,8 +45,8 @@ M.setup = function()
   map('n', '<F12>', ':ToggleTerm<CR>', opt)
 
 
-  -- vista
-  map('n', '<space>o', ':<C-u>Vista!!<CR>', opt)
+  -- symbols-outline.nvim
+  map('n', '<space>o', ':<C-u>SymbolsOutline<CR>', opt)
 
   -- trouble.nvim
   -- see lsp map
@@ -71,8 +71,10 @@ M.setup = function()
   map('n', '<leader>fr', '<cmd>Telescope asynctasks all<cr>', opt)
 
   -- translate
-  map('n', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
-  map('v', '<Leader>t', ':TranslateW --engines=google<cr>', opt)
+  map('n', '<leader>tz', ':Translate ZH -source=EN -parse_after=window -output=floating<cr>', opt)
+  map('v', '<leader>tz', ':Translate ZH -source=EN -parse_after=window -output=floating<cr>', opt)
+  map('n', '<leader>te', ':Translate EN -source=ZH -parse_after=window -output=floating<cr>', opt)
+  map('v', '<leader>te', ':Translate EN -source=ZH -parse_after=window -output=floating<cr>', opt)
 
   -- camel_case
   require('core.utils').camel_case_init()
