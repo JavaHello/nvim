@@ -140,6 +140,8 @@ require('packer').startup({ function()
 
   -- mackdown 预览插件
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install' }
+  -- mackdown cli 预览插件
+  use {"ellisonleao/glow.nvim", branch = 'main'}
 
   -- 格式化插件
   use 'mhartington/formatter.nvim'
@@ -265,7 +267,7 @@ vim.defer_fn(function()
   require('plugins/config/nvim-cmp')
   -- require('plugins/config/LeaderF')
   require('plugins/config/gitsigns-nvim')
-  require('plugins/config/vim-floaterm')
+  -- require('plugins/config/vim-floaterm')
   require('plugins/config/asynctasks')
   -- require('plugins/config/feline')
   require('plugins/config/vista')
