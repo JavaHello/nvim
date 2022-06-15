@@ -1,3 +1,4 @@
+require('plugins/config/symbols-outline')
 require('packer').startup({ function()
 
 
@@ -274,7 +275,6 @@ vim.defer_fn(function()
   require('plugins/config/asynctasks')
   -- require('plugins/config/feline')
   -- require('plugins/config/vista')
-  require('plugins/config/symbols-outline')
   -- require('plugins/config/lsp-colors')
   require('plugins/config/trouble')
   require('plugins/config/nvim-notify')
