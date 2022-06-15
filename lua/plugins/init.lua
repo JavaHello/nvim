@@ -22,6 +22,7 @@ require('packer').startup({ function()
   -- use 'hrsh7th/cmp-vsnip'    -- { name = 'vsnip' }
   -- use 'hrsh7th/vim-vsnip'
 
+  -- 代码片段
   use 'rafamadriz/friendly-snippets'
   -- LuaSnip
   use 'L3MON4D3/LuaSnip'

@@ -59,7 +59,7 @@ git clone  https://github.com/JavaHello/nvim.git
 
 ## Neovim 插件列表
 
-- [yutkat/my-neovim-pluginlist](https://github.com/yutkat/my-neovim-pluginlist)
-- [rockerBOO/awesome-neovim](https://github.com/rockerBOO/awesome-neovim)
-- [Neovim 精选插件](http://neovimcraft.com/)
+- Neovim 精选插件[yutkat/my-neovim-pluginlist](https://github.com/yutkat/my-neovim-pluginlist)
+- Neovim 精选插件[rockerBOO/awesome-neovim](https://github.com/rockerBOO/awesome-neovim)
+- Neovim 精选插件[neovimcraft](http://neovimcraft.com/)
 - 推荐[NvChad](https://github.com/NvChad/NvChad), 部分插件和配置参考了 `NvChad`
