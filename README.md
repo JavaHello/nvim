@@ -48,7 +48,7 @@ git clone  https://github.com/JavaHello/nvim.git
 - 搜索`class`,`method`,`field`等
   ![003](https://javahello.github.io/dev/nvim-lean/images/java-symbols-003.gif)
 
-## VIM 插件列表
+## 我的 VIM 插件列表
 
 | 插件名称                                                           | 插件描述               | 推荐等级 | 备注 |
 | ------------------------------------------------------------------ | ---------------------- | -------- | ---- |
@@ -57,4 +57,9 @@ git clone  https://github.com/JavaHello/nvim.git
 | [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)       | 状态栏插件             | 8        |      |
 | [vim-table-mode](https://github.com/dhruvasagar/vim-table-mode)    | table 模式插件         | 10       |      |
 
-感谢[NvChad](https://github.com/NvChad/NvChad), 部分插件和配置参考了 `NvChad`
+## Neovim 插件列表
+
+- [yutkat/my-neovim-pluginlist](https://github.com/yutkat/my-neovim-pluginlist)
+- [rockerBOO/awesome-neovim](https://github.com/rockerBOO/awesome-neovim)
+- [Neovim 精选插件](http://neovimcraft.com/)
+- 推荐[NvChad](https://github.com/NvChad/NvChad), 部分插件和配置参考了 `NvChad`
