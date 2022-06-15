@@ -16,10 +16,12 @@ require("bufferline").setup {
       {
         filetype = "NvimTree",
         text = function()
+          -- return "File Explorer"
           return vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
         end,
         padding = 1,
         highlight = "Directory",
+        -- text_align = "center"
         text_align = "left"
       }, {
         filetype = "Outline",
@@ -35,4 +37,6 @@ require("bufferline").setup {
   show_buffer_default_icon = true,
   show_close_icon = false,
   show_tab_indicators = true,
+  -- separator_style = "slant" | "thick" | "thin" | { 'any', 'any' },
+  separator_style = "slant",
 }

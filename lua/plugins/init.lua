@@ -69,7 +69,7 @@ require('packer').startup({ function()
   }
 
   -- using packer.nvim
-  use { 'akinsho/bufferline.nvim', requires = 'kyazdani42/nvim-web-devicons' }
+  use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
 
 
   -- treesitter (新增)
@@ -127,6 +127,9 @@ require('packer').startup({ function()
   -- 大纲插件
   -- use 'liuchengxu/vista.vim'
   use 'simrat39/symbols-outline.nvim'
+  -- use {
+    -- 'stevearc/aerial.nvim',
+  -- }
 
   -- 消息通知
   use 'rcarriga/nvim-notify'
@@ -144,7 +147,7 @@ require('packer').startup({ function()
   -- mackdown 预览插件
   use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install' }
   -- mackdown cli 预览插件
-  use {"ellisonleao/glow.nvim", branch = 'main'}
+  use { "ellisonleao/glow.nvim", branch = 'main' }
 
   -- 格式化插件
   use 'mhartington/formatter.nvim'
@@ -275,6 +278,7 @@ vim.defer_fn(function()
   require('plugins/config/asynctasks')
   -- require('plugins/config/feline')
   -- require('plugins/config/vista')
+  -- require('plugins/config/aerial')
   -- require('plugins/config/lsp-colors')
   require('plugins/config/trouble')
   require('plugins/config/nvim-notify')
