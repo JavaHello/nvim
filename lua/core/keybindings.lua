@@ -68,7 +68,6 @@ M.setup = function()
   end, opt)
   map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', opt)
   map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', opt)
-  map('n', '<leader>fr', '<cmd>Telescope asynctasks all<cr>', opt)
 
   -- translate
   map('n', '<leader>tz', ':Translate ZH -source=EN -parse_after=window -output=floating<cr>', opt)
@@ -149,6 +148,8 @@ map('v', '<leader>sr', "<cmd>lua require('spectre').open_visual()<CR>", opt)
 map('n', '<leader>sp', "viw:lua require('spectre').open_file_search()<cr>", opt)
 -- run command :Spectre
 
+-- ToggleTask
+map('n', '<leader>ts', '<cmd>Telescope toggletasks spawn<cr>', opt)
 -- lsp 回调函数快捷键设置
 M.maplsp = function(client, bufnr)
 

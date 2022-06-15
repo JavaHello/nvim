@@ -100,8 +100,16 @@ require('packer').startup({ function()
   }
 
   -- 异步任务执行插件
-  use 'skywind3000/asynctasks.vim'
-  use 'skywind3000/asyncrun.vim'
+  -- use 'skywind3000/asynctasks.vim'
+  -- use 'skywind3000/asyncrun.vim'
+  use {
+    'jedrzejboczar/toggletasks.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'akinsho/toggleterm.nvim',
+      'nvim-telescope/telescope.nvim/',
+    },
+  }
 
   -- 浮动窗口插件
   -- use 'voldikss/vim-floaterm'
@@ -128,7 +136,7 @@ require('packer').startup({ function()
   -- use 'liuchengxu/vista.vim'
   use 'simrat39/symbols-outline.nvim'
   -- use {
-    -- 'stevearc/aerial.nvim',
+  -- 'stevearc/aerial.nvim',
   -- }
 
   -- 消息通知
@@ -177,7 +185,7 @@ require('packer').startup({ function()
   -- use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   use { 'nvim-telescope/telescope-dap.nvim' }
 
-  use 'GustavoKatel/telescope-asynctasks.nvim'
+  -- use 'GustavoKatel/telescope-asynctasks.nvim'
   -- use 'aloussase/telescope-gradle.nvim'
   -- use 'aloussase/telescope-mvnsearch'
   use { "LinArcX/telescope-env.nvim" }
@@ -275,7 +283,8 @@ vim.defer_fn(function()
   -- require('plugins/config/LeaderF')
   require('plugins/config/gitsigns-nvim')
   -- require('plugins/config/vim-floaterm')
-  require('plugins/config/asynctasks')
+  -- require('plugins/config/asynctasks')
+  require('plugins/config/toggletasks')
   -- require('plugins/config/feline')
   -- require('plugins/config/vista')
   -- require('plugins/config/aerial')

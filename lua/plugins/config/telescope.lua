@@ -113,3 +113,5 @@ telescope.load_extension("ui-select")
 -- telescope.load_extension('maven_search')
 telescope.load_extension('env')
 telescope.load_extension('dap')
+
+telescope.load_extension('toggletasks')
