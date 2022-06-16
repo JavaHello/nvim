@@ -3,6 +3,7 @@
 
 local map = vim.api.nvim_set_keymap
 local opt = { noremap = true, silent = true }
+local keymap = vim.keymap.set
 
 local M = {}
 
@@ -58,9 +59,13 @@ M.setup = function()
 
   -- Telescope
   map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', opt)
+  keymap('v', '<leader>ff', function()
+    local tb = require('telescope.builtin')
+    local text = require('core.utils').get_visual_selection()
+    tb.find_files({ default_text = text })
+  end, opt)
   map('n', '<C-p>', '<cmd>Telescope find_files<cr>', opt)
   map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', opt)
-  local keymap = vim.keymap.set
   keymap('v', '<leader>fg', function()
     local tb = require('telescope.builtin')
     local text = require('core.utils').get_visual_selection()
@@ -181,7 +186,6 @@ M.maplsp = function(client, bufnr)
   -- mapbuf('n', '<space>s', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opt)
   -- mapbuf('n', '<space>s', '<cmd>lua require"telescope.builtin".lsp_workspace_symbols({ query = vim.fn.input("Query> ") })<CR>', opt)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>sw', '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>', opt)
-  local keymap = vim.keymap.set
   keymap('v', '<leader>sw', function()
     local tb = require('telescope.builtin')
     local text = require('core.utils').get_visual_selection()
