@@ -55,6 +55,7 @@ git clone  https://github.com/JavaHello/nvim.git
 |         断点         |     `<leader>b`      |
 |     翻译 en->zh      |     `<leader>tz`     |
 |     翻译 zh->en      |     `<leader>te`     |
+|       内置终端       |    `:ToggleTerm`     |
 
 更多配置参考 [keybindings](./lua/core/keybindings.lua) 文件
 
