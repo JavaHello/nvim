@@ -56,6 +56,7 @@ git clone  https://github.com/JavaHello/nvim.git
 |     翻译 en->zh      |     `<leader>tz`     |
 |     翻译 zh->en      |     `<leader>te`     |
 |       内置终端       |    `:ToggleTerm`     |
+|      Tasks 列表      |     `<leader>ts`     |
 
 更多配置参考 [keybindings](./lua/core/keybindings.lua) 文件
 
@@ -76,12 +77,13 @@ git clone  https://github.com/JavaHello/nvim.git
 
 ## 我的 VIM 插件列表
 
-| 插件名称                                                           | 插件描述               | 推荐等级 | 备注 |
-| ------------------------------------------------------------------ | ---------------------- | -------- | ---- |
-| [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)                    | LSP 代码提示插件       | 10       |      |
-| [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | 模糊查找插件，窗口预览 | 8        |      |
-| [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)       | 状态栏插件             | 8        |      |
-| [vim-table-mode](https://github.com/dhruvasagar/vim-table-mode)    | table 模式插件         | 10       |      |
+| 插件名称                                                              | 插件描述               | 推荐等级 | 备注 |
+| --------------------------------------------------------------------- | ---------------------- | -------- | ---- |
+| [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)                       | LSP 代码提示插件       | 10       |      |
+| [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)    | 模糊查找插件，窗口预览 | 10       |      |
+| [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)          | 状态栏插件             | 8        |      |
+| [vim-table-mode](https://github.com/dhruvasagar/vim-table-mode)       | table 模式插件         | 8        |      |
+| [toggletasks.nvim](https://github.com/jedrzejboczar/toggletasks.nvim) | 任务执行插件           | 8        |      |
 
 ## Neovim 插件列表
 
