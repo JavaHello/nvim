@@ -75,6 +75,6 @@ git clone  https://github.com/JavaHello/nvim.git
 - Neovim 精选插件[neovimcraft](http://neovimcraft.com/)
 - 推荐[NvChad](https://github.com/NvChad/NvChad), 部分插件和配置参考了 `NvChad`
 
-## 欢迎使用
+## 感谢使用
 
 打造一个高效美观的终端环境。欢迎提供各种建议，插件推荐，快捷键定义，主题配色等。
