@@ -35,14 +35,28 @@ git clone  https://github.com/JavaHello/nvim.git
 
 ## 快捷键
 
-|   功能   |    按键     |
-| :------: | :---------: |
-| Outline  | `<leader>o` |
-| 查看实现 |    `gi`     |
-| 查看引用 |    `gr`     |
-| 查看声明 |    `gd`     |
-|  Debug   |    `F5`     |
-|   断点   | `<leader>b` |
+|         功能         |         按键         |
+| :------------------: | :------------------: |
+|       文件管理       |     `<leader>e`      |
+|       文件搜索       |     `<leader>ff`     |
+|       全局搜索       |     `<leader>fg`     |
+|     全局搜索替换     |     `<leader>sr`     |
+| 格式化(插件提供支持) |      `:Format`       |
+|       Git 操作       |        `:Git`        |
+|       Outline        |     `<leader>o`      |
+|       查看实现       |         `gi`         |
+|       查看引用       |         `gr`         |
+|       查看声明       |         `gd`         |
+|     搜索 symbols     |     `<leader>sw`     |
+| 格式化(LSP 提供支持) |     `<leader>=`      |
+|        重命名        |     `<leader>rn`     |
+|     Code Action      |     `<leader>ca`     |
+|        Debug         | `F5`or`:DapContinue` |
+|         断点         |     `<leader>b`      |
+|     翻译 en->zh      |     `<leader>tz`     |
+|     翻译 zh->en      |     `<leader>te`     |
+
+更多配置参考 [keybindings](./lua/core/keybindings.lua) 文件
 
 ## Java 配置
 
