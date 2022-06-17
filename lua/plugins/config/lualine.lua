@@ -4,7 +4,7 @@ require('lualine').setup {
     theme = 'gruvbox',
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
-    disabled_filetypes = { 'Outline',
+    disabled_filetypes = { 
       -- "dap-repl", "dapui_watches", "dapui_stacks", "dapui_breakpoints", "dapui_scopes"
     },
     always_divide_middle = true,
@@ -28,5 +28,5 @@ require('lualine').setup {
     lualine_z = {}
   },
   tabline = {},
-  extensions = { 'quickfix', 'toggleterm', 'nvim-tree', 'fugitive' }
+  extensions = { 'quickfix', 'toggleterm', 'nvim-tree', 'fugitive', 'symbols-outline' }
 }
