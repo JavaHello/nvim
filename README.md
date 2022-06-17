@@ -33,6 +33,17 @@ cd $env:LOCALAPPDATA
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
+## 快捷键
+
+|   功能   |    按键     |
+| :------: | :---------: |
+| Outline  | `<leader>o` |
+| 查看实现 |    `gi`     |
+| 查看引用 |    `gr`     |
+| 查看声明 |    `gd`     |
+|  Debug   |    `F5`     |
+|   断点   | `<leader>b` |
+
 ## Java 配置
 
 > 如果不使用 `Java` 语言开发，无需配置
@@ -63,3 +74,7 @@ git clone  https://github.com/JavaHello/nvim.git
 - Neovim 精选插件[rockerBOO/awesome-neovim](https://github.com/rockerBOO/awesome-neovim)
 - Neovim 精选插件[neovimcraft](http://neovimcraft.com/)
 - 推荐[NvChad](https://github.com/NvChad/NvChad), 部分插件和配置参考了 `NvChad`
+
+## 欢迎使用
+
+打造一个高效美观的终端环境。欢迎提供各种建议，插件推荐，快捷键定义，主题配色等。
