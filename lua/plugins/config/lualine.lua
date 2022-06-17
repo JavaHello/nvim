@@ -1,10 +1,19 @@
+local dap = {
+  sections = {
+    lualine_a = { 'filename' }
+  },
+  filetypes = {
+    "dap-repl", "dapui_watches", "dapui_stacks", "dapui_breakpoints", "dapui_scopes"
+  },
+};
+
 require('lualine').setup {
   options = {
     icons_enabled = true,
     theme = 'gruvbox',
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
-    disabled_filetypes = { 
+    disabled_filetypes = {
       -- "dap-repl", "dapui_watches", "dapui_stacks", "dapui_breakpoints", "dapui_scopes"
     },
     always_divide_middle = true,
@@ -28,5 +37,5 @@ require('lualine').setup {
     lualine_z = {}
   },
   tabline = {},
-  extensions = { 'quickfix', 'toggleterm', 'nvim-tree', 'fugitive', 'symbols-outline' }
+  extensions = { 'quickfix', 'toggleterm', 'nvim-tree', 'fugitive', 'symbols-outline', dap }
 }
