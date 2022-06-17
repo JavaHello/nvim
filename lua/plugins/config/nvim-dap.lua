@@ -6,7 +6,8 @@ local dap = require('dap')
 --   args = { '-e' };
 -- }
 
-require("dapui").setup({
+local dapui = require("dapui")
+dapui.setup({
   icons = { expanded = "▾", collapsed = "▸" },
   mappings = {
     -- Use a table to apply multiple mappings
@@ -16,6 +17,7 @@ require("dapui").setup({
     edit = "e",
     repl = "r",
   },
+  expand_lines = true,
   sidebar = {
     -- You can change the order of elements in the sidebar
     elements = {
@@ -26,14 +28,14 @@ require("dapui").setup({
       },
       { id = "breakpoints", size = 0.25 },
       { id = "stacks", size = 0.25 },
-      { id = "watches", size = 00.25 },
+      { id = "watches", size = 0.25 },
     },
     size = 40,
     position = "left", -- Can be "left", "right", "top", "bottom"
   },
   tray = {
     elements = { "repl" },
-    size = 10,
+    size = 12,
     position = "bottom", -- Can be "left", "right", "top", "bottom"
   },
   floating = {
@@ -45,11 +47,13 @@ require("dapui").setup({
     },
   },
   windows = { indent = 1 },
+  render = {
+    max_type_length = nil, -- Can be integer or nil.
+  }
 })
 
-local dapui = require("dapui")
 dap.listeners.after.event_initialized["dapui_config"] = function()
-  --dapui.open()
+  dapui.open()
 end
 dap.listeners.before.event_terminated["dapui_config"] = function()
   dapui.close()
@@ -59,7 +63,7 @@ dap.listeners.before.event_exited["dapui_config"] = function()
 end
 
 -- vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
-vim.fn.sign_define('DapBreakpoint', {text='', texthl='Debug', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'Debug', linehl = '', numhl = '' })
 -- vim.fn.sign_define("DapBreakpointCondition", { text = "C", texthl = "", linehl = "", numhl = "" })
 -- vim.fn.sign_define('DapBreakpointRejected', {text='R', texthl='', linehl='', numhl=''})
 -- vim.fn.sign_define('DapLogPoint', {text='L', texthl='', linehl='', numhl=''})
