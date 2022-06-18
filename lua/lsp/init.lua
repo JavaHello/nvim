@@ -13,6 +13,7 @@ local servers = {
   html = require("lsp.html"),
   pyright = require("lsp.pyright"),
   rust_analyzer = require 'lsp.rust_analyzer',
+  sqls = require 'lsp.sqls',
 }
 
 -- 自动安装 LanguageServers

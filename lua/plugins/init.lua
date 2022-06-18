@@ -259,6 +259,8 @@ require('packer').startup({ function()
   use 'jbyuki/venn.nvim'
 
   use "tversteeg/registers.nvim"
+
+  use 'nanotee/sqls.nvim'
 end,
 config = {
   display = {
