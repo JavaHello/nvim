@@ -44,8 +44,8 @@ local dap = {
 table.insert(config.extensions, dap)
 
 -- nvim-sqls extensions
-local db_connection_value
-local db_database_value = ''
+local db_connection_value = 'default'
+local db_database_value = 'default'
 require("sqls.events").add_subscriber("connection_choice", function(event)
   local cs = vim.split(event.choice, ' ');
   db_connection_value = cs[3]
@@ -58,9 +58,7 @@ require("sqls.events").add_subscriber("database_choice", function(event)
   db_database_value = event.choice
 end)
 local function db_info()
-  if db_connection_value then
-    return db_connection_value .. '->' .. db_database_value
-  end
+  return db_connection_value .. '->' .. db_database_value
 end
 
 local sqls = {
