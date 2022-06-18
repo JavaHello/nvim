@@ -50,7 +50,7 @@ require("sqls.events").add_subscriber("connection_choice", function(event)
   local cs = vim.split(event.choice, ' ');
   db_connection_value = cs[3]
   local db = vim.split(cs[4], '/')
-  if db[2] then
+  if db[2] and db_database_value == 'default' then
     db_database_value = db[2]
   end
 end)
