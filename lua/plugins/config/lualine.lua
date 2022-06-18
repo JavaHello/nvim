@@ -1,13 +1,4 @@
-local dap = {
-  sections = {
-    lualine_a = { 'filename' }
-  },
-  filetypes = {
-    "dap-repl", "dapui_watches", "dapui_stacks", "dapui_breakpoints", "dapui_scopes"
-  },
-};
-
-require('lualine').setup {
+local config = {
   options = {
     icons_enabled = true,
     theme = 'gruvbox',
@@ -37,5 +28,48 @@ require('lualine').setup {
     lualine_z = {}
   },
   tabline = {},
-  extensions = { 'quickfix', 'toggleterm', 'nvim-tree', 'fugitive', 'symbols-outline', dap }
+  extensions = { 'quickfix', 'toggleterm', 'nvim-tree', 'fugitive', 'symbols-outline' }
 }
+
+-- nvim-dap-ui extensions
+local dap = {
+  sections = {
+    lualine_a = { 'filename' }
+  },
+  filetypes = {
+    "dap-repl", "dapui_watches", "dapui_stacks", "dapui_breakpoints", "dapui_scopes"
+  },
+};
+
+table.insert(config.extensions, dap)
+
+-- nvim-sqls extensions
+local db_connection_value
+local db_database_value = ''
+require("sqls.events").add_subscriber("connection_choice", function(event)
+  local cs = vim.split(event.choice, ' ');
+  db_connection_value = cs[3]
+  local db = vim.split(cs[4], '/')
+  if db[2] then
+    db_database_value = db[2]
+  end
+end)
+require("sqls.events").add_subscriber("database_choice", function(event)
+  db_database_value = event.choice
+end)
+local function db_info()
+  if db_connection_value then
+    return db_connection_value .. '->' .. db_database_value
+  end
+end
+
+local sqls = {
+}
+sqls.sections = vim.deepcopy(config.sections)
+table.insert(sqls.sections.lualine_c, db_info)
+sqls.filetypes = {
+  "sql"
+}
+table.insert(config.extensions, sqls)
+
+require('lualine').setup(config)
