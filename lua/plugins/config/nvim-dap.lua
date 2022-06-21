@@ -31,7 +31,7 @@ dapui.setup(
   }
 )
 
-dap.defaults.fallback.terminal_win_cmd = 'belowright 12new'
+dap.defaults.fallback.terminal_win_cmd = 'belowright 12new | set filetype=dap-terminal'
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()

@@ -31,6 +31,17 @@ local config = {
   extensions = { 'quickfix', 'toggleterm', 'nvim-tree', 'fugitive', 'symbols-outline', 'nvim-dap-ui' }
 }
 
+local dap = {
+}
+dap.sections = {
+  lualine_a = {
+    { 'filename', file_status = false }
+  },
+}
+dap.filetypes = {
+  "dap-terminal"
+}
+table.insert(config.extensions, dap)
 
 -- nvim-sqls extensions
 local db_connection_value = 'default'
