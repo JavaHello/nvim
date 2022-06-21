@@ -28,20 +28,9 @@ local config = {
     lualine_z = {}
   },
   tabline = {},
-  extensions = { 'quickfix', 'toggleterm', 'nvim-tree', 'fugitive', 'symbols-outline' }
+  extensions = { 'quickfix', 'toggleterm', 'nvim-tree', 'fugitive', 'symbols-outline', 'nvim-dap-ui' }
 }
 
--- nvim-dap-ui extensions
-local dap = {
-  sections = {
-    lualine_a = { 'filename' }
-  },
-  filetypes = {
-    "dap-repl", "dapui_console", "dapui_watches", "dapui_stacks", "dapui_breakpoints", "dapui_scopes"
-  },
-};
-
-table.insert(config.extensions, dap)
 
 -- nvim-sqls extensions
 local db_connection_value = 'default'

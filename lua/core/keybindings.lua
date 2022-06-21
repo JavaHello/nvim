@@ -8,6 +8,8 @@ local keymap = vim.keymap.set
 local M = {}
 
 M.setup = function()
+  -- Esc
+  -- map('i', 'jk', '<C-\\><C-N>', opt)
   -- nvimTree
   map('n', '<leader>e', ':NvimTreeToggle<CR>', opt)
   -- n 模式下复制内容到系统剪切板
