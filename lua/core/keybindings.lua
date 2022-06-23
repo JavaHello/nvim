@@ -222,7 +222,9 @@ M.maplsp = function(client, bufnr)
   keymap('n', '<leader>=', function()
     vim.lsp.buf.format({
       bufnr = bufnr,
-      filter = require("core.utils").filter_format_lsp_client,
+      filter = function(c)
+        return require("core.utils").filter_format_lsp_client(c, bufnr)
+      end,
     })
   end, opt)
   vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>=', '<cmd>lua require("core.utils").format_range_operator()<CR>', opt)
