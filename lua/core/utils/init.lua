@@ -179,6 +179,14 @@ M.format_range_operator = function()
   vim.api.nvim_feedkeys('g@', 'n', false)
 end
 
+M.filter_format_lsp_client = function(client)
+  if client.name == "jdt.ls" then
+    return true
+  elseif client.name == "sumneko_lua" then
+    return true
+  end
+  return client.name == "null-ls"
+end
 
 
 M.get_visual_selection = function()

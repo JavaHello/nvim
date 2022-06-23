@@ -51,7 +51,7 @@ null_ls.setup({
   sources = sources,
   on_attach = function(client, bufnr)
     require('core.keybindings').maplsp(client, bufnr)
-    on_attach(client, bufnr)
+    -- on_attach(client, bufnr)
   end,
   -- debug = true,
 })
