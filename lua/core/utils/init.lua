@@ -199,11 +199,30 @@ end
 local format_lsp_mapping = {}
 format_lsp_mapping["java"] = "jdt.ls"
 format_lsp_mapping["lua"] = "sumneko_lua"
-format_lsp_mapping["markdown"] = "null-ls"
+
+-- sql_formatter
 format_lsp_mapping["sql"] = "null-ls"
-format_lsp_mapping["json"] = "null-ls"
+-- prettier
+format_lsp_mapping["javascript"] = "null-ls"
+format_lsp_mapping["javascriptreact"] = "null-ls"
+format_lsp_mapping["typescript"] = "null-ls"
+format_lsp_mapping["typescriptreact"] = "null-ls"
+format_lsp_mapping["vue"] = "null-ls"
+format_lsp_mapping["css"] = "null-ls"
+format_lsp_mapping["scss"] = "null-ls"
+format_lsp_mapping["less"] = "null-ls"
 format_lsp_mapping["html"] = "null-ls"
+format_lsp_mapping["json"] = "null-ls"
+format_lsp_mapping["jsonc"] = "null-ls"
+format_lsp_mapping["yaml"] = "null-ls"
+format_lsp_mapping["markdown"] = "null-ls"
+format_lsp_mapping["graphql"] = "null-ls"
+format_lsp_mapping["handlebars"] = "null-ls"
+
+-- xmllint
 format_lsp_mapping["xml"] = "null-ls"
+
+
 format_lsp_mapping["http"] = "null-ls"
 format_lsp_mapping["sh"] = "null-ls"
 

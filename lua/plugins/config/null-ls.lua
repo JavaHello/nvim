@@ -3,8 +3,10 @@ local null_ls = require("null-ls")
 -- register any number of sources simultaneously
 local sources = {
   null_ls.builtins.formatting.prettier.with({
-    filetypes = { "html", "json", "javascript", "typescript", "yaml", "markdown" },
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html",
+      "json", "jsonc", "yaml", "markdown", "graphql", "handlebars" },
   }),
+  -- null_ls.builtins.formatting.jq,
   null_ls.builtins.formatting.xmllint,
   null_ls.builtins.diagnostics.write_good.with({
     method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
