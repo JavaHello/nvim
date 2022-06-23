@@ -183,6 +183,8 @@ end
 local format_lsp_mapping = {}
 format_lsp_mapping["java"] = "jdt.ls"
 format_lsp_mapping["lua"] = "sumneko_lua"
+format_lsp_mapping["markdown"] = "null-ls"
+format_lsp_mapping["sql"] = "null-ls"
 
 M.filter_format_lsp_client = function(client, bufnr)
   local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
@@ -190,7 +192,6 @@ M.filter_format_lsp_client = function(client, bufnr)
   if client.name == cn then
     return true
   end
-  return client.name == "null-ls"
 end
 
 
