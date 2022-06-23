@@ -8,13 +8,16 @@ local sources = {
   null_ls.builtins.diagnostics.write_good.with({
     method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
   }),
+  null_ls.builtins.diagnostics.markdownlint.with({
+    method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+  }),
   null_ls.builtins.code_actions.gitsigns,
   null_ls.builtins.formatting.sql_formatter,
   -- null_ls.builtins.formatting.google_java_format,
   -- null_ls.builtins.diagnostics.semgrep,
   null_ls.builtins.diagnostics.semgrep.with({
     method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
-    extra_args = { "--config", "auto" },
+    extra_args = { "--config", "p/java" },
   }),
 }
 
