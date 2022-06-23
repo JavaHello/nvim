@@ -220,10 +220,11 @@ M.maplsp = function(client, bufnr)
   -- vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>=', '<cmd>lua vim.lsp.buf.range_formatting()<CR>', opt)
 
   keymap('n', '<leader>=', function()
+    local bfn = vim.api.nvim_get_current_buf()
     vim.lsp.buf.format({
-      bufnr = bufnr,
+      bufnr = bfn,
       filter = function(c)
-        return require("core.utils").filter_format_lsp_client(c, bufnr)
+        return require("core.utils").filter_format_lsp_client(c, bfn)
       end,
     })
   end, opt)
