@@ -26,7 +26,9 @@ M.setup = function()
   vim.api.nvim_create_user_command("BufferCloseOther", function()
     require("core.utils").close_other_bufline()
   end, {})
-  map('n', '<Leader>w', ':bdelete!<CR>', opt)
+  map('n', '<Leader>s', ':w<CR>', opt)
+  map('n', '<Leader>w', ':bdelete<CR>', opt)
+  map('n', '<Leader>W', ':bdelete!<CR>', opt)
   map('n', '<Leader>q', ':q<CR>', opt)
   map("n", '<Leader>n', ":BufferLineCycleNext <CR>", opt)
   map("n", '<Leader>p', ":BufferLineCyclePrev <CR>", opt)
@@ -149,10 +151,10 @@ map('o', 'F', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.
 -- nvim-spectre
 map('n', '<leader>S', "<cmd>lua require('spectre').open()<CR>", opt)
 -- search current word
-map('n', '<leader>sr', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
-map('v', '<leader>sr', "<cmd>lua require('spectre').open_visual()<CR>", opt)
+map('n', '<leader>fr', "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
+map('v', '<leader>fr', "<cmd>lua require('spectre').open_visual()<CR>", opt)
 --  search in current file
-map('n', '<leader>sp', "viw:lua require('spectre').open_file_search()<cr>", opt)
+map('n', '<leader>fp', "viw:lua require('spectre').open_file_search()<cr>", opt)
 -- run command :Spectre
 
 -- ToggleTask
@@ -187,15 +189,15 @@ M.maplsp = function(client, bufnr)
   -- mapbuf('n', 'gr', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opt)
   -- mapbuf('n', '<space>s', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opt)
   -- mapbuf('n', '<space>s', '<cmd>lua require"telescope.builtin".lsp_workspace_symbols({ query = vim.fn.input("Query> ") })<CR>', opt)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>sw', '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>', opt)
-  keymap('v', '<leader>sw', function()
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>fw', '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>', opt)
+  keymap('v', '<leader>fw', function()
     local tb = require('telescope.builtin')
     local text = require('core.utils').get_visual_selection()
     tb.lsp_workspace_symbols({ default_text = text, query = text })
   end, opt)
 
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>sd', '<cmd>Telescope lsp_document_symbols<CR>', opt)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>fo', '<cmd>Telescope lsp_document_symbols<CR>', opt)
   -- diagnostic
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'go', '<cmd>lua vim.diagnostic.open_float()<CR>', opt)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[g', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opt)

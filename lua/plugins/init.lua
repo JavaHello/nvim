@@ -49,7 +49,6 @@ require('packer').startup({ function()
   use({
     "jose-elias-alvarez/null-ls.nvim",
     config = function()
-      require("null-ls").setup()
     end,
     requires = { "nvim-lua/plenary.nvim" },
   })
@@ -157,8 +156,8 @@ require('packer').startup({ function()
   -- mackdown cli 预览插件
   use { "ellisonleao/glow.nvim", branch = 'main' }
 
-  -- 格式化插件
-  use 'mhartington/formatter.nvim'
+  -- 格式化插件 -> 使用 null-ls
+  -- use 'mhartington/formatter.nvim'
   -- use 'sbdchd/neoformat'
 
 
@@ -218,7 +217,7 @@ require('packer').startup({ function()
   -- rust
   use 'simrat39/rust-tools.nvim'
 
-  use "Pocco81/AutoSave.nvim"
+  -- use "Pocco81/AutoSave.nvim"
 
 
   use {
@@ -262,11 +261,11 @@ require('packer').startup({ function()
 
   use 'nanotee/sqls.nvim'
 end,
-config = {
-  display = {
-    open_fn = require('packer.util').float,
-  }
-} })
+  config = {
+    display = {
+      open_fn = require('packer.util').float,
+    }
+  } })
 
 
 require('plugins/config/bufferline')
@@ -297,7 +296,7 @@ vim.defer_fn(function()
   require('plugins/config/nvim-colorizer')
   require('plugins/config/comment')
   -- require('plugins/config/lspsaga')
-  require('plugins/config/formatter')
+  -- require('plugins/config/formatter')
   require('plugins/config/telescope')
   -- require('plugins/config/nvim-lsputils')
   require('plugins/config/nvim-autopairs')
@@ -305,8 +304,9 @@ vim.defer_fn(function()
   require('plugins/config/nvim-dap')
   require('plugins/config/markdown-preview')
   require('plugins/config/translate')
-  require('plugins/config/autosave')
+  -- require('plugins/config/autosave')
   -- require('plugins/config/nvim-neorg')
+  require("plugins/config/null-ls")
   vim.cmd [[
 function! s:http_rest_init() abort
   lua require('plugins/config/rest-nvim')

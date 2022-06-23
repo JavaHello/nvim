@@ -40,8 +40,7 @@ git clone  https://github.com/JavaHello/nvim.git
 |       文件管理       |     `<leader>e`      |
 |       文件搜索       |     `<leader>ff`     |
 |       全局搜索       |     `<leader>fg`     |
-|     全局搜索替换     |     `<leader>sr`     |
-| 格式化(插件提供支持) |      `:Format`       |
+|     全局搜索替换     |     `<leader>fr`     |
 |       Git 操作       |        `:Git`        |
 |       Outline        |     `<leader>o`      |
 |       查看实现       |         `gi`         |
