@@ -5,6 +5,7 @@ local sources = {
   null_ls.builtins.formatting.prettier.with({
     filetypes = { "html", "json", "javascript", "typescript", "yaml", "markdown" },
   }),
+  null_ls.builtins.formatting.xmllint,
   null_ls.builtins.diagnostics.write_good.with({
     method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
   }),
