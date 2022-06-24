@@ -222,9 +222,13 @@ format_lsp_mapping["handlebars"] = "null-ls"
 -- xmllint
 format_lsp_mapping["xml"] = "null-ls"
 
+-- taplo
+format_lsp_mapping["toml"] = "null-ls"
+
+-- shfmt
+format_lsp_mapping["sh"] = "null-ls"
 
 format_lsp_mapping["http"] = "null-ls"
-format_lsp_mapping["sh"] = "null-ls"
 
 M.filter_format_lsp_client = function(client, bufnr)
   local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
