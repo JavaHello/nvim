@@ -224,11 +224,11 @@ M.maplsp = function(client, bufnr)
     vim.lsp.buf.format({
       bufnr = bfn,
       filter = function(c)
-        return require("core.utils").filter_format_lsp_client(c, bfn)
+        return require("lsp.utils").filter_format_lsp_client(c, bfn)
       end,
     })
   end, opt)
-  vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>=', '<cmd>lua require("core.utils").format_range_operator()<CR>', opt)
+  vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>=', '<cmd>lua require("lsp.utils").format_range_operator()<CR>', opt)
   -- mapbuf('v', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt)
   -- mapbuf('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opt)
   -- mapbuf('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opt)
