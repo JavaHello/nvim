@@ -1,5 +1,4 @@
-
-local saga = require 'lspsaga'
+local saga = require("lspsaga")
 
 -- add your config value here
 -- default value
@@ -38,11 +37,11 @@ local saga = require 'lspsaga'
 -- server_filetype_map = {}
 
 saga.init_lsp_saga({
-  error_sign = '',
-  warn_sign = '',
-  hint_sign = '',
-  infor_sign = '',
-  code_action_prompt = {
-    enable = false,
-  },
+	error_sign = "",
+	warn_sign = "",
+	hint_sign = "",
+	infor_sign = "",
+	code_action_prompt = {
+		enable = false,
+	},
 })

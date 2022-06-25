@@ -22,30 +22,30 @@ vim.o.smartcase = true
 
 vim.g.encoding = "UTF-8"
 
-vim.o.fileencoding= "UTF-8"
+vim.o.fileencoding = "UTF-8"
 -- jk移动时光标下上方保留8行
 vim.o.scrolloff = 3
 vim.o.sidescrolloff = 3
 
 -- 缩进配置
-vim.o.tabstop=4
-vim.bo.tabstop=4
-vim.o.softtabstop=4
+vim.o.tabstop = 4
+vim.bo.tabstop = 4
+vim.o.softtabstop = 4
 -- vim.o.softround=true
 -- > < 时移动长度
-vim.o.shiftwidth=4
-vim.bo.shiftwidth=4
+vim.o.shiftwidth = 4
+vim.bo.shiftwidth = 4
 
-vim.cmd('autocmd Filetype lua setlocal ts=2 sw=2 expandtab')
-vim.cmd('autocmd Filetype js setlocal ts=2 sw=2 expandtab')
-vim.cmd('autocmd Filetype javascript setlocal ts=2 sw=2 expandtab')
-vim.cmd('autocmd Filetype json setlocal ts=2 sw=2 expandtab')
-vim.cmd('autocmd Filetype css setlocal ts=2 sw=2 expandtab')
-vim.cmd('autocmd Filetype html setlocal ts=2 sw=2 expandtab')
-vim.cmd('autocmd Filetype xml setlocal ts=2 sw=2 expandtab')
-vim.cmd('autocmd Filetype yaml setlocal ts=2 sw=2 expandtab')
-vim.cmd('autocmd Filetype http setlocal ts=2 sw=2 expandtab')
-vim.cmd('autocmd Filetype markdown setlocal ts=2 sw=2 expandtab')
+vim.cmd("autocmd Filetype lua setlocal ts=2 sw=2 expandtab")
+vim.cmd("autocmd Filetype js setlocal ts=2 sw=2 expandtab")
+vim.cmd("autocmd Filetype javascript setlocal ts=2 sw=2 expandtab")
+vim.cmd("autocmd Filetype json setlocal ts=2 sw=2 expandtab")
+vim.cmd("autocmd Filetype css setlocal ts=2 sw=2 expandtab")
+vim.cmd("autocmd Filetype html setlocal ts=2 sw=2 expandtab")
+vim.cmd("autocmd Filetype xml setlocal ts=2 sw=2 expandtab")
+vim.cmd("autocmd Filetype yaml setlocal ts=2 sw=2 expandtab")
+vim.cmd("autocmd Filetype http setlocal ts=2 sw=2 expandtab")
+vim.cmd("autocmd Filetype markdown setlocal ts=2 sw=2 expandtab")
 
 -- 新行对齐当前行，空格替代tab
 vim.o.expandtab = true
@@ -53,7 +53,6 @@ vim.bo.expandtab = true
 vim.o.autoindent = true
 vim.bo.autoindent = true
 vim.o.smartindent = true
-
 
 -- 使用增强状态栏后不再需要 vim 的模式提示
 vim.o.showmode = false
@@ -84,7 +83,7 @@ vim.o.wildmenu = true
 vim.opt.confirm = true
 
 -- vim.g.python_host_prog='/opt/homebrew/bin/python3'
-vim.g.python3_host_prog='/opt/homebrew/bin/python3'
+vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 
 vim.cmd([[
 " 始终显示符号列
@@ -94,7 +93,7 @@ set mouse=n
 if exists('g:neovide')
     " let g:neovide_refresh_rate=60
     let g:neovide_cursor_vfx_mode = "railgun"
-    set guifont=DejaVuSansMono\ Nerd\ Font:h14
+    set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h14
     let g:neovide_transparency=1
     " let g:neovide_fullscreen=v:true
     let g:neovide_remember_window_size = v:true

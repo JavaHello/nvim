@@ -36,14 +36,14 @@ ls.config.set_config({
 	ext_opts = {
 		[types.choiceNode] = {
 			active = {
-				virt_text = {{"●", "GruvboxOrange"}}
-			}
+				virt_text = { { "●", "GruvboxOrange" } },
+			},
 		},
 		[types.insertNode] = {
 			active = {
-				virt_text = {{"●", "GruvboxBlue"}}
-			}
-		}
+				virt_text = { { "●", "GruvboxBlue" } },
+			},
+		},
 	},
 
 	-- treesitter-hl has 100, use something higher (default is 200).
@@ -121,10 +121,7 @@ local function jdocsnip(args, _, old_state)
 			else
 				inode = i(insert)
 			end
-			vim.list_extend(
-				nodes,
-				{ t({ " * @param " .. arg .. " " }), inode, t({ "", "" }) }
-			)
+			vim.list_extend(nodes, { t({ " * @param " .. arg .. " " }), inode, t({ "", "" }) })
 			param_nodes["arg" .. arg] = inode
 
 			insert = insert + 1
@@ -139,10 +136,7 @@ local function jdocsnip(args, _, old_state)
 			inode = i(insert)
 		end
 
-		vim.list_extend(
-			nodes,
-			{ t({ " * ", " * @return " }), inode, t({ "", "" }) }
-		)
+		vim.list_extend(nodes, { t({ " * ", " * @return " }), inode, t({ "", "" }) })
 		param_nodes.ret = inode
 		insert = insert + 1
 	end
@@ -155,10 +149,7 @@ local function jdocsnip(args, _, old_state)
 		else
 			ins = i(insert)
 		end
-		vim.list_extend(
-			nodes,
-			{ t({ " * ", " * @throws " .. exc .. " " }), ins, t({ "", "" }) }
-		)
+		vim.list_extend(nodes, { t({ " * ", " * @throws " .. exc .. " " }), ins, t({ "", "" }) })
 		param_nodes.ex = ins
 		insert = insert + 1
 	end
@@ -288,17 +279,11 @@ ls.snippets = {
 			})
 		),
 		-- The delimiters can be changed from the default `{}` to something else.
-		s(
-			"fmt4",
-			fmt("foo() { return []; }", i(1, "x"), { delimiters = "[]" })
-		),
+		s("fmt4", fmt("foo() { return []; }", i(1, "x"), { delimiters = "[]" })),
 		-- `fmta` is a convenient wrapper that uses `<>` instead of `{}`.
 		s("fmt5", fmta("foo() { return <>; }", i(1, "x"))),
 		-- By default all args must be used. Use strict=false to disable the check
-		s(
-			"fmt6",
-			fmt("use {} only", { t("this"), t("not this") }, { strict = false })
-		),
+		s("fmt6", fmt("use {} only", { t("this"), t("not this") }, { strict = false })),
 		-- Use a dynamic_node to interpolate the output of a
 		-- function (see date_input above) into the initial
 		-- value of an insert_node.
@@ -310,16 +295,10 @@ ls.snippets = {
 		-- Parsing snippets: First parameter: Snippet-Trigger, Second: Snippet body.
 		-- Placeholders are parsed into choices with 1. the placeholder text(as a snippet) and 2. an empty string.
 		-- This means they are not SELECTed like in other editors/Snippet engines.
-		ls.parser.parse_snippet(
-			"lspsyn",
-			"Wow! This ${1:Stuff} really ${2:works. ${3:Well, a bit.}}"
-		),
+		ls.parser.parse_snippet("lspsyn", "Wow! This ${1:Stuff} really ${2:works. ${3:Well, a bit.}}"),
 
 		-- When wordTrig is set to false, snippets may also expand inside other words.
-		ls.parser.parse_snippet(
-			{ trig = "te", wordTrig = false },
-			"${1:cond} ? ${2:true} : ${3:false}"
-		),
+		ls.parser.parse_snippet({ trig = "te", wordTrig = false }, "${1:cond} ? ${2:true} : ${3:false}"),
 
 		-- When regTrig is set, trig is treated like a pattern, this snippet will expand after any number.
 		ls.parser.parse_snippet({ trig = "%d", regTrig = true }, "A Number!!"),
@@ -421,11 +400,7 @@ ls.snippets = {
 		s("mat3", {
 			i(1, { "sample_text" }),
 			t(": "),
-			m(
-				1,
-				l._1:gsub("[123]", ""):match("%d"),
-				"contains a number that isn't 1, 2 or 3!"
-			),
+			m(1, l._1:gsub("[123]", ""):match("%d"), "contains a number that isn't 1, 2 or 3!"),
 		}),
 		-- `match` also accepts a function in place of the condition, which in
 		-- turn accepts the usual functionNode-args.

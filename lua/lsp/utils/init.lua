@@ -1,26 +1,21 @@
 local M = {}
 
 M.format_range_operator = function()
-  local old_func = vim.go.operatorfunc
-  _G.op_func_formatting = function()
-    local start = vim.api.nvim_buf_get_mark(0, '[')
-    local finish = vim.api.nvim_buf_get_mark(0, ']')
-    vim.lsp.buf.range_formatting({}, start, finish)
-    vim.go.operatorfunc = old_func
-    _G.op_func_formatting = nil
-  end
-  vim.go.operatorfunc = 'v:lua.op_func_formatting'
-  vim.api.nvim_feedkeys('g@', 'n', false)
+	local old_func = vim.go.operatorfunc
+	_G.op_func_formatting = function()
+		local start = vim.api.nvim_buf_get_mark(0, "[")
+		local finish = vim.api.nvim_buf_get_mark(0, "]")
+		vim.lsp.buf.range_formatting({}, start, finish)
+		vim.go.operatorfunc = old_func
+		_G.op_func_formatting = nil
+	end
+	vim.go.operatorfunc = "v:lua.op_func_formatting"
+	vim.api.nvim_feedkeys("g@", "n", false)
 end
-
-
-
-
 
 -- 指定格式化 lsp_client
 local format_lsp_mapping = {}
 format_lsp_mapping["java"] = "jdt.ls"
-format_lsp_mapping["lua"] = "sumneko_lua"
 
 -- sql_formatter
 format_lsp_mapping["sql"] = "null-ls"
@@ -49,13 +44,15 @@ format_lsp_mapping["toml"] = "null-ls"
 
 -- shfmt
 format_lsp_mapping["sh"] = "null-ls"
+-- stylua
+format_lsp_mapping["lua"] = "null-ls"
 
 format_lsp_mapping["http"] = "null-ls"
 
 M.filter_format_lsp_client = function(client, bufnr)
-  local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
-  local cn = format_lsp_mapping[filetype]
-  return client.name == cn
+	local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+	local cn = format_lsp_mapping[filetype]
+	return client.name == cn
 end
 
 return M

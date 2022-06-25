@@ -1,1 +1,1 @@
-require('feline').setup()
+require("feline").setup()

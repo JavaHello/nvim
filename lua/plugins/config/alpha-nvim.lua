@@ -1,26 +1,26 @@
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
 
-dashboard.leader = '\\'
+dashboard.leader = "\\"
 -- Set header
 dashboard.section.header.val = {
-    "                                                     ",
-    "  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
-    "  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
-    "  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
-    "  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
-    "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
-    "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
-    "                                                     ",
+	"                                                     ",
+	"  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+	"  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+	"  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+	"  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+	"  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+	"  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+	"                                                     ",
 }
 
 -- Set menu
 dashboard.section.buttons.val = {
-    dashboard.button("<leader>  ff", "  Find File", ":Telescope find_files<CR>"),
-    dashboard.button("<leader>  fg", "  Find Word  ", ":Telescope live_grep<CR>"),
-    dashboard.button("<leader>  fo", "  Recent File"   , ":Telescope oldfiles<CR>"),
-    dashboard.button("<leader>  es", "  Settings" , ":e $MYVIMRC | :cd %:p:h <CR>"),
-    dashboard.button("<leader>  q ", "  Quit NVIM", ":qa<CR>"),
+	dashboard.button("<leader>  ff", "  Find File", ":Telescope find_files<CR>"),
+	dashboard.button("<leader>  fg", "  Find Word  ", ":Telescope live_grep<CR>"),
+	dashboard.button("<leader>  fo", "  Recent File", ":Telescope oldfiles<CR>"),
+	dashboard.button("<leader>  es", "  Settings", ":e $MYVIMRC | :cd %:p:h <CR>"),
+	dashboard.button("<leader>  q ", "  Quit NVIM", ":qa<CR>"),
 }
 
 -- Set footer
@@ -46,4 +46,3 @@ alpha.setup(dashboard.opts)
 vim.cmd([[
     autocmd FileType alpha setlocal nofoldenable
 ]])
-
