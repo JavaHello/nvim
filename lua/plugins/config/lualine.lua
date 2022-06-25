@@ -28,7 +28,7 @@ local config = {
 		lualine_z = {},
 	},
 	tabline = {},
-	extensions = { "quickfix", "toggleterm", "nvim-tree", "fugitive", "symbols-outline", "nvim-dap-ui" },
+	extensions = { "quickfix", "toggleterm", "fugitive", "symbols-outline", "nvim-dap-ui" },
 }
 
 local dap = {}
@@ -41,6 +41,17 @@ dap.filetypes = {
 	"dap-terminal",
 }
 table.insert(config.extensions, dap)
+
+-- NvimTree
+local nerdtree = require("lualine.extensions.nerdtree")
+
+local nvim_tree = {}
+nvim_tree.sections = vim.deepcopy(nerdtree.sections)
+nvim_tree.sections.lualine_b = { "branch" }
+nvim_tree.filetypes = {
+	"NvimTree",
+}
+table.insert(config.extensions, nvim_tree)
 
 -- nvim-sqls extensions
 local db_connection_value = "default"

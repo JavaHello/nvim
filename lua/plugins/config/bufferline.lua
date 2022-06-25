@@ -16,7 +16,17 @@ require("bufferline").setup({
 				filetype = "NvimTree",
 				text = function()
 					-- return "File Explorer"
-					return vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+					-- git symbolic-ref --short -q HEAD
+					-- git --no-pager rev-parse --show-toplevel --absolute-git-dir --abbrev-ref HEAD
+					-- git --no-pager rev-parse --short HEAD
+					-- local b = vim.fn.trim(vim.fn.system("git symbolic-ref --short -q HEAD"))
+					-- if string.match(b, "fatal") then
+					-- 	b = ""
+					-- else
+					-- 	b = "  " .. b
+					-- end
+					-- return vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t") .. b
+					return "File Explorer"
 				end,
 				padding = 1,
 				highlight = "Directory",
@@ -25,7 +35,7 @@ require("bufferline").setup({
 			},
 			{
 				filetype = "Outline",
-				text = "Outline",
+				text = " Outline",
 				padding = 1,
 				highlight = "Directory",
 				text_align = "left",
