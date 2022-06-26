@@ -67,6 +67,18 @@ git clone  https://github.com/JavaHello/nvim.git
 
 ### 功能演示
 
+- 启动页
+  ![home](https://javahello.github.io/dev/nvim-lean/images/home.png)
+- 查找文件
+  ![find-file](https://javahello.github.io/dev/nvim-lean/images/find-file.gif)
+- 全局搜索
+  ![find-word](https://javahello.github.io/dev/nvim-lean/images/find-word.gif)
+- 全局搜索替换
+  ![fr](https://javahello.github.io/dev/nvim-lean/images/fr.gif)
+- 文件管理
+  ![file-tree](https://javahello.github.io/dev/nvim-lean/images/file-tree.gif)
+- 大纲
+  ![Outline](https://javahello.github.io/dev/nvim-lean/images/outline.gif)
 - 查看引用
   ![001](https://javahello.github.io/dev/nvim-lean/images/java-ref-001.gif)
 - 查看实现
