@@ -91,11 +91,11 @@ set signcolumn=yes
 " set signcolumn=number
 set mouse=n
 if exists('g:neovide')
-    let g:neovide_refresh_rate=60
+    " let g:neovide_refresh_rate=60
     let g:neovide_cursor_vfx_mode = "railgun"
     set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h14
-    let g:neovide_transparency=1
-    let g:neovide_fullscreen=v:true
+    " let g:neovide_transparency=1
+    " let g:neovide_fullscreen=v:true
     " let g:neovide_remember_window_size = v:true
     let g:neovide_input_use_logo=v:true
     let g:neovide_profiler = v:false
