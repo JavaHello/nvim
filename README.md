@@ -86,7 +86,7 @@ git clone  https://github.com/JavaHello/nvim.git
 - 搜索`class`,`method`,`field`等
   ![003](https://javahello.github.io/dev/nvim-lean/images/java-symbols-003.gif)
 - Debug
-  ![Debug](https://javahello.github.io/dev/nvim-lean/images/debug.gif)
+  ![Debug001](https://javahello.github.io/dev/nvim-lean/images/debug.gif)
 
 ## 我的 VIM 插件列表
 
