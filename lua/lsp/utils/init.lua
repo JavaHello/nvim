@@ -47,6 +47,9 @@ format_lsp_mapping["sh"] = "null-ls"
 -- stylua
 format_lsp_mapping["lua"] = "null-ls"
 
+-- rustfmt
+format_lsp_mapping["rust"] = "null-ls"
+
 format_lsp_mapping["http"] = "null-ls"
 
 M.filter_format_lsp_client = function(client, bufnr)
