@@ -179,4 +179,8 @@ M.get_visual_selection = function()
 	end
 end
 
+M.run_cmd = function(cmd)
+	return vim.fn.system(cmd)
+end
+
 return M

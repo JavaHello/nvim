@@ -8,6 +8,8 @@ require("core.basic")
 require("plugins")
 vim.defer_fn(function()
 	require("lsp")
+
+	require("core.utils.plantuml").setup()
 end, 0)
 
 -- vim.api.nvim_command('colorscheme gruvbox')
