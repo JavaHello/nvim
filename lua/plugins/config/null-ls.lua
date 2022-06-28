@@ -46,10 +46,10 @@ local sources = {
 	-- null_ls.builtins.formatting.google_java_format,
 	-- null_ls.builtins.diagnostics.semgrep,
 	null_ls.builtins.formatting.rustfmt,
-	null_ls.builtins.diagnostics.semgrep.with({
-		method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
-		extra_args = { "--config", "p/java" },
-	}),
+	-- null_ls.builtins.diagnostics.semgrep.with({
+	-- 	method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+	-- 	extra_args = { "--config", "p/java" },
+	-- }),
 }
 
 local lsp_formatting = function(bufnr)
