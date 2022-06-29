@@ -183,4 +183,7 @@ M.run_cmd = function(cmd)
 	return vim.fn.system(cmd)
 end
 
+M.or_default = function(a, v)
+	return a and a or v
+end
 return M

@@ -1,10 +1,22 @@
 local lsp_installer = require("nvim-lsp-installer")
 local lspconfig = require("lspconfig")
+lsp_installer.setup({
+	ensure_installed = {
+		"sumneko_lua",
+		"clangd",
+		"tsserver",
+		"html",
+		"pyright",
+		"rust_analyzer",
+		"sqls",
+		"gopls",
+	},
+})
 
 -- 安装列表
 -- https://github.com/williamboman/nvim-lsp-installer#available-lsps
 -- { key: 语言 value: 配置文件 }
-local servers = {
+local server_configs = {
 	sumneko_lua = require("lsp.lua"), -- /lua/lsp/lua.lua
 	-- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
 	-- jsonls = require("lsp.jsonls"),
@@ -14,54 +26,34 @@ local servers = {
 	pyright = require("lsp.pyright"),
 	rust_analyzer = require("lsp.rust_analyzer"),
 	sqls = require("lsp.sqls"),
+	gopls = require("lsp.gopls"),
 }
-
--- 自动安装 LanguageServers
-for name, _ in pairs(servers) do
-	local server_available, server = lsp_installer.get_server(name)
-	if server_available then
-		if not server:is_installed() then
-			vim.notify(string.format("请安装 [%s] LSP server", name), vim.log.levels.WARN)
-			-- server:install()
-		end
-	end
-end
 
 -- Setup lspconfig.
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- 没有确定使用效果参数
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
-lsp_installer.setup({})
-for name, m in pairs(servers) do
-	local opts = m.config
-	if opts then
-		opts.on_attach = function(client, bufnr)
-			-- local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-			-- 绑定快捷键
-			require("core.keybindings").maplsp(client, bufnr)
-			-- require("aerial").on_attach(client, bufnr)
-			if m.on_attach then
-				m.on_attach(client, bufnr)
-			end
-			-- vim.notify(string.format("Starting [%s] server", server.name), vim.log.levels.INFO)
+for _, server in ipairs(lsp_installer.get_installed_servers()) do
+	local cfg = require("core.utils").or_default(server_configs[server.name], {})
+	local on_attach = function(client, bufnr)
+		-- 绑定快捷键
+		require("core.keybindings").maplsp(client, bufnr)
+		if cfg.on_attach then
+			cfg.on_attach(client, bufnr)
 		end
-		opts.flags = {
-			debounce_text_changes = 150,
-		}
-		opts.capabilities = capabilities
 	end
 
-	if name == "rust_analyzer" then
+	if server.name == "rust_analyzer" then
 		-- Initialize the LSP via rust-tools instead
 		require("rust-tools").setup({
 			-- The "server" property provided in rust-tools setup function are the
 			-- settings rust-tools will provide to lspconfig during init.            --
 			-- We merge the necessary settings from nvim-lsp-installer (server:get_default_options())
 			-- with the user's own settings (opts).
-			dap = m.dap,
+			dap = cfg.dap,
 			server = {
-				on_attach = opts.on_attach,
-				capabilities = opts.capabilities,
+				on_attach = on_attach,
+				capabilities = capabilities,
 				standalone = false,
 				settings = {
 					["rust-analyzer"] = {
@@ -77,12 +69,17 @@ for name, m in pairs(servers) do
 				},
 			},
 		})
-		-- Only if standalone support is needed
-		-- require("rust-tools").start_standalone_if_required()
 	else
-		lspconfig[name].setup(opts)
+		lspconfig[server.name].setup({
+			on_attach = on_attach,
+			flags = {
+				debounce_text_changes = 150,
+			},
+			capabilities = capabilities,
+		})
 	end
 end
+
 -- LSP 相关美化参考 https://github.com/NvChad/NvChad
 local function lspSymbol(name, icon)
 	local hl = "DiagnosticSign" .. name

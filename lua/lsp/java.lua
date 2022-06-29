@@ -11,7 +11,7 @@ local env = {
 }
 
 local function or_default(a, v)
-	return a and a or v
+	return require("core.utils").or_default(a, v)
 end
 
 local maven_settings = env.MAVEN_HOME .. "/conf/settings.xml"
