@@ -17,10 +17,10 @@ lsp_installer.setup({
 -- https://github.com/williamboman/nvim-lsp-installer#available-lsps
 -- { key: 语言 value: 配置文件 }
 local server_configs = {
-	sumneko_lua = require("lsp.lua"), -- /lua/lsp/lua.lua
+	sumneko_lua = require("lsp.sumneko_lua"), -- /lua/lsp/lua.lua
 	-- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
 	-- jsonls = require("lsp.jsonls"),
-	clangd = require("lsp.c"),
+	clangd = require("lsp.clangd"),
 	tsserver = require("lsp.tsserver"),
 	html = require("lsp.html"),
 	pyright = require("lsp.pyright"),
@@ -35,48 +35,24 @@ local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protoco
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 for _, server in ipairs(lsp_installer.get_installed_servers()) do
 	local cfg = require("core.utils").or_default(server_configs[server.name], {})
-	local on_attach = function(client, bufnr)
+	local on_attach = cfg.on_attach
+	local opts = vim.tbl_deep_extend("force", server:get_default_options(), cfg)
+	opts.on_attach = function(client, bufnr)
 		-- 绑定快捷键
 		require("core.keybindings").maplsp(client, bufnr)
-		if cfg.on_attach then
-			cfg.on_attach(client, bufnr)
+		if on_attach then
+			on_attach(client, bufnr)
 		end
 	end
-
+	opts.flags = {
+		debounce_text_changes = 150,
+	}
+	opts.capabilities = capabilities
 	if server.name == "rust_analyzer" then
 		-- Initialize the LSP via rust-tools instead
-		require("rust-tools").setup({
-			-- The "server" property provided in rust-tools setup function are the
-			-- settings rust-tools will provide to lspconfig during init.            --
-			-- We merge the necessary settings from nvim-lsp-installer (server:get_default_options())
-			-- with the user's own settings (opts).
-			dap = cfg.dap,
-			server = {
-				on_attach = on_attach,
-				capabilities = capabilities,
-				standalone = false,
-				settings = {
-					["rust-analyzer"] = {
-						completion = {
-							postfix = {
-								enable = false,
-							},
-						},
-						checkOnSave = {
-							command = "clippy",
-						},
-					},
-				},
-			},
-		})
+		require("rust-tools").setup(opts)
 	else
-		lspconfig[server.name].setup({
-			on_attach = on_attach,
-			flags = {
-				debounce_text_changes = 150,
-			},
-			capabilities = capabilities,
-		})
+		lspconfig[server.name].setup(opts)
 	end
 end
 
