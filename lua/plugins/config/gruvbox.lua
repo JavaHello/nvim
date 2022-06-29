@@ -10,6 +10,6 @@ require("gruvbox").setup({
 	invert_signs = false,
 	invert_tabline = false,
 	invert_intend_guides = false,
-	contrast = "soft", -- can be "hard" or "soft"
+	contrast = "", -- can be "hard" or "soft"
 	overrides = {},
 })
