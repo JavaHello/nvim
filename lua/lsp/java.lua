@@ -65,7 +65,7 @@ M.setup = function()
 			"-Dlog.protocol=true",
 			"-Dlog.level=ALL",
 			"-Dsun.zip.disableMemoryMapping=true",
-			"-noverify",
+			-- "-noverify",
 			-- '-XX:+UseParallelGC',
 			-- '-XX:GCTimeRatio=4',
 			-- '-XX:AdaptiveSizePolicyWeight=90',
