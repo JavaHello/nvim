@@ -33,26 +33,32 @@ local server_configs = {
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- 没有确定使用效果参数
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
+local utils = require("core.utils")
 for _, server in ipairs(lsp_installer.get_installed_servers()) do
-	local cfg = require("core.utils").or_default(server_configs[server.name], {})
-	local on_attach = cfg.on_attach
-	local opts = vim.tbl_deep_extend("force", server:get_default_options(), cfg)
-	opts.on_attach = function(client, bufnr)
+	-- tools config
+	local cfg = utils.or_default(server_configs[server.name], {})
+
+	-- lspconfig
+	local scfg = utils.or_default(cfg.server, {})
+	scfg = vim.tbl_deep_extend("force", server:get_default_options(), scfg)
+	local on_attach = scfg.on_attach
+	scfg.on_attach = function(client, bufnr)
 		-- 绑定快捷键
 		require("core.keybindings").maplsp(client, bufnr)
 		if on_attach then
 			on_attach(client, bufnr)
 		end
 	end
-	opts.flags = {
+	scfg.flags = {
 		debounce_text_changes = 150,
 	}
-	opts.capabilities = capabilities
+	scfg.capabilities = capabilities
 	if server.name == "rust_analyzer" then
 		-- Initialize the LSP via rust-tools instead
-		require("rust-tools").setup(opts)
+		cfg.server = scfg
+		require("rust-tools").setup(cfg)
 	else
-		lspconfig[server.name].setup(opts)
+		lspconfig[server.name].setup(scfg)
 	end
 end
 
