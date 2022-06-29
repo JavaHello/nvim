@@ -4,6 +4,7 @@ if present then
 	impatient.enable_profile()
 end
 
+require("plugins.config.gruvbox")
 require("core.basic")
 require("plugins")
 vim.defer_fn(function()
