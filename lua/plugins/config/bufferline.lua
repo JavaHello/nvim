@@ -34,6 +34,16 @@ require("bufferline").setup({
 				text_align = "left",
 			},
 			{
+				filetype = "DiffviewFiles",
+				text = function()
+					return "DiffviewFilePanel"
+				end,
+				padding = 1,
+				highlight = "Directory",
+				-- text_align = "center"
+				text_align = "left",
+			},
+			{
 				filetype = "Outline",
 				text = " Outline",
 				padding = 1,

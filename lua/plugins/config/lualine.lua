@@ -79,4 +79,16 @@ sqls.filetypes = {
 }
 table.insert(config.extensions, sqls)
 
+-- DiffviewFilePanel
+local diffview = {}
+diffview.sections = {
+	lualine_a = {
+		{ "filename", file_status = false },
+	},
+}
+diffview.filetypes = {
+	"DiffviewFiles",
+}
+table.insert(config.extensions, diffview)
+
 require("lualine").setup(config)

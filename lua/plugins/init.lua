@@ -308,6 +308,7 @@ vim.defer_fn(function()
 	-- require('plugins/config/nvim-neorg')
 	require("plugins/config/null-ls")
 	require("plugins/config/diffview-nvim")
+	require("plugins/config/neogit")
 	vim.cmd([[
 function! s:http_rest_init() abort
   lua require('plugins/config/rest-nvim')
