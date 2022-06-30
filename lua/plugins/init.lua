@@ -82,6 +82,7 @@ require("packer").startup({
 
 		-- git
 		use("tpope/vim-fugitive")
+		use("sindrets/diffview.nvim")
 		use({ "TimUntersberger/neogit", requires = "nvim-lua/plenary.nvim" })
 
 		-- LeaderF
@@ -306,6 +307,7 @@ vim.defer_fn(function()
 	-- require('plugins/config/autosave')
 	-- require('plugins/config/nvim-neorg')
 	require("plugins/config/null-ls")
+	require("plugins/config/diffview-nvim")
 	vim.cmd([[
 function! s:http_rest_init() abort
   lua require('plugins/config/rest-nvim')
