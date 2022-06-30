@@ -82,6 +82,7 @@ require("packer").startup({
 
 		-- git
 		use("tpope/vim-fugitive")
+		use({ "TimUntersberger/neogit", requires = "nvim-lua/plenary.nvim" })
 
 		-- LeaderF
 		-- use 'Yggdroot/LeaderF'
