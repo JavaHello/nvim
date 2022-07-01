@@ -69,4 +69,7 @@ neogit.setup({
 			["B"] = "BranchPopup",
 		},
 	},
+	status = {
+		recent_commit_count = 40,
+	},
 })
