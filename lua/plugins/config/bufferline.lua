@@ -55,8 +55,8 @@ require("bufferline").setup({
 	color_icons = true,
 	show_buffer_close_icons = true,
 	show_buffer_default_icon = true,
-	show_close_icon = false,
+	show_close_icon = true,
 	show_tab_indicators = true,
 	-- separator_style = "slant" | "thick" | "thin" | { 'any', 'any' },
-	separator_style = "slant",
+	separator_style = "padded_slant",
 })

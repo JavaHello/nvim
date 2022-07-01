@@ -1,6 +1,6 @@
-require("plugins/config/symbols-outline")
+local bootstrap = require("packer_bootstrap")
 require("packer").startup({
-	function()
+	function(use)
 		use({ "nvim-lua/plenary.nvim" })
 		use({ "lewis6991/impatient.nvim" })
 		use({ "nathom/filetype.nvim" })
@@ -260,6 +260,9 @@ require("packer").startup({
 		use("tversteeg/registers.nvim")
 
 		use("nanotee/sqls.nvim")
+		if bootstrap then
+			require("packer").sync()
+		end
 	end,
 	config = {
 		display = {
@@ -268,6 +271,7 @@ require("packer").startup({
 	},
 })
 
+require("plugins/config/gruvbox")
 require("plugins/config/bufferline")
 require("plugins/config/indent-blankline")
 -- require('plugins/config/dashboard-nvim')
@@ -275,6 +279,7 @@ require("plugins/config/alpha-nvim")
 require("plugins/config/lualine")
 require("plugins/config/nvim-tree")
 require("plugins/config/vim-illuminate")
+require("plugins/config/symbols-outline")
 -- 异步加载
 vim.defer_fn(function()
 	require("plugins/config/nvim-treesitter")
