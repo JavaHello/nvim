@@ -72,6 +72,7 @@ M.setup = function()
 			-- '-XX:+UseG1GC',
 			-- '-XX:+UseStringDeduplication',
 			-- '-Xms512m',
+      "-XX:+UseZGC",
 			"-Xmx2g",
 			-- "-Xbootclasspath/a:" .. get_lombok_jar(),
 			"-javaagent:" .. get_lombok_jar(),
