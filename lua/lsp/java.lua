@@ -20,7 +20,7 @@ local function get_maven_settings()
 end
 
 local function get_java_home()
-	return or_default(env.JAVA_HOME, "/opt/software/java/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64")
+	return or_default(env.JAVA_HOME, "/opt/software/java/zulu17.34.19-ca-jdk17.0.3-macosx_aarch64")
 end
 
 local function get_java()
@@ -73,7 +73,7 @@ M.setup = function()
 			-- '-XX:+UseStringDeduplication',
 			-- '-Xms512m',
       "-XX:+UseZGC",
-			"-Xmx2g",
+			"-Xmx4g",
 			-- "-Xbootclasspath/a:" .. get_lombok_jar(),
 			"-javaagent:" .. get_lombok_jar(),
 			"--add-modules=ALL-SYSTEM",
