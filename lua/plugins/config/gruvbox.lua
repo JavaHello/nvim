@@ -13,3 +13,14 @@ require("gruvbox").setup({
 	contrast = "", -- can be "hard" or "soft"
 	overrides = {},
 })
+-- vim.api.nvim_command('colorscheme gruvbox')
+vim.cmd([[ 
+set background=dark
+" g:gruvbox_contrast_dark=hard
+" set background=light
+" g:gruvbox_contrast_light=medium
+colorscheme gruvbox
+"  丢失配色, 变为透明
+" highlight Normal guibg=NONE ctermbg=None
+" autocmd vimenter * hi Normal guibg=#282828
+]])
