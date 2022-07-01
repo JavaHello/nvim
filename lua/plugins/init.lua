@@ -1,15 +1,15 @@
 local bootstrap = require("packer_bootstrap")
 require("packer").startup({
 	function(use)
+		-- Packer can manage itself
+		use("wbthomason/packer.nvim")
 		use({ "nvim-lua/plenary.nvim" })
 		use({ "lewis6991/impatient.nvim" })
 		use({ "nathom/filetype.nvim" })
-		-- Packer can manage itself
-		use("wbthomason/packer.nvim")
-
-		use({ "neovim/nvim-lspconfig", "williamboman/nvim-lsp-installer" })
 
 		use("kyazdani42/nvim-web-devicons")
+		use({ "neovim/nvim-lspconfig", "williamboman/nvim-lsp-installer" })
+
 
 		-- nvim-cmp
 		use("hrsh7th/cmp-nvim-lsp") -- { name = nvim_lsp }
