@@ -8,6 +8,7 @@ require("core.basic")
 require("plugins")
 vim.defer_fn(function()
 	require("lsp")
+	require("dap-cfg")
 
 	require("core.utils.plantuml").setup()
 end, 0)
