@@ -2,21 +2,6 @@
 
 支持 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发。
 
-## Packer 插件管理器安装
-
-### Linux, Mac
-
-```sh
-git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-```
-
-### Windows
-
-```sh
-git clone https://github.com/wbthomason/packer.nvim "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\packer.nvim"
-```
-
 ## 安装
 
 ### Linux, Mac
@@ -64,6 +49,8 @@ git clone  https://github.com/JavaHello/nvim.git
 > 如果不使用 `Java` 语言开发，无需配置
 
 [NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE.html)
+
+如果使用长时间后感觉卡顿，关闭下所有`buffer`, `:%bw` 。
 
 ### 功能演示
 
