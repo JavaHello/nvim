@@ -17,23 +17,23 @@ lsp_installer.setup({
 -- https://github.com/williamboman/nvim-lsp-installer#available-lsps
 -- { key: 语言 value: 配置文件 }
 local server_configs = {
-	sumneko_lua = require("lsp.sumneko_lua"), -- /lua/lsp/lua.lua
+	sumneko_lua = require("kide.lsp.sumneko_lua"), -- /lua/lsp/lua.lua
 	-- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
 	-- jsonls = require("lsp.jsonls"),
-	clangd = require("lsp.clangd"),
-	tsserver = require("lsp.tsserver"),
-	html = require("lsp.html"),
-	pyright = require("lsp.pyright"),
-	rust_analyzer = require("lsp.rust_analyzer"),
-	sqls = require("lsp.sqls"),
-	gopls = require("lsp.gopls"),
+	clangd = require("kide.lsp.clangd"),
+	tsserver = require("kide.lsp.tsserver"),
+	html = require("kide.lsp.html"),
+	pyright = require("kide.lsp.pyright"),
+	rust_analyzer = require("kide.lsp.rust_analyzer"),
+	sqls = require("kide.lsp.sqls"),
+	gopls = require("kide.lsp.gopls"),
 }
 
 -- Setup lspconfig.
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- 没有确定使用效果参数
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
-local utils = require("core.utils")
+local utils = require("kide.core.utils")
 for _, server in ipairs(lsp_installer.get_installed_servers()) do
 	-- tools config
 	local cfg = utils.or_default(server_configs[server.name], {})
@@ -44,7 +44,7 @@ for _, server in ipairs(lsp_installer.get_installed_servers()) do
 	local on_attach = scfg.on_attach
 	scfg.on_attach = function(client, bufnr)
 		-- 绑定快捷键
-		require("core.keybindings").maplsp(client, bufnr)
+		require("kide.core.keybindings").maplsp(client, bufnr)
 		if on_attach then
 			on_attach(client, bufnr)
 		end

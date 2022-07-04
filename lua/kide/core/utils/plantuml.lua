@@ -1,4 +1,4 @@
-local utils = require("core.utils")
+local utils = require("kide.core.utils")
 local M = {}
 M.config = {}
 

@@ -4,11 +4,11 @@ if present then
 	impatient.enable_profile()
 end
 
-require("core.basic")
-require("plugins")
+require("kide.core.basic")
+require("kide.plugins")
 vim.defer_fn(function()
-	require("lsp")
-	require("dap-cfg")
+	require("kide.lsp")
+	require("kide.dap")
 
-	require("core.utils.plantuml").setup()
+	require("kide.core.utils.plantuml").setup()
 end, 0)

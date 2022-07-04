@@ -11,7 +11,7 @@ local env = {
 }
 
 local function or_default(a, v)
-	return require("core.utils").or_default(a, v)
+	return require("kide.core.utils").or_default(a, v)
 end
 
 local maven_settings = env.MAVEN_HOME .. "/conf/settings.xml"
@@ -252,7 +252,7 @@ M.setup = function()
 		-- Remove the option if you do not want that.
 		require("jdtls").setup_dap({ hotcodereplace = "auto" })
 		require("jdtls.setup").add_commands()
-		require("core.keybindings").maplsp(client, bufnr)
+		require("kide.core.keybindings").maplsp(client, bufnr)
 		-- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
 	end
 
