@@ -316,7 +316,7 @@ vim.defer_fn(function()
 	require("kide.plugins.config.neogit")
 	vim.cmd([[
 function! s:http_rest_init() abort
-  lua require('plugins/config/rest-nvim')
+  lua require('kide.plugins/config/rest-nvim')
   lua require('kide.core.keybindings').rest_nvim()
 endfunction
 augroup http_rest
