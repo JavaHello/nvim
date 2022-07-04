@@ -113,3 +113,5 @@ telescope.load_extension("env")
 telescope.load_extension("dap")
 
 telescope.load_extension("toggletasks")
+
+telescope.load_extension('projects')

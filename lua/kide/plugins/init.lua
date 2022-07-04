@@ -10,7 +10,6 @@ require("packer").startup({
 		use("kyazdani42/nvim-web-devicons")
 		use({ "neovim/nvim-lspconfig", "williamboman/nvim-lsp-installer" })
 
-
 		-- nvim-cmp
 		use("hrsh7th/cmp-nvim-lsp") -- { name = nvim_lsp }
 		use("hrsh7th/cmp-buffer") -- { name = 'buffer' },
@@ -263,6 +262,13 @@ require("packer").startup({
 		if bootstrap then
 			require("packer").sync()
 		end
+		-- 项目管理
+		use({
+			"ahmedkhalf/project.nvim",
+			config = function()
+				require("project_nvim").setup({})
+			end,
+		})
 	end,
 	config = {
 		display = {
