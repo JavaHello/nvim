@@ -238,7 +238,7 @@ M.maplsp = function(client, bufnr)
 		vim.lsp.buf.format({
 			bufnr = bfn,
 			filter = function(c)
-				return require("lsp.utils").filter_format_lsp_client(c, bfn)
+				return require("kide.lsp.utils").filter_format_lsp_client(c, bfn)
 			end,
 		})
 	end, opt)
@@ -246,7 +246,7 @@ M.maplsp = function(client, bufnr)
 		bufnr,
 		"v",
 		"<leader>=",
-		'<cmd>lua require("lsp.utils").format_range_operator()<CR>',
+		'<cmd>lua require("kide.lsp.utils").format_range_operator()<CR>',
 		opt
 	)
 	-- mapbuf('v', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt)
