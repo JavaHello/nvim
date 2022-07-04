@@ -103,6 +103,6 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
 vim.cmd([[
 augroup jdtls_lsp
     autocmd!
-    autocmd FileType java lua require'lsp.java'.setup()
+    autocmd FileType java lua require"kide.lsp.java".setup()
 augroup end
 ]])
