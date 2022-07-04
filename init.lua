@@ -1,3 +1,4 @@
+math.randomseed(os.time())
 local present, impatient = pcall(require, "impatient")
 
 if present then

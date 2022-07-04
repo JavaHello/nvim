@@ -1,19 +1,10 @@
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
+local ascli = require('kide.plugins.config.ascli-header')
 
 dashboard.leader = "\\"
 -- Set header
-dashboard.section.header.val = {
-	"                                                     ",
-	"  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
-	"  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
-	"  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
-	"  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
-	"  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
-	"  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
-	"                                                     ",
-}
-
+dashboard.section.header.val = ascli[math.random(0, #ascli)]
 local opt = { noremap = true, silent = true }
 -- Set menu
 dashboard.section.buttons.val = {
@@ -22,7 +13,7 @@ dashboard.section.buttons.val = {
 	dashboard.button("<leader>  fp", "  Recent Projects", ":Telescope projects<CR>", opt),
 	dashboard.button("<leader>  fo", "  Recent File", ":Telescope oldfiles<CR>", opt),
 	dashboard.button("<leader>  es", "  Settings", ":e $MYVIMRC | :cd %:p:h <CR>", opt),
-	dashboard.button("<leader>  q ", "  Quit NVIM", ":qa<CR>"),
+	dashboard.button("<leader>  q ", "  Quit NVIM", ":qa<CR>", opt),
 }
 
 -- Set footer
