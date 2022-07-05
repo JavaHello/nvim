@@ -33,7 +33,7 @@ telescope.setup({
 			height = 0.80,
 			preview_cutoff = 120,
 		},
-		winblend = 20,
+		winblend = 0,
 		-- border = {},
 		-- borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
 		-- borderchars = {

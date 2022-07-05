@@ -1,5 +1,9 @@
 -- setup must be called before loading the colorscheme
 -- Default options:
+
+local overrides = {}
+
+overrides = vim.tbl_extend("force", overrides, require("kide.theme.telescope"))
 require("gruvbox").setup({
 	undercurl = true,
 	underline = true,
@@ -11,8 +15,9 @@ require("gruvbox").setup({
 	invert_tabline = false,
 	invert_intend_guides = false,
 	contrast = "", -- can be "hard" or "soft"
-	overrides = {},
+	overrides = overrides,
 })
+
 -- vim.api.nvim_command('colorscheme gruvbox')
 vim.cmd([[ 
 set background=dark
