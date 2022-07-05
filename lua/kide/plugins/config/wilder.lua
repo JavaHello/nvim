@@ -1,5 +1,5 @@
 local result = vim.api.nvim_exec(
-	[[
+  [[
 call wilder#setup({
       \ 'modes': [':', '/', '?'],
       \ 'next_key': '<Tab>',
@@ -38,5 +38,5 @@ call wilder#set_option('renderer', wilder#renderer_mux({
       \ 'substitute': s:wildmenu_renderer,
       \ }))
 ]],
-	true
+  true
 )

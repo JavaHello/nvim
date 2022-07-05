@@ -1,16 +1,16 @@
 local M = {}
 
 M.format_range_operator = function()
-	local old_func = vim.go.operatorfunc
-	_G.op_func_formatting = function()
-		local start = vim.api.nvim_buf_get_mark(0, "[")
-		local finish = vim.api.nvim_buf_get_mark(0, "]")
-		vim.lsp.buf.range_formatting({}, start, finish)
-		vim.go.operatorfunc = old_func
-		_G.op_func_formatting = nil
-	end
-	vim.go.operatorfunc = "v:lua.op_func_formatting"
-	vim.api.nvim_feedkeys("g@", "n", false)
+  local old_func = vim.go.operatorfunc
+  _G.op_func_formatting = function()
+    local start = vim.api.nvim_buf_get_mark(0, "[")
+    local finish = vim.api.nvim_buf_get_mark(0, "]")
+    vim.lsp.buf.range_formatting({}, start, finish)
+    vim.go.operatorfunc = old_func
+    _G.op_func_formatting = nil
+  end
+  vim.go.operatorfunc = "v:lua.op_func_formatting"
+  vim.api.nvim_feedkeys("g@", "n", false)
 end
 
 -- 指定格式化 lsp_client
@@ -53,9 +53,9 @@ format_lsp_mapping["rust"] = "null-ls"
 format_lsp_mapping["http"] = "null-ls"
 
 M.filter_format_lsp_client = function(client, bufnr)
-	local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
-	local cn = format_lsp_mapping[filetype]
-	return client.name == cn
+  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  local cn = format_lsp_mapping[filetype]
+  return client.name == cn
 end
 
 return M

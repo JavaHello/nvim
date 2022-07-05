@@ -37,8 +37,8 @@ local saga = require("lspsaga")
 -- server_filetype_map = {}
 
 saga.init_lsp_saga({
-	diagnostic_header = { " ", " ", " ", " " },
-	server_filetype_map = {
-		metals = { "java" },
-	},
+  diagnostic_header = { " ", " ", " ", " " },
+  server_filetype_map = {
+    metals = { "java" },
+  },
 })

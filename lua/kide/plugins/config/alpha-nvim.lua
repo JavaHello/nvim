@@ -1,6 +1,6 @@
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
-local ascli = require('kide.plugins.config.ascli-header')
+local ascli = require("kide.plugins.config.ascli-header")
 
 dashboard.leader = "\\"
 -- Set header
@@ -8,12 +8,12 @@ dashboard.section.header.val = ascli[math.random(0, #ascli)]
 local opt = { noremap = true, silent = true }
 -- Set menu
 dashboard.section.buttons.val = {
-	dashboard.button("<leader>  ff", "  Find File", ":Telescope find_files<CR>", opt),
-	dashboard.button("<leader>  fg", "  Find Word  ", ":Telescope live_grep<CR>", opt),
-	dashboard.button("<leader>  fp", "  Recent Projects", ":Telescope projects<CR>", opt),
-	dashboard.button("<leader>  fo", "  Recent File", ":Telescope oldfiles<CR>", opt),
-	dashboard.button("<leader>  es", "  Settings", ":e $MYVIMRC | :cd %:p:h <CR>", opt),
-	dashboard.button("<leader>  q ", "  Quit NVIM", ":qa<CR>", opt),
+  dashboard.button("<leader>  ff", "  Find File", ":Telescope find_files<CR>", opt),
+  dashboard.button("<leader>  fg", "  Find Word  ", ":Telescope live_grep<CR>", opt),
+  dashboard.button("<leader>  fp", "  Recent Projects", ":Telescope projects<CR>", opt),
+  dashboard.button("<leader>  fo", "  Recent File", ":Telescope oldfiles<CR>", opt),
+  dashboard.button("<leader>  es", "  Settings", ":e $MYVIMRC | :cd %:p:h <CR>", opt),
+  dashboard.button("<leader>  q ", "  Quit NVIM", ":qa<CR>", opt),
 }
 
 -- Set footer

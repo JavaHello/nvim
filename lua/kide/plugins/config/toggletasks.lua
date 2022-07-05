@@ -1,8 +1,8 @@
 require("toggletasks").setup({
-	search_paths = {
-		".tasks",
-		".toggletasks",
-		".nvim/toggletasks",
-		".nvim/tasks",
-	},
+  search_paths = {
+    ".tasks",
+    ".toggletasks",
+    ".nvim/toggletasks",
+    ".nvim/tasks",
+  },
 })

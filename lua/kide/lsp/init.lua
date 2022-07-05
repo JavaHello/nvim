@@ -1,32 +1,32 @@
 local lsp_installer = require("nvim-lsp-installer")
 local lspconfig = require("lspconfig")
 lsp_installer.setup({
-	ensure_installed = {
-		"sumneko_lua",
-		"clangd",
-		"tsserver",
-		"html",
-		"pyright",
-		"rust_analyzer",
-		"sqls",
-		"gopls",
-	},
+  ensure_installed = {
+    "sumneko_lua",
+    "clangd",
+    "tsserver",
+    "html",
+    "pyright",
+    "rust_analyzer",
+    "sqls",
+    "gopls",
+  },
 })
 
 -- 安装列表
 -- https://github.com/williamboman/nvim-lsp-installer#available-lsps
 -- { key: 语言 value: 配置文件 }
 local server_configs = {
-	sumneko_lua = require("kide.lsp.sumneko_lua"), -- /lua/lsp/lua.lua
-	-- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
-	-- jsonls = require("lsp.jsonls"),
-	clangd = require("kide.lsp.clangd"),
-	tsserver = require("kide.lsp.tsserver"),
-	html = require("kide.lsp.html"),
-	pyright = require("kide.lsp.pyright"),
-	rust_analyzer = require("kide.lsp.rust_analyzer"),
-	sqls = require("kide.lsp.sqls"),
-	gopls = require("kide.lsp.gopls"),
+  sumneko_lua = require("kide.lsp.sumneko_lua"), -- /lua/lsp/lua.lua
+  -- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
+  -- jsonls = require("lsp.jsonls"),
+  clangd = require("kide.lsp.clangd"),
+  tsserver = require("kide.lsp.tsserver"),
+  html = require("kide.lsp.html"),
+  pyright = require("kide.lsp.pyright"),
+  rust_analyzer = require("kide.lsp.rust_analyzer"),
+  sqls = require("kide.lsp.sqls"),
+  gopls = require("kide.lsp.gopls"),
 }
 
 -- Setup lspconfig.
@@ -35,37 +35,37 @@ local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protoco
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 local utils = require("kide.core.utils")
 for _, server in ipairs(lsp_installer.get_installed_servers()) do
-	-- tools config
-	local cfg = utils.or_default(server_configs[server.name], {})
+  -- tools config
+  local cfg = utils.or_default(server_configs[server.name], {})
 
-	-- lspconfig
-	local scfg = utils.or_default(cfg.server, {})
-	scfg = vim.tbl_deep_extend("force", server:get_default_options(), scfg)
-	local on_attach = scfg.on_attach
-	scfg.on_attach = function(client, bufnr)
-		-- 绑定快捷键
-		require("kide.core.keybindings").maplsp(client, bufnr)
-		if on_attach then
-			on_attach(client, bufnr)
-		end
-	end
-	scfg.flags = {
-		debounce_text_changes = 150,
-	}
-	scfg.capabilities = capabilities
-	if server.name == "rust_analyzer" then
-		-- Initialize the LSP via rust-tools instead
-		cfg.server = scfg
-		require("rust-tools").setup(cfg)
-	else
-		lspconfig[server.name].setup(scfg)
-	end
+  -- lspconfig
+  local scfg = utils.or_default(cfg.server, {})
+  scfg = vim.tbl_deep_extend("force", server:get_default_options(), scfg)
+  local on_attach = scfg.on_attach
+  scfg.on_attach = function(client, bufnr)
+    -- 绑定快捷键
+    require("kide.core.keybindings").maplsp(client, bufnr)
+    if on_attach then
+      on_attach(client, bufnr)
+    end
+  end
+  scfg.flags = {
+    debounce_text_changes = 150,
+  }
+  scfg.capabilities = capabilities
+  if server.name == "rust_analyzer" then
+    -- Initialize the LSP via rust-tools instead
+    cfg.server = scfg
+    require("rust-tools").setup(cfg)
+  else
+    lspconfig[server.name].setup(scfg)
+  end
 end
 
 -- LSP 相关美化参考 https://github.com/NvChad/NvChad
 local function lspSymbol(name, icon)
-	local hl = "DiagnosticSign" .. name
-	vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
+  local hl = "DiagnosticSign" .. name
+  vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
 end
 
 lspSymbol("Error", "")
@@ -74,19 +74,19 @@ lspSymbol("Hint", "")
 lspSymbol("Warn", "")
 
 vim.diagnostic.config({
-	virtual_text = {
-		prefix = "",
-	},
-	signs = true,
-	underline = true,
-	update_in_insert = false,
+  virtual_text = {
+    prefix = "",
+  },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
 })
 
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-	border = "single",
+  border = "single",
 })
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-	border = "single",
+  border = "single",
 })
 
 -- suppress error messages from lang servers
