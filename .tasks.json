@@ -1,0 +1,8 @@
+{
+  "tasks": [
+    {
+      "name": "fmt",
+      "cmd": "stylua --config-path ./stylua.toml **/*.lua"
+    }
+  ]
+}
