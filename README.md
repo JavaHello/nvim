@@ -57,7 +57,7 @@ git clone  https://github.com/JavaHello/nvim.git
 - 启动页
   ![home](https://javahello.github.io/dev/nvim-lean/images/home.png)
 - 查找文件
-  ![find-file](https://javahello.github.io/dev/nvim-lean/images/find-file.gif)
+  ![find-file](https://javahello.github.io/dev/nvim-lean/images/telescope-theme-1.png)
 - 全局搜索
   ![find-word](https://javahello.github.io/dev/nvim-lean/images/find-word.gif)
 - 全局搜索替换
