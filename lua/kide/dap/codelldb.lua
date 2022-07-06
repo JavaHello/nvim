@@ -2,6 +2,7 @@ local M = {}
 local extension_path = "/Users/luokai/.vscode/extensions/vadimcn.vscode-lldb-1.7.0"
 M.config = {}
 M.config.codelldb_path = extension_path .. "/adapter/codelldb"
+M.config.liblldb_path = extension_path .. "/lldb/lib/liblldb.dylib"
 
 M.setup = function(config)
   if config then
@@ -21,7 +22,7 @@ M.setup = function(config)
     local stderr = vim.loop.new_pipe(false)
     local opts = {
       stdio = { nil, stdout, stderr },
-      args = { "--port", tostring(port) },
+      args = { "--port", tostring(port), "--liblldb", M.config.liblldb_path },
     }
     local handle
     local pid_or_err
