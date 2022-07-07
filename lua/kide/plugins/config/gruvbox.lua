@@ -1,9 +1,16 @@
 -- setup must be called before loading the colorscheme
 -- Default options:
 
-local overrides = {}
+local colors = require("gruvbox.palette")
+local overrides = {
+
+  NvimTreeFolderIcon = {
+    fg = colors.bright_green,
+  },
+}
 
 overrides = vim.tbl_extend("force", overrides, require("kide.theme.telescope"))
+
 require("gruvbox").setup({
   undercurl = true,
   underline = true,
