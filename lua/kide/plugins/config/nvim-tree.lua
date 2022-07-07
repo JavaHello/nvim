@@ -1,3 +1,6 @@
+local function custom_callback(callback_name)
+  return string.format(":lua require('kide.plugins.config.utils.treeutil').%s()<CR>", callback_name)
+end
 require("nvim-tree").setup({
   disable_netrw = true,
   hijack_netrw = true,
@@ -65,7 +68,11 @@ require("nvim-tree").setup({
     signcolumn = "yes",
     mappings = {
       custom_only = false,
-      list = {},
+      list = {
+
+        { key = "<leader>ff", cb = custom_callback("launch_find_files") },
+        { key = "<leader>fg", cb = custom_callback("launch_live_grep") },
+      },
     },
   },
   renderer = {
