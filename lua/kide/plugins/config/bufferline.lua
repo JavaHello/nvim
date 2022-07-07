@@ -50,6 +50,13 @@ require("bufferline").setup({
         highlight = "Directory",
         text_align = "left",
       },
+      {
+        filetype = "dbui",
+        text = "Databases",
+        padding = 1,
+        highlight = "Directory",
+        text_align = "left",
+      },
     },
     color_icons = true,
     show_buffer_close_icons = true,
