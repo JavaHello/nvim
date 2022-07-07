@@ -93,7 +93,7 @@ set mouse=n
 if exists('g:neovide')
     " let g:neovide_refresh_rate=60
     let g:neovide_cursor_vfx_mode = "railgun"
-    set guifont=CaskaydiaCove\ Nerd\ Font\ Mono,Cascadia\ Mono\ PL:h14
+    set guifont=Hack\ Nerd\ Font\ Mono,Hack:h13
     " let g:neovide_transparency=1
     " let g:neovide_fullscreen=v:true
     " let g:neovide_remember_window_size = v:true
