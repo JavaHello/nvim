@@ -19,6 +19,7 @@ format_lsp_mapping["java"] = "jdt.ls"
 
 -- sql_formatter
 format_lsp_mapping["sql"] = "null-ls"
+format_lsp_mapping["mysql"] = "null-ls"
 -- prettier
 format_lsp_mapping["javascript"] = "null-ls"
 format_lsp_mapping["javascriptreact"] = "null-ls"

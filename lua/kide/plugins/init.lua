@@ -258,10 +258,11 @@ require("packer").startup({
 
     use("tversteeg/registers.nvim")
 
+    -- databases
     use("nanotee/sqls.nvim")
-    if bootstrap then
-      require("packer").sync()
-    end
+    use("tpope/vim-dadbod")
+    use("kristijanhusak/vim-dadbod-ui")
+
     -- 项目管理
     use({
       "ahmedkhalf/project.nvim",
@@ -269,6 +270,10 @@ require("packer").startup({
         require("project_nvim").setup({})
       end,
     })
+
+    if bootstrap then
+      require("packer").sync()
+    end
   end,
   config = {
     display = {
@@ -320,6 +325,7 @@ vim.defer_fn(function()
   require("kide.plugins.config.null-ls")
   require("kide.plugins.config.diffview-nvim")
   require("kide.plugins.config.neogit")
+  require("kide.plugins.config.vim-dadbod")
   vim.cmd([[
 function! s:http_rest_init() abort
   lua require('kide.plugins/config/rest-nvim')

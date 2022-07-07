@@ -91,4 +91,18 @@ diffview.filetypes = {
 }
 table.insert(config.extensions, diffview)
 
+
+
+-- db-ui
+local dbui = {}
+dbui.sections = {
+  lualine_a = {
+    { "filename", file_status = false },
+  },
+}
+dbui.filetypes = {
+  "dbui",
+}
+table.insert(config.extensions, dbui)
+
 require("lualine").setup(config)

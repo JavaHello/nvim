@@ -42,7 +42,12 @@ local sources = {
   }),
   -- null_ls.builtins.code_actions.gitsigns,
   -- sql
-  null_ls.builtins.formatting.sql_formatter,
+  null_ls.builtins.formatting.sql_formatter.with({
+    filetypes = {
+      "sql",
+      "mysql",
+    },
+  }),
   -- null_ls.builtins.formatting.google_java_format,
   -- null_ls.builtins.diagnostics.semgrep,
   null_ls.builtins.formatting.rustfmt,
