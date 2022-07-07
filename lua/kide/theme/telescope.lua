@@ -47,7 +47,7 @@ return {
     bg = colors.black3,
   },
   TelescopePreviewNormal = {
-    fg = colors.black3,
+    fg = colors.white,
     bg = colors.black3,
   },
 
