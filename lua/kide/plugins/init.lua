@@ -61,6 +61,7 @@ require("packer").startup({
       requires = {
         "kyazdani42/nvim-web-devicons", -- optional, for file icon
       },
+      tag = "nightly",
     })
 
     -- using packer.nvim
