@@ -291,6 +291,7 @@ require("kide.plugins.config.lualine")
 require("kide.plugins.config.nvim-tree")
 require("kide.plugins.config.vim-illuminate")
 require("kide.plugins.config.symbols-outline")
+require("kide.plugins.config.vim-dadbod")
 -- 异步加载
 vim.defer_fn(function()
   require("kide.plugins.config.nvim-treesitter")
@@ -325,7 +326,6 @@ vim.defer_fn(function()
   require("kide.plugins.config.null-ls")
   require("kide.plugins.config.diffview-nvim")
   require("kide.plugins.config.neogit")
-  require("kide.plugins.config.vim-dadbod")
   vim.cmd([[
 function! s:http_rest_init() abort
   lua require('kide.plugins/config/rest-nvim')
