@@ -32,7 +32,7 @@ require("packer").startup({
 
     -- lsp 相关
     -- use 'folke/lsp-colors.nvim'
-    use("folke/trouble.nvim")
+    -- use("folke/trouble.nvim")
 
     -- java 不友好
     -- use({ "glepnir/lspsaga.nvim", branch = "main" })
@@ -308,7 +308,7 @@ vim.defer_fn(function()
   -- require('plugins/config/vista')
   -- require('plugins/config/aerial')
   -- require('plugins/config/lsp-colors')
-  require("kide.plugins.config.trouble")
+  -- require("kide.plugins.config.trouble")
   require("kide.plugins.config.nvim-notify")
   require("kide.plugins.config.wilder")
   require("kide.plugins.config.nvim-colorizer")
