@@ -91,8 +91,6 @@ diffview.filetypes = {
 }
 table.insert(config.extensions, diffview)
 
-
-
 -- db-ui
 local dbui = {}
 dbui.sections = {
