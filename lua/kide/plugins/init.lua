@@ -35,7 +35,7 @@ require("packer").startup({
     use("folke/trouble.nvim")
 
     -- java 不友好
-    -- use 'glepnir/lspsaga.nvim'
+    -- use({ "glepnir/lspsaga.nvim", branch = "main" })
     -- use 'arkav/lualine-lsp-progress'
     -- use 'nvim-lua/lsp-status.nvim'
 
@@ -313,7 +313,7 @@ vim.defer_fn(function()
   require("kide.plugins.config.wilder")
   require("kide.plugins.config.nvim-colorizer")
   require("kide.plugins.config.comment")
-  -- require('kide.plugins.config.lspsaga')
+  -- require("kide.plugins.config.lspsaga")
   -- require('plugins/config/formatter')
   require("kide.plugins.config.telescope")
   -- require('plugins/config/nvim-lsputils')

@@ -35,9 +35,10 @@ local saga = require("lspsaga")
 -- the related filetypes into this table
 -- like server_filetype_map = {metals = {'sbt', 'scala'}}
 -- server_filetype_map = {}
-
 saga.init_lsp_saga({
   diagnostic_header = { " ", " ", " ", " " },
+  code_action_icon = "",
+  max_preview_lines = 40,
   server_filetype_map = {
     metals = { "java" },
   },
