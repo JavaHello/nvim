@@ -42,7 +42,7 @@ git clone  https://github.com/JavaHello/nvim.git
 |       内置终端       |    `:ToggleTerm`     |
 |      Tasks 列表      |     `<leader>ts`     |
 
-更多配置参考 [keybindings](./lua/core/keybindings.lua) 文件
+更多配置参考 [keybindings](./lua/kide/core/keybindings.lua) 文件
 
 ## Java 配置
 
