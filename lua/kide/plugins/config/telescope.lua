@@ -1,6 +1,30 @@
 -- local actions = require("telescope.actions")
 -- local trouble = require("trouble.providers.telescope")
 local telescope = require("telescope")
+
+-- 支持预览 jar 包 class
+local form_entry = require("telescope.from_entry")
+local f_path = form_entry.path
+form_entry.path = function(entry, validate, escape)
+  escape = vim.F.if_nil(escape, true)
+  local path
+  if escape then
+    path = entry.path and vim.fn.fnameescape(entry.path) or nil
+  else
+    path = entry.path
+  end
+  if path == nil then
+    path = entry.filename
+  end
+  if path == nil then
+    path = entry.value
+  end
+  if vim.startswith(path, "jdt://") then
+    return path
+  end
+  return f_path(entry, validate, escape)
+end
+
 telescope.setup({
   defaults = {
     -- vimgrep_arguments = {
@@ -52,7 +76,9 @@ telescope.setup({
     -- file_sorter = require("telescope.sorters").get_fuzzy_file,
     file_ignore_patterns = { "node_modules" },
     -- generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
-    -- path_display = { "truncate" },
+    path_display = { "truncate" },
+    dynamic_preview_title = true,
+    results_title = false,
     -- file_previewer = require("telescope.previewers").vim_buffer_cat.new,
     -- grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
     -- qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
@@ -61,6 +87,16 @@ telescope.setup({
 
     -- Default configuration for telescope goes here:
     -- config_key = value,
+    preview = {
+      -- timeout = 1000,
+      filetype_hook = function(filepath, bufnr, opts)
+        if vim.startswith(filepath, "jdt://") then
+          require("kide.lsp.utils.jdtls").open_jdt_link(filepath, bufnr, opts.preview.timeout)
+          return false
+        end
+        return true
+      end,
+    },
     mappings = {
       i = {
         -- map actions.which_key to <C-h> (default: <C-/>)
