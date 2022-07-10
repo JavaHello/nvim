@@ -113,7 +113,6 @@ require("packer").startup({
     -- use 'voldikss/LeaderF-floaterm'
     use({
       "akinsho/toggleterm.nvim",
-      tag = "v2.*",
       config = function()
         require("toggleterm").setup()
       end,
