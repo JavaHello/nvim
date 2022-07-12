@@ -47,7 +47,13 @@ require("packer").startup({
 
     use({
       "jose-elias-alvarez/null-ls.nvim",
-      config = function() end,
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("null-ls.nvim")
+      end,
+      config = function()
+        require("kide.plugins.config.null-ls")
+      end,
       requires = { "nvim-lua/plenary.nvim" },
     })
 
@@ -150,7 +156,16 @@ require("packer").startup({
     })
 
     -- blankline
-    use("lukas-reineke/indent-blankline.nvim")
+    use({
+      "lukas-reineke/indent-blankline.nvim",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("indent-blankline.nvim")
+      end,
+      function()
+        require("kide.plugins.config.indent-blankline")
+      end,
+    })
 
     -- <>()等匹配插件
     use({
@@ -356,7 +371,6 @@ require("packer").startup({
 require("kide.plugins.config.gruvbox")
 require("kide.plugins.config.nvim-treesitter")
 require("kide.plugins.config.bufferline")
-require("kide.plugins.config.indent-blankline")
 -- require('plugins/config/dashboard-nvim')
 require("kide.plugins.config.alpha-nvim")
 require("kide.plugins.config.lualine")
@@ -392,7 +406,6 @@ vim.defer_fn(function()
   require("kide.plugins.config.translate")
   -- require('plugins/config/autosave')
   -- require('plugins/config/nvim-neorg')
-  require("kide.plugins.config.null-ls")
   require("kide.plugins.config.diffview-nvim")
   require("kide.plugins.config.neogit")
 
