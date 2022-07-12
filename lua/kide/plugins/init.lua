@@ -162,7 +162,7 @@ require("packer").startup({
       setup = function()
         require("kide.core.layz_load").on_file_open("indent-blankline.nvim")
       end,
-      function()
+      config = function()
         require("kide.plugins.config.indent-blankline")
       end,
     })
