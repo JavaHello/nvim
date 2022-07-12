@@ -73,7 +73,22 @@ require("packer").startup({
     use("nvim-treesitter/nvim-treesitter-textobjects")
 
     -- java
-    use("mfussenegger/nvim-jdtls")
+    use({
+      "mfussenegger/nvim-jdtls",
+      opt = true,
+      ft = "java",
+      setup = function()
+        require("kide.core.layz_load").on_file_open("nvim-jdtls")
+      end,
+      config = function()
+        vim.cmd([[
+        augroup jdtls_lsp
+            autocmd!
+            autocmd FileType java lua require"kide.lsp.java".setup()
+        augroup end
+        ]])
+      end,
+    })
     -- use 'NiYanhhhhh/lighttree-java'
 
     -- debug
