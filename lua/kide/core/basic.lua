@@ -85,6 +85,7 @@ vim.opt.confirm = true
 -- vim.g.python_host_prog='/opt/homebrew/bin/python3'
 vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 
+vim.opt.list = true
 vim.cmd([[
 " 始终显示符号列
 set signcolumn=yes
