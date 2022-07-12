@@ -1,4 +1,5 @@
 local bootstrap = require("packer_bootstrap")
+vim.cmd("packadd packer.nvim")
 require("packer").startup({
   function(use)
     -- Packer can manage itself
@@ -119,7 +120,13 @@ require("packer").startup({
     })
 
     -- 多光标插件
-    use("mg979/vim-visual-multi")
+    use({
+      "mg979/vim-visual-multi",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("vim-visual-multi")
+      end,
+    })
 
     -- 状态栏插件
     -- use 'feline-nvim/feline.nvim'
@@ -131,7 +138,13 @@ require("packer").startup({
     use("lukas-reineke/indent-blankline.nvim")
 
     -- <>()等匹配插件
-    use("andymass/vim-matchup")
+    use({
+      "andymass/vim-matchup",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("vim-matchup")
+      end,
+    })
     -- 大纲插件
     -- use 'liuchengxu/vista.vim'
     use("simrat39/symbols-outline.nvim")
@@ -153,9 +166,22 @@ require("packer").startup({
     })
 
     -- mackdown 预览插件
-    use({ "iamcco/markdown-preview.nvim", run = "cd app && yarn install" })
+    use({
+      "iamcco/markdown-preview.nvim",
+      opt = true,
+      ft = "markdown",
+      run = "cd app && yarn install",
+      config = function()
+        require("kide.plugins.config.markdown-preview")
+      end,
+    })
     -- mackdown cli 预览插件
-    use({ "ellisonleao/glow.nvim", branch = "main" })
+    use({
+      "ellisonleao/glow.nvim",
+      opt = true,
+      ft = "markdown",
+      branch = "main",
+    })
 
     -- 格式化插件 -> 使用 null-ls
     -- use 'mhartington/formatter.nvim'
@@ -201,10 +227,23 @@ require("packer").startup({
     use("uga-rosa/translate.nvim")
 
     -- 自动对齐插件
-    use("junegunn/vim-easy-align")
+    use({
+      "junegunn/vim-easy-align",
+
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("vim-easy-align")
+      end,
+    })
 
     -- 表格模式插件
-    use("dhruvasagar/vim-table-mode")
+    use({
+      "dhruvasagar/vim-table-mode",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("vim-table-mode")
+      end,
+    })
 
     -- () 自动补全
     use("windwp/nvim-autopairs")
@@ -219,9 +258,23 @@ require("packer").startup({
 
     use({
       "NTBBloodbath/rest.nvim",
+      ft = "http",
+      opt = true,
       requires = {
         "nvim-lua/plenary.nvim",
       },
+      config = function()
+        vim.cmd([[
+          function! s:http_rest_init() abort
+            lua require('kide.plugins.config.rest-nvim')
+            lua require('kide.core.keybindings').rest_nvim()
+          endfunction
+          augroup http_rest
+              autocmd!
+              autocmd FileType http call s:http_rest_init()
+          augroup end
+         ]])
+      end,
     })
 
     -- 选中高亮插件
@@ -230,9 +283,12 @@ require("packer").startup({
     -- 快速跳转
     use({
       "phaazon/hop.nvim",
-      branch = "v1", -- optional but strongly recommended
+      opt = true,
+      branch = "v1",
+      setup = function()
+        require("kide.core.layz_load").on_file_open("hop.nvim")
+      end,
       config = function()
-        -- you can configure Hop the way you like here; see :h hop-config
         require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
       end,
     })
@@ -283,6 +339,7 @@ require("packer").startup({
 })
 
 require("kide.plugins.config.gruvbox")
+require("kide.plugins.config.nvim-treesitter")
 require("kide.plugins.config.bufferline")
 require("kide.plugins.config.indent-blankline")
 -- require('plugins/config/dashboard-nvim')
@@ -294,8 +351,6 @@ require("kide.plugins.config.symbols-outline")
 require("kide.plugins.config.vim-dadbod")
 -- 异步加载
 vim.defer_fn(function()
-  require("kide.plugins.config.nvim-treesitter")
-
   require("kide.plugins.config.luasnip")
   require("kide.plugins.config.nvim-cmp")
   -- require('plugins/config/LeaderF')
@@ -319,23 +374,12 @@ vim.defer_fn(function()
   require("kide.plugins.config.nvim-autopairs")
   -- require('plugins/config/lsp_signature')
   require("kide.plugins.config.nvim-dap")
-  require("kide.plugins.config.markdown-preview")
   require("kide.plugins.config.translate")
   -- require('plugins/config/autosave')
   -- require('plugins/config/nvim-neorg')
   require("kide.plugins.config.null-ls")
   require("kide.plugins.config.diffview-nvim")
   require("kide.plugins.config.neogit")
-  vim.cmd([[
-function! s:http_rest_init() abort
-  lua require('kide.plugins/config/rest-nvim')
-  lua require('kide.core.keybindings').rest_nvim()
-endfunction
-augroup http_rest
-    autocmd!
-    autocmd FileType http call s:http_rest_init()
-augroup end
-]])
 
   require("kide.core.keybindings").setup()
 end, 0)
