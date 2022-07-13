@@ -8,6 +8,7 @@ vim.g.Illuminate_ftblacklist = {
   "markdown",
   "git",
   "text",
+  "txt",
   "NvimTree",
   "dashboard",
   "alpha",
