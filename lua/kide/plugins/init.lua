@@ -4,11 +4,17 @@ require("packer").startup({
   function(use)
     -- Packer can manage itself
     use("wbthomason/packer.nvim")
-    use({ "nvim-lua/plenary.nvim" })
+    use({
+      "nvim-lua/plenary.nvim",
+      module = "plenary",
+    })
     use({ "lewis6991/impatient.nvim" })
     use({ "nathom/filetype.nvim" })
 
-    use("kyazdani42/nvim-web-devicons")
+    use({
+      "kyazdani42/nvim-web-devicons",
+      module = "nvim-web-devicons",
+    })
     use({
       "williamboman/nvim-lsp-installer",
       cmd = {
@@ -30,32 +36,62 @@ require("packer").startup({
       end,
     })
     use({
-      after = "nvim-lsp-installer",
       "neovim/nvim-lspconfig",
+      after = "nvim-lsp-installer",
+      module = "lspconfig",
       config = function()
         require("kide.lsp")
       end,
     })
 
+    -- 代码片段
+    use({
+      "rafamadriz/friendly-snippets",
+      event = "InsertEnter",
+    })
     -- nvim-cmp
-    use("hrsh7th/cmp-nvim-lsp") -- { name = nvim_lsp }
-    use("hrsh7th/cmp-buffer") -- { name = 'buffer' },
-    use("hrsh7th/cmp-path") -- { name = 'path' }
+    use({
+      "hrsh7th/nvim-cmp",
+      after = "friendly-snippets",
+    })
+    -- LuaSnip
+    use({
+      "L3MON4D3/LuaSnip",
+      after = "nvim-cmp",
+      config = function()
+        require("kide.plugins.config.luasnip")
+      end,
+    })
+    use({
+      "saadparwaiz1/cmp_luasnip",
+      after = "LuaSnip",
+    })
+
+    use({
+      "hrsh7th/cmp-nvim-lsp",
+      after = "cmp_luasnip",
+    })
+    use({
+      "hrsh7th/cmp-buffer",
+      after = "cmp-nvim-lsp",
+    })
+    use({
+      "hrsh7th/cmp-path",
+      after = "cmp-buffer",
+    })
+    -- lspkind
+    use({
+      "onsails/lspkind-nvim",
+      after = "cmp-path",
+      config = function()
+        require("kide.plugins.config.nvim-cmp")
+      end,
+    })
     -- use 'hrsh7th/cmp-cmdline'  -- { name = 'cmdline' }
-    use("hrsh7th/nvim-cmp")
 
     -- vsnip
     -- use 'hrsh7th/cmp-vsnip'    -- { name = 'vsnip' }
     -- use 'hrsh7th/vim-vsnip'
-
-    -- 代码片段
-    use("rafamadriz/friendly-snippets")
-    -- LuaSnip
-    use("L3MON4D3/LuaSnip")
-    use({ "saadparwaiz1/cmp_luasnip" })
-
-    -- lspkind
-    use("onsails/lspkind-nvim")
 
     -- lsp 相关
     -- use 'folke/lsp-colors.nvim'
@@ -139,6 +175,7 @@ require("packer").startup({
     use({
       "sindrets/diffview.nvim",
       opt = true,
+      module = "diffview",
       cmd = {
         "DiffviewClose",
         "DiffviewFileHistory",
@@ -302,6 +339,7 @@ require("packer").startup({
     -- 搜索插件
     use({
       "nvim-telescope/telescope.nvim",
+      module = "telescope",
       requires = {
         "nvim-lua/plenary.nvim",
       },
@@ -354,13 +392,23 @@ require("packer").startup({
     })
 
     -- () 自动补全
-    use("windwp/nvim-autopairs")
+    use({
+      "windwp/nvim-autopairs",
+      after = "nvim-cmp",
+      config = function()
+        require("kide.plugins.config.nvim-autopairs")
+      end,
+    })
 
     -- 任务插件
     use("itchyny/calendar.vim")
 
     -- rust
-    use("simrat39/rust-tools.nvim")
+    use({
+      "simrat39/rust-tools.nvim",
+      opt = true,
+      module = "rust-tools",
+    })
 
     -- use "Pocco81/AutoSave.nvim"
 
@@ -479,8 +527,6 @@ require("kide.plugins.config.symbols-outline")
 require("kide.plugins.config.vim-dadbod")
 -- 异步加载
 vim.defer_fn(function()
-  require("kide.plugins.config.luasnip")
-  require("kide.plugins.config.nvim-cmp")
   -- require('plugins/config/LeaderF')
   require("kide.plugins.config.gitsigns-nvim")
   -- require('plugins/config/vim-floaterm')
@@ -497,7 +543,6 @@ vim.defer_fn(function()
   -- require('plugins/config/formatter')
   require("kide.plugins.config.telescope")
   -- require('plugins/config/nvim-lsputils')
-  require("kide.plugins.config.nvim-autopairs")
   -- require('plugins/config/lsp_signature')
   require("kide.plugins.config.nvim-dap")
   -- require('plugins/config/autosave')
