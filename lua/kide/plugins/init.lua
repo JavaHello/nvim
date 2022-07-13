@@ -47,6 +47,7 @@ require("packer").startup({
     -- 代码片段
     use({
       "rafamadriz/friendly-snippets",
+      module = "cmp_nvim_lsp",
       event = "InsertEnter",
     })
     -- nvim-cmp
@@ -57,6 +58,7 @@ require("packer").startup({
     -- LuaSnip
     use({
       "L3MON4D3/LuaSnip",
+      wants = "friendly-snippets",
       after = "nvim-cmp",
       config = function()
         require("kide.plugins.config.luasnip")
@@ -451,7 +453,14 @@ require("packer").startup({
     })
 
     -- 选中高亮插件
-    use("RRethy/vim-illuminate")
+    use({
+      "RRethy/vim-illuminate",
+      opt = true,
+      setup = function()
+        require("kide.plugins.config.vim-illuminate")
+        require("kide.core.layz_load").on_file_open("vim-illuminate")
+      end,
+    })
 
     -- 快速跳转
     use({
@@ -510,8 +519,23 @@ require("packer").startup({
       ft = { "sql", "mysql" },
       opt = true,
     })
-    use("tpope/vim-dadbod")
-    use("kristijanhusak/vim-dadbod-ui")
+    use({
+      "tpope/vim-dadbod",
+      opt = true,
+    })
+    use({
+      "kristijanhusak/vim-dadbod-ui",
+      opt = true,
+      wants = "vim-dadbod",
+      after = "vim-dadbod",
+      cmd = {
+        "DBUI",
+        "DBUIToggle",
+      },
+      setup = function()
+        require("kide.plugins.config.vim-dadbod")
+      end,
+    })
 
     -- 项目管理
     use({
@@ -539,8 +563,6 @@ require("kide.plugins.config.bufferline")
 require("kide.plugins.config.alpha-nvim")
 require("kide.plugins.config.lualine")
 require("kide.plugins.config.nvim-tree")
-require("kide.plugins.config.vim-illuminate")
-require("kide.plugins.config.vim-dadbod")
 -- 异步加载
 vim.defer_fn(function()
   -- require('plugins/config/LeaderF')
