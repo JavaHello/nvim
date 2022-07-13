@@ -130,63 +130,63 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 ]])
+
+  -- hop.nvim
+  -- place this in one of your configuration file(s)
+  map(
+    "n",
+    "f",
+    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
+    opt
+  )
+  map(
+    "v",
+    "f",
+    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
+    opt
+  )
+  map(
+    "n",
+    "F",
+    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
+    opt
+  )
+  map(
+    "v",
+    "F",
+    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
+    opt
+  )
+  map(
+    "o",
+    "f",
+    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
+    opt
+  )
+  map(
+    "o",
+    "F",
+    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
+    opt
+  )
+  -- map('', 't', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", opt)
+  -- map('', 'T', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>", opt)
+  -- map('n', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END })<cr>", opt)
+  -- map('v', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END })<cr>", opt)
+  -- map('o', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END, inclusive_jump = true })<cr>", opt)
+
+  -- nvim-spectre
+  map("n", "<leader>S", "<cmd>lua require('spectre').open()<CR>", opt)
+  -- search current word
+  map("n", "<leader>fr", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
+  map("v", "<leader>fr", "<cmd>lua require('spectre').open_visual()<CR>", opt)
+  --  search in current file
+  -- map("n", "<leader>fp", "viw:lua require('spectre').open_file_search()<cr>", opt)
+  -- run command :Spectre
+
+  -- ToggleTask
+  map("n", "<leader>ts", "<cmd>Telescope toggletasks spawn<cr>", opt)
 end
-
--- hop.nvim
--- place this in one of your configuration file(s)
-map(
-  "n",
-  "f",
-  "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
-  opt
-)
-map(
-  "v",
-  "f",
-  "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
-  opt
-)
-map(
-  "n",
-  "F",
-  "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
-  opt
-)
-map(
-  "v",
-  "F",
-  "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
-  opt
-)
-map(
-  "o",
-  "f",
-  "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
-  opt
-)
-map(
-  "o",
-  "F",
-  "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
-  opt
-)
--- map('', 't', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", opt)
--- map('', 'T', "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>", opt)
--- map('n', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END })<cr>", opt)
--- map('v', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END })<cr>", opt)
--- map('o', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END, inclusive_jump = true })<cr>", opt)
-
--- nvim-spectre
-map("n", "<leader>S", "<cmd>lua require('spectre').open()<CR>", opt)
--- search current word
-map("n", "<leader>fr", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
-map("v", "<leader>fr", "<cmd>lua require('spectre').open_visual()<CR>", opt)
---  search in current file
--- map("n", "<leader>fp", "viw:lua require('spectre').open_file_search()<cr>", opt)
--- run command :Spectre
-
--- ToggleTask
-map("n", "<leader>ts", "<cmd>Telescope toggletasks spawn<cr>", opt)
 -- lsp 回调函数快捷键设置
 M.maplsp = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
