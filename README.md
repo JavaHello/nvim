@@ -1,6 +1,6 @@
 # NVIM IDE
 
-支持 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发。
+支持 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发。 极速启动 (70 ~ 100 ms), 注重细节。
 
 ## 安装
 
