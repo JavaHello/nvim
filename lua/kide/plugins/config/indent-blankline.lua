@@ -22,7 +22,7 @@ require("indent_blankline").setup({
     "Outline",
     "TelescopePrompt",
     "TelescopeResults",
-    ""
+    "",
   },
   buftype_exclude = { "terminal" },
   use_treesitter = true,

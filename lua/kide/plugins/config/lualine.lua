@@ -70,7 +70,7 @@ table.insert(config.extensions, nvim_tree)
 -- local function db_info()
 --   return db_connection_value .. "->" .. db_database_value
 -- end
--- 
+--
 -- local sqls = {}
 -- sqls.sections = vim.deepcopy(config.sections)
 -- table.insert(sqls.sections.lualine_c, db_info)
