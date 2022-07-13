@@ -189,7 +189,16 @@ require("packer").startup({
     use("gelguy/wilder.nvim")
 
     -- 颜色显示
-    use("norcalli/nvim-colorizer.lua")
+    use({
+      "norcalli/nvim-colorizer.lua",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("nvim-colorizer.lua")
+      end,
+      config = function()
+        require("kide.plugins.config.nvim-colorizer")
+      end,
+    })
 
     use({
       "numToStr/Comment.nvim",
@@ -254,12 +263,20 @@ require("packer").startup({
 
     -- 翻译插件
     -- use 'voldikss/vim-translator'
-    use("uga-rosa/translate.nvim")
+    use({
+      "uga-rosa/translate.nvim",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("translate.nvim")
+      end,
+      config = function()
+        require("kide.plugins.config.translate")
+      end,
+    })
 
     -- 自动对齐插件
     use({
       "junegunn/vim-easy-align",
-
       opt = true,
       setup = function()
         require("kide.core.layz_load").on_file_open("vim-easy-align")
@@ -334,18 +351,38 @@ require("packer").startup({
     -- 查找替换
     use({
       "windwp/nvim-spectre",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("nvim-spectre")
+      end,
       config = function()
         require("spectre").setup()
       end,
     })
 
     -- ASCII 图
-    use("jbyuki/venn.nvim")
+    use({
+      "jbyuki/venn.nvim",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("venn.nvim")
+      end,
+    })
 
-    use("tversteeg/registers.nvim")
+    use({
+      "tversteeg/registers.nvim",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("registers.nvim")
+      end,
+    })
 
     -- databases
-    use("nanotee/sqls.nvim")
+    use({
+      "nanotee/sqls.nvim",
+      ft = { "sql", "mysql" },
+      opt = true,
+    })
     use("tpope/vim-dadbod")
     use("kristijanhusak/vim-dadbod-ui")
 
@@ -394,7 +431,6 @@ vim.defer_fn(function()
   -- require("kide.plugins.config.trouble")
   require("kide.plugins.config.nvim-notify")
   require("kide.plugins.config.wilder")
-  require("kide.plugins.config.nvim-colorizer")
   require("kide.plugins.config.comment")
   -- require("kide.plugins.config.lspsaga")
   -- require('plugins/config/formatter')
@@ -403,7 +439,6 @@ vim.defer_fn(function()
   require("kide.plugins.config.nvim-autopairs")
   -- require('plugins/config/lsp_signature')
   require("kide.plugins.config.nvim-dap")
-  require("kide.plugins.config.translate")
   -- require('plugins/config/autosave')
   -- require('plugins/config/nvim-neorg')
   require("kide.plugins.config.diffview-nvim")
