@@ -160,10 +160,21 @@ require("packer").startup({
     -- use 'NiYanhhhhh/lighttree-java'
 
     -- debug
-    use({ "mfussenegger/nvim-dap" })
-    use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
+    use({
+      "mfussenegger/nvim-dap",
+    })
+    use({
+      "rcarriga/nvim-dap-ui",
+      after = "nvim-dap",
+    })
     use({
       "theHamsta/nvim-dap-virtual-text",
+      after = "nvim-dap-ui",
+      module = { "dap", "dapui" },
+      config = function()
+        require("kide.plugins.config.nvim-dap")
+        require("kide.dap")
+      end,
     })
 
     -- git
@@ -544,7 +555,6 @@ vim.defer_fn(function()
   require("kide.plugins.config.telescope")
   -- require('plugins/config/nvim-lsputils')
   -- require('plugins/config/lsp_signature')
-  require("kide.plugins.config.nvim-dap")
   -- require('plugins/config/autosave')
   -- require('plugins/config/nvim-neorg')
 

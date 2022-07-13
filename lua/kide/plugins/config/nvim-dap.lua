@@ -49,3 +49,4 @@ vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "
 -- vim.fn.sign_define('DapStopped', {text='→', texthl='', linehl='debugPC', numhl=''})
 
 require("nvim-dap-virtual-text").setup()
+require("telescope").load_extension("dap")
