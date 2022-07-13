@@ -202,6 +202,13 @@ require("packer").startup({
 
     use({
       "numToStr/Comment.nvim",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").on_file_open("Comment.nvim")
+      end,
+      config = function()
+        require("kide.plugins.config.comment")
+      end,
     })
 
     -- mackdown 预览插件
@@ -337,6 +344,7 @@ require("packer").startup({
       end,
       config = function()
         require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
+        require("kide.core.keybindings").hop_mapkey()
       end,
     })
 
@@ -431,7 +439,6 @@ vim.defer_fn(function()
   -- require("kide.plugins.config.trouble")
   require("kide.plugins.config.nvim-notify")
   require("kide.plugins.config.wilder")
-  require("kide.plugins.config.comment")
   -- require("kide.plugins.config.lspsaga")
   -- require('plugins/config/formatter')
   require("kide.plugins.config.telescope")
