@@ -8,7 +8,6 @@ end
 require("kide.core.basic")
 require("kide.plugins")
 vim.defer_fn(function()
-  require("kide.lsp")
   require("kide.dap")
 
   require("kide.core.utils.plantuml").setup()

@@ -9,7 +9,33 @@ require("packer").startup({
     use({ "nathom/filetype.nvim" })
 
     use("kyazdani42/nvim-web-devicons")
-    use({ "neovim/nvim-lspconfig", "williamboman/nvim-lsp-installer" })
+    use({
+      "williamboman/nvim-lsp-installer",
+      cmd = {
+        "LspInfo",
+        "LspStart",
+        "LspRestart",
+        "LspStop",
+        "LspInstall",
+        "LspUnInstall",
+        "LspUnInstallAll",
+        "LspInstall",
+        "LspInstallInfo",
+        "LspInstallLog",
+        "LspLog",
+        "LspPrintInstalled",
+      },
+      setup = function()
+        require("kide.core.layz_load").on_file_open("nvim-lsp-installer")
+      end,
+    })
+    use({
+      after = "nvim-lsp-installer",
+      "neovim/nvim-lspconfig",
+      config = function()
+        require("kide.lsp")
+      end,
+    })
 
     -- nvim-cmp
     use("hrsh7th/cmp-nvim-lsp") -- { name = nvim_lsp }
@@ -98,9 +124,11 @@ require("packer").startup({
     -- use 'NiYanhhhhh/lighttree-java'
 
     -- debug
-    use("mfussenegger/nvim-dap")
+    use({ "mfussenegger/nvim-dap" })
     use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
-    use("theHamsta/nvim-dap-virtual-text")
+    use({
+      "theHamsta/nvim-dap-virtual-text",
+    })
 
     -- git
     use({
