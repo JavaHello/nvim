@@ -281,7 +281,13 @@ require("packer").startup({
     })
     -- 大纲插件
     -- use 'liuchengxu/vista.vim'
-    use("simrat39/symbols-outline.nvim")
+    use({
+      "simrat39/symbols-outline.nvim",
+      cmd = { "SymbolsOutline" },
+      config = function()
+        require("kide.plugins.config.symbols-outline")
+      end,
+    })
     -- use {
     -- 'stevearc/aerial.nvim',
     -- }
@@ -534,7 +540,6 @@ require("kide.plugins.config.alpha-nvim")
 require("kide.plugins.config.lualine")
 require("kide.plugins.config.nvim-tree")
 require("kide.plugins.config.vim-illuminate")
-require("kide.plugins.config.symbols-outline")
 require("kide.plugins.config.vim-dadbod")
 -- 异步加载
 vim.defer_fn(function()
