@@ -284,7 +284,7 @@ require("packer").startup({
     use({
       "simrat39/symbols-outline.nvim",
       cmd = { "SymbolsOutline" },
-      config = function()
+      setup = function()
         require("kide.plugins.config.symbols-outline")
       end,
     })
