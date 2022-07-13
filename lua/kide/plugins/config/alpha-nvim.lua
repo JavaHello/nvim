@@ -22,7 +22,7 @@ dashboard.section.buttons.val = {
   dashboard.button("<leader>  fg", "  Find Word  ", ":Telescope live_grep<CR>", opt),
   dashboard.button("<leader>  fp", "  Recent Projects", ":Telescope projects<CR>", opt),
   dashboard.button("<leader>  fo", "  Recent File", ":Telescope oldfiles<CR>", opt),
-  dashboard.button("<leader>  es", "  Settings", ":e $MYVIMRC | :cd %:p:h <CR>", opt),
+  dashboard.button("<leader>  ns", "  Settings", ":e $MYVIMRC | :cd %:p:h <CR>", opt),
   dashboard.button("<leader>  q ", "  Quit NVIM", ":qa<CR>", opt),
 }
 
