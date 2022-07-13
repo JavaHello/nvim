@@ -103,9 +103,37 @@ require("packer").startup({
     use("theHamsta/nvim-dap-virtual-text")
 
     -- git
-    use("tpope/vim-fugitive")
-    use("sindrets/diffview.nvim")
-    use({ "TimUntersberger/neogit", requires = "nvim-lua/plenary.nvim" })
+    use({
+      "tpope/vim-fugitive",
+      opt = true,
+      cmd = { "Git" },
+    })
+    use({
+      "sindrets/diffview.nvim",
+      opt = true,
+      cmd = {
+        "DiffviewClose",
+        "DiffviewFileHistory",
+        "DiffviewFocusFiles",
+        "DiffviewLog",
+        "DiffviewOpen",
+        "DiffviewRefresh",
+        "DiffviewToggleFiles",
+      },
+      config = function()
+        require("kide.plugins.config.diffview-nvim")
+      end,
+    })
+    use({
+      after = "diffview.nvim",
+      opt = true,
+      "TimUntersberger/neogit",
+      cmd = { "Neogit" },
+      config = function()
+        require("kide.plugins.config.neogit")
+      end,
+      requires = "nvim-lua/plenary.nvim",
+    })
 
     -- LeaderF
     -- use 'Yggdroot/LeaderF'
@@ -203,9 +231,7 @@ require("packer").startup({
     use({
       "numToStr/Comment.nvim",
       opt = true,
-      setup = function()
-        require("kide.core.layz_load").on_file_open("Comment.nvim")
-      end,
+      keys = { "gc", "gb" },
       config = function()
         require("kide.plugins.config.comment")
       end,
@@ -448,8 +474,6 @@ vim.defer_fn(function()
   require("kide.plugins.config.nvim-dap")
   -- require('plugins/config/autosave')
   -- require('plugins/config/nvim-neorg')
-  require("kide.plugins.config.diffview-nvim")
-  require("kide.plugins.config.neogit")
 
   require("kide.core.keybindings").setup()
 end, 0)
