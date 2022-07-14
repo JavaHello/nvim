@@ -483,7 +483,17 @@ require("packer").startup({
         require("telescope").load_extension("ui-select")
       end,
     })
-    -- use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+    use({
+      "nvim-telescope/telescope-fzf-native.nvim",
+      run = "make",
+      after = "telescope.nvim",
+      setup = function()
+        vim.cmd("PackerLoad telescope-fzf-native.nvim")
+      end,
+      config = function()
+        require("telescope").load_extension("fzf")
+      end,
+    })
     use({ "nvim-telescope/telescope-dap.nvim" })
 
     -- use 'GustavoKatel/telescope-asynctasks.nvim'
