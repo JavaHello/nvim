@@ -145,6 +145,7 @@ require("packer").startup({
 
       opt = true,
       tag = "nightly",
+      wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
       setup = function()
         vim.defer_fn(function()
@@ -161,6 +162,7 @@ require("packer").startup({
       "akinsho/bufferline.nvim",
       opt = true,
       tag = "v2.*",
+      wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
       requires = "kyazdani42/nvim-web-devicons",
       setup = function()
@@ -175,6 +177,7 @@ require("packer").startup({
     use({
       "nvim-treesitter/nvim-treesitter",
       module = "nvim-treesitter",
+      wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
       run = ":TSUpdate",
     })
@@ -287,8 +290,11 @@ require("packer").startup({
     use({
       "jedrzejboczar/toggletasks.nvim",
       opt = true,
+      after = "toggleterm.nvim",
       setup = function()
-        vim.cmd("PackerLoad toggletasks.nvim")
+        vim.defer_fn(function()
+          vim.cmd("PackerLoad toggletasks.nvim")
+        end, 0)
       end,
       requires = {
         "nvim-lua/plenary.nvim",
@@ -305,6 +311,8 @@ require("packer").startup({
     -- use 'voldikss/LeaderF-floaterm'
     use({
       "akinsho/toggleterm.nvim",
+      module = "toggleterm",
+      opt = true,
       config = function()
         require("toggleterm").setup()
       end,
@@ -324,6 +332,7 @@ require("packer").startup({
     use({
       "nvim-lualine/lualine.nvim",
       opt = true,
+      wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
       setup = function()
         vim.cmd("PackerLoad lualine.nvim")
@@ -357,6 +366,7 @@ require("packer").startup({
     -- use 'liuchengxu/vista.vim'
     use({
       "simrat39/symbols-outline.nvim",
+      opt = true,
       cmd = { "SymbolsOutline" },
       setup = function()
         require("kide.plugins.config.symbols-outline")
@@ -453,6 +463,8 @@ require("packer").startup({
     use({
       "nvim-telescope/telescope.nvim",
       module = "telescope",
+      wants = "gruvbox.nvim",
+      after = "gruvbox.nvim",
       requires = {
         "nvim-lua/plenary.nvim",
       },
@@ -539,7 +551,15 @@ require("packer").startup({
     })
 
     -- 任务插件
-    use("itchyny/calendar.vim")
+    use({
+      "itchyny/calendar.vim",
+      opt = true,
+      setup = function()
+        vim.defer_fn(function()
+          vim.cmd("PackerLoad calendar.vim")
+        end, 0)
+      end,
+    })
 
     -- rust
     use({
