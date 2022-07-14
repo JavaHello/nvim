@@ -123,7 +123,17 @@ require("packer").startup({
 
     -- 主题
     -- use 'morhetz/gruvbox'
-    use({ "ellisonleao/gruvbox.nvim" })
+    use({
+      "ellisonleao/gruvbox.nvim",
+      opt = true,
+      module = "gruvbox",
+      setup = function()
+        vim.cmd("PackerLoad gruvbox.nvim")
+      end,
+      config = function()
+        require("kide.plugins.config.gruvbox")
+      end,
+    })
     -- use 'sainnhe/gruvbox-material'
 
     -- 文件管理
@@ -132,15 +142,53 @@ require("packer").startup({
       requires = {
         "kyazdani42/nvim-web-devicons", -- optional, for file icon
       },
+
+      opt = true,
       tag = "nightly",
+      after = "gruvbox.nvim",
+      setup = function()
+        vim.defer_fn(function()
+          vim.cmd("PackerLoad nvim-tree.lua")
+        end, 0)
+      end,
+      config = function()
+        require("kide.plugins.config.nvim-tree")
+      end,
     })
 
     -- using packer.nvim
-    use({ "akinsho/bufferline.nvim", tag = "v2.*", requires = "kyazdani42/nvim-web-devicons" })
+    use({
+      "akinsho/bufferline.nvim",
+      opt = true,
+      tag = "v2.*",
+      after = "gruvbox.nvim",
+      requires = "kyazdani42/nvim-web-devicons",
+      setup = function()
+        vim.cmd("PackerLoad bufferline.nvim")
+      end,
+      config = function()
+        require("kide.plugins.config.bufferline")
+      end,
+    })
 
     -- treesitter (新增)
-    use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
-    use("nvim-treesitter/nvim-treesitter-textobjects")
+    use({
+      "nvim-treesitter/nvim-treesitter",
+      module = "nvim-treesitter",
+      after = "gruvbox.nvim",
+      run = ":TSUpdate",
+    })
+    use({
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      opt = true,
+      after = "nvim-treesitter",
+      setup = function()
+        vim.cmd("PackerLoad nvim-treesitter-textobjects")
+      end,
+      config = function()
+        require("kide.plugins.config.nvim-treesitter")
+      end,
+    })
 
     -- java
     use({
@@ -219,9 +267,18 @@ require("packer").startup({
     -- git edit 状态显示插件
     use({
       "lewis6991/gitsigns.nvim",
+      opt = true,
+      setup = function()
+        vim.defer_fn(function()
+          vim.cmd("PackerLoad gitsigns.nvim")
+        end, 0)
+      end,
       requires = {
         "nvim-lua/plenary.nvim",
       },
+      config = function()
+        require("kide.plugins.config.gitsigns-nvim")
+      end,
     })
 
     -- 异步任务执行插件
@@ -229,11 +286,18 @@ require("packer").startup({
     -- use 'skywind3000/asyncrun.vim'
     use({
       "jedrzejboczar/toggletasks.nvim",
+      opt = true,
+      setup = function()
+        vim.cmd("PackerLoad toggletasks.nvim")
+      end,
       requires = {
         "nvim-lua/plenary.nvim",
         "akinsho/toggleterm.nvim",
         "nvim-telescope/telescope.nvim/",
       },
+      config = function()
+        require("kide.plugins.config.toggletasks")
+      end,
     })
 
     -- 浮动窗口插件
@@ -259,6 +323,14 @@ require("packer").startup({
     -- use 'feline-nvim/feline.nvim'
     use({
       "nvim-lualine/lualine.nvim",
+      opt = true,
+      after = "gruvbox.nvim",
+      setup = function()
+        vim.cmd("PackerLoad lualine.nvim")
+      end,
+      config = function()
+        require("kide.plugins.config.lualine")
+      end,
     })
 
     -- blankline
@@ -295,10 +367,32 @@ require("packer").startup({
     -- }
 
     -- 消息通知
-    use("rcarriga/nvim-notify")
+    use({
+      "rcarriga/nvim-notify",
+      opt = true,
+      setup = function()
+        vim.defer_fn(function()
+          vim.cmd("PackerLoad nvim-notify")
+        end, 0)
+      end,
+      config = function()
+        require("kide.plugins.config.nvim-notify")
+      end,
+    })
 
     -- wildmenu 补全美化
-    use("gelguy/wilder.nvim")
+    use({
+      "gelguy/wilder.nvim",
+      opt = true,
+      setup = function()
+        vim.defer_fn(function()
+          vim.cmd("PackerLoad wilder.nvim")
+        end, 0)
+      end,
+      config = function()
+        require("kide.plugins.config.wilder")
+      end,
+    })
 
     -- 颜色显示
     use({
@@ -362,21 +456,46 @@ require("packer").startup({
       requires = {
         "nvim-lua/plenary.nvim",
       },
+      config = function()
+        require("kide.plugins.config.telescope")
+      end,
     })
-    use({ "nvim-telescope/telescope-ui-select.nvim" })
+    use({
+      "nvim-telescope/telescope-ui-select.nvim",
+      after = "telescope.nvim",
+      setup = function()
+        vim.cmd("PackerLoad telescope-ui-select.nvim")
+      end,
+      config = function()
+        require("telescope").load_extension("ui-select")
+      end,
+    })
     -- use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use({ "nvim-telescope/telescope-dap.nvim" })
 
     -- use 'GustavoKatel/telescope-asynctasks.nvim'
     -- use 'aloussase/telescope-gradle.nvim'
     -- use 'aloussase/telescope-mvnsearch'
-    use({ "LinArcX/telescope-env.nvim" })
+    use({
+      "LinArcX/telescope-env.nvim",
+      after = "telescope.nvim",
+      config = function()
+        require("telescope").load_extension("env")
+      end,
+    })
 
     -- 仪表盘
     -- use {'glepnir/dashboard-nvim'}
     use({
       "goolord/alpha-nvim",
+      opt = true,
       requires = { "kyazdani42/nvim-web-devicons" },
+      setup = function()
+        vim.cmd("PackerLoad alpha-nvim")
+      end,
+      config = function()
+        require("kide.plugins.config.alpha-nvim")
+      end,
     })
 
     -- 翻译插件
@@ -542,6 +661,8 @@ require("packer").startup({
       "ahmedkhalf/project.nvim",
       config = function()
         require("project_nvim").setup({})
+
+        require("telescope").load_extension("projects")
       end,
     })
 
@@ -556,34 +677,6 @@ require("packer").startup({
   },
 })
 
-require("kide.plugins.config.gruvbox")
-require("kide.plugins.config.nvim-treesitter")
-require("kide.plugins.config.bufferline")
--- require('plugins/config/dashboard-nvim')
-require("kide.plugins.config.alpha-nvim")
-require("kide.plugins.config.lualine")
-require("kide.plugins.config.nvim-tree")
--- 异步加载
 vim.defer_fn(function()
-  -- require('plugins/config/LeaderF')
-  require("kide.plugins.config.gitsigns-nvim")
-  -- require('plugins/config/vim-floaterm')
-  -- require('plugins/config/asynctasks')
-  require("kide.plugins.config.toggletasks")
-  -- require('plugins/config/feline')
-  -- require('plugins/config/vista')
-  -- require('plugins/config/aerial')
-  -- require('plugins/config/lsp-colors')
-  -- require("kide.plugins.config.trouble")
-  require("kide.plugins.config.nvim-notify")
-  require("kide.plugins.config.wilder")
-  -- require("kide.plugins.config.lspsaga")
-  -- require('plugins/config/formatter')
-  require("kide.plugins.config.telescope")
-  -- require('plugins/config/nvim-lsputils')
-  -- require('plugins/config/lsp_signature')
-  -- require('plugins/config/autosave')
-  -- require('plugins/config/nvim-neorg')
-
   require("kide.core.keybindings").setup()
 end, 0)

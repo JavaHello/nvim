@@ -6,3 +6,5 @@ require("toggletasks").setup({
     ".nvim/tasks",
   },
 })
+
+require("telescope").load_extension("toggletasks")

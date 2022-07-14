@@ -140,13 +140,6 @@ telescope.setup({
     -- }
   },
 })
-telescope.load_extension("notify")
 -- telescope.load_extension('fzf')
-telescope.load_extension("ui-select")
 -- telescope.load_extension('gradle')
 -- telescope.load_extension('maven_search')
-telescope.load_extension("env")
-
-telescope.load_extension("toggletasks")
-
-telescope.load_extension("projects")
