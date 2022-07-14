@@ -58,6 +58,7 @@ require("packer").startup({
     -- LuaSnip
     use({
       "L3MON4D3/LuaSnip",
+      module = "luasnip",
       wants = "friendly-snippets",
       after = "nvim-cmp",
       config = function()
