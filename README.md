@@ -26,12 +26,12 @@ git clone  https://github.com/JavaHello/nvim.git
 |       文件搜索       |     `<leader>ff`     |
 |       全局搜索       |     `<leader>fg`     |
 |     全局搜索替换     |     `<leader>fr`     |
-|       Git 操作       |        `:Git`        |
+|       Git 操作       |      `:Neogit`       |
 |       Outline        |     `<leader>o`      |
 |       查看实现       |         `gi`         |
 |       查看引用       |         `gr`         |
 |       查看声明       |         `gd`         |
-|     搜索 symbols     |     `<leader>sw`     |
+|     搜索 symbols     |     `<leader>fs`     |
 | 格式化(LSP 提供支持) |     `<leader>=`      |
 |        重命名        |     `<leader>rn`     |
 |     Code Action      |     `<leader>ca`     |
