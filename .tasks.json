@@ -2,7 +2,7 @@
   "tasks": [
     {
       "name": "fmt",
-      "cmd": "stylua --config-path ./stylua.toml lua/**/*.lua ftplugin/*.lua init.lua"
+      "cmd": "stylua lua/**/*.lua ftplugin/*.lua init.lua"
     }
   ]
 }
