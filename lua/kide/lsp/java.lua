@@ -6,7 +6,7 @@ local env = {
   MAVEN_SETTINGS = os.getenv("MAVEN_SETTINGS"),
   JDTLS_HOME = os.getenv("JDTLS_HOME"),
   JDTLS_WORKSPACE = os.getenv("JDTLS_WORKSPACE"),
-  JDTLS_EXTENSIONS = os.getenv("JDTLS_EXTENSIONS"),
+  VSCODE_EXTENSIONS = os.getenv("VSCODE_EXTENSIONS"),
   LOMBOK_JAR = os.getenv("LOMBOK_JAR"),
 }
 
@@ -27,11 +27,6 @@ local function get_java()
   return get_java_home() .. "/bin/java"
 end
 
-local jdtls_root = "/opt/software/lsp/java/jdt-language-server"
-local function get_jdtls_home()
-  return or_default(env.JDTLS_HOME, jdtls_root)
-end
-
 local function get_jdtls_workspace()
   return or_default(env.JDTLS_WORKSPACE, "/Users/luokai/jdtls-workspace/")
 end
@@ -40,8 +35,8 @@ local function get_lombok_jar()
   return or_default(env.LOMBOK_JAR, "/opt/software/lsp/lombok.jar")
 end
 
-local function get_jdtls_extensions()
-  return or_default(env.JDTLS_EXTENSIONS, "/opt/software/lsp/java")
+local function get_vscode_extensions()
+  return or_default(env.VSCODE_EXTENSIONS, "~/.vscode/extensions")
 end
 
 M.setup = function()
@@ -49,7 +44,11 @@ M.setup = function()
 
   local workspace_dir = get_jdtls_workspace() .. project_name
 
-  local jdtls_launcher = vim.fn.glob(get_jdtls_home() .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+  local jdtls_launcher = vim.fn.glob(
+    get_vscode_extensions() .. "/redhat.java-*/server/plugins/org.eclipse.equinox.launcher_*.jar"
+  )
+  local jdtls_config = vim.fn.glob(get_vscode_extensions() .. "/redhat.java-*/server/config_mac")
+
   -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
   local config = {
     -- The command that starts the language server
@@ -84,7 +83,7 @@ M.setup = function()
       "-jar",
       jdtls_launcher,
       "-configuration",
-      get_jdtls_home() .. "/config_mac",
+      jdtls_config,
       "-data",
       workspace_dir,
     },
@@ -212,16 +211,16 @@ M.setup = function()
   }
 
   -- This bundles definition is the same as in the previous section (java-debug installation)
+  vim.notify(vim.fn.glob(get_vscode_extensions() .. "/redhat.java-*"), vim.log.levels.INFO)
   local bundles = {
-    vim.fn.glob(
-      get_jdtls_extensions()
-        .. "/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
-    ),
+    vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-debug-*/server/com.microsoft.java.debug.plugin-*.jar"),
   }
 
   -- /opt/software/lsp/java/vscode-java-test/server
   -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
-  for _, bundle in ipairs(vim.split(vim.fn.glob(get_jdtls_extensions() .. "/vscode-java-test/server/*.jar"), "\n")) do
+  for _, bundle in
+    ipairs(vim.split(vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-test-*/server/*.jar"), "\n"))
+  do
     if not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar") then
       table.insert(bundles, bundle)
     end
@@ -230,7 +229,7 @@ M.setup = function()
   -- /opt/software/lsp/java/vscode-java-decompiler/server/
   vim.list_extend(
     bundles,
-    vim.split(vim.fn.glob(get_jdtls_extensions() .. "/vscode-java-decompiler/server/*.jar"), "\n")
+    vim.split(vim.fn.glob(get_vscode_extensions() .. "/dgileadi.java-decompiler-*/server/*.jar"), "\n")
   )
 
   -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
