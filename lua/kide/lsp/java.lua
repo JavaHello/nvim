@@ -1,4 +1,5 @@
 local M = {}
+local cutils = require("kide.core.utils")
 local env = {
   -- HOME = vim.loop.os_homedir(),
   JAVA_HOME = os.getenv("JAVA_HOME"),
@@ -31,13 +32,26 @@ local function get_jdtls_workspace()
   return or_default(env.JDTLS_WORKSPACE, "/Users/luokai/jdtls-workspace/")
 end
 
-local function get_lombok_jar()
-  return or_default(env.LOMBOK_JAR, "/opt/software/lsp/lombok.jar")
-end
-
 local function get_vscode_extensions()
   return or_default(env.VSCODE_EXTENSIONS, "~/.vscode/extensions")
 end
+
+local function get_lombok_jar()
+  return or_default(
+    env.LOMBOK_JAR,
+    vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-lombok-*/server/lombok.jar")
+  )
+end
+
+local _config = (function()
+  if cutils.os_type() == cutils.Windows then
+    return "config_win"
+  elseif cutils.os_type() == cutils.Mac then
+    return "config_mac"
+  else
+    return "config_linux"
+  end
+end)()
 
 M.setup = function()
   local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
@@ -47,7 +61,9 @@ M.setup = function()
   local jdtls_launcher = vim.fn.glob(
     get_vscode_extensions() .. "/redhat.java-*/server/plugins/org.eclipse.equinox.launcher_*.jar"
   )
-  local jdtls_config = vim.fn.glob(get_vscode_extensions() .. "/redhat.java-*/server/config_mac")
+  local jdtls_config = vim.fn.glob(get_vscode_extensions() .. "/redhat.java-*/server/" .. _config)
+
+  -- vim.notify(jdtls_config, vim.log.levels.INFO)
 
   -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
   local config = {
@@ -211,7 +227,6 @@ M.setup = function()
   }
 
   -- This bundles definition is the same as in the previous section (java-debug installation)
-  vim.notify(vim.fn.glob(get_vscode_extensions() .. "/redhat.java-*"), vim.log.levels.INFO)
   local bundles = {
     vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-debug-*/server/com.microsoft.java.debug.plugin-*.jar"),
   }
