@@ -1,7 +1,7 @@
 local M = {}
 local cutils = require("kide.core.utils")
 local env = {
-  -- HOME = vim.loop.os_homedir(),
+  HOME = vim.loop.os_homedir(),
   JAVA_HOME = os.getenv("JAVA_HOME"),
   MAVEN_HOME = os.getenv("MAVEN_HOME"),
   MAVEN_SETTINGS = os.getenv("MAVEN_SETTINGS"),
@@ -29,7 +29,7 @@ local function get_java()
 end
 
 local function get_jdtls_workspace()
-  return or_default(env.JDTLS_WORKSPACE, "/Users/luokai/jdtls-workspace/")
+  return or_default(env.JDTLS_WORKSPACE, env.HOME .. "/jdtls-workspace/")
 end
 
 local function get_vscode_extensions()
