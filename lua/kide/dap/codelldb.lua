@@ -1,5 +1,5 @@
 local M = {}
-local extension_path = "/Users/luokai/.vscode/extensions/vadimcn.vscode-lldb-1.7.0"
+local extension_path = "/Users/luokai/.vscode/extensions/vadimcn.vscode-lldb-1.7.2"
 M.config = {}
 M.config.codelldb_path = extension_path .. "/adapter/codelldb"
 M.config.liblldb_path = extension_path .. "/lldb/lib/liblldb.dylib"
