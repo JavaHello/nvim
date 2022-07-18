@@ -48,7 +48,8 @@ git clone  https://github.com/JavaHello/nvim.git
 
 > 如果不使用 `Java` 语言开发，无需配置
 
-[NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE.html)
+[NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE-vscode.html)
+更新了配置，全部使用 vscode 扩展，简化安装步骤。
 
 如果使用长时间后感觉卡顿，关闭下所有`buffer`, `:%bw` 。
 
