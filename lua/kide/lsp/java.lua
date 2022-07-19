@@ -63,8 +63,7 @@ M.setup = function()
   )
   local jdtls_config = vim.fn.glob(get_vscode_extensions() .. "/redhat.java-*/server/" .. _config)
 
-  -- vim.notify(jdtls_config, vim.log.levels.INFO)
-
+  -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
   -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
   local config = {
     -- The command that starts the language server
@@ -278,6 +277,7 @@ M.setup = function()
     create_command(bufnr, "OR", require("jdtls").organize_imports, {
       nargs = 0,
     })
+    -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
   end
 
   local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -295,4 +295,17 @@ M.setup = function()
   jdtls.start_or_attach(config)
 end
 
+M.init = function()
+  local group = vim.api.nvim_create_augroup("jdtls_java", { clear = true })
+  vim.api.nvim_create_autocmd({ "FileType" }, {
+    group = group,
+    pattern = { "java" },
+    desc = "jdtls",
+    callback = function(o)
+      -- vim.notify("load: " .. o.buf, vim.log.levels.INFO)
+      M.setup()
+    end,
+  })
+  return group
+end
 return M
