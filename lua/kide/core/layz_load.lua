@@ -12,9 +12,9 @@ M.lazy_load = function(tb)
         -- dont defer for treesitter as it will show slow highlighting
         -- This deferring only happens only when we do "nvim filename"
         if tb.plugins ~= "nvim-treesitter" then
-          vim.defer_fn(function()
+          vim.schedule(function()
             vim.cmd("PackerLoad " .. tb.plugins)
-          end, 0)
+          end)
         else
           vim.cmd("PackerLoad " .. tb.plugins)
         end

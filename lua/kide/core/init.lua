@@ -1,5 +1,6 @@
 require("kide.core.basic")
 
-vim.defer_fn(function()
+
+vim.schedule(function()
   require("kide.core.utils.plantuml").setup()
-end, 0)
+end)

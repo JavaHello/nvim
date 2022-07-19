@@ -149,9 +149,9 @@ require("packer").startup({
       wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
       setup = function()
-        vim.defer_fn(function()
+        vim.schedule(function()
           vim.cmd("PackerLoad nvim-tree.lua")
-        end, 0)
+        end)
       end,
       config = function()
         require("kide.plugins.config.nvim-tree")
@@ -199,16 +199,8 @@ require("packer").startup({
       "mfussenegger/nvim-jdtls",
       opt = true,
       ft = "java",
-      setup = function()
-        require("kide.core.layz_load").on_file_open("nvim-jdtls")
-      end,
       config = function()
-        vim.cmd([[
-        augroup jdtls_lsp
-            autocmd!
-            autocmd FileType java lua require"kide.lsp.java".setup()
-        augroup end
-        ]])
+        require("kide.lsp.java").init()
       end,
     })
     -- use 'NiYanhhhhh/lighttree-java'
@@ -273,9 +265,9 @@ require("packer").startup({
       "lewis6991/gitsigns.nvim",
       opt = true,
       setup = function()
-        vim.defer_fn(function()
+        vim.schedule(function()
           vim.cmd("PackerLoad gitsigns.nvim")
-        end, 0)
+        end)
       end,
       requires = {
         "nvim-lua/plenary.nvim",
@@ -293,9 +285,9 @@ require("packer").startup({
       opt = true,
       after = "toggleterm.nvim",
       setup = function()
-        vim.defer_fn(function()
+        vim.schedule(function()
           vim.cmd("PackerLoad toggletasks.nvim")
-        end, 0)
+        end)
       end,
       requires = {
         "nvim-lua/plenary.nvim",
@@ -382,9 +374,9 @@ require("packer").startup({
       "rcarriga/nvim-notify",
       opt = true,
       setup = function()
-        vim.defer_fn(function()
+        vim.schedule(function()
           vim.cmd("PackerLoad nvim-notify")
-        end, 0)
+        end)
       end,
       config = function()
         require("kide.plugins.config.nvim-notify")
@@ -396,9 +388,9 @@ require("packer").startup({
       "gelguy/wilder.nvim",
       opt = true,
       setup = function()
-        vim.defer_fn(function()
+        vim.schedule(function()
           vim.cmd("PackerLoad wilder.nvim")
-        end, 0)
+        end)
       end,
       config = function()
         require("kide.plugins.config.wilder")
@@ -566,9 +558,9 @@ require("packer").startup({
       "itchyny/calendar.vim",
       opt = true,
       setup = function()
-        vim.defer_fn(function()
+        vim.schedule(function()
           vim.cmd("PackerLoad calendar.vim")
-        end, 0)
+        end)
       end,
     })
 
@@ -708,6 +700,6 @@ require("packer").startup({
   },
 })
 
-vim.defer_fn(function()
+vim.schedule(function()
   require("kide.core.keybindings").setup()
-end, 0)
+end)
