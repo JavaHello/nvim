@@ -40,6 +40,7 @@ require("packer").startup({
     -- nvim-cmp
     use({
       "hrsh7th/nvim-cmp",
+      module = "cmp",
       after = "friendly-snippets",
     })
     -- LuaSnip
@@ -574,9 +575,9 @@ require("packer").startup({
     use({
       "itchyny/calendar.vim",
       opt = true,
-      setup = function()
-        require("kide.core.layz_load").async_load("calendar.vim")
-      end,
+      cmd = {
+        "Calendar",
+      },
     })
 
     -- rust
