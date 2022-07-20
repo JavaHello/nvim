@@ -6,8 +6,7 @@ require("toggletasks").setup({
     ".nvim/tasks",
   },
   defaults = {
-    close_on_exit = false,
-    hidden = true,
+    close_on_exit = true,
   },
 })
 
