@@ -196,15 +196,21 @@ require("packer").startup({
     -- debug
     use({
       "mfussenegger/nvim-dap",
+      opt = true,
+      module = "dap",
     })
     use({
       "rcarriga/nvim-dap-ui",
+      opt = true,
+      module = "dapui",
       after = "nvim-dap",
     })
     use({
       "theHamsta/nvim-dap-virtual-text",
       after = "nvim-dap-ui",
-      module = { "dap", "dapui" },
+      setup = function()
+        require("kide.core.layz_load").async_load("nvim-dap-virtual-text")
+      end,
       config = function()
         require("kide.plugins.config.nvim-dap")
         require("kide.dap")
@@ -452,6 +458,7 @@ require("packer").startup({
     -- 搜索插件
     use({
       "nvim-telescope/telescope.nvim",
+      opt = true,
       module = "telescope",
       wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
@@ -483,14 +490,22 @@ require("packer").startup({
         require("telescope").load_extension("fzf")
       end,
     })
-    use({ "nvim-telescope/telescope-dap.nvim" })
+    use({
+      "nvim-telescope/telescope-dap.nvim",
+      after = "telescope.nvim",
+      opt = true,
+    })
 
     -- use 'GustavoKatel/telescope-asynctasks.nvim'
     -- use 'aloussase/telescope-gradle.nvim'
     -- use 'aloussase/telescope-mvnsearch'
     use({
       "LinArcX/telescope-env.nvim",
+      opt = true,
       after = "telescope.nvim",
+      setup = function()
+        require("kide.core.layz_load").async_load("telescope-env.nvim")
+      end,
       config = function()
         require("telescope").load_extension("env")
       end,

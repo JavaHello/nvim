@@ -9,7 +9,7 @@ local overrides = {
   },
 }
 
-overrides = vim.tbl_extend("force", overrides, require("kide.theme.telescope"))
+overrides = vim.tbl_extend("force", overrides, require("kide.theme.gruvbox").flat_telescope)
 
 require("gruvbox").setup({
   undercurl = true,
