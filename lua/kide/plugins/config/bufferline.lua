@@ -51,6 +51,13 @@ require("bufferline").setup({
         text_align = "left",
       },
       {
+        filetype = "dapui_watches",
+        text = "Debug",
+        padding = 1,
+        highlight = "Directory",
+        text_align = "left",
+      },
+      {
         filetype = "dbui",
         text = "Databases",
         padding = 1,
