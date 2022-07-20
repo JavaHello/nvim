@@ -307,7 +307,22 @@ require("packer").startup({
       module = "toggleterm",
       opt = true,
       config = function()
-        require("toggleterm").setup()
+        require("toggleterm").setup({
+          shade_terminals = true,
+          direction = "float",
+          close_on_exit = true,
+          float_opts = {
+            -- The border key is *almost* the same as 'nvim_open_win'
+            -- see :h nvim_open_win for details on borders however
+            -- the 'curved' border is a custom border type
+            -- not natively supported but implemented in this plugin.
+            -- border = 'single' | 'double' | 'shadow' | 'curved' | ... other options supported by win open
+            -- width = <value>,
+            -- height = <value>,
+            border = "double",
+            winblend = 0,
+          },
+        })
       end,
     })
 

@@ -5,6 +5,10 @@ require("toggletasks").setup({
     ".nvim/toggletasks",
     ".nvim/tasks",
   },
+  defaults = {
+    close_on_exit = false,
+    hidden = true,
+  },
 })
 
 require("telescope").load_extension("toggletasks")
