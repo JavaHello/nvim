@@ -29,15 +29,6 @@ M.close_other_bufline = function()
   vim.fn.execute("BufferLineCloseRight")
 end
 
-M.packer_lazy_load = function(plugin, timer)
-  if plugin then
-    timer = timer or 0
-    vim.defer_fn(function()
-      require("packer").loader(plugin)
-    end, timer)
-  end
-end
-
 M.is_upper = function(c)
   return c >= 65 and c <= 90
 end

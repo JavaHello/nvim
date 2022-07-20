@@ -1,5 +1,6 @@
 local bootstrap = require("packer_bootstrap")
 vim.cmd("packadd packer.nvim")
+
 require("packer").startup({
   function(use)
     -- Packer can manage itself
@@ -17,28 +18,16 @@ require("packer").startup({
     })
     use({
       "williamboman/nvim-lsp-installer",
-      cmd = {
-        "LspInfo",
-        "LspStart",
-        "LspRestart",
-        "LspStop",
-        "LspInstall",
-        "LspUnInstall",
-        "LspUnInstallAll",
-        "LspInstall",
-        "LspInstallInfo",
-        "LspInstallLog",
-        "LspLog",
-        "LspPrintInstalled",
-      },
-      setup = function()
-        require("kide.core.layz_load").on_file_open("nvim-lsp-installer")
-      end,
+      module = "nvim-lsp-installer",
+      opt = true,
     })
     use({
       "neovim/nvim-lspconfig",
       after = "nvim-lsp-installer",
       module = "lspconfig",
+      setup = function()
+        require("kide.core.layz_load").async_load("nvim-lspconfig")
+      end,
       config = function()
         require("kide.lsp")
       end,
@@ -114,7 +103,8 @@ require("packer").startup({
       "jose-elias-alvarez/null-ls.nvim",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("null-ls.nvim")
+        -- on_file_open("null-ls.nvim")
+        require("kide.core.layz_load").async_load("null-ls.nvim")
       end,
       config = function()
         require("kide.plugins.config.null-ls")
@@ -129,7 +119,7 @@ require("packer").startup({
       opt = true,
       module = "gruvbox",
       setup = function()
-        vim.cmd("PackerLoad gruvbox.nvim")
+        require("kide.core.layz_load").sync_load("gruvbox.nvim")
       end,
       config = function()
         require("kide.plugins.config.gruvbox")
@@ -149,9 +139,7 @@ require("packer").startup({
       wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
       setup = function()
-        vim.schedule(function()
-          vim.cmd("PackerLoad nvim-tree.lua")
-        end)
+        require("kide.core.layz_load").async_load("nvim-tree.lua")
       end,
       config = function()
         require("kide.plugins.config.nvim-tree")
@@ -167,7 +155,7 @@ require("packer").startup({
       after = "gruvbox.nvim",
       requires = "kyazdani42/nvim-web-devicons",
       setup = function()
-        vim.cmd("PackerLoad bufferline.nvim")
+        require("kide.core.layz_load").sync_load("bufferline.nvim")
       end,
       config = function()
         require("kide.plugins.config.bufferline")
@@ -187,7 +175,7 @@ require("packer").startup({
       opt = true,
       after = "nvim-treesitter",
       setup = function()
-        vim.cmd("PackerLoad nvim-treesitter-textobjects")
+        require("kide.core.layz_load").sync_load("nvim-treesitter-textobjects")
       end,
       config = function()
         require("kide.plugins.config.nvim-treesitter")
@@ -265,9 +253,7 @@ require("packer").startup({
       "lewis6991/gitsigns.nvim",
       opt = true,
       setup = function()
-        vim.schedule(function()
-          vim.cmd("PackerLoad gitsigns.nvim")
-        end)
+        require("kide.core.layz_load").async_load("gitsigns.nvim")
       end,
       requires = {
         "nvim-lua/plenary.nvim",
@@ -285,9 +271,7 @@ require("packer").startup({
       opt = true,
       after = "toggleterm.nvim",
       setup = function()
-        vim.schedule(function()
-          vim.cmd("PackerLoad toggletasks.nvim")
-        end)
+        require("kide.core.layz_load").async_load("toggletasks.nvim")
       end,
       requires = {
         "nvim-lua/plenary.nvim",
@@ -325,7 +309,8 @@ require("packer").startup({
       "mg979/vim-visual-multi",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("vim-visual-multi")
+        -- on_file_open("vim-visual-multi")
+        require("kide.core.layz_load").async_load("vim-visual-multi")
       end,
     })
 
@@ -337,7 +322,7 @@ require("packer").startup({
       wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
       setup = function()
-        vim.cmd("PackerLoad lualine.nvim")
+        require("kide.core.layz_load").sync_load("lualine.nvim")
       end,
       config = function()
         require("kide.plugins.config.lualine")
@@ -349,7 +334,8 @@ require("packer").startup({
       "lukas-reineke/indent-blankline.nvim",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("indent-blankline.nvim")
+        -- on_file_open("indent-blankline.nvim")
+        require("kide.core.layz_load").async_load("indent-blankline.nvim")
       end,
       config = function()
         require("kide.plugins.config.indent-blankline")
@@ -361,7 +347,8 @@ require("packer").startup({
       "andymass/vim-matchup",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("vim-matchup")
+        -- on_file_open("vim-matchup")
+        require("kide.core.layz_load").async_load("vim-matchup")
       end,
     })
     -- 大纲插件
@@ -383,9 +370,7 @@ require("packer").startup({
       "rcarriga/nvim-notify",
       opt = true,
       setup = function()
-        vim.schedule(function()
-          vim.cmd("PackerLoad nvim-notify")
-        end)
+        require("kide.core.layz_load").sync_load("nvim-notify")
       end,
       config = function()
         require("kide.plugins.config.nvim-notify")
@@ -397,9 +382,7 @@ require("packer").startup({
       "gelguy/wilder.nvim",
       opt = true,
       setup = function()
-        vim.schedule(function()
-          vim.cmd("PackerLoad wilder.nvim")
-        end)
+        require("kide.core.layz_load").async_load("wilder.nvim")
       end,
       config = function()
         require("kide.plugins.config.wilder")
@@ -411,7 +394,8 @@ require("packer").startup({
       "norcalli/nvim-colorizer.lua",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("nvim-colorizer.lua")
+        -- on_file_open("nvim-colorizer.lua")
+        require("kide.core.layz_load").async_load("nvim-colorizer.lua")
       end,
       config = function()
         require("kide.plugins.config.nvim-colorizer")
@@ -452,6 +436,10 @@ require("packer").startup({
     -- 快捷键查看
     use({
       "folke/which-key.nvim",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").async_load("which-key.nvim")
+      end,
       config = function()
         require("which-key").setup({
           -- your configuration comes here
@@ -478,7 +466,7 @@ require("packer").startup({
       "nvim-telescope/telescope-ui-select.nvim",
       after = "telescope.nvim",
       setup = function()
-        vim.cmd("PackerLoad telescope-ui-select.nvim")
+        require("kide.core.layz_load").async_load("telescope-ui-select.nvim")
       end,
       config = function()
         require("telescope").load_extension("ui-select")
@@ -489,7 +477,7 @@ require("packer").startup({
       run = "make",
       after = "telescope.nvim",
       setup = function()
-        vim.cmd("PackerLoad telescope-fzf-native.nvim")
+        require("kide.core.layz_load").async_load("telescope-fzf-native.nvim")
       end,
       config = function()
         require("telescope").load_extension("fzf")
@@ -515,7 +503,7 @@ require("packer").startup({
       opt = true,
       requires = { "kyazdani42/nvim-web-devicons" },
       setup = function()
-        vim.cmd("PackerLoad alpha-nvim")
+        require("kide.core.layz_load").sync_load("alpha-nvim")
       end,
       config = function()
         require("kide.plugins.config.alpha-nvim")
@@ -528,7 +516,8 @@ require("packer").startup({
       "uga-rosa/translate.nvim",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("translate.nvim")
+        -- on_file_open("translate.nvim")
+        require("kide.core.layz_load").async_load("translate.nvim")
       end,
       config = function()
         require("kide.plugins.config.translate")
@@ -540,7 +529,8 @@ require("packer").startup({
       "junegunn/vim-easy-align",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("vim-easy-align")
+        -- on_file_open("vim-easy-align")
+        require("kide.core.layz_load").async_load("vim-easy-align")
       end,
     })
 
@@ -549,14 +539,19 @@ require("packer").startup({
       "dhruvasagar/vim-table-mode",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("vim-table-mode")
+        -- on_file_open("vim-table-mode")
+        require("kide.core.layz_load").async_load("vim-table-mode")
       end,
     })
 
     -- () 自动补全
     use({
       "windwp/nvim-autopairs",
+      opt = true,
       after = "nvim-cmp",
+      setup = function()
+        require("kide.core.layz_load").async_load("nvim-autopairs")
+      end,
       config = function()
         require("kide.plugins.config.nvim-autopairs")
       end,
@@ -567,9 +562,7 @@ require("packer").startup({
       "itchyny/calendar.vim",
       opt = true,
       setup = function()
-        vim.schedule(function()
-          vim.cmd("PackerLoad calendar.vim")
-        end)
+        require("kide.core.layz_load").async_load("calendar.vim")
       end,
     })
 
@@ -609,7 +602,8 @@ require("packer").startup({
       opt = true,
       setup = function()
         require("kide.plugins.config.vim-illuminate")
-        require("kide.core.layz_load").on_file_open("vim-illuminate")
+        -- on_file_open("vim-illuminate")
+        require("kide.core.layz_load").async_load("vim-illuminate")
       end,
     })
 
@@ -619,7 +613,8 @@ require("packer").startup({
       opt = true,
       branch = "v1",
       setup = function()
-        require("kide.core.layz_load").on_file_open("hop.nvim")
+        -- on_file_open("hop.nvim")
+        require("kide.core.layz_load").async_load("hop.nvim")
       end,
       config = function()
         require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
@@ -630,6 +625,10 @@ require("packer").startup({
     -- LSP 进度
     use({
       "j-hui/fidget.nvim",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").async_load("fidget.nvim")
+      end,
       config = function()
         require("fidget").setup({})
       end,
@@ -640,7 +639,8 @@ require("packer").startup({
       "windwp/nvim-spectre",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("nvim-spectre")
+        -- on_file_open("nvim-spectre")
+        require("kide.core.layz_load").async_load("nvim-spectre")
       end,
       config = function()
         require("spectre").setup()
@@ -652,7 +652,8 @@ require("packer").startup({
       "jbyuki/venn.nvim",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("venn.nvim")
+        -- on_file_open("venn.nvim")
+        require("kide.core.layz_load").async_load("venn.nvim")
       end,
     })
 
@@ -660,7 +661,8 @@ require("packer").startup({
       "tversteeg/registers.nvim",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").on_file_open("registers.nvim")
+        -- on_file_open("registers.nvim")
+        require("kide.core.layz_load").async_load("registers.nvim")
       end,
     })
 
@@ -691,9 +693,12 @@ require("packer").startup({
     -- 项目管理
     use({
       "ahmedkhalf/project.nvim",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").async_load("project.nvim")
+      end,
       config = function()
         require("project_nvim").setup({})
-
         require("telescope").load_extension("projects")
       end,
     })

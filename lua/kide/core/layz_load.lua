@@ -39,4 +39,13 @@ M.on_file_open = function(plugin_name)
   })
 end
 
+M.sync_load = function(plugin)
+  require("packer").loader(plugin)
+end
+M.async_load = function(plugin)
+  vim.schedule(function()
+    require("packer").loader(plugin)
+  end)
+end
+
 return M
