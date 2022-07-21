@@ -277,13 +277,13 @@ M.setup = function()
     create_command(bufnr, "OR", require("jdtls").organize_imports, {
       nargs = 0,
     })
-    local dt = vim.g.jdtls_dap_main_class_config_time or 0
-    vim.defer_fn(function()
-      if vim.g.jdtls_dap_main_class_config_time then
-        require("jdtls.dap").setup_dap_main_class_configs()
-      end
-      vim.g.jdtls_dap_main_class_config_time = 200
-    end, dt)
+    -- local dt = vim.g.jdtls_dap_main_class_config_time or 0
+    -- vim.defer_fn(function()
+    --   if vim.g.jdtls_dap_main_class_config_time then
+    --     require("jdtls.dap").setup_dap_main_class_configs()
+    --   end
+    --   vim.g.jdtls_dap_main_class_config_time = 200
+    -- end, dt)
 
     -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
   end
