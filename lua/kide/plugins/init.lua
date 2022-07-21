@@ -625,7 +625,7 @@ require("packer").startup({
     use({
       "phaazon/hop.nvim",
       opt = true,
-      branch = "v1",
+      branch = "v2",
       setup = function()
         -- on_file_open("hop.nvim")
         require("kide.core.layz_load").async_load("hop.nvim")
