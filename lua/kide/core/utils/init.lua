@@ -152,7 +152,7 @@ M.camel_case_init = function()
   " command! -complete=customlist,coreutils#cmdline#complete -nargs=* -bang -range
   command!  -nargs=* -range
   \ CamelCase
-  \ lua require('core.utils').camel_case_start(<range>, <line1>, <line2>)
+  \ lua require('kide.core.utils').camel_case_start(<range>, <line1>, <line2>)
 ]])
 end
 -- print(M.camel_case("helloWorldAaAaAxC"))
