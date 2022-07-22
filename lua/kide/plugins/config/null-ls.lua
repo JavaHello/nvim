@@ -55,6 +55,7 @@ local sources = {
   -- 	method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
   -- 	extra_args = { "--config", "p/java" },
   -- }),
+  null_ls.builtins.formatting.gofmt,
 }
 
 local lsp_formatting = function(bufnr)
