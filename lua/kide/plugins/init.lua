@@ -8,11 +8,13 @@ require("packer").startup({
     use({
       "nvim-lua/plenary.nvim",
       module = "plenary",
+      opt = true,
     })
 
     use({
       "kyazdani42/nvim-web-devicons",
       module = "nvim-web-devicons",
+      opt = true,
     })
     use({
       "williamboman/nvim-lsp-installer",
