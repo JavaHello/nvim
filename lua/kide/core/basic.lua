@@ -38,16 +38,36 @@ vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
 vim.bo.shiftwidth = 4
 
-vim.cmd("autocmd Filetype lua setlocal ts=2 sw=2 expandtab")
-vim.cmd("autocmd Filetype js setlocal ts=2 sw=2 expandtab")
-vim.cmd("autocmd Filetype javascript setlocal ts=2 sw=2 expandtab")
-vim.cmd("autocmd Filetype json setlocal ts=2 sw=2 expandtab")
-vim.cmd("autocmd Filetype css setlocal ts=2 sw=2 expandtab")
-vim.cmd("autocmd Filetype html setlocal ts=2 sw=2 expandtab")
-vim.cmd("autocmd Filetype xml setlocal ts=2 sw=2 expandtab")
-vim.cmd("autocmd Filetype yaml setlocal ts=2 sw=2 expandtab")
-vim.cmd("autocmd Filetype http setlocal ts=2 sw=2 expandtab")
-vim.cmd("autocmd Filetype markdown setlocal ts=2 sw=2 expandtab")
+local autocmd = vim.api.nvim_create_autocmd
+autocmd("FileType", {
+  pattern = {
+    "lua",
+    "javascript",
+    "json",
+    "css",
+    "html",
+    "xml",
+    "yaml",
+    "http",
+    "markdown",
+  },
+  callback = function()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.expandtab = true
+  end,
+})
+
+-- vim.cmd("autocmd Filetype lua setlocal ts=2 sw=2 expandtab")
+-- vim.cmd("autocmd Filetype js setlocal ts=2 sw=2 expandtab")
+-- vim.cmd("autocmd Filetype javascript setlocal ts=2 sw=2 expandtab")
+-- vim.cmd("autocmd Filetype json setlocal ts=2 sw=2 expandtab")
+-- vim.cmd("autocmd Filetype css setlocal ts=2 sw=2 expandtab")
+-- vim.cmd("autocmd Filetype html setlocal ts=2 sw=2 expandtab")
+-- vim.cmd("autocmd Filetype xml setlocal ts=2 sw=2 expandtab")
+-- vim.cmd("autocmd Filetype yaml setlocal ts=2 sw=2 expandtab")
+-- vim.cmd("autocmd Filetype http setlocal ts=2 sw=2 expandtab")
+-- vim.cmd("autocmd Filetype markdown setlocal ts=2 sw=2 expandtab")
 
 -- 新行对齐当前行，空格替代tab
 vim.o.expandtab = true
