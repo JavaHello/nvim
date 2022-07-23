@@ -4,8 +4,10 @@ vim.opt.title = true
 vim.opt.clipboard = "unnamedplus"
 
 -- 行号
-vim.wo.number = true
-vim.wo.relativenumber = true
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.numberwidth = 2
+vim.opt.ruler = false
 
 -- 高亮所在行
 vim.wo.cursorline = true
@@ -66,15 +68,14 @@ vim.o.backup = false
 vim.o.writebackup = false
 vim.o.swapfile = false
 -- smaller updatetime
-vim.o.updatetime = 300
+vim.o.updatetime = 240
 
 -- split window 从下边和右边出现
 vim.o.splitbelow = false
 vim.o.splitright = true
 
 -- 样式
-vim.o.background = "dark"
-vim.o.termguicolors = true
+vim.opt.background = "dark"
 vim.opt.termguicolors = true
 
 -- 补全增强
@@ -86,11 +87,15 @@ vim.opt.confirm = true
 vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 
 vim.opt.list = true
+vim.opt.cul = true -- cursor line
+
+vim.opt.timeoutlen = 400
+
+-- 始终显示符号列
+vim.opt.signcolumn = "yes"
+vim.opt.mouse = "a"
+
 vim.cmd([[
-" 始终显示符号列
-set signcolumn=yes
-" set signcolumn=number
-set mouse=a
 if exists('g:neovide')
     " let g:neovide_refresh_rate=60
     let g:neovide_cursor_vfx_mode = "railgun"
