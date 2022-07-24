@@ -88,7 +88,7 @@ vim.o.backup = false
 vim.o.writebackup = false
 vim.o.swapfile = false
 -- smaller updatetime
-vim.o.updatetime = 240
+vim.o.updatetime = 300
 
 -- split window 从下边和右边出现
 vim.o.splitbelow = false
@@ -109,7 +109,7 @@ vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 vim.opt.list = true
 vim.opt.cul = true -- cursor line
 
-vim.opt.timeoutlen = 400
+vim.opt.timeoutlen = 250
 
 -- 始终显示符号列
 vim.opt.signcolumn = "yes"
