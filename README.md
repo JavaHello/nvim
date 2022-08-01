@@ -51,7 +51,7 @@ git clone  https://github.com/JavaHello/nvim.git
 [NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE-vscode.html)
 更新了配置，全部使用 vscode 扩展，简化安装步骤。
 
-如果使用长时间后感觉卡顿，关闭下所有`buffer`, `:%bw` 。
+如果使用长时间后感觉卡顿，关闭下所有`buffer`, `:%bw`(当前会导致诊断列表不可用,正在修复中[neovim/issues/19322](https://github.com/neovim/neovim/issues/19322)) 。
 
 ### 功能演示
 
