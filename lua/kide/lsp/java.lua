@@ -257,6 +257,9 @@ M.setup = function()
 
   -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
   -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
+  -- /opt/software/lsp/java/vscode-java-dependency/server/
+  local java_dependency_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-dependency-*/server"))
+  vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
 
   local jdtls = require("jdtls")
 
@@ -313,7 +316,7 @@ M.setup = function()
 end
 
 M.init = function()
-  local group = vim.api.nvim_create_augroup("jdtls_java", { clear = true })
+  local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
     pattern = { "java" },
