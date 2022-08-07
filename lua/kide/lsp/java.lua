@@ -61,17 +61,45 @@ local function find_one(v)
   end
   return v
 end
+local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+
+local workspace_dir = get_jdtls_workspace() .. project_name
+local jdtls_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/redhat.java-*/server"))
+
+local jdtls_launcher = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+
+local jdtls_config = vim.fn.glob(jdtls_path .. "/" .. _config)
+
+local bundles = {}
+-- This bundles definition is the same as in the previous section (java-debug installation)
+local vscode_java_debug_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-debug-*/server"))
+vim.list_extend(
+  bundles,
+  vim.split(vim.fn.glob(vscode_java_debug_path .. "/com.microsoft.java.debug.plugin-*.jar"), "\n")
+)
+
+-- /opt/software/lsp/java/vscode-java-test/server
+-- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
+local vscode_java_test_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-test-*/server"))
+for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
+  if not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar") then
+    table.insert(bundles, bundle)
+  end
+end
+
+-- /opt/software/lsp/java/vscode-java-decompiler/server/
+local java_decoompiler_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/dgileadi.java-decompiler-*/server"))
+vim.list_extend(bundles, vim.split(vim.fn.glob(java_decoompiler_path .. "/*.jar"), "\n"))
+
+-- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
+-- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
+-- /opt/software/lsp/java/vscode-java-dependency/server/
+local java_dependency_path = find_one(
+  vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-dependency-*/server")
+)
+vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
 
 M.setup = function()
-  local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-
-  local workspace_dir = get_jdtls_workspace() .. project_name
-  local jdtls_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/redhat.java-*/server"))
-
-  local jdtls_launcher = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
-
-  local jdtls_config = vim.fn.glob(jdtls_path .. "/" .. _config)
-
   -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
   -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
   local config = {
@@ -233,33 +261,6 @@ M.setup = function()
     --   workspace = workspace_dir
     -- },
   }
-
-  local bundles = {}
-  -- This bundles definition is the same as in the previous section (java-debug installation)
-  local vscode_java_debug_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-debug-*/server"))
-  vim.list_extend(
-    bundles,
-    vim.split(vim.fn.glob(vscode_java_debug_path .. "/com.microsoft.java.debug.plugin-*.jar"), "\n")
-  )
-
-  -- /opt/software/lsp/java/vscode-java-test/server
-  -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
-  local vscode_java_test_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-test-*/server"))
-  for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
-    if not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar") then
-      table.insert(bundles, bundle)
-    end
-  end
-
-  -- /opt/software/lsp/java/vscode-java-decompiler/server/
-  local java_decoompiler_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/dgileadi.java-decompiler-*/server"))
-  vim.list_extend(bundles, vim.split(vim.fn.glob(java_decoompiler_path .. "/*.jar"), "\n"))
-
-  -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
-  -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
-  -- /opt/software/lsp/java/vscode-java-dependency/server/
-  local java_dependency_path = find_one(vim.fn.glob(get_vscode_extensions() .. "/vscjava.vscode-java-dependency-*/server"))
-  vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
 
   local jdtls = require("jdtls")
 
