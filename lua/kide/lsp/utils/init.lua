@@ -57,8 +57,8 @@ format_lsp_mapping["http"] = "null-ls"
 format_lsp_mapping["go"] = "null-ls"
 
 -- clang_format
-format_lsp_mapping["c"] = "null-ls"
-format_lsp_mapping["cpp"] = "null-ls"
+format_lsp_mapping["c"] = "clangd"
+format_lsp_mapping["cpp"] = "clangd"
 
 M.filter_format_lsp_client = function(client, bufnr)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")

@@ -56,12 +56,12 @@ local sources = {
   -- 	extra_args = { "--config", "p/java" },
   -- }),
   null_ls.builtins.formatting.gofmt,
-  null_ls.builtins.formatting.clang_format.with({
-    filetypes = {
-      "c",
-      "cpp",
-    },
-  }),
+  -- null_ls.builtins.formatting.clang_format.with({
+  --   filetypes = {
+  --     "c",
+  --     "cpp",
+  --   },
+  -- }),
 }
 
 local lsp_formatting = function(bufnr)
