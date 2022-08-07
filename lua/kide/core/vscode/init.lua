@@ -6,7 +6,8 @@ local env = {
 M.get_vscode_extensions = function()
   return env.VSCODE_EXTENSIONS or "~/.vscode/extensions"
 end
-M.find_one = function(v)
+M.find_one = function(extension_path)
+  local v = vim.fn.glob(M.get_vscode_extensions() .. extension_path)
   if type(v) == "string" then
     return vim.split(v, "\n")[1]
   elseif type(v) == "table" then
