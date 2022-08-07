@@ -101,220 +101,220 @@ vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar")
 
 local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
 
-M.setup = function()
-  -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
-  -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
-  local config = {
-    -- The command that starts the language server
-    -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
-    cmd = {
-      get_java(), -- or '/path/to/java11_or_newer/bin/java'
-      "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-      "-Dosgi.bundles.defaultStartLevel=4",
-      "-Declipse.product=org.eclipse.jdt.ls.core.product",
-      -- "-Dosgi.configuration.cascaded=true",
-      -- "-Dosgi.sharedConfiguration.area=" .. get_jdtls_home() .. "/config_mac",
-      -- "-Dosgi.sharedConfiguration.area.readOnly=true",
-      "-Dlog.protocol=true",
-      "-Dlog.level=ALL",
-      "-Dsun.zip.disableMemoryMapping=true",
-      -- "-noverify",
-      -- '-XX:+UseParallelGC',
-      -- '-XX:GCTimeRatio=4',
-      -- '-XX:AdaptiveSizePolicyWeight=90',
-      -- '-XX:+UseG1GC',
-      -- '-XX:+UseStringDeduplication',
-      -- '-Xms512m',
-      "-XX:+UseZGC",
-      "-Xmx4g",
-      -- "-Xbootclasspath/a:" .. get_lombok_jar(),
-      "-javaagent:" .. get_lombok_jar(),
-      "--add-modules=ALL-SYSTEM",
-      "--add-opens",
-      "java.base/java.util=ALL-UNNAMED",
-      "--add-opens",
-      "java.base/java.lang=ALL-UNNAMED",
-      "-jar",
-      jdtls_launcher,
-      "-configuration",
-      jdtls_config,
-      "-data",
-      workspace_dir,
-    },
-    filetypes = { "java" },
+-- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
+-- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
+local config = {
+  -- The command that starts the language server
+  -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
+  cmd = {
+    get_java(), -- or '/path/to/java11_or_newer/bin/java'
+    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    "-Dosgi.bundles.defaultStartLevel=4",
+    "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    -- "-Dosgi.configuration.cascaded=true",
+    -- "-Dosgi.sharedConfiguration.area=" .. get_jdtls_home() .. "/config_mac",
+    -- "-Dosgi.sharedConfiguration.area.readOnly=true",
+    "-Dlog.protocol=true",
+    "-Dlog.level=ALL",
+    "-Dsun.zip.disableMemoryMapping=true",
+    -- "-noverify",
+    -- '-XX:+UseParallelGC',
+    -- '-XX:GCTimeRatio=4',
+    -- '-XX:AdaptiveSizePolicyWeight=90',
+    -- '-XX:+UseG1GC',
+    -- '-XX:+UseStringDeduplication',
+    -- '-Xms512m',
+    "-XX:+UseZGC",
+    "-Xmx4g",
+    -- "-Xbootclasspath/a:" .. get_lombok_jar(),
+    "-javaagent:" .. get_lombok_jar(),
+    "--add-modules=ALL-SYSTEM",
+    "--add-opens",
+    "java.base/java.util=ALL-UNNAMED",
+    "--add-opens",
+    "java.base/java.lang=ALL-UNNAMED",
+    "-jar",
+    jdtls_launcher,
+    "-configuration",
+    jdtls_config,
+    "-data",
+    workspace_dir,
+  },
+  filetypes = { "java" },
 
-    -- 💀
-    -- This is the default if not provided, you can remove it. Or adjust as needed.
-    -- One dedicated LSP server & client will be started per unique root_dir
-    root_dir = root_dir,
+  -- 💀
+  -- This is the default if not provided, you can remove it. Or adjust as needed.
+  -- One dedicated LSP server & client will be started per unique root_dir
+  root_dir = root_dir,
 
-    -- Here you can configure eclipse.jdt.ls specific settings
-    -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
-    -- for a list of options
-    settings = {
-      java = {
-        home = get_java_home(),
-        project = {
-          resourceFilters = {
-            "node_modules",
-            ".git",
-            ".idea",
-          },
+  -- Here you can configure eclipse.jdt.ls specific settings
+  -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
+  -- for a list of options
+  settings = {
+    java = {
+      home = get_java_home(),
+      project = {
+        resourceFilters = {
+          "node_modules",
+          ".git",
+          ".idea",
         },
-        import = {
-          exclusions = {
-            "**/node_modules/**",
-            "**/.metadata/**",
-            "**/archetype-resources/**",
-            "**/META-INF/maven/**",
-            "**/.git/**",
-            "**/.idea/**",
-          },
+      },
+      import = {
+        exclusions = {
+          "**/node_modules/**",
+          "**/.metadata/**",
+          "**/archetype-resources/**",
+          "**/META-INF/maven/**",
+          "**/.git/**",
+          "**/.idea/**",
         },
-        -- referenceCodeLens = { enabled = true },
-        -- implementationsCodeLens = { enabled = true },
-        templates = {
-          fileHeader = {
-            "/**",
-            " * ${type_name}",
-            " * @author ${user}",
-            " */",
-          },
-          typeComment = {
-            "/**",
-            " * ${type_name}",
-            " * @author ${user}",
-            " */",
-          },
+      },
+      -- referenceCodeLens = { enabled = true },
+      -- implementationsCodeLens = { enabled = true },
+      templates = {
+        fileHeader = {
+          "/**",
+          " * ${type_name}",
+          " * @author ${user}",
+          " */",
         },
-        eclipse = {
-          downloadSources = true,
+        typeComment = {
+          "/**",
+          " * ${type_name}",
+          " * @author ${user}",
+          " */",
         },
-        server = {
-          launchMode = "Hybrid",
+      },
+      eclipse = {
+        downloadSources = true,
+      },
+      server = {
+        launchMode = "Hybrid",
+      },
+      maven = {
+        downloadSources = true,
+        updateSnapshots = true,
+      },
+      signatureHelp = { enabled = true },
+      contentProvider = { preferred = "fernflower" },
+      completion = {
+        favoriteStaticMembers = {
+          "org.hamcrest.MatcherAssert.assertThat",
+          "org.hamcrest.Matchers.*",
+          "org.hamcrest.CoreMatchers.*",
+          "org.junit.jupiter.api.Assertions.*",
+          "java.util.Objects.requireNonNull",
+          "java.util.Objects.requireNonNullElse",
+          "org.mockito.Mockito.*",
         },
+        filteredTypes = {
+          "com.sun.*",
+          "io.micrometer.shaded.*",
+          "java.awt.*",
+          "jdk.*",
+          "sun.*",
+        },
+      },
+      sources = {
+        organizeImports = {
+          starThreshold = 9999,
+          staticStarThreshold = 9999,
+        },
+      },
+      configuration = {
         maven = {
-          downloadSources = true,
-          updateSnapshots = true,
+          --          userSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
+          --          globalSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
+          userSettings = get_maven_settings(),
+          globalSettings = get_maven_settings(),
         },
-        signatureHelp = { enabled = true },
-        contentProvider = { preferred = "fernflower" },
-        completion = {
-          favoriteStaticMembers = {
-            "org.hamcrest.MatcherAssert.assertThat",
-            "org.hamcrest.Matchers.*",
-            "org.hamcrest.CoreMatchers.*",
-            "org.junit.jupiter.api.Assertions.*",
-            "java.util.Objects.requireNonNull",
-            "java.util.Objects.requireNonNullElse",
-            "org.mockito.Mockito.*",
+        runtimes = {
+          {
+            name = "JavaSE-1.8",
+            path = "/opt/software/java/zulu8.62.0.19-ca-jdk8.0.332-macosx_aarch64",
+            default = true,
           },
-          filteredTypes = {
-            "com.sun.*",
-            "io.micrometer.shaded.*",
-            "java.awt.*",
-            "jdk.*",
-            "sun.*",
+          {
+            name = "JavaSE-11",
+            path = "/opt/software/java/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64",
           },
-        },
-        sources = {
-          organizeImports = {
-            starThreshold = 9999,
-            staticStarThreshold = 9999,
-          },
-        },
-        configuration = {
-          maven = {
-            --          userSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
-            --          globalSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
-            userSettings = get_maven_settings(),
-            globalSettings = get_maven_settings(),
-          },
-          runtimes = {
-            {
-              name = "JavaSE-1.8",
-              path = "/opt/software/java/zulu8.62.0.19-ca-jdk8.0.332-macosx_aarch64",
-              default = true,
-            },
-            {
-              name = "JavaSE-11",
-              path = "/opt/software/java/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64",
-            },
-            {
-              name = "JavaSE-17",
-              path = "/opt/software/java/graalvm-ce-java17-22.1.0/Contents/Home",
-            },
+          {
+            name = "JavaSE-17",
+            path = "/opt/software/java/graalvm-ce-java17-22.1.0/Contents/Home",
           },
         },
       },
     },
+  },
 
-    -- Language server `initializationOptions`
-    -- You need to extend the `bundles` with paths to jar files
-    -- if you want to use additional eclipse.jdt.ls plugins.
-    --
-    -- See https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
-    --
-    -- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
-    -- init_options = {
-    --   bundles = {
-    --     vim.fn.glob("/opt/software/lsp/java/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.35.0.jar")
-    --   },
-    --   workspace = workspace_dir
-    -- },
-  }
+  -- Language server `initializationOptions`
+  -- You need to extend the `bundles` with paths to jar files
+  -- if you want to use additional eclipse.jdt.ls plugins.
+  --
+  -- See https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
+  --
+  -- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
+  -- init_options = {
+  --   bundles = {
+  --     vim.fn.glob("/opt/software/lsp/java/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.35.0.jar")
+  --   },
+  --   workspace = workspace_dir
+  -- },
+}
 
-  local jdtls = require("jdtls")
+local jdtls = require("jdtls")
 
-  local extendedClientCapabilities = jdtls.extendedClientCapabilities
-  extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
+local extendedClientCapabilities = jdtls.extendedClientCapabilities
+extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 
-  config["init_options"] = {
-    bundles = bundles,
-    extendedClientCapabilities = extendedClientCapabilities,
-  }
+config["init_options"] = {
+  bundles = bundles,
+  extendedClientCapabilities = extendedClientCapabilities,
+}
 
-  config["on_attach"] = function(client, bufnr)
-    -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
-    -- you make during a debug session immediately.
-    -- Remove the option if you do not want that.
-    require("jdtls").setup_dap({ hotcodereplace = "auto" })
-    require("jdtls.setup").add_commands()
-    require("kide.core.keybindings").maplsp(client, bufnr)
-    -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
-    local opts = { silent = true, buffer = bufnr }
-    vim.keymap.set("n", "<leader>dc", jdtls.test_class, opts)
-    vim.keymap.set("n", "<leader>dm", jdtls.test_nearest_method, opts)
-    vim.keymap.set("n", "crv", jdtls.extract_variable, opts)
-    vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
-    vim.keymap.set("n", "crc", jdtls.extract_constant, opts)
-    local create_command = vim.api.nvim_buf_create_user_command
-    create_command(bufnr, "OR", require("jdtls").organize_imports, {
-      nargs = 0,
-    })
-    -- local dt = vim.g.jdtls_dap_main_class_config_time or 0
-    -- vim.defer_fn(function()
-    --   if vim.g.jdtls_dap_main_class_config_time then
-    --     require("jdtls.dap").setup_dap_main_class_configs()
-    --   end
-    --   vim.g.jdtls_dap_main_class_config_time = 200
-    -- end, dt)
+config["on_attach"] = function(client, bufnr)
+  -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
+  -- you make during a debug session immediately.
+  -- Remove the option if you do not want that.
+  require("jdtls").setup_dap({ hotcodereplace = "auto" })
+  require("jdtls.setup").add_commands()
+  require("kide.core.keybindings").maplsp(client, bufnr)
+  -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
+  local opts = { silent = true, buffer = bufnr }
+  vim.keymap.set("n", "<leader>dc", jdtls.test_class, opts)
+  vim.keymap.set("n", "<leader>dm", jdtls.test_nearest_method, opts)
+  vim.keymap.set("n", "crv", jdtls.extract_variable, opts)
+  vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
+  vim.keymap.set("n", "crc", jdtls.extract_constant, opts)
+  local create_command = vim.api.nvim_buf_create_user_command
+  create_command(bufnr, "OR", require("jdtls").organize_imports, {
+    nargs = 0,
+  })
+  -- local dt = vim.g.jdtls_dap_main_class_config_time or 0
+  -- vim.defer_fn(function()
+  --   if vim.g.jdtls_dap_main_class_config_time then
+  --     require("jdtls.dap").setup_dap_main_class_configs()
+  --   end
+  --   vim.g.jdtls_dap_main_class_config_time = 200
+  -- end, dt)
 
-    -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
-  end
+  -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
+end
 
-  local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  -- capabilities.experimental = {
-  --   hoverActions = true,
-  --   hoverRange = true,
-  --   serverStatusNotification = true,
-  --   snippetTextEdit = true,
-  --   codeActionGroup = true,
-  --   ssr = true,
-  -- }
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- capabilities.experimental = {
+--   hoverActions = true,
+--   hoverRange = true,
+--   serverStatusNotification = true,
+--   snippetTextEdit = true,
+--   codeActionGroup = true,
+--   ssr = true,
+-- }
 
-  config.capabilities = capabilities
+config.capabilities = capabilities
 
+M.setup = function()
   jdtls.start_or_attach(config)
 end
 
