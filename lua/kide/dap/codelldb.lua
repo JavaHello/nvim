@@ -1,5 +1,7 @@
 local M = {}
-local extension_path = "/Users/luokai/.vscode/extensions/vadimcn.vscode-lldb-1.7.2"
+local vscode = require("kide.core.vscode")
+local extension_path = vscode.find_one("/vadimcn.vscode-lldb-*")
+
 M.config = {}
 M.config.codelldb_path = extension_path .. "/adapter/codelldb"
 M.config.liblldb_path = extension_path .. "/lldb/lib/liblldb.dylib"
