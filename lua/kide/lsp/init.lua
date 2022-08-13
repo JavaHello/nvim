@@ -1,6 +1,5 @@
-local lsp_installer = require("nvim-lsp-installer")
-local lspconfig = require("lspconfig")
-lsp_installer.setup({
+local mason_lspconfig = require("mason-lspconfig")
+mason_lspconfig.setup({
   ensure_installed = {
     "sumneko_lua",
     "clangd",
@@ -34,33 +33,40 @@ local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protoco
 -- 没有确定使用效果参数
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 local utils = require("kide.core.utils")
-for _, server in ipairs(lsp_installer.get_installed_servers()) do
-  -- tools config
-  local cfg = utils.or_default(server_configs[server.name], {})
 
-  -- lspconfig
-  local scfg = utils.or_default(cfg.server, {})
-  scfg = vim.tbl_deep_extend("force", server:get_default_options(), scfg)
-  local on_attach = scfg.on_attach
-  scfg.on_attach = function(client, bufnr)
-    -- 绑定快捷键
-    require("kide.core.keybindings").maplsp(client, bufnr)
-    if on_attach then
-      on_attach(client, bufnr)
+require("mason-lspconfig").setup_handlers({
+  -- The first entry (without a key) will be the default handler
+  -- and will be called for each installed server that doesn't have
+  -- a dedicated handler.
+  function(server_name) -- default handler (optional)
+    local lspconfig = require("lspconfig")
+    -- tools config
+    local cfg = utils.or_default(server_configs[server_name], {})
+
+    -- lspconfig
+    local scfg = utils.or_default(cfg.server, {})
+    -- scfg = vim.tbl_deep_extend("force", server:get_default_options(), scfg)
+    local on_attach = scfg.on_attach
+    scfg.on_attach = function(client, bufnr)
+      -- 绑定快捷键
+      require("kide.core.keybindings").maplsp(client, bufnr)
+      if on_attach then
+        on_attach(client, bufnr)
+      end
     end
-  end
-  scfg.flags = {
-    debounce_text_changes = 150,
-  }
-  scfg.capabilities = capabilities
-  if server.name == "rust_analyzer" then
-    -- Initialize the LSP via rust-tools instead
-    cfg.server = scfg
-    require("rust-tools").setup(cfg)
-  else
-    lspconfig[server.name].setup(scfg)
-  end
-end
+    scfg.flags = {
+      debounce_text_changes = 150,
+    }
+    scfg.capabilities = capabilities
+    if server_name == "rust_analyzer" then
+      -- Initialize the LSP via rust-tools instead
+      cfg.server = scfg
+      require("rust-tools").setup(cfg)
+    else
+      lspconfig[server_name].setup(scfg)
+    end
+  end,
+})
 
 -- LSP 相关美化参考 https://github.com/NvChad/NvChad
 local function lspSymbol(name, icon)

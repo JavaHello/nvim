@@ -17,13 +17,28 @@ require("packer").startup({
       opt = true,
     })
     use({
-      "williamboman/nvim-lsp-installer",
-      module = "nvim-lsp-installer",
+      "williamboman/mason.nvim",
       opt = true,
+      module = "mason",
+      setup = function()
+        require("kide.core.layz_load").async_load("mason.nvim")
+      end,
+      config = function()
+        require("kide.plugins.config.mason-nvim")
+      end,
+    })
+    use({
+      "williamboman/mason-lspconfig.nvim",
+      after = "mason.nvim",
+      module = "mason-lspconfig",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").async_load("mason-lspconfig.nvim")
+      end,
     })
     use({
       "neovim/nvim-lspconfig",
-      after = "nvim-lsp-installer",
+      after = "mason-lspconfig.nvim",
       module = "lspconfig",
       setup = function()
         require("kide.core.layz_load").async_load("nvim-lspconfig")
