@@ -282,7 +282,7 @@ config["on_attach"] = function(client, bufnr)
   --   vim.g.jdtls_dap_main_class_config_time = 200
   -- end, dt)
 
-  require('java-deps').attach(client, bufnr)
+  -- require('java-deps').attach(client, bufnr)
   -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
 end
 
