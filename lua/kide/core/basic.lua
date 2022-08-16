@@ -109,7 +109,7 @@ vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 vim.opt.list = true
 vim.opt.cul = true -- cursor line
 
-vim.opt.timeoutlen = 250
+vim.opt.timeoutlen = 450
 
 -- 始终显示符号列
 vim.opt.signcolumn = "yes"
