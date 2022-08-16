@@ -144,47 +144,47 @@ nnoremap <C-l> <C-w>l
   map("n", "<leader>ts", "<cmd>Telescope toggletasks spawn<cr>", opt)
 end
 -- lsp 回调函数快捷键设置
-M.maplsp = function(client, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-  vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
+M.maplsp = function(client, buffer)
+  vim.api.nvim_buf_set_option(buffer, "omnifunc", "v:lua.vim.lsp.omnifunc")
+  vim.api.nvim_buf_set_option(buffer, "formatexpr", "v:lua.vim.lsp.formatexpr()")
 
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
   -- rename
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opt)
   -- mapbuf('n', '<leader>rn', '<cmd>lua require("lspsaga.rename").rename()<CR>', opt)
   -- code action
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opt)
   -- mapbuf('n', '<leader>ca', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opt)
   -- go xx
   -- mapbuf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>Trouble lsp_definitions<CR>', opt)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>Telescope lsp_definitions<CR>", opt)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gd", "<cmd>Telescope lsp_definitions<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opt)
   -- mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opt)
   -- mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<cmd>Trouble lsp_type_definitions<CR>", opt)
   -- mapbuf('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>Trouble lsp_implementations<CR>", opt)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>Telescope lsp_implementations<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gi", "<cmd>Telescope lsp_implementations<CR>", opt)
   -- mapbuf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>Trouble lsp_references<CR>", opt)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>Telescope lsp_references<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gr", "<cmd>Telescope lsp_references<CR>", opt)
   -- mapbuf('n', 'gr', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opt)
   -- mapbuf('n', '<space>s', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opt)
   -- mapbuf('n', '<space>s', '<cmd>lua require"telescope.builtin".lsp_workspace_symbols({ query = vim.fn.input("Query> ") })<CR>', opt)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>fs", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>fs", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opt)
   keymap("v", "<leader>fs", function()
     local tb = require("telescope.builtin")
     local text = require("kide.core.utils").get_visual_selection()
     tb.lsp_workspace_symbols({ default_text = text, query = text })
   end, opt)
 
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>fo", "<cmd>Telescope lsp_document_symbols<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>fo", "<cmd>Telescope lsp_document_symbols<CR>", opt)
   -- diagnostic
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "go", "<cmd>lua vim.diagnostic.open_float()<CR>", opt)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "[g", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opt)
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "]g", "<cmd>lua vim.diagnostic.goto_next()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "go", "<cmd>lua vim.diagnostic.open_float()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "[g", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "]g", "<cmd>lua vim.diagnostic.goto_next()<CR>", opt)
   -- mapbuf('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opt)
   -- leader + =
   -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>=', '<cmd>lua vim.lsp.buf.format()<CR>', opt)
@@ -200,7 +200,7 @@ M.maplsp = function(client, bufnr)
     })
   end, opt)
   vim.api.nvim_buf_set_keymap(
-    bufnr,
+    buffer,
     "v",
     "<leader>=",
     '<cmd>lua require("kide.lsp.utils").format_range_operator()<CR>',
@@ -213,7 +213,7 @@ M.maplsp = function(client, bufnr)
   -- mapbuf('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opt)
   -- mapbuf('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opt)
 
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xw", "<cmd>Telescope diagnostics<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>xw", "<cmd>Telescope diagnostics<CR>", opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<CR>", opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xx", "<cmd>Trouble<CR>", opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<CR>", opt)

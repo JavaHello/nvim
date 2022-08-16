@@ -463,11 +463,7 @@ require("packer").startup({
         require("kide.core.layz_load").async_load("which-key.nvim")
       end,
       config = function()
-        require("which-key").setup({
-          -- your configuration comes here
-          -- or leave it empty to use the default settings
-          -- refer to the configuration section below
-        })
+        require("kide.plugins.config.which-key")
       end,
     })
 

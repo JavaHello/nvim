@@ -256,22 +256,24 @@ config["init_options"] = {
   extendedClientCapabilities = extendedClientCapabilities,
 }
 
-config["on_attach"] = function(client, bufnr)
+config["on_attach"] = function(client, buffer)
   -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
   -- you make during a debug session immediately.
   -- Remove the option if you do not want that.
   require("jdtls").setup_dap({ hotcodereplace = "auto" })
   require("jdtls.setup").add_commands()
-  require("kide.core.keybindings").maplsp(client, bufnr)
+  require("kide.core.keybindings").maplsp(client, buffer)
   -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
-  local opts = { silent = true, buffer = bufnr }
+  local opts = { silent = true, buffer = buffer }
   vim.keymap.set("n", "<leader>dc", jdtls.test_class, opts)
   vim.keymap.set("n", "<leader>dm", jdtls.test_nearest_method, opts)
   vim.keymap.set("n", "crv", jdtls.extract_variable, opts)
-  vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
+  vim.keymap.set("v", "crm", function()
+    require("jdtls").extract_method(true)
+  end, opts)
   vim.keymap.set("n", "crc", jdtls.extract_constant, opts)
   local create_command = vim.api.nvim_buf_create_user_command
-  create_command(bufnr, "OR", require("jdtls").organize_imports, {
+  create_command(buffer, "OR", require("jdtls").organize_imports, {
     nargs = 0,
   })
   -- local dt = vim.g.jdtls_dap_main_class_config_time or 0
