@@ -267,11 +267,9 @@ config["on_attach"] = function(client, buffer)
   local opts = { silent = true, buffer = buffer }
   vim.keymap.set("n", "<leader>dc", jdtls.test_class, opts)
   vim.keymap.set("n", "<leader>dm", jdtls.test_nearest_method, opts)
-  vim.keymap.set("n", "crv", jdtls.extract_variable, opts)
-  vim.keymap.set("v", "crm", function()
-    require("jdtls").extract_method(true)
-  end, opts)
-  vim.keymap.set("n", "crc", jdtls.extract_constant, opts)
+  vim.keymap.set("n", "<leader>rv", jdtls.extract_variable, opts)
+  vim.keymap.set("v", "<leader>rm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
+  vim.keymap.set("n", "<leader>rc", jdtls.extract_constant, opts)
   local create_command = vim.api.nvim_buf_create_user_command
   create_command(buffer, "OR", require("jdtls").organize_imports, {
     nargs = 0,
