@@ -276,7 +276,6 @@ config["on_attach"] = function(client, buffer)
   })
   if vim.g.jdtls_dap_main_class_config_init then
     vim.defer_fn(function()
-      require("jdtls.dap").setup_dap_main_class_configs()
       require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
     end, 3000)
     vim.g.jdtls_dap_main_class_config_init = false
