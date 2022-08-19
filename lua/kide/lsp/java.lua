@@ -274,13 +274,13 @@ config["on_attach"] = function(client, buffer)
   create_command(buffer, "OR", require("jdtls").organize_imports, {
     nargs = 0,
   })
-  -- local dt = vim.g.jdtls_dap_main_class_config_time or 0
-  -- vim.defer_fn(function()
-  --   if vim.g.jdtls_dap_main_class_config_time then
-  --     require("jdtls.dap").setup_dap_main_class_configs()
-  --   end
-  --   vim.g.jdtls_dap_main_class_config_time = 200
-  -- end, dt)
+  if vim.g.jdtls_dap_main_class_config_init then
+    vim.defer_fn(function()
+      require("jdtls.dap").setup_dap_main_class_configs()
+      require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
+    end, 3000)
+    vim.g.jdtls_dap_main_class_config_init = false
+  end
 
   -- require('java-deps').attach(client, bufnr)
   -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
@@ -303,6 +303,7 @@ M.setup = function()
 end
 
 M.init = function()
+  vim.g.jdtls_dap_main_class_config_init = true
   local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
