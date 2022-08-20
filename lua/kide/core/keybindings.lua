@@ -30,8 +30,12 @@ M.setup = function()
   map("n", "<Leader>w", ":bd<CR>", opt)
   map("n", "<Leader>W", ":%bd<CR>", opt)
   map("n", "<Leader>q", ":q<CR>", opt)
-  map("n", "<Leader>n", ":BufferLineCycleNext <CR>", opt)
-  map("n", "<Leader>p", ":BufferLineCyclePrev <CR>", opt)
+  -- buffer
+  map("n", "]b", ":BufferLineCycleNext <CR>", opt)
+  map("n", "[b", ":BufferLineCyclePrev <CR>", opt)
+  -- window
+  map("n", "<A-[>", ":vertical resize +5 <CR>", opt)
+  map("n", "<A-]>", ":vertical resize -5  <CR>", opt)
 
   -- " 退出 terminal 模式
   map("t", "<Esc>", "<C-\\><C-N>", opt)
