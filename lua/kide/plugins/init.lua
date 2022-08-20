@@ -628,9 +628,10 @@ require("packer").startup({
       "RRethy/vim-illuminate",
       opt = true,
       setup = function()
-        require("kide.plugins.config.vim-illuminate")
-        -- on_file_open("vim-illuminate")
         require("kide.core.layz_load").async_load("vim-illuminate")
+      end,
+      config = function ()
+        require("kide.plugins.config.vim-illuminate")
       end,
     })
 
