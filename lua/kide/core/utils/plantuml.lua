@@ -56,7 +56,7 @@ local function init()
   local group = vim.api.nvim_create_augroup("plantuml_export", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
-    pattern = { "puml" },
+    pattern = { "plantuml" },
     desc = "Export Plantuml file",
     callback = function(o)
       vim.api.nvim_buf_create_user_command(o.buf, "Plantuml", function(opts)

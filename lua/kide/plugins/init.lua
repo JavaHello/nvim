@@ -630,7 +630,7 @@ require("packer").startup({
       setup = function()
         require("kide.core.layz_load").async_load("vim-illuminate")
       end,
-      config = function ()
+      config = function()
         require("kide.plugins.config.vim-illuminate")
       end,
     })
@@ -729,6 +729,12 @@ require("packer").startup({
         require("project_nvim").setup({})
         require("telescope").load_extension("projects")
       end,
+    })
+
+    use({
+      "aklt/plantuml-syntax",
+      opt = true,
+      ft = "plantuml",
     })
 
     if bootstrap then
