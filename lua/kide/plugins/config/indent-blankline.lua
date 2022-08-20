@@ -22,6 +22,7 @@ require("indent_blankline").setup({
     "Outline",
     "TelescopePrompt",
     "TelescopeResults",
+    "NeogitStatus",
     "",
   },
   buftype_exclude = { "terminal" },

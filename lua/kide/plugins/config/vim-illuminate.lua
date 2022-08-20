@@ -26,6 +26,7 @@ require("illuminate").configure({
     "dashboard",
     "alpha",
     "Outline",
+    "NeogitStatus",
   },
   -- filetypes_allowlist: filetypes to illuminate, this is overriden by filetypes_denylist
   filetypes_allowlist = {},
