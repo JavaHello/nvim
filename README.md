@@ -36,7 +36,7 @@ git clone  https://github.com/JavaHello/nvim.git
 |        重命名        |     `<leader>rn`     |
 |     Code Action      |     `<leader>ca`     |
 |        Debug         | `F5`or`:DapContinue` |
-|         断点         |     `<leader>b`      |
+|         断点         |     `<leader>db`     |
 |     翻译 en->zh      |     `<leader>tz`     |
 |     翻译 zh->en      |     `<leader>te`     |
 |       内置终端       |    `:ToggleTerm`     |
