@@ -61,7 +61,7 @@ M.config = {
       FILE = { icon = "", hl = "TSURI" },
       WORKSPACE = { icon = "", hl = "TSNamespace" },
       CONTAINER = { icon = "", hl = "TSMethod" },
-      PACKAGE = { icon = "", hl = "TSNamespace" },
+      PACKAGE = { icon = "", hl = "TSNamespace" },
       PRIMARYTYPE = { icon = "ﴯ", hl = "TSType" },
       PROJECT = { icon = "פּ", hl = "TSType" },
       PACKAGEROOT = { icon = "", hl = "TSType" },
