@@ -737,6 +737,29 @@ require("packer").startup({
       ft = "plantuml",
     })
 
+    use({
+      "stevearc/dressing.nvim",
+      opt = true,
+      module = "dressing",
+      setup = function()
+        require("kide.core.layz_load").async_load("dressing.nvim")
+      end,
+      config = function()
+        require("kide.plugins.config.dressing-nvim")
+      end,
+    })
+
+    use({
+      "lalitmee/browse.nvim",
+      opt = true,
+      cmd = {
+        "Browse",
+      },
+      config = function()
+        require("kide.plugins.config.browse-nvim")
+      end,
+    })
+
     if bootstrap then
       require("packer").sync()
     end
