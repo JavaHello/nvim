@@ -760,9 +760,6 @@ require("packer").startup({
       "stevearc/dressing.nvim",
       opt = true,
       module = "dressing",
-      setup = function()
-        require("kide.core.layz_load").async_load("dressing.nvim")
-      end,
       config = function()
         require("kide.plugins.config.dressing-nvim")
       end,
@@ -794,9 +791,7 @@ require("packer").startup({
     use({
       "anuvyklack/hydra.nvim",
       opt = true,
-      setup = function()
-        require("kide.core.layz_load").async_load("hydra.nvim")
-      end,
+      module = "hydra",
     })
 
     if bootstrap then
