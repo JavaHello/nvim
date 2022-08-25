@@ -197,6 +197,17 @@ require("packer").startup({
         require("kide.plugins.config.nvim-treesitter")
       end,
     })
+    use({
+      "nvim-treesitter/nvim-treesitter-context",
+      opt = true,
+      after = "nvim-treesitter-textobjects",
+      setup = function()
+        require("kide.core.layz_load").async_load("nvim-treesitter-context")
+      end,
+      config = function()
+        require("kide.plugins.config.nvim-treesitter-context")
+      end,
+    })
 
     -- java
     use({
@@ -757,6 +768,19 @@ require("packer").startup({
       },
       config = function()
         require("kide.plugins.config.browse-nvim")
+      end,
+    })
+
+    use({
+      "kylechui/nvim-surround",
+      opt=true,
+      setup = function()
+        require("kide.core.layz_load").async_load("nvim-surround")
+      end,
+      config = function()
+        require("nvim-surround").setup({
+          -- Configuration here, or leave empty to use defaults
+        })
       end,
     })
 
