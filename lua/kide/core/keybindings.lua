@@ -90,9 +90,6 @@ M.setup = function()
   -- camel_case
   require("kide.core.utils").camel_case_init()
 
-  -- neogen
-  map("n", "<Leader>nc", ":lua require('neogen').generate({ type = 'class' })<CR>", opt)
-  map("n", "<Leader>nf", ":lua require('neogen').generate({ type = 'func' })<CR>", opt)
 
   -- vim-easy-align
   vim.cmd([[
