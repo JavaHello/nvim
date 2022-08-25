@@ -794,6 +794,15 @@ require("packer").startup({
       module = "hydra",
     })
 
+    use({
+      "SmiteshP/nvim-navic",
+      opt = true,
+      module = "nvim-navic",
+      config = function()
+        require("kide.plugins.config.nvim-navic")
+      end,
+    })
+
     if bootstrap then
       require("packer").sync()
     end

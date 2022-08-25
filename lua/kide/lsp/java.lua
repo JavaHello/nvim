@@ -281,6 +281,7 @@ config["on_attach"] = function(client, buffer)
     vim.g.jdtls_dap_main_class_config_init = false
   end
 
+  require("nvim-navic").attach(client, buffer)
   -- require('java-deps').attach(client, bufnr)
   -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
 end

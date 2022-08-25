@@ -47,11 +47,12 @@ require("mason-lspconfig").setup_handlers({
     local scfg = utils.or_default(cfg.server, {})
     -- scfg = vim.tbl_deep_extend("force", server:get_default_options(), scfg)
     local on_attach = scfg.on_attach
-    scfg.on_attach = function(client, bufnr)
+    scfg.on_attach = function(client, buffer)
       -- 绑定快捷键
-      require("kide.core.keybindings").maplsp(client, bufnr)
+      require("kide.core.keybindings").maplsp(client, buffer)
+      require("nvim-navic").attach(client, buffer)
       if on_attach then
-        on_attach(client, bufnr)
+        on_attach(client, buffer)
       end
     end
     scfg.flags = {
