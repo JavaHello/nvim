@@ -443,6 +443,14 @@ require("packer").startup({
         require("kide.plugins.config.comment")
       end,
     })
+    use({
+      "danymat/neogen",
+      opt = true,
+      module = "neogen",
+      config = function()
+        require("kide.plugins.config.neogen")
+      end,
+    })
 
     -- mackdown 预览插件
     use({
@@ -773,7 +781,7 @@ require("packer").startup({
 
     use({
       "kylechui/nvim-surround",
-      opt=true,
+      opt = true,
       setup = function()
         require("kide.core.layz_load").async_load("nvim-surround")
       end,
@@ -781,6 +789,13 @@ require("packer").startup({
         require("nvim-surround").setup({
           -- Configuration here, or leave empty to use defaults
         })
+      end,
+    })
+    use({
+      "anuvyklack/hydra.nvim",
+      opt = true,
+      setup = function()
+        require("kide.core.layz_load").async_load("hydra.nvim")
       end,
     })
 

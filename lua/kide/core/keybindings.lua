@@ -90,6 +90,10 @@ M.setup = function()
   -- camel_case
   require("kide.core.utils").camel_case_init()
 
+  -- neogen
+  map("n", "<Leader>nc", ":lua require('neogen').generate({ type = 'class' })<CR>", opt)
+  map("n", "<Leader>nf", ":lua require('neogen').generate({ type = 'func' })<CR>", opt)
+
   -- vim-easy-align
   vim.cmd([[
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -228,6 +232,7 @@ end
 -- nvim-cmp 自动补全
 M.cmp = function(cmp)
   local luasnip = require("luasnip")
+  local neogen = require("neogen")
   local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
@@ -261,6 +266,8 @@ M.cmp = function(cmp)
         cmp.select_next_item()
       elseif luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
+      elseif neogen.jumpable() then
+        neogen.jump_next()
       elseif has_words_before() then
         cmp.complete()
       else
@@ -273,6 +280,8 @@ M.cmp = function(cmp)
         cmp.select_prev_item()
       elseif luasnip.jumpable(-1) then
         luasnip.jump(-1)
+      elseif neogen.jumpable(true) then
+        neogen.jump_prev()
       else
         fallback()
       end
