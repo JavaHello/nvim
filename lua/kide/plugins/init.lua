@@ -51,7 +51,6 @@ require("packer").startup({
     -- 代码片段
     use({
       "rafamadriz/friendly-snippets",
-      module = "cmp_nvim_lsp",
       event = "InsertEnter",
     })
     -- nvim-cmp
@@ -77,6 +76,7 @@ require("packer").startup({
 
     use({
       "hrsh7th/cmp-nvim-lsp",
+      module = "cmp_nvim_lsp",
       after = "cmp_luasnip",
     })
     use({
@@ -200,7 +200,7 @@ require("packer").startup({
     use({
       "nvim-treesitter/nvim-treesitter-context",
       opt = true,
-      after = "nvim-treesitter-textobjects",
+      after = "nvim-treesitter",
       setup = function()
         require("kide.core.layz_load").async_load("nvim-treesitter-context")
       end,
