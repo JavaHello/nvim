@@ -185,6 +185,9 @@ require("packer").startup({
       wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
       run = ":TSUpdate",
+      config = function()
+        require("kide.plugins.config.nvim-treesitter")
+      end,
     })
     use({
       "nvim-treesitter/nvim-treesitter-textobjects",
@@ -192,9 +195,6 @@ require("packer").startup({
       after = "nvim-treesitter",
       setup = function()
         require("kide.core.layz_load").sync_load("nvim-treesitter-textobjects")
-      end,
-      config = function()
-        require("kide.plugins.config.nvim-treesitter")
       end,
     })
     use({
@@ -376,14 +376,15 @@ require("packer").startup({
     })
 
     -- <>()等匹配插件
-    use({
-      "andymass/vim-matchup",
-      opt = true,
-      setup = function()
-        -- on_file_open("vim-matchup")
-        require("kide.core.layz_load").async_load("vim-matchup")
-      end,
-    })
+    -- use({
+    --   "andymass/vim-matchup",
+    --   opt = true,
+    --   after = "nvim-treesitter",
+    --   setup = function()
+    --     -- on_file_open("vim-matchup")
+    --     require("kide.core.layz_load").async_load("vim-matchup")
+    --   end,
+    -- })
     -- 大纲插件
     -- use 'liuchengxu/vista.vim'
     use({
