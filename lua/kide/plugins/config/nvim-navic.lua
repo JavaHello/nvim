@@ -1,5 +1,5 @@
 local navic = require("nvim-navic")
-local symbol_map = require("kide.core.symbol_map")
+local symbol_map = require("kide.lsp.lsp_ui").symbol_map
 navic.setup({
   icons = {
     File = symbol_map.File.icon .. " ",

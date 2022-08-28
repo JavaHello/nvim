@@ -1,4 +1,5 @@
-local M = {
+local M = {}
+M.symbol_map = {
   Text = { icon = "" },
   Method = { icon = "", hl = "TSMethod" },
   Function = { icon = "", hl = "TSFunction" },
@@ -34,6 +35,17 @@ local M = {
   Object = { icon = "", hl = "TSType" },
   Key = { icon = "", hl = "TSType" },
   Null = { icon = "ﳠ", hl = "TSType" },
+}
+
+M.hover_border = {
+  { "╭", "FloatBorder" },
+  { "─", "FloatBorder" },
+  { "╮", "FloatBorder" },
+  { "│", "FloatBorder" },
+  { "╯", "FloatBorder" },
+  { "─", "FloatBorder" },
+  { "╰", "FloatBorder" },
+  { "│", "FloatBorder" },
 }
 
 return M

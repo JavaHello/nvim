@@ -135,8 +135,10 @@ local config = {
   -- for a list of options
   settings = {
     java = {
+      maxConcurrentBuilds = 8,
       home = get_java_home(),
       project = {
+        encoding = "UTF-8",
         resourceFilters = {
           "node_modules",
           ".git",
@@ -179,10 +181,16 @@ local config = {
         downloadSources = true,
         updateSnapshots = true,
       },
-      signatureHelp = { enabled = true },
+      signatureHelp = {
+        enabled = true,
+        description = {
+          enabled = true,
+        },
+      },
       contentProvider = { preferred = "fernflower" },
       completion = {
         favoriteStaticMembers = {
+          "org.junit.Assert.*",
           "org.hamcrest.MatcherAssert.assertThat",
           "org.hamcrest.Matchers.*",
           "org.hamcrest.CoreMatchers.*",
@@ -195,6 +203,7 @@ local config = {
           "com.sun.*",
           "io.micrometer.shaded.*",
           "java.awt.*",
+          "org.graalvm.*",
           "jdk.*",
           "sun.*",
         },
@@ -228,6 +237,12 @@ local config = {
           },
         },
       },
+      -- referencesCodeLens = {
+      --   enabled = true,
+      -- },
+      -- implementationsCodeLens = {
+      --   enabled = true,
+      -- },
     },
   },
 
@@ -298,6 +313,108 @@ local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protoco
 
 config.capabilities = capabilities
 
+local function markdown_format(input)
+  if input then
+    -- input = string.gsub(input, "[\r\n]( +)(%*)", function (i1)
+    --   return i1 .. "-"
+    -- end)
+    return string.gsub(input, "(%[)([^%]]+)(%])(%(jdt://[^%)]+%))", function(_, i2)
+      return "`" .. i2 .. "`"
+    end)
+  end
+  return input
+end
+
+local function split_lines(value)
+  value = string.gsub(value, "\r\n?", "\n")
+  return vim.split(value, "\n", true)
+end
+function M.convert_input_to_markdown_lines(input, contents)
+  contents = contents or {}
+  -- MarkedString variation 1
+  if type(input) == "string" then
+    input = markdown_format(input)
+    vim.list_extend(contents, split_lines(input))
+  else
+    assert(type(input) == "table", "Expected a table for Hover.contents")
+    -- MarkupContent
+    if input.kind then
+      -- The kind can be either plaintext or markdown.
+      -- If it's plaintext, then wrap it in a <text></text> block
+
+      -- Some servers send input.value as empty, so let's ignore this :(
+      local value = input.value or ""
+
+      if input.kind == "plaintext" then
+        -- wrap this in a <text></text> block so that stylize_markdown
+        -- can properly process it as plaintext
+        value = string.format("<text>\n%s\n</text>", value)
+      end
+
+      -- assert(type(value) == 'string')
+      vim.list_extend(contents, split_lines(value))
+      -- MarkupString variation 2
+    elseif input.language then
+      -- Some servers send input.value as empty, so let's ignore this :(
+      -- assert(type(input.value) == 'string')
+      table.insert(contents, "```" .. input.language)
+      vim.list_extend(contents, split_lines(input.value or ""))
+      table.insert(contents, "```")
+      -- By deduction, this must be MarkedString[]
+    else
+      -- Use our existing logic to handle MarkedString
+      for _, marked_string in ipairs(input) do
+        M.convert_input_to_markdown_lines(marked_string, contents)
+      end
+    end
+  end
+  if (contents[1] == "" or contents[1] == nil) and #contents == 1 then
+    return {}
+  end
+  return contents
+end
+
+local function jhover(_, result, ctx, c)
+  c = c or {}
+  c.focus_id = ctx.method
+  c.stylize_markdown = true
+  if not (result and result.contents) then
+    vim.notify("No information available")
+    return
+  end
+  local markdown_lines = M.convert_input_to_markdown_lines(result.contents)
+  markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)
+  if vim.tbl_isempty(markdown_lines) then
+    vim.notify("No information available")
+    return
+  end
+  local b, w = vim.lsp.util.open_floating_preview(markdown_lines, "markdown", c)
+  -- vim.api.nvim_win_set_option(w, "winblend", 10)
+  return b, w
+end
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(jhover, { border = require("kide.lsp.lsp_ui").hover_border })
+local source = require("cmp_nvim_lsp.source")
+source.resolve = function(self, completion_item, callback)
+  -- client is stopped.
+  if self.client.is_stopped() then
+    return callback()
+  end
+
+  -- client has no completion capability.
+  if not self:_get(self.client.server_capabilities, { "completionProvider", "resolveProvider" }) then
+    return callback()
+  end
+
+  self:_request("completionItem/resolve", completion_item, function(_, response)
+    -- print(vim.inspect(response))
+    if response and response.documentation then
+      response.documentation.value = markdown_format(response.documentation.value)
+    end
+    -- print(vim.inspect(response))
+    callback(response or completion_item)
+  end)
+end
+
 M.setup = function()
   jdtls.start_or_attach(config)
 end
@@ -309,7 +426,7 @@ M.init = function()
     group = group,
     pattern = { "java" },
     desc = "jdtls",
-    callback = function(o)
+    callback = function(_)
       -- vim.notify("load: " .. o.buf, vim.log.levels.INFO)
       M.setup()
     end,

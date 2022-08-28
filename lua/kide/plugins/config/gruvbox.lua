@@ -2,14 +2,23 @@
 -- Default options:
 
 local colors = require("gruvbox.palette")
+local kgrubox = require("kide.theme.gruvbox")
 local overrides = {
 
   NvimTreeFolderIcon = {
     fg = colors.bright_green,
   },
+  NormalFloat = {
+    bg = kgrubox.colors.black3,
+  },
+  Pmenu = {
+    bg = kgrubox.colors.black2,
+  },
+
+  -- cmp, wilder
 }
 
-overrides = vim.tbl_extend("force", overrides, require("kide.theme.gruvbox").flat_telescope)
+overrides = vim.tbl_extend("force", overrides, kgrubox.flat_telescope)
 
 require("gruvbox").setup({
   undercurl = true,
@@ -26,4 +35,4 @@ require("gruvbox").setup({
 })
 
 vim.opt.background = "dark"
-vim.cmd[[colorscheme gruvbox]]
+vim.cmd([[colorscheme gruvbox]])

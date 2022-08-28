@@ -81,19 +81,19 @@ lspSymbol("Hint", "")
 lspSymbol("Warn", "")
 
 vim.diagnostic.config({
-  virtual_text = {
-    prefix = "",
-  },
+  virtual_text = true,
   signs = true,
   underline = true,
   update_in_insert = false,
+  severity_sort = false,
 })
 
+local border = require("kide.lsp.lsp_ui").hover_border
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = "single",
+  border = border,
 })
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = "single",
+  border = border,
 })
 
 -- suppress error messages from lang servers
