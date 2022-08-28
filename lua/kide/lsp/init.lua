@@ -88,13 +88,9 @@ vim.diagnostic.config({
   severity_sort = false,
 })
 
-local border = require("kide.lsp.lsp_ui").hover_border
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = border,
-})
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = border,
-})
+local lsp_ui = require("kide.lsp.lsp_ui")
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, lsp_ui.hover_actions)
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 
 -- suppress error messages from lang servers
 -- vim.notify = function(msg, log_level)

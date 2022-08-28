@@ -394,7 +394,9 @@ local function jhover(_, result, ctx, c)
   -- vim.api.nvim_win_set_option(w, "winblend", 10)
   return b, w
 end
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(jhover, { border = require("kide.lsp.lsp_ui").hover_border })
+
+local lsp_ui = require("kide.lsp.lsp_ui")
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(jhover, lsp_ui.hover_actions)
 local source = require("cmp_nvim_lsp.source")
 source.resolve = function(self, completion_item, callback)
   -- client is stopped.
