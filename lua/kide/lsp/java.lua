@@ -318,9 +318,11 @@ local function markdown_format(input)
     -- input = string.gsub(input, "[\r\n]( +)(%*)", function (i1)
     --   return i1 .. "-"
     -- end)
-    return string.gsub(input, "(%[)([^%]]+[,%s%w%[\\%]%)]*)(%])%(([jdt://file://]).+%)", function(_, i2)
-      return "`" .. i2 .. "`"
+    input = string.gsub(input, "%[([^:/]*)%]", function(i1)
+      return "`" .. i1 .. "`"
     end)
+    input = string.gsub(input, "%(file:/[^%)]+%)", "")
+    input = string.gsub(input, "%(jdt://[^%)]+%)", "")
   end
   return input
 end
