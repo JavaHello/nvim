@@ -468,7 +468,12 @@ require("packer").startup({
       "ellisonleao/glow.nvim",
       opt = true,
       ft = "markdown",
-      branch = "main",
+      config = function()
+        require("glow").setup({
+          style = "dark",
+          width = 120,
+        })
+      end,
     })
 
     -- 格式化插件 -> 使用 null-ls
