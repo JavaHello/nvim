@@ -7,7 +7,7 @@ require("symbols-outline").setup({
   auto_preview = false,
   position = "right",
   relative_width = true,
-  width = 34,
+  width = 25,
   auto_close = false,
   show_numbers = false,
   show_relative_numbers = false,
@@ -51,5 +51,7 @@ require("symbols-outline").setup({
     Event = symbols_map.Event,
     Operator = symbols_map.Operator,
     TypeParameter = symbols_map.TypeParameter,
+    Component = symbols_map.Component,
+    Fragment = symbols_map.Fragment,
   },
 })

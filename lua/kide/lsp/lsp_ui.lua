@@ -35,6 +35,8 @@ M.symbol_map = {
   Object = { icon = "", hl = "TSType" },
   Key = { icon = "", hl = "TSType" },
   Null = { icon = "ﳠ", hl = "TSType" },
+  Component = { icon = '', hl = 'TSFunction' },
+  Fragment = { icon = '', hl = 'TSConstant' },
 }
 
 M.hover_actions = {
