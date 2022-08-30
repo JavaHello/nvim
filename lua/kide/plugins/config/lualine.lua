@@ -15,7 +15,23 @@ local config = {
     lualine_a = { "mode" },
     lualine_b = { "branch", "diff", "diagnostics" },
     -- lualine_c = {'filename', 'lsp_progress'},
-    lualine_c = { "filename", { navic.get_location, cond = navic.is_available } },
+    lualine_c = {
+      {
+        function()
+          local names = {}
+          for _, server in pairs(vim.lsp.buf_get_clients(0)) do
+            table.insert(names, server.name)
+          end
+          if vim.tbl_isempty(names) then
+            return " [No LSP]"
+          else
+            return " [" .. table.concat(names, " ") .. "]"
+          end
+        end,
+      },
+      "filename",
+      { navic.get_location, cond = navic.is_available },
+    },
     lualine_x = { "encoding", "fileformat", "filetype" },
     lualine_y = { "progress" },
     lualine_z = { "location" },
