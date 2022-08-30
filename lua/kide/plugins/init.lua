@@ -757,15 +757,17 @@ require("packer").startup({
       ft = "plantuml",
     })
 
-    use({
-      "stevearc/dressing.nvim",
-      opt = true,
-      module = "dressing",
-      config = function()
-        require("kide.plugins.config.dressing-nvim")
-      end,
-    })
+    -- UI 美化
+    -- use({
+    --   "stevearc/dressing.nvim",
+    --   opt = true,
+    --   module = "dressing",
+    --   config = function()
+    --     require("kide.plugins.config.dressing-nvim")
+    --   end,
+    -- })
 
+    -- 浏览器搜索
     use({
       "lalitmee/browse.nvim",
       opt = true,
@@ -777,6 +779,7 @@ require("packer").startup({
       end,
     })
 
+    -- 环绕输入
     use({
       "kylechui/nvim-surround",
       opt = true,
