@@ -797,12 +797,15 @@ require("packer").startup({
         })
       end,
     })
+
+    --  Create custom submodes and menus 
     use({
       "anuvyklack/hydra.nvim",
       opt = true,
       module = "hydra",
     })
 
+    -- 代码状态栏导航
     use({
       "SmiteshP/nvim-navic",
       opt = true,
@@ -811,6 +814,8 @@ require("packer").startup({
         require("kide.plugins.config.nvim-navic")
       end,
     })
+
+    -- markdown 背景设置
     use({
       "lukas-reineke/headlines.nvim",
       opt = true,
@@ -819,6 +824,8 @@ require("packer").startup({
         require("headlines").setup()
       end,
     })
+
+    -- 笔记
     use({
       "mickael-menu/zk-nvim",
       opt = true,
