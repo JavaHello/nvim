@@ -811,6 +811,26 @@ require("packer").startup({
         require("kide.plugins.config.nvim-navic")
       end,
     })
+    use({
+      "lukas-reineke/headlines.nvim",
+      opt = true,
+      ft = { "markdown", "norg", "org" },
+      config = function()
+        require("headlines").setup()
+      end,
+    })
+    use({
+      "mickael-menu/zk-nvim",
+      opt = true,
+      cmd = {
+        "ZkIndex",
+        "ZkNew",
+        "ZkNotes",
+      },
+      config = function()
+        require("kide.plugins.config.zk-nvim")
+      end,
+    })
 
     if bootstrap then
       require("packer").sync()
