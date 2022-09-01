@@ -53,6 +53,11 @@ M.hover_actions = {
   },
 }
 
+M.signs = {
+  closed = "",
+  opened = "",
+}
+
 M.diagnostics = {
   icons = {
     hint = "",

@@ -1,3 +1,4 @@
+local lsp_ui = require("kide.lsp.lsp_ui")
 local neogit = require("neogit")
 
 neogit.setup({
@@ -18,8 +19,8 @@ neogit.setup({
   -- customize displayed signs
   signs = {
     -- { CLOSED, OPENED }
-    section = { ">", "v" },
-    item = { ">", "v" },
+    section = { lsp_ui.signs.closed, lsp_ui.signs.opened },
+    item = { lsp_ui.signs.closed, lsp_ui.signs.opened },
     hunk = { "", "" },
   },
   integrations = {
