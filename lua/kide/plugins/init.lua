@@ -327,9 +327,7 @@ require("packer").startup({
       "TimUntersberger/neogit",
       after = "diffview.nvim",
       opt = true,
-      setup = function()
-        require("kide.core.layz_load").async_load("neogit")
-      end,
+      cmd = "Neogit",
       config = function()
         require("kide.plugins.config.neogit")
       end,
