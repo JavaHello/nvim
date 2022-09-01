@@ -817,14 +817,14 @@ require("packer").startup({
     })
 
     -- markdown 背景设置
-    use({
-      "lukas-reineke/headlines.nvim",
-      opt = true,
-      ft = { "markdown", "norg", "org" },
-      config = function()
-        require("headlines").setup()
-      end,
-    })
+    -- use({
+    --   "lukas-reineke/headlines.nvim",
+    --   opt = true,
+    --   ft = { "markdown", "norg", "org" },
+    --   config = function()
+    --     require("headlines").setup()
+    --   end,
+    -- })
 
     -- 笔记
     use({
@@ -848,6 +848,7 @@ require("packer").startup({
     display = {
       open_fn = require("packer.util").float,
     },
+    max_jobs = 10,
   },
 })
 
