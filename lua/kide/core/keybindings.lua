@@ -90,7 +90,6 @@ M.setup = function()
   -- camel_case
   require("kide.core.utils").camel_case_init()
 
-
   -- vim-easy-align
   vim.cmd([[
 " Start interactive EasyAlign in visual mode (e.g. vipga)

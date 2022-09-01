@@ -324,10 +324,12 @@ require("packer").startup({
       end,
     })
     use({
+      "TimUntersberger/neogit",
       after = "diffview.nvim",
       opt = true,
-      "TimUntersberger/neogit",
-      cmd = { "Neogit" },
+      setup = function()
+        require("kide.core.layz_load").async_load("neogit")
+      end,
       config = function()
         require("kide.plugins.config.neogit")
       end,
@@ -547,7 +549,6 @@ require("packer").startup({
         require("kide.plugins.config.which-key")
       end,
     })
-
 
     -- 仪表盘
     -- use {'glepnir/dashboard-nvim'}
@@ -799,7 +800,7 @@ require("packer").startup({
       end,
     })
 
-    --  Create custom submodes and menus 
+    --  Create custom submodes and menus
     use({
       "anuvyklack/hydra.nvim",
       opt = true,
