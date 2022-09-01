@@ -244,6 +244,62 @@ require("packer").startup({
       end,
     })
 
+    -- 搜索插件
+    use({
+      "nvim-telescope/telescope.nvim",
+      opt = true,
+      module = "telescope",
+      wants = "gruvbox.nvim",
+      after = "gruvbox.nvim",
+      requires = {
+        "nvim-lua/plenary.nvim",
+      },
+      config = function()
+        require("kide.plugins.config.telescope")
+      end,
+    })
+    use({
+      "nvim-telescope/telescope-ui-select.nvim",
+      after = "telescope.nvim",
+      setup = function()
+        require("kide.core.layz_load").async_load("telescope-ui-select.nvim")
+      end,
+      config = function()
+        require("telescope").load_extension("ui-select")
+      end,
+    })
+    use({
+      "nvim-telescope/telescope-fzf-native.nvim",
+      run = "make",
+      after = "telescope.nvim",
+      setup = function()
+        require("kide.core.layz_load").async_load("telescope-fzf-native.nvim")
+      end,
+      config = function()
+        require("telescope").load_extension("fzf")
+      end,
+    })
+    use({
+      "nvim-telescope/telescope-dap.nvim",
+      after = "telescope.nvim",
+      opt = true,
+    })
+
+    -- use 'GustavoKatel/telescope-asynctasks.nvim'
+    -- use 'aloussase/telescope-gradle.nvim'
+    -- use 'aloussase/telescope-mvnsearch'
+    use({
+      "LinArcX/telescope-env.nvim",
+      opt = true,
+      after = "telescope.nvim",
+      setup = function()
+        require("kide.core.layz_load").async_load("telescope-env.nvim")
+      end,
+      config = function()
+        require("telescope").load_extension("env")
+      end,
+    })
+
     -- git
     use({
       "tpope/vim-fugitive",
@@ -296,26 +352,6 @@ require("packer").startup({
       end,
     })
 
-    -- 异步任务执行插件
-    -- use 'skywind3000/asynctasks.vim'
-    -- use 'skywind3000/asyncrun.vim'
-    use({
-      "jedrzejboczar/toggletasks.nvim",
-      opt = true,
-      after = "toggleterm.nvim",
-      setup = function()
-        require("kide.core.layz_load").async_load("toggletasks.nvim")
-      end,
-      requires = {
-        "nvim-lua/plenary.nvim",
-        "akinsho/toggleterm.nvim",
-        "nvim-telescope/telescope.nvim/",
-      },
-      config = function()
-        require("kide.plugins.config.toggletasks")
-      end,
-    })
-
     -- 浮动窗口插件
     -- use 'voldikss/vim-floaterm'
     -- use 'voldikss/LeaderF-floaterm'
@@ -334,6 +370,26 @@ require("packer").startup({
             winblend = 0,
           },
         })
+      end,
+    })
+
+    -- 异步任务执行插件
+    -- use 'skywind3000/asynctasks.vim'
+    -- use 'skywind3000/asyncrun.vim'
+    use({
+      "jedrzejboczar/toggletasks.nvim",
+      opt = true,
+      after = "toggleterm.nvim",
+      setup = function()
+        require("kide.core.layz_load").async_load("toggletasks.nvim")
+      end,
+      requires = {
+        "nvim-lua/plenary.nvim",
+        "akinsho/toggleterm.nvim",
+        "nvim-telescope/telescope.nvim",
+      },
+      config = function()
+        require("kide.plugins.config.toggletasks")
       end,
     })
 
@@ -492,61 +548,6 @@ require("packer").startup({
       end,
     })
 
-    -- 搜索插件
-    use({
-      "nvim-telescope/telescope.nvim",
-      opt = true,
-      module = "telescope",
-      wants = "gruvbox.nvim",
-      after = "gruvbox.nvim",
-      requires = {
-        "nvim-lua/plenary.nvim",
-      },
-      config = function()
-        require("kide.plugins.config.telescope")
-      end,
-    })
-    use({
-      "nvim-telescope/telescope-ui-select.nvim",
-      after = "telescope.nvim",
-      setup = function()
-        require("kide.core.layz_load").async_load("telescope-ui-select.nvim")
-      end,
-      config = function()
-        require("telescope").load_extension("ui-select")
-      end,
-    })
-    use({
-      "nvim-telescope/telescope-fzf-native.nvim",
-      run = "make",
-      after = "telescope.nvim",
-      setup = function()
-        require("kide.core.layz_load").async_load("telescope-fzf-native.nvim")
-      end,
-      config = function()
-        require("telescope").load_extension("fzf")
-      end,
-    })
-    use({
-      "nvim-telescope/telescope-dap.nvim",
-      after = "telescope.nvim",
-      opt = true,
-    })
-
-    -- use 'GustavoKatel/telescope-asynctasks.nvim'
-    -- use 'aloussase/telescope-gradle.nvim'
-    -- use 'aloussase/telescope-mvnsearch'
-    use({
-      "LinArcX/telescope-env.nvim",
-      opt = true,
-      after = "telescope.nvim",
-      setup = function()
-        require("kide.core.layz_load").async_load("telescope-env.nvim")
-      end,
-      config = function()
-        require("telescope").load_extension("env")
-      end,
-    })
 
     -- 仪表盘
     -- use {'glepnir/dashboard-nvim'}
