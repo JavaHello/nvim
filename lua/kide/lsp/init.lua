@@ -75,10 +75,11 @@ local function lspSymbol(name, icon)
   vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
 end
 
-lspSymbol("Error", "")
-lspSymbol("Info", "")
-lspSymbol("Hint", "")
-lspSymbol("Warn", "")
+local lsp_ui = require("kide.lsp.lsp_ui")
+lspSymbol("Error", lsp_ui.diagnostics.icons.error)
+lspSymbol("Info", lsp_ui.diagnostics.icons.info)
+lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
+lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
 
 vim.diagnostic.config({
   virtual_text = true,
@@ -88,7 +89,6 @@ vim.diagnostic.config({
   severity_sort = false,
 })
 
-local lsp_ui = require("kide.lsp.lsp_ui")
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, lsp_ui.hover_actions)
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 

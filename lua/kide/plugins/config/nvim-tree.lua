@@ -10,7 +10,6 @@ require("nvim-tree").setup({
   auto_reload_on_write = true,
   open_on_tab = false,
   hijack_cursor = true,
-  update_cwd = false,
   actions = {
     use_system_clipboard = true,
     change_dir = {
@@ -30,22 +29,13 @@ require("nvim-tree").setup({
       },
     },
   },
-  diagnostics = {
-    enable = false,
-    icons = {
-      hint = "",
-      info = "",
-      warning = "",
-      error = "",
-    },
-  },
   update_focused_file = {
     enable = true,
     update_cwd = false,
     ignore_list = {},
   },
   system_open = {
-    cmd = nil,
+    cmd = "",
     args = {},
   },
   filters = {
@@ -77,11 +67,12 @@ require("nvim-tree").setup({
   },
   renderer = {
     indent_markers = {
-      enable = true,
+      enable = false,
       icons = {
-        corner = "└ ",
-        edge = "│ ",
-        none = "  ",
+        corner = "└",
+        edge = "│",
+        item = "│",
+        none = " ",
       },
     },
   },
