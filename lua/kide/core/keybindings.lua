@@ -340,4 +340,9 @@ M.hop_mapkey = function()
   -- map('o', '<leader>e', "<cmd> lua require'hop'.hint_words({ hint_position = require'hop.hint'.HintPosition.END, inclusive_jump = true })<cr>", opt)
 end
 
+M.ufo_mapkey = function()
+  -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+  vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+  vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+end
 return M

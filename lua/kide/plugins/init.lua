@@ -839,6 +839,25 @@ require("packer").startup({
       end,
     })
 
+    -- 折叠
+    use({
+      "kevinhwang91/promise-async",
+      opt = true,
+      module = "promise",
+    })
+    use({
+      "kevinhwang91/nvim-ufo",
+      opt = true,
+      require = "kevinhwang91/promise-async",
+      after = "promise-async",
+      setup = function()
+        require("kide.core.layz_load").async_load("nvim-ufo")
+      end,
+      config = function()
+        require("kide.plugins.config.nvim-ufo")
+      end,
+    })
+
     if bootstrap then
       require("packer").sync()
     end

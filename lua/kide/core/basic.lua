@@ -116,6 +116,14 @@ vim.opt.timeoutlen = 450
 vim.opt.signcolumn = "yes"
 vim.opt.mouse = "a"
 
+vim.o.foldcolumn = "1"
+-- 默认不要折叠
+-- https://stackoverflow.com/questions/8316139/how-to-set-the-default-to-unfolded-when-you-open-a-file
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+
+
 vim.cmd([[
 if exists('g:neovide')
     " let g:neovide_refresh_rate=60
