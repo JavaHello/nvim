@@ -41,6 +41,8 @@ git clone  https://github.com/JavaHello/nvim.git
 |     翻译 zh->en      |     `<leader>te`     |
 |       内置终端       |    `:ToggleTerm`     |
 |      Tasks 列表      |     `<leader>ts`     |
+|       代码折叠       |         `zc`         |
+|       代码展开       |      `zo`or`l`       |
 
 更多配置参考 [keybindings](./lua/kide/core/keybindings.lua) 文件
 
