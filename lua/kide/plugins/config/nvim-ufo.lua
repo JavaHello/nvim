@@ -1,4 +1,3 @@
-
 require("kide.core.keybindings").ufo_mapkey()
 
 -- Option 3: treesitter as a main provider instead
