@@ -36,6 +36,7 @@ format_lsp_mapping["yaml"] = "null-ls"
 format_lsp_mapping["markdown"] = "null-ls"
 format_lsp_mapping["graphql"] = "null-ls"
 format_lsp_mapping["handlebars"] = "null-ls"
+format_lsp_mapping["nginx"] = "null-ls"
 
 -- xmllint
 format_lsp_mapping["xml"] = "null-ls"

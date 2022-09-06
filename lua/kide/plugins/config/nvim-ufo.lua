@@ -10,6 +10,7 @@ local ftMap = {
   java = { "treesitter" },
   lua = { "treesitter" },
   html = { "treesitter" },
+  nginx = { "indent" },
   vim = "indent",
   python = { "indent" },
 }

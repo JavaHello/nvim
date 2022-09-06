@@ -78,6 +78,7 @@ local sources = {
   --     "cpp",
   --   },
   -- }),
+  null_ls.builtins.formatting.nginx_beautifier,
 }
 
 local lsp_formatting = function(bufnr)
