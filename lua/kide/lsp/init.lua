@@ -9,6 +9,7 @@ mason_lspconfig.setup({
     "rust_analyzer",
     "sqls",
     "gopls",
+    "kotlin_language_server",
   },
 })
 
@@ -26,6 +27,7 @@ local server_configs = {
   rust_analyzer = require("kide.lsp.rust_analyzer"),
   sqls = require("kide.lsp.sqls"),
   gopls = require("kide.lsp.gopls"),
+  kotlin_language_server = {},
 }
 
 -- Setup lspconfig.
