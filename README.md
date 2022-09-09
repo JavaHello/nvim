@@ -2,6 +2,8 @@
 
 可配置 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发环境。 极速启动 (60 ~ 100 ms), 注重细节。
 
+推荐使用 `neovim master` 版本，提前享受新功能 😊。
+
 ## 安装
 
 ### Linux, Mac
