@@ -30,8 +30,8 @@ cmp.setup({
     -- -- For snippy users.
     -- { name = 'snippy' },
   }, {
-    { name = "buffer" },
     { name = "path" },
+    { name = "buffer" },
   }),
 
   -- 快捷键
