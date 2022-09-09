@@ -223,6 +223,17 @@ M.maplsp = function(client, buffer)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<CR>", opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xd", "<cmd>Trouble document_diagnostics<CR>", opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xq", "<cmd>Trouble quickfix<CR>", opt)
+
+  -- <= 0.7.x
+  if client.resolved_capabilities["document_highlight"] then
+    vim.cmd(string.format("au CursorHold  <buffer=%d> lua vim.lsp.buf.document_highlight()", buffer))
+    vim.cmd(string.format("au CursorHoldI <buffer=%d> lua vim.lsp.buf.document_highlight()", buffer))
+    vim.cmd(string.format("au CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()", buffer))
+  end
+  if vim.lsp.codelens and client.resolved_capabilities["code_lens"] then
+    vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", opt)
+    vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>ce", "<Cmd>lua vim.lsp.codelens.run()<CR>", opt)
+  end
 end
 
 -- nvim-cmp 自动补全

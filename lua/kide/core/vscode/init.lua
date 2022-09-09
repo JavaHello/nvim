@@ -8,12 +8,14 @@ M.get_vscode_extensions = function()
 end
 M.find_one = function(extension_path)
   local v = vim.fn.glob(M.get_vscode_extensions() .. extension_path)
-  if type(v) == "string" then
-    return vim.split(v, "\n")[1]
-  elseif type(v) == "table" then
-    return v[1]
+  if v and v ~= "" then
+    if type(v) == "string" then
+      return vim.split(v, "\n")[1]
+    elseif type(v) == "table" then
+      return v[1]
+    end
+    return v
   end
-  return v
 end
 
 return M

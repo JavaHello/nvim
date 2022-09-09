@@ -82,6 +82,11 @@ vim.list_extend(bundles, vim.split(vim.fn.glob(java_decoompiler_path .. "/*.jar"
 local java_dependency_path = vscode.find_one("/vscjava.vscode-java-dependency-*/server")
 vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
 
+local vscode_pde_path = vscode.find_one("/yaozheng.vscode-pde-*/server")
+if vscode_pde_path then
+  vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
+end
+
 local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
 
 -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
@@ -155,8 +160,8 @@ local config = {
           "**/.idea/**",
         },
       },
-      -- referenceCodeLens = { enabled = true },
-      -- implementationsCodeLens = { enabled = true },
+      referenceCodeLens = { enabled = true },
+      implementationsCodeLens = { enabled = true },
       templates = {
         fileHeader = {
           "/**",
@@ -289,12 +294,12 @@ config["on_attach"] = function(client, buffer)
   create_command(buffer, "OR", require("jdtls").organize_imports, {
     nargs = 0,
   })
-  if vim.g.jdtls_dap_main_class_config_init then
-    vim.defer_fn(function()
-      require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
-    end, 3000)
-    vim.g.jdtls_dap_main_class_config_init = false
-  end
+  -- if vim.g.jdtls_dap_main_class_config_init then
+  --   vim.defer_fn(function()
+  --     require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
+  --   end, 3000)
+  --   vim.g.jdtls_dap_main_class_config_init = false
+  -- end
 
   require("nvim-navic").attach(client, buffer)
   -- require('java-deps').attach(client, bufnr)
@@ -312,6 +317,8 @@ local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protoco
 -- }
 
 config.capabilities = capabilities
+-- config.handlers = {}
+-- config.handlers["language/status"] = function() end
 
 local function markdown_format(input)
   if input then
