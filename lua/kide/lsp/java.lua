@@ -49,7 +49,11 @@ end)()
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 
 local workspace_dir = get_jdtls_workspace() .. project_name
-local jdtls_path = vscode.find_one("/redhat.java-*/server")
+-- local jdtls_path = vscode.find_one("/redhat.java-*/server")
+local function get_jdtls_path()
+  return or_default(env.JDTLS_HOME, vscode.find_one("/redhat.java-*/server"))
+end
+local jdtls_path = get_jdtls_path()
 
 local jdtls_launcher = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
 
