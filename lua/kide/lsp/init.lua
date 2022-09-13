@@ -10,6 +10,7 @@ mason_lspconfig.setup({
     "sqls",
     "gopls",
     "kotlin_language_server",
+    "vuels",
   },
 })
 
@@ -28,6 +29,7 @@ local server_configs = {
   sqls = require("kide.lsp.sqls"),
   gopls = require("kide.lsp.gopls"),
   kotlin_language_server = {},
+  vuels = {},
 }
 
 -- Setup lspconfig.

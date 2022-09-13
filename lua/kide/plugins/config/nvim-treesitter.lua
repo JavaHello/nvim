@@ -20,6 +20,7 @@ require("nvim-treesitter.configs").setup({
     "org",
     "norg",
     "kotlin",
+    "vue",
   },
 
   -- Install languages synchronously (only applied to `ensure_installed`)
