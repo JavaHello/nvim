@@ -15,7 +15,7 @@ end
 
 -- 指定格式化 lsp_client
 local format_lsp_mapping = {}
-format_lsp_mapping["java"] = "jdt.ls"
+format_lsp_mapping["java"] = "jdtls"
 
 -- sql_formatter
 format_lsp_mapping["sql"] = "null-ls"
