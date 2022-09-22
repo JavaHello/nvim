@@ -590,10 +590,7 @@ require("packer").startup({
     use({
       "dhruvasagar/vim-table-mode",
       opt = true,
-      setup = function()
-        -- on_file_open("vim-table-mode")
-        require("kide.core.layz_load").async_load("vim-table-mode")
-      end,
+      cmd = { "TableModeEnable" },
     })
 
     -- () 自动补全
@@ -704,19 +701,14 @@ require("packer").startup({
     use({
       "jbyuki/venn.nvim",
       opt = true,
-      setup = function()
-        -- on_file_open("venn.nvim")
-        require("kide.core.layz_load").async_load("venn.nvim")
-      end,
+      cmd = { "VBox" },
     })
 
     use({
       "tversteeg/registers.nvim",
       opt = true,
-      setup = function()
-        -- on_file_open("registers.nvim")
-        require("kide.core.layz_load").async_load("registers.nvim")
-      end,
+      cmd = { "Registers" },
+      keys = '"',
     })
 
     -- databases
