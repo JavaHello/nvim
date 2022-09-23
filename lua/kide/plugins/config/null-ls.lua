@@ -29,7 +29,7 @@ local sources = {
   -- sh
   null_ls.builtins.code_actions.shellcheck,
   null_ls.builtins.diagnostics.shellcheck,
-  null_ls.builtins.formatting.shellharden,
+  null_ls.builtins.formatting.shfmt,
   -- lua
   null_ls.builtins.formatting.stylua,
   -- word
