@@ -51,6 +51,7 @@ autocmd("FileType", {
     "http",
     "markdown",
     "lisp",
+    "sh",
   },
   callback = function()
     vim.opt_local.tabstop = 2
