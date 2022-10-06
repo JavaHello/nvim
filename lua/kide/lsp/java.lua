@@ -33,7 +33,7 @@ end
 
 local vscode = require("kide.core.vscode")
 local function get_lombok_jar()
-  return or_default(env.LOMBOK_JAR, vscode.find_one("/vscjava.vscode-lombok-*/server/lombok.jar"))
+  return or_default(env.LOMBOK_JAR, "/opt/software/lsp/lombok.jar")
 end
 
 local _config = (function()
