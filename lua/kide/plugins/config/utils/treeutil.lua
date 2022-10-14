@@ -1,9 +1,10 @@
-local openfile = require("nvim-tree.actions.open-file")
+local lib = require("nvim-tree.lib")
+local openfile = require("nvim-tree.actions.node.open-file")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 local M = {}
 
-local view_selection = function(prompt_bufnr, _)
+local view_selection = function(prompt_bufnr, map)
   actions.select_default:replace(function()
     actions.close(prompt_bufnr)
     local selection = action_state.get_selected_entry()
