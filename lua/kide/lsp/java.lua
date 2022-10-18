@@ -274,6 +274,7 @@ local jdtls = require("jdtls")
 
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
+extendedClientCapabilities.progressReportProvider = false
 
 config["init_options"] = {
   bundles = bundles,
@@ -328,6 +329,10 @@ config.handlers["language/status"] = function(_, s)
     require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
   end
 end
+
+-- java 暂时兼容 fidget, 等待上游支持
+vim.lsp.handlers["$/progress"] = nil
+require("fidget").setup({})
 
 local function markdown_format(input)
   if input then
