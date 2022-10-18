@@ -61,8 +61,8 @@ M.open_jdt_link = function(uri, buf, timeout)
   end
   vim.api.nvim_buf_set_option(buf, "modifiable", true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, buf_content)
-  -- vim.api.nvim_buf_set_option(buf, "filetype", "java")
-  vim.api.nvim_buf_set_option(buf, "syntax", "java")
+  vim.api.nvim_buf_set_option(buf, "filetype", "java")
+  -- vim.api.nvim_buf_set_option(buf, "syntax", "java")
   vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end
 return M

@@ -214,6 +214,10 @@ require("packer").startup({
       "mfussenegger/nvim-jdtls",
       opt = true,
       ft = "java",
+      setup = function()
+        -- 不加载 nvim-jdtls.vim
+        vim.g.nvim_jdtls = 1
+      end,
       config = function()
         require("kide.lsp.java").init()
       end,
