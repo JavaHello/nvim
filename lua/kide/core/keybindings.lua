@@ -218,6 +218,13 @@ M.maplsp = function(client, buffer)
   -- mapbuf('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opt)
 
   vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>xw", "<cmd>Telescope diagnostics<CR>", opt)
+  vim.api.nvim_buf_set_keymap(
+    buffer,
+    "n",
+    "<leader>xe",
+    "<cmd>lua require('telescope.builtin').diagnostics({ severity = vim.diagnostic.severity.ERROR })<CR>",
+    opt
+  )
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<CR>", opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xx", "<cmd>Trouble<CR>", opt)
   -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<CR>", opt)
