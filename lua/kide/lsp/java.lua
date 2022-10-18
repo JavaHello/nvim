@@ -343,6 +343,7 @@ config.handlers["language/status"] = function(_, s)
 end
 
 -- java 暂时兼容 fidget, 等待上游支持
+-- https://github.com/eclipse/eclipse.jdt.ls/pull/2258
 vim.lsp.handlers["$/progress"] = nil
 require("fidget").setup({})
 
