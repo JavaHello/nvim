@@ -324,7 +324,8 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protoc
 config.capabilities = capabilities
 config.handlers = {}
 config.handlers["language/status"] = function(_, s)
-  print("jdtls " .. s.type .. ": " .. s.message)
+  -- 使用 progress 查看状态
+  -- print("jdtls " .. s.type .. ": " .. s.message)
   if "ServiceReady" == s.type then
     require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
   end
