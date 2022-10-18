@@ -22,6 +22,11 @@ end
 local function get_java_home()
   return or_default(env.JAVA_HOME, "/opt/software/java/zulu17.34.19-ca-jdk17.0.3-macosx_aarch64")
 end
+local function get_java_ver_home(v, dv)
+  local java_home =  os.getenv("JAVA_" .. v .. "_HOME") or dv
+  print(java_home)
+  return java_home;
+end
 
 local function get_java()
   return get_java_home() .. "/bin/java"
@@ -233,16 +238,16 @@ local config = {
         runtimes = {
           {
             name = "JavaSE-1.8",
-            path = "/opt/software/java/zulu8.62.0.19-ca-jdk8.0.332-macosx_aarch64",
+            path = get_java_ver_home("8", "/opt/software/java/zulu8.62.0.19-ca-jdk8.0.332-macosx_aarch64"),
             default = true,
           },
           {
             name = "JavaSE-11",
-            path = "/opt/software/java/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64",
+            path = get_java_ver_home("11", "/opt/software/java/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64"),
           },
           {
             name = "JavaSE-17",
-            path = "/opt/software/java/graalvm-ce-java17-22.1.0/Contents/Home",
+            path = get_java_ver_home("17", "/opt/software/java/graalvm-ce-java17-22.1.0/Contents/Home"),
           },
         },
       },
