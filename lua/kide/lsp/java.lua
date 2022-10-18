@@ -331,12 +331,7 @@ config.handlers["language/status"] = function(_, s)
 end
 
 -- java 暂时兼容 fidget, 等待上游支持
-local old_progress = vim.lsp.handlers["$/progres"]
-vim.lsp.handlers["$/progress"] = function(err, result, ctx, cfg)
-  if old_progress then
-    old_progress(err, result, ctx, cfg)
-  end
-end
+vim.lsp.handlers["$/progress"] = nil
 require("fidget").setup({})
 
 local function markdown_format(input)
