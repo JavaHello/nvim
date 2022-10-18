@@ -447,9 +447,7 @@ M.init = function()
   vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
     pattern = "jdt://*",
     callback = function(e)
-      if e.file then
-        require("jdtls").open_jdt_link(e.file)
-      end
+      require("jdtls").open_jdt_link(e.file)
     end,
   })
   vim.api.nvim_create_user_command("JdtWipeDataAndRestart", "lua require('jdtls.setup').wipe_data_and_restart()", {})
