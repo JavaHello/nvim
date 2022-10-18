@@ -65,29 +65,37 @@ local jdtls_config = vim.fn.glob(jdtls_path .. "/" .. _config)
 local bundles = {}
 -- This bundles definition is the same as in the previous section (java-debug installation)
 local vscode_java_debug_path = vscode.find_one("/vscjava.vscode-java-debug-*/server")
-vim.list_extend(
-  bundles,
-  vim.split(vim.fn.glob(vscode_java_debug_path .. "/com.microsoft.java.debug.plugin-*.jar"), "\n")
-)
+if vscode_java_debug_path then
+  vim.list_extend(
+    bundles,
+    vim.split(vim.fn.glob(vscode_java_debug_path .. "/com.microsoft.java.debug.plugin-*.jar"), "\n")
+  )
+end
 
 -- /opt/software/lsp/java/vscode-java-test/server
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
 local vscode_java_test_path = vscode.find_one("/vscjava.vscode-java-test-*/server")
-for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
-  if not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar") then
-    table.insert(bundles, bundle)
+if vscode_java_test_path then
+  for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
+    if not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar") then
+      table.insert(bundles, bundle)
+    end
   end
 end
 
 -- /opt/software/lsp/java/vscode-java-decompiler/server/
 local java_decoompiler_path = vscode.find_one("/dgileadi.java-decompiler-*/server")
-vim.list_extend(bundles, vim.split(vim.fn.glob(java_decoompiler_path .. "/*.jar"), "\n"))
+if java_decoompiler_path then
+  vim.list_extend(bundles, vim.split(vim.fn.glob(java_decoompiler_path .. "/*.jar"), "\n"))
+end
 
 -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
 -- /opt/software/lsp/java/vscode-java-dependency/server/
 local java_dependency_path = vscode.find_one("/vscjava.vscode-java-dependency-*/server")
-vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
+if java_dependency_path then
+  vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
+end
 
 local vscode_pde_path = vscode.find_one("/yaozheng.vscode-pde-*/server")
 if vscode_pde_path then
