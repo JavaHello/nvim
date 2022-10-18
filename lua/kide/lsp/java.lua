@@ -23,9 +23,7 @@ local function get_java_home()
   return or_default(env.JAVA_HOME, "/opt/software/java/zulu17.34.19-ca-jdk17.0.3-macosx_aarch64")
 end
 local function get_java_ver_home(v, dv)
-  local java_home =  os.getenv("JAVA_" .. v .. "_HOME") or dv
-  print(java_home)
-  return java_home;
+  return os.getenv("JAVA_" .. v .. "_HOME") or dv
 end
 
 local function get_java()
