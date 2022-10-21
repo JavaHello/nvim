@@ -3,10 +3,14 @@ local vscode = require("kide.core.vscode")
 local extension_path = vscode.find_one("/vadimcn.vscode-lldb-*")
 
 M.config = {}
-M.config.codelldb_path = extension_path .. "/adapter/codelldb"
-M.config.liblldb_path = extension_path .. "/lldb/lib/liblldb.dylib"
 
 M.setup = function(config)
+  if not extension_path then
+    vim.notify("codelldb not found", vim.log.levels.WARN)
+    return nil
+  end
+  M.config.codelldb_path = extension_path .. "/adapter/codelldb"
+  M.config.liblldb_path = extension_path .. "/lldb/lib/liblldb.dylib"
   if config then
     M.config = vim.tbl_deep_extend("force", M.config, config)
   end
