@@ -55,7 +55,8 @@ git clone  https://github.com/JavaHello/nvim.git
 [NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE-vscode.html)
 更新了配置，全部使用 vscode 扩展，简化安装步骤。
 
-如果使用长时间后感觉卡顿，关闭下所有`buffer`, `:%bw`。
+- 如果使用长时间后感觉卡顿，关闭下所有`buffer`, `:%bw`。
+- 搜索依赖`jar`包`class`很慢的问题。在搜索框输入会频繁的请求`LSP server`导致内存和`CPU`提升,通常需要好几秒才会返回结果。建议复制类名称到搜索框，或者选择类名后按下`<leader>fs`, 这样会很快搜索出相关的`class`。
 
 ### 功能演示
 
