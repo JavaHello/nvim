@@ -10,7 +10,7 @@ M.setup = function(config)
     return nil
   end
   M.config.codelldb_path = extension_path .. "/adapter/codelldb"
-  M.config.liblldb_path = extension_path .. "/lldb/lib/liblldb.dylib"
+  -- M.config.liblldb_path = extension_path .. "/lldb/lib/liblldb.dylib"
   if config then
     M.config = vim.tbl_deep_extend("force", M.config, config)
   end
@@ -28,7 +28,7 @@ M.setup = function(config)
     local stderr = vim.loop.new_pipe(false)
     local opts = {
       stdio = { nil, stdout, stderr },
-      args = { "--port", tostring(port), "--liblldb", M.config.liblldb_path },
+      args = { "--port", tostring(port) },
     }
     local handle
     local pid_or_err
