@@ -13,6 +13,8 @@ cd ~/.config
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
+> 此配置在 Linux, Mac 长期使用
+
 ### Windows
 
 ```sh
