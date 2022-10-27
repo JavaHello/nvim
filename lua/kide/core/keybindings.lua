@@ -158,6 +158,7 @@ M.maplsp = function(client, buffer)
   -- mapbuf('n', '<leader>rn', '<cmd>lua require("lspsaga.rename").rename()<CR>', opt)
   -- code action
   vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "v", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opt)
   -- mapbuf('n', '<leader>ca', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opt)
   -- go xx
   -- mapbuf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
