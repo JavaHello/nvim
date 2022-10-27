@@ -5,7 +5,18 @@ M.format_range_operator = function()
   _G.op_func_formatting = function()
     local start = vim.api.nvim_buf_get_mark(0, "[")
     local finish = vim.api.nvim_buf_get_mark(0, "]")
-    vim.lsp.buf.range_formatting({}, start, finish)
+
+    local bfn = vim.api.nvim_get_current_buf()
+    vim.lsp.buf.format({
+      bufnr = bfn,
+      filter = function(c)
+        return require("kide.lsp.utils").filter_format_lsp_client(c, bfn)
+      end,
+      range = {
+        start,
+        finish,
+      },
+    })
     vim.go.operatorfunc = old_func
     _G.op_func_formatting = nil
   end
