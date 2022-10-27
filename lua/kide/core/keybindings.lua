@@ -204,13 +204,22 @@ M.maplsp = function(client, buffer)
       end,
     })
   end, opt)
-  vim.api.nvim_buf_set_keymap(
-    buffer,
-    "v",
-    "<leader>=",
-    '<cmd>lua require("kide.lsp.utils").format_range_operator()<CR>',
-    opt
-  )
+  keymap("v", "<leader>=", function()
+    local bfn = vim.api.nvim_get_current_buf()
+    vim.lsp.buf.format({
+      bufnr = bfn,
+      filter = function(c)
+        return require("kide.lsp.utils").filter_format_lsp_client(c, bfn)
+      end,
+    })
+  end, opt)
+  -- vim.api.nvim_buf_set_keymap(
+  --   buffer,
+  --   "v",
+  --   "<leader>=",
+  --   '<cmd>lua require("kide.lsp.utils").format_range_operator()<CR>',
+  --   opt
+  -- )
   -- mapbuf('v', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt)
   -- mapbuf('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opt)
   -- mapbuf('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opt)
