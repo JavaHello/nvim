@@ -255,6 +255,10 @@ local config = {
             name = "JavaSE-17",
             path = get_java_ver_home("17", "/opt/software/java/graalvm-ce-java17-22.1.0/Contents/Home"),
           },
+          {
+            name = "JavaSE-19",
+            path = get_java_ver_home("19", "/opt/software/java/graalvm-ce-java19-22.3.0/Contents/Home"),
+          },
         },
       },
       -- referencesCodeLens = {
