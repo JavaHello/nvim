@@ -8,6 +8,7 @@ local env = {
   JDTLS_HOME = os.getenv("JDTLS_HOME"),
   JDTLS_WORKSPACE = os.getenv("JDTLS_WORKSPACE"),
   LOMBOK_JAR = os.getenv("LOMBOK_JAR"),
+  JOL_JAR = os.getenv("JOL_JAR"),
 }
 
 local function or_default(a, v)
@@ -37,6 +38,10 @@ end
 local vscode = require("kide.core.vscode")
 local function get_lombok_jar()
   return or_default(env.LOMBOK_JAR, "/opt/software/lsp/lombok.jar")
+end
+
+local function get_jol_jar()
+  return env.JOL_JAR or "/opt/software/java/jol-cli-0.16-full.jar"
 end
 
 local _config = (function()
@@ -286,6 +291,7 @@ local config = {
 }
 
 local jdtls = require("jdtls")
+jdtls.jol_path = get_jol_jar()
 
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
