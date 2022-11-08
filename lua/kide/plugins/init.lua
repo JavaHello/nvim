@@ -255,6 +255,7 @@ require("packer").startup({
       module = "telescope",
       wants = "gruvbox.nvim",
       after = "gruvbox.nvim",
+      tag = "0.1.x",
       requires = {
         "nvim-lua/plenary.nvim",
       },
