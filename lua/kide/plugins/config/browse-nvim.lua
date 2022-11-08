@@ -6,11 +6,9 @@ browse.setup({
 })
 
 local bookmarks = {
-  "https://github.com/hoob3rt/lualine.nvim",
-  "https://github.com/neovim/neovim",
-  "https://neovim.discourse.group/",
-  "https://github.com/nvim-telescope/telescope.nvim",
-  "https://github.com/rockerBOO/awesome-neovim",
+  "https://docs.spring.io/spring-framework/docs/5.3.12/reference/html/",
+  "https://github.com/",
+  "https://stackoverflow.com/",
 }
 
 local function command(name, rhs, opts)
