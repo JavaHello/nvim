@@ -13,7 +13,6 @@ cd ~/.config
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
-> 此配置在 Linux, Mac 系统上长期使用
 
 ### Windows
 
@@ -21,6 +20,8 @@ git clone  https://github.com/JavaHello/nvim.git
 cd $env:LOCALAPPDATA
 git clone  https://github.com/JavaHello/nvim.git
 ```
+
+> 此配置在 Linux, Mac, Windows (推荐使用 scoop 安装依赖) 系统上长期使用
 
 ## 快捷键
 
