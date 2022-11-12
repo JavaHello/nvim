@@ -125,6 +125,7 @@ local config = {
     "-Dlog.protocol=true",
     "-Dlog.level=ALL",
     "-Dsun.zip.disableMemoryMapping=true",
+    -- "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16",
     -- "-noverify",
     -- '-XX:+UseParallelGC',
     -- '-XX:GCTimeRatio=4',
