@@ -5,6 +5,7 @@ local env = {
   JAVA_HOME = os.getenv("JAVA_HOME"),
   MAVEN_HOME = os.getenv("MAVEN_HOME"),
   MAVEN_SETTINGS = os.getenv("MAVEN_SETTINGS"),
+  JDTLS_RUN_JAVA = os.getenv("JDTLS_RUN_JAVA"),
   JDTLS_HOME = os.getenv("JDTLS_HOME"),
   JDTLS_WORKSPACE = os.getenv("JDTLS_WORKSPACE"),
   LOMBOK_JAR = os.getenv("LOMBOK_JAR"),
@@ -28,7 +29,7 @@ local function get_java_ver_home(v, dv)
 end
 
 local function get_java()
-  return get_java_home() .. "/bin/java"
+  return or_default(env.JDTLS_RUN_JAVA, get_java_home() .. "/bin/java")
 end
 
 local function get_jdtls_workspace()
