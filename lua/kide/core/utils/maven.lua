@@ -18,8 +18,13 @@ M.maven_command = function(buf, settings)
   end, {
     nargs = 0,
   })
-  vim.api.nvim_buf_create_user_command(buf, "MavenPkg", function()
+  vim.api.nvim_buf_create_user_command(buf, "MavenPpckage", function()
     require("toggleterm").exec("mvn clean package" .. settings_opt(settings))
+  end, {
+    nargs = 0,
+  })
+  vim.api.nvim_buf_create_user_command(buf, "MavenDependency", function()
+    require("toggleterm").exec("mvn dependency:tree -Doutput=.dependency.txt" .. settings_opt(settings))
   end, {
     nargs = 0,
   })
