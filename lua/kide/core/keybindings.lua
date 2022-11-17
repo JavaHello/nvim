@@ -139,7 +139,7 @@ nnoremap <C-l> <C-w>l
   map("n", "<leader>S", "<cmd>lua require('spectre').open()<CR>", opt)
   -- search current word
   map("n", "<leader>fr", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
-  map("v", "<leader>fr", "<cmd>lua require('spectre').open_visual()<CR>", opt)
+  map("v", "<leader>fr", "<esc>:lua require('spectre').open_visual()<CR>", opt)
   --  search in current file
   -- map("n", "<leader>fp", "viw:lua require('spectre').open_file_search()<cr>", opt)
   -- run command :Spectre
