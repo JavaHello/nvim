@@ -21,7 +21,7 @@ cd $env:LOCALAPPDATA
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
-> 此配置在 Linux, Mac, Windows (推荐使用 scoop 安装依赖) 系统上长期使用
+> 此配置在 Linux, Mac, Windows (推荐使用 [scoop](https://scoop.sh/) 安装依赖) 系统上长期使用
 
 ## 快捷键
 
