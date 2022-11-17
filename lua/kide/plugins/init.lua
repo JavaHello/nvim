@@ -668,16 +668,13 @@ require("packer").startup({
 
     -- 快速跳转
     use({
-      "phaazon/hop.nvim",
+      "ggandor/leap.nvim",
       opt = true,
-      branch = "v2",
       setup = function()
-        -- on_file_open("hop.nvim")
-        require("kide.core.layz_load").async_load("hop.nvim")
+        require("kide.core.layz_load").async_load("leap.nvim")
       end,
       config = function()
-        require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
-        require("kide.core.keybindings").hop_mapkey()
+        require("leap").add_default_mappings()
       end,
     })
 
