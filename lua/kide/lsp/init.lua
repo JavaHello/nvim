@@ -37,7 +37,7 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protoc
 -- 没有确定使用效果参数
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 local utils = require("kide.core.utils")
-local navic_unsupported = { "sqls" }
+local navic_unsupported = { sqls = true }
 
 require("mason-lspconfig").setup_handlers({
   -- The first entry (without a key) will be the default handler
