@@ -37,6 +37,7 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protoc
 -- 没有确定使用效果参数
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 local utils = require("kide.core.utils")
+local navic_unsupported = { "sqls" }
 
 require("mason-lspconfig").setup_handlers({
   -- The first entry (without a key) will be the default handler
@@ -54,7 +55,9 @@ require("mason-lspconfig").setup_handlers({
     scfg.on_attach = function(client, buffer)
       -- 绑定快捷键
       require("kide.core.keybindings").maplsp(client, buffer)
-      require("nvim-navic").attach(client, buffer)
+      if not navic_unsupported[client.name] then
+        require("nvim-navic").attach(client, buffer)
+      end
       if on_attach then
         on_attach(client, buffer)
       end
