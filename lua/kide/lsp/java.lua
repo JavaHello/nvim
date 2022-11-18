@@ -3,22 +3,16 @@ local cutils = require("kide.core.utils")
 local env = {
   HOME = vim.loop.os_homedir(),
   JAVA_HOME = os.getenv("JAVA_HOME"),
-  MAVEN_HOME = os.getenv("MAVEN_HOME"),
-  MAVEN_SETTINGS = os.getenv("MAVEN_SETTINGS"),
   JDTLS_RUN_JAVA = os.getenv("JDTLS_RUN_JAVA"),
   JDTLS_HOME = os.getenv("JDTLS_HOME"),
   JDTLS_WORKSPACE = os.getenv("JDTLS_WORKSPACE"),
   LOMBOK_JAR = os.getenv("LOMBOK_JAR"),
   JOL_JAR = os.getenv("JOL_JAR"),
 }
+local maven = require("kide.core.utils.maven")
 
 local function or_default(a, v)
   return require("kide.core.utils").or_default(a, v)
-end
-
-local maven_settings = env.MAVEN_HOME .. "/conf/settings.xml"
-local function get_maven_settings()
-  return or_default(env.MAVEN_SETTINGS, maven_settings)
 end
 
 local function get_java_home()
@@ -245,8 +239,8 @@ local config = {
         maven = {
           --          userSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
           --          globalSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
-          userSettings = get_maven_settings(),
-          globalSettings = get_maven_settings(),
+          userSettings = maven.get_maven_settings(),
+          globalSettings = maven.get_maven_settings(),
         },
         runtimes = {
           {
@@ -330,7 +324,7 @@ config["on_attach"] = function(client, buffer)
   -- end
 
   require("nvim-navic").attach(client, buffer)
-  require("kide.core.utils.maven").maven_command(buffer, get_maven_settings())
+  maven.maven_command(buffer)
   -- require('java-deps').attach(client, bufnr)
   -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
 end
