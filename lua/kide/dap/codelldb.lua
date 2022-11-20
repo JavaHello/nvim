@@ -7,7 +7,7 @@ M.config = {}
 M.setup = function(config)
   if not extension_path then
     vim.notify("codelldb not found", vim.log.levels.WARN)
-    return nil
+    return false
   end
   M.config.codelldb_path = extension_path .. "/adapter/codelldb"
   -- M.config.liblldb_path = extension_path .. "/lldb/lib/liblldb.dylib"
@@ -82,5 +82,6 @@ M.setup = function(config)
   }
   dap.configurations.c = dap.configurations.cpp
   dap.configurations.rust = dap.configurations.cpp
+  return true
 end
 return M

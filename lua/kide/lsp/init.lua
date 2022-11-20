@@ -2,15 +2,6 @@ local mason_lspconfig = require("mason-lspconfig")
 mason_lspconfig.setup({
   ensure_installed = {
     "sumneko_lua",
-    "clangd",
-    "tsserver",
-    "html",
-    "pyright",
-    "rust_analyzer",
-    "sqls",
-    "gopls",
-    "kotlin_language_server",
-    "vuels",
   },
 })
 
