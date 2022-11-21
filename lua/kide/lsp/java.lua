@@ -82,6 +82,7 @@ local runtimes = (function()
   if #result == 0 then
     vim.notify("Please config Java runtimes (JAVA_8_HOME...)")
   end
+  return result;
 end)()
 
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
