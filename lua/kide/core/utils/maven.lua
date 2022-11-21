@@ -28,24 +28,58 @@ end
 local exec = function(cmd, pom)
   require("toggleterm").exec(cmd .. settings_opt(M.get_maven_settings()) .. pom_file(pom))
 end
-local function create_command(buf, name, cmd)
-  vim.api.nvim_buf_create_user_command(buf, name, function()
-    exec(cmd, vim.fn.expand("%"))
+local function create_command(buf, name, cmd, complete)
+  vim.api.nvim_buf_create_user_command(buf, name, function(opts)
+    if opts.args then
+      exec(cmd .. " " .. opts.args, vim.fn.expand("%"))
+    else
+      exec(cmd, vim.fn.expand("%"))
+    end
   end, {
-    nargs = 0,
+    nargs = "*",
+    complete = complete,
   })
 end
 
+local function maven_args_complete(complete, deduplicate)
+  if complete then
+    return function(_, cmd_line, _)
+      if deduplicate then
+        local args = vim.split(cmd_line, " ")
+        return vim.tbl_filter(function(item)
+          return not vim.tbl_contains(args, item)
+        end, complete)
+      else
+        return complete
+      end
+    end
+  end
+end
+
 M.maven_command = function(buf)
-  create_command(buf, "MavenCompile", "mvn compile test-compile")
-  create_command(buf, "MavenInstll", "mvn clean install")
-  create_command(buf, "MavenInstllSkipTest", "mvn clean install -DskipTests")
-  create_command(buf, "MavenPpckage", "mvn clean package")
-  create_command(buf, "MavenPpckageSkipTest", "mvn clean package -DskipTests")
-  create_command(buf, "MavenDependencyTree", "mvn dependency:tree -Doutput=.dependency.txt")
+  create_command(buf, "MavenCompile", "mvn compile", maven_args_complete({ "test-compile" }, true))
+  create_command(
+    buf,
+    "MavenInstll",
+    "mvn clean install",
+    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, true)
+  )
+  create_command(
+    buf,
+    "MavenPackage",
+    "mvn clean package",
+    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, true)
+  )
+  create_command(
+    buf,
+    "MavenDependencyTree",
+    "mvn dependency:tree",
+    maven_args_complete({ "-Doutput=.dependency.txt" }, true)
+  )
   create_command(buf, "MavenDependencyAnalyzeDuplicate", "mvn dependency:analyze-duplicate")
   create_command(buf, "MavenDependencyAnalyzeOnly", "mvn dependency:analyze-only -Dverbose")
   create_command(buf, "MavenDownloadSources", "mvn dependency:sources -DdownloadSources=true")
+  create_command(buf, "MavenTest", "mvn test", maven_args_complete({ "-Dtest=" }))
 end
 
 M.setup = function()
