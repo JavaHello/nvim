@@ -49,6 +49,41 @@ local _config = (function()
   end
 end)()
 
+local runtimes = (function()
+  local result = {}
+  for _, value in ipairs({
+    {
+      name = "JavaSE-1.8",
+      version = "8",
+      default = true,
+    },
+    {
+      name = "JavaSE-11",
+      version = "11",
+    },
+    {
+      name = "JavaSE-17",
+      version = "17",
+    },
+    {
+      name = "JavaSE-19",
+      version = "19",
+    },
+  }) do
+    local java_home = get_java_ver_home(value.version)
+    if java_home then
+      table.insert(result, {
+        name = value.name,
+        path = java_home,
+        default = value.default,
+      })
+    end
+  end
+  if #result == 0 then
+    vim.notify("Please config Java runtimes (JAVA_8_HOME...)")
+  end
+end)()
+
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 
 local workspace_dir = get_jdtls_workspace() .. project_name
@@ -242,25 +277,7 @@ local config = {
           userSettings = maven.get_maven_settings(),
           globalSettings = maven.get_maven_settings(),
         },
-        runtimes = {
-          {
-            name = "JavaSE-1.8",
-            path = get_java_ver_home("8", "/opt/software/java/zulu8.62.0.19-ca-jdk8.0.332-macosx_aarch64"),
-            default = true,
-          },
-          {
-            name = "JavaSE-11",
-            path = get_java_ver_home("11", "/opt/software/java/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64"),
-          },
-          {
-            name = "JavaSE-17",
-            path = get_java_ver_home("17", "/opt/software/java/graalvm-ce-java17-22.1.0/Contents/Home"),
-          },
-          {
-            name = "JavaSE-19",
-            path = get_java_ver_home("19", "/opt/software/java/graalvm-ce-java19-22.3.0/Contents/Home"),
-          },
-        },
+        runtimes = runtimes,
       },
       -- referencesCodeLens = {
       --   enabled = true,
@@ -370,7 +387,7 @@ end
 
 local function split_lines(value)
   value = string.gsub(value, "\r\n?", "\n")
-  return vim.split(value, "\n", true)
+  return vim.split(value, "\n", { plain = true })
 end
 function M.convert_input_to_markdown_lines(input, contents)
   contents = contents or {}
