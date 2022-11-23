@@ -82,7 +82,7 @@ local runtimes = (function()
   if #result == 0 then
     vim.notify("Please config Java runtimes (JAVA_8_HOME...)")
   end
-  return result;
+  return result
 end)()
 
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
@@ -367,10 +367,13 @@ config.handlers["language/status"] = function(_, s)
   end
 end
 
--- java 暂时兼容 fidget, 等待上游支持
--- https://github.com/eclipse/eclipse.jdt.ls/pull/2258
-vim.lsp.handlers["$/progress"] = nil
-require("fidget").setup({})
+if not env.JDTLS_HOME then
+  -- java 暂时兼容 fidget, 等待上游支持
+  -- https://github.com/eclipse/eclipse.jdt.ls/pull/2258
+  -- 已合并，需要编译最新版本支持
+  vim.lsp.handlers["$/progress"] = nil
+  require("fidget").setup({})
+end
 
 local function markdown_format(input)
   if input then
