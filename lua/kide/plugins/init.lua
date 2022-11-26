@@ -540,7 +540,15 @@ require("packer").startup({
         })
       end,
     })
-
+    -- pandoc 命令插件(用于md转pdf)
+    use({
+      "aspeddro/pandoc.nvim",
+      opt = true,
+      ft = "markdown",
+      config = function()
+        require("kide.plugins.config.pandoc")
+      end,
+    })
     -- 格式化插件 -> 使用 null-ls
     -- use 'mhartington/formatter.nvim'
     -- use 'sbdchd/neoformat'
