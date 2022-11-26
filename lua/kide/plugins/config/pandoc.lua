@@ -1,8 +1,17 @@
+local utils = require("kide.core.utils")
 require("pandoc").setup({
   commands = {
     enable = false,
   },
 })
+
+local cjk_mainfont = function()
+  if utils.is_win then
+    return "Microsoft YaHei UI"
+  else
+    return "Yuanti SC"
+  end
+end
 
 -- pandoc --pdf-engine=xelatex --highlight-style tango -N --toc -V CJKmainfont="Yuanti SC" -V mainfont="Hack" -V geometry:"top=2cm, bottom=1.5cm, left=2cm, right=2cm" test.md -o out.pdf
 local function markdown_to_pdf()
@@ -18,7 +27,7 @@ local function markdown_to_pdf()
           { "--highlight-style", "tango" },
           { "--number-sections" },
           { "--toc" },
-          { "--variable", "CJKmainfont=Yuanti SC" },
+          { "--variable", "CJKmainfont=" .. cjk_mainfont() },
           { "--variable", "mainfont=Hack" },
           { "--variable", "geometry:top=2cm, bottom=1.5cm, left=2cm, right=2cm" },
         })

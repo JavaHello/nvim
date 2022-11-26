@@ -193,6 +193,10 @@ M.os_type = function()
   return t
 end
 
+M.is_win = M.os_type() == M.Windows
+M.is_linux = M.os_type() == M.Linux
+M.is_mac = M.os_type() == M.Mac
+
 --- complete
 ---@param complete {}
 ---@param opt {multiple:false, multiple_repeated:false, single:false}
