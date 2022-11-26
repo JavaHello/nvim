@@ -1,3 +1,4 @@
+local utils = require("kide.core.utils")
 local M = {}
 
 local function maven_settings()
@@ -41,45 +42,32 @@ local function create_command(buf, name, cmd, complete)
   })
 end
 
-local function maven_args_complete(complete, deduplicate)
-  if complete then
-    return function(_, cmd_line, _)
-      if deduplicate then
-        local args = vim.split(cmd_line, " ")
-        return vim.tbl_filter(function(item)
-          return not vim.tbl_contains(args, item)
-        end, complete)
-      else
-        return complete
-      end
-    end
-  end
-end
+local maven_args_complete = utils.command_args_complete
 
 M.maven_command = function(buf)
-  create_command(buf, "MavenCompile", "mvn compile", maven_args_complete({ "test-compile" }, true))
+  create_command(buf, "MavenCompile", "mvn compile", maven_args_complete({ "test-compile" }, { multiple = true }))
   create_command(
     buf,
     "MavenInstll",
     "mvn clean install",
-    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, true)
+    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true })
   )
   create_command(
     buf,
     "MavenPackage",
     "mvn clean package",
-    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, true)
+    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true })
   )
   create_command(
     buf,
     "MavenDependencyTree",
     "mvn dependency:tree",
-    maven_args_complete({ "-Doutput=.dependency.txt" }, true)
+    maven_args_complete({ "-Doutput=.dependency.txt" }, { multiple = true })
   )
   create_command(buf, "MavenDependencyAnalyzeDuplicate", "mvn dependency:analyze-duplicate")
   create_command(buf, "MavenDependencyAnalyzeOnly", "mvn dependency:analyze-only -Dverbose")
   create_command(buf, "MavenDownloadSources", "mvn dependency:sources -DdownloadSources=true")
-  create_command(buf, "MavenTest", "mvn test", maven_args_complete({ "-Dtest=" }))
+  create_command(buf, "MavenTest", "mvn test", maven_args_complete({ "-Dtest=" }, {}))
 end
 
 M.setup = function()

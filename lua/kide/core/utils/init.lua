@@ -193,4 +193,50 @@ M.os_type = function()
   return t
 end
 
+--- complete
+---@param complete {}
+---@param opt {multiple:false, multiple_repeated:false, single:false}
+M.command_args_complete = function(complete, opt)
+  local lopt = opt or {}
+  if complete then
+    return function(_, cmd_line, _)
+      if lopt.multiple then
+        local args = vim.split(cmd_line, " ")
+        return vim.tbl_filter(function(item)
+          return not vim.tbl_contains(args, item)
+        end, complete)
+      elseif lopt.single then
+        local args = vim.split(cmd_line, " ")
+        for _, value in ipairs(args) do
+          if vim.tbl_contains(complete, value) then
+            return {}
+          end
+        end
+        return complete
+      else
+        return complete
+      end
+    end
+  end
+end
+
+M.open_fn = function(file)
+  local ok, system_open = pcall(require, "nvim-tree.actions.node.system-open")
+  if ok then
+    system_open.fn({ absolute_path = file })
+  end
+end
+
+M.get_filename = function(path)
+  local idx = path:match(".+()%.%w+$")
+  if idx then
+    return path:sub(1, idx - 1)
+  else
+    return path
+  end
+end
+
+M.get_extension = function(str)
+  return str:match(".+%.(%w+)$")
+end
 return M
