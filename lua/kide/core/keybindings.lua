@@ -190,8 +190,20 @@ M.maplsp = function(client, buffer)
   vim.api.nvim_buf_set_keymap(buffer, "n", "go", "<cmd>lua vim.diagnostic.open_float()<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "n", "[g", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "n", "]g", "<cmd>lua vim.diagnostic.goto_next()<CR>", opt)
-  vim.api.nvim_buf_set_keymap(buffer, "n", "[e", "<cmd>lua vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })<CR>", opt)
-  vim.api.nvim_buf_set_keymap(buffer, "n", "]e", "<cmd>lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })<CR>", opt)
+  vim.api.nvim_buf_set_keymap(
+    buffer,
+    "n",
+    "[e",
+    "<cmd>lua vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })<CR>",
+    opt
+  )
+  vim.api.nvim_buf_set_keymap(
+    buffer,
+    "n",
+    "]e",
+    "<cmd>lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })<CR>",
+    opt
+  )
   -- mapbuf('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opt)
   -- leader + =
   -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>=', '<cmd>lua vim.lsp.buf.format()<CR>', opt)
