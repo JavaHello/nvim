@@ -3,7 +3,7 @@ vim.opt.title = true
 
 vim.opt.clipboard = "unnamedplus"
 
-if vim.fn.has("wsl") then
+if vim.fn.has("wsl") == 1 then
   vim.g.clipboard = {
     name = "win32yank-wsl",
     copy = {
