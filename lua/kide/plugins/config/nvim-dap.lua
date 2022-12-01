@@ -48,5 +48,15 @@ vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "
 -- vim.fn.sign_define('DapLogPoint', {text='L', texthl='', linehl='', numhl=''})
 -- vim.fn.sign_define('DapStopped', {text='→', texthl='', linehl='debugPC', numhl=''})
 
+vim.api.nvim_create_user_command("DapUiOpen", function()
+  require("dapui").open({})
+end, {})
+vim.api.nvim_create_user_command("DapUiClose", function()
+  require("dapui").close({})
+end, {})
+vim.api.nvim_create_user_command("DapUiToggle", function()
+  require("dapui").toggle({})
+end, {})
+
 require("nvim-dap-virtual-text").setup({})
 require("telescope").load_extension("dap")
