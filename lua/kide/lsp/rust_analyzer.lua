@@ -7,9 +7,9 @@ local codelldb_path = (function()
     return nil
   end
   if utils.is_win then
-    return extension_path .. "adapter\\codelldb.exe"
+    return vim.fn.glob(extension_path .. "/adapter/codelldb.exe")
   else
-    return extension_path .. "adapter/codelldb"
+    return vim.fn.glob(extension_path .. "/adapter/codelldb")
   end
 end)()
 local liblldb_path = (function()
@@ -17,17 +17,16 @@ local liblldb_path = (function()
     return nil
   end
   if utils.is_mac then
-    return extension_path .. "lldb/lib/liblldb.dylib"
+    return vim.fn.glob(extension_path .. "/lldb/lib/liblldb.dylib")
   elseif utils.is_win then
-    return extension_path .. "lldb\\lib\\liblldb.dll"
+    return vim.fn.glob(extension_path .. "/lldb\\lib\\liblldb.dll")
   else
-    return extension_path .. "lldb/lib/liblldb.so"
+    return vim.fn.glob(extension_path .. "/lldb/lib/liblldb.so")
   end
 end)()
 
 local adapter = function()
   if codelldb_path and liblldb_path then
-    print(codelldb_path)
     return require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path)
   end
 end
