@@ -1,33 +1,7 @@
-local vscode = require("kide.core.vscode")
-local utils = require("kide.core.utils")
--- Update this path
-local extension_path = vscode.find_one("/vadimcn.vscode-lldb-*")
-local codelldb_path = (function()
-  if not extension_path then
-    return nil
-  end
-  if utils.is_win then
-    return vim.fn.glob(extension_path .. "/adapter/codelldb.exe")
-  else
-    return vim.fn.glob(extension_path .. "/adapter/codelldb")
-  end
-end)()
-local liblldb_path = (function()
-  if not extension_path then
-    return nil
-  end
-  if utils.is_mac then
-    return vim.fn.glob(extension_path .. "/lldb/lib/liblldb.dylib")
-  elseif utils.is_win then
-    return vim.fn.glob(extension_path .. "/lldb/bin/liblldb.dll")
-  else
-    return vim.fn.glob(extension_path .. "/lldb/lib/liblldb.so")
-  end
-end)()
-
+local codelldb = require("kide.dap.codelldb")
 local adapter = function()
-  if codelldb_path and liblldb_path then
-    return require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path)
+  if codelldb.extension_path then
+    return require("rust-tools.dap").get_codelldb_adapter(codelldb.codelldb_path, codelldb.liblldb_path)
   end
 end
 local rt = require("rust-tools")

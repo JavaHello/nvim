@@ -1,15 +1,37 @@
 local M = {}
 local vscode = require("kide.core.vscode")
-local extension_path = vscode.find_one("/vadimcn.vscode-lldb-*")
+local utils = require("kide.core.utils")
+-- Update this path
+M.extension_path = vscode.find_one("/vadimcn.vscode-lldb-*")
+M.codelldb_path = (function()
+  if M.extension_path then
+    if utils.is_win then
+      return vim.fn.glob(M.extension_path .. "/adapter/codelldb.exe")
+    else
+      return vim.fn.glob(M.extension_path .. "/adapter/codelldb")
+    end
+  end
+end)()
+M.liblldb_path = (function()
+  if M.extension_path then
+    if utils.is_mac then
+      return vim.fn.glob(M.extension_path .. "/lldb/lib/liblldb.dylib")
+    elseif utils.is_win then
+      return vim.fn.glob(M.extension_path .. "/lldb/bin/liblldb.dll")
+    else
+      return vim.fn.glob(M.extension_path .. "/lldb/lib/liblldb.so")
+    end
+  end
+end)()
 
 M.config = {}
 
 M.setup = function(config)
-  if not extension_path then
+  if not M.extension_path then
     vim.notify("codelldb not found", vim.log.levels.WARN)
     return false
   end
-  M.config.codelldb_path = extension_path .. "/adapter/codelldb"
+  M.config.codelldb_path = M.codelldb_path
   -- M.config.liblldb_path = extension_path .. "/lldb/lib/liblldb.dylib"
   if config then
     M.config = vim.tbl_deep_extend("force", M.config, config)
@@ -28,7 +50,7 @@ M.setup = function(config)
     local stderr = vim.loop.new_pipe(false)
     local opts = {
       stdio = { nil, stdout, stderr },
-      args = { "--port", tostring(port) },
+      args = { "--liblldb", M.liblldb_path, "--port", tostring(port) },
     }
     local handle
     local pid_or_err
