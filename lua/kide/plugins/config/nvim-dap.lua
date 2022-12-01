@@ -7,6 +7,7 @@ local dap = require("dap")
 -- }
 local dapui = require("dapui")
 dapui.setup({
+  icons = { expanded = "", collapsed = "", current_frame = "" },
   layouts = {
     {
       elements = {
@@ -23,7 +24,7 @@ dapui.setup({
         "repl",
         -- 'console',
       },
-      size = 12,
+      size = 0.25,
       position = "bottom",
     },
   },
