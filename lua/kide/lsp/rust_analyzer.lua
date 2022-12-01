@@ -19,7 +19,7 @@ local liblldb_path = (function()
   if utils.is_mac then
     return vim.fn.glob(extension_path .. "/lldb/lib/liblldb.dylib")
   elseif utils.is_win then
-    return vim.fn.glob(extension_path .. "/lldb/lib/liblldb.lib")
+    return vim.fn.glob(extension_path .. "/lldb/bin/liblldb.dll")
   else
     return vim.fn.glob(extension_path .. "/lldb/lib/liblldb.so")
   end
