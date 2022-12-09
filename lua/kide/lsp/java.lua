@@ -481,11 +481,11 @@ source.resolve = function(self, completion_item, callback)
   end)
 end
 
-M.setup = function()
+M.start = function()
   jdtls.start_or_attach(config)
 end
 
-M.init = function()
+M.setup = function()
   vim.g.jdtls_dap_main_class_config_init = true
   -- au BufReadCmd jdt://* lua require('jdtls').open_jdt_link(vim.fn.expand('<amatch>'))
   -- command! JdtWipeDataAndRestart lua require('jdtls.setup').wipe_data_and_restart()
@@ -511,7 +511,7 @@ M.init = function()
       if e.file == "java" then
         -- ignore
       else
-        M.setup()
+        M.start()
       end
     end,
   })

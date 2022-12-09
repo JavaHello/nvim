@@ -219,7 +219,7 @@ require("packer").startup({
         vim.g.nvim_jdtls = 1
       end,
       config = function()
-        require("kide.lsp.java").init()
+        require("kide.lsp.java").setup()
       end,
     })
     -- use 'NiYanhhhhh/lighttree-java'
