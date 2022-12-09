@@ -21,6 +21,12 @@ end
 local function get_java_ver_home(v, dv)
   return os.getenv("JAVA_" .. v .. "_HOME") or dv
 end
+local function get_java_ver_sources(v, dv)
+  return os.getenv("JAVA_" .. v .. "_SOURCES") or dv
+end
+local function get_java_ver_doc(v, dv)
+  return os.getenv("JAVA_" .. v .. "_DOC") or dv
+end
 
 local function get_java()
   return or_default(env.JDTLS_RUN_JAVA, get_java_home() .. "/bin/java")
@@ -40,42 +46,65 @@ local function get_jol_jar()
 end
 
 local _config = (function()
-  if cutils.os_type() == cutils.Windows then
+  if cutils.is_win then
     return "config_win"
-  elseif cutils.os_type() == cutils.Mac then
+  elseif cutils.is_mac then
     return "config_mac"
   else
     return "config_linux"
   end
 end)()
 
+-- see https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
+local ExecutionEnvironment = {
+  J2SE_1_5 = "J2SE-1.5",
+  JavaSE_1_6 = "JavaSE-1.6",
+  JavaSE_1_7 = "JavaSE-1.7",
+  JavaSE_1_8 = "JavaSE-1.8",
+  JavaSE_9 = "JavaSE-9",
+  JavaSE_10 = "JavaSE-10",
+  JavaSE_11 = "JavaSE-11",
+  JavaSE_12 = "JavaSE-12",
+  JavaSE_13 = "JavaSE-13",
+  JavaSE_14 = "JavaSE-14",
+  JavaSE_15 = "JavaSE-15",
+  JavaSE_16 = "JavaSE-16",
+  JavaSE_17 = "JavaSE-17",
+  JavaSE_18 = "JavaSE-18",
+  JavaSE_19 = "JavaSE-19",
+}
+
+local function fglob(path)
+  if path == "" then
+    return nil
+  end
+  return path
+end
+
 local runtimes = (function()
   local result = {}
-  for _, value in ipairs({
-    {
-      name = "JavaSE-1.8",
-      version = "8",
-      default = true,
-    },
-    {
-      name = "JavaSE-11",
-      version = "11",
-    },
-    {
-      name = "JavaSE-17",
-      version = "17",
-    },
-    {
-      name = "JavaSE-19",
-      version = "19",
-    },
-  }) do
-    local java_home = get_java_ver_home(value.version)
+  for _, value in pairs(ExecutionEnvironment) do
+    local version = vim.fn.split(value, "-")[2]
+    if string.match(version, "%.") then
+      version = vim.split(version, "%.")[2]
+    end
+    local java_home = get_java_ver_home(version)
+    local default_jdk = false
     if java_home then
+      local java_sources = get_java_ver_sources(
+        version,
+        fglob(vim.fn.glob(java_home .. "/src.zip")) or fglob(vim.fn.glob(java_home .. "/lib/src.zip"))
+      )
+      local javadoc = get_java_ver_doc(version, fglob(vim.fn.glob(java_home .. "/docs")))
+      if ExecutionEnvironment.JavaSE_1_8 == value then
+        default_jdk = true
+      end
       table.insert(result, {
-        name = value.name,
+        name = value,
         path = java_home,
-        default = value.default,
+        sources = java_sources,
+        javadoc = javadoc,
+        default = default_jdk,
       })
     end
   end
