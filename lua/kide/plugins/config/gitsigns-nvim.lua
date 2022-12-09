@@ -5,6 +5,7 @@ require("gitsigns").setup({
     delete = { hl = "DiffDelete", text = "", numhl = "GitSignsDeleteNr" },
     topdelete = { hl = "DiffDelete", text = "‾", numhl = "GitSignsDeleteNr" },
     changedelete = { hl = "DiffChangeDelete", text = "~", numhl = "GitSignsChangeNr" },
+    untracked = { hl = "GitSignsAdd", text = "│", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
   },
   signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
   numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
