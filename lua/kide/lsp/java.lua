@@ -95,7 +95,6 @@ local runtimes = (function()
         version,
         fglob(vim.fn.glob(java_home .. "/src.zip")) or fglob(vim.fn.glob(java_home .. "/lib/src.zip"))
       )
-      local javadoc = get_java_ver_doc(version, fglob(vim.fn.glob(java_home .. "/docs")))
       if ExecutionEnvironment.JavaSE_1_8 == value then
         default_jdk = true
       end
@@ -103,7 +102,6 @@ local runtimes = (function()
         name = value,
         path = java_home,
         sources = java_sources,
-        javadoc = javadoc,
         default = default_jdk,
       })
     end
