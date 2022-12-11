@@ -1,3 +1,4 @@
+local utils = require("kide.core.utils")
 local M = {}
 
 local function delete_file(hf)
@@ -23,10 +24,12 @@ local function clean_jdtls()
 end
 
 M.setup = function()
-  vim.api.nvim_create_user_command("CleanJdtls", function()
-    clean_jdtls()
-  end, {
-    nargs = 0,
-  })
+  if utils.is_mac or utils.is_linux then
+    vim.api.nvim_create_user_command("CleanJdtls", function()
+      clean_jdtls()
+    end, {
+      nargs = 0,
+    })
+  end
 end
 return M
