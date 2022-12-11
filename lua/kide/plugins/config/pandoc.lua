@@ -8,6 +8,8 @@ require("pandoc").setup({
 local cjk_mainfont = function()
   if utils.is_win then
     return "Microsoft YaHei UI"
+  elseif utils.is_linux then
+    return "Noto Sans CJK SC"
   else
     return "Yuanti SC"
   end
