@@ -149,11 +149,8 @@ require("packer").startup({
       requires = {
         "kyazdani42/nvim-web-devicons", -- optional, for file icon
       },
-
       opt = true,
       tag = "nightly",
-      wants = "gruvbox.nvim",
-      after = "gruvbox.nvim",
       setup = function()
         require("kide.core.layz_load").async_load("nvim-tree.lua")
       end,
@@ -469,7 +466,7 @@ require("packer").startup({
       "rcarriga/nvim-notify",
       opt = true,
       setup = function()
-        require("kide.core.layz_load").sync_load("nvim-notify")
+        require("kide.core.layz_load").async_load("nvim-notify")
       end,
       config = function()
         require("kide.plugins.config.nvim-notify")

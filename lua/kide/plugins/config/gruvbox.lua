@@ -1,13 +1,8 @@
 -- setup must be called before loading the colorscheme
 -- Default options:
 
-local colors = require("gruvbox.palette")
 local kgrubox = require("kide.theme.gruvbox")
 local overrides = {
-
-  NvimTreeFolderIcon = {
-    fg = colors.bright_green,
-  },
   NormalFloat = {
     bg = kgrubox.colors.black3,
   },

@@ -1,5 +1,5 @@
-vim.notify = require("notify")
-vim.notify.setup({
+local notify = require("notify")
+notify.setup({
   -- Animation style (see below for details)
   stages = "fade_in_slide_out",
 
@@ -31,3 +31,5 @@ vim.notify.setup({
     TRACE = "✎",
   },
 })
+
+vim.notify = notify
