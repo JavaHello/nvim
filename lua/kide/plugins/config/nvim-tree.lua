@@ -105,3 +105,6 @@ require("nvim-tree").setup({
 --       symlink_open = "",
 --    },
 -- }
+
+-- nvimTree
+require("kide.core.keybindings").nvim_tree()

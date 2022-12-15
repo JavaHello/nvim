@@ -10,8 +10,6 @@ local M = {}
 M.setup = function()
   -- Esc
   -- map('i', 'jk', '<C-\\><C-N>', opt)
-  -- nvimTree
-  map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
   -- n 模式下复制内容到系统剪切板
   map("n", "<Leader>c", '"+yy', opt)
   -- v 模式下复制内容到系统剪切板
@@ -332,5 +330,10 @@ M.ufo_mapkey = function()
   -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
   vim.keymap.set("n", "zR", require("ufo").openAllFolds)
   vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+end
+
+M.nvim_tree = function()
+  -- nvimTree
+  map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
 end
 return M
