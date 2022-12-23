@@ -45,7 +45,7 @@ end
 local maven_args_complete = utils.command_args_complete
 
 M.maven_command = function(buf)
-  create_command(buf, "MavenCompile", "mvn compile", maven_args_complete({ "test-compile" }, { multiple = true }))
+  create_command(buf, "MavenCompile", "mvn clean compile", maven_args_complete({ "test-compile" }, { multiple = true }))
   create_command(
     buf,
     "MavenInstll",
