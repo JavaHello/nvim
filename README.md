@@ -13,7 +13,6 @@ cd ~/.config
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
-
 ### Windows
 
 ```sh
@@ -63,26 +62,55 @@ git clone  https://github.com/JavaHello/nvim.git
 
 ### 功能演示
 
-- 启动页
-  ![home](https://javahello.github.io/dev/nvim-lean/images/home.png)
-- 查找文件
-  ![find-file](https://javahello.github.io/dev/nvim-lean/images/telescope-theme-1.png)
-- 全局搜索
-  ![find-word](https://javahello.github.io/dev/nvim-lean/images/find-word.gif)
-- 全局搜索替换
-  ![fr](https://javahello.github.io/dev/nvim-lean/images/fr.gif)
-- 文件管理
-  ![file-tree](https://javahello.github.io/dev/nvim-lean/images/file-tree.gif)
-- 大纲
-  ![Outline](https://javahello.github.io/dev/nvim-lean/images/outline.gif)
-- 查看引用
-  ![001](https://javahello.github.io/dev/nvim-lean/images/java-ref-001.gif)
-- 查看实现
-  ![002](https://javahello.github.io/dev/nvim-lean/images/java-impl-002.gif)
-- 搜索`class`,`method`,`field`等
-  ![003](https://javahello.github.io/dev/nvim-lean/images/java-symbols-003.gif)
-- Debug
-  ![Debug001](https://javahello.github.io/dev/nvim-lean/images/debug.gif)
+<details>
+<summary>启动页</summary>
+  <img width="700" alt="启动页" src="https://javahello.github.io/dev/nvim-lean/images/home.png">
+</details>
+
+<details>
+<summary>查找文件</summary>
+  <img width="700" alt="查找文件" src="https://javahello.github.io/dev/nvim-lean/images/telescope-theme-1.png">
+</details>
+
+<details>
+<summary>全局搜索</summary>
+  <img width="700" alt="全局搜索" src="https://javahello.github.io/dev/nvim-lean/images/find-word.gif">
+</details>
+
+<details>
+<summary>全局搜索替换</summary>
+  <img width="700" alt="全局搜索替换" src="https://javahello.github.io/dev/nvim-lean/images/fr.gif">
+</details>
+
+<details>
+<summary>文件管理</summary>
+  <img width="700" alt="文件管理" src="https://javahello.github.io/dev/nvim-lean/images/file-tree.gif">
+</details>
+
+<details>
+<summary>大纲</summary>
+  <img width="700" alt="大纲" src="https://javahello.github.io/dev/nvim-lean/images/outline.gif">
+</details>
+
+<details>
+<summary>查看引用</summary>
+  <img width="700" alt="查看引用" src="https://javahello.github.io/dev/nvim-lean/images/java-ref-001.gif">
+</details>
+
+<details>
+<summary>查看实现</summary>
+  <img width="700" alt="查看实现" src="https://javahello.github.io/dev/nvim-lean/images/java-impl-002.gif">
+</details>
+
+<details>
+<summary>搜索 symbols</summary>
+  <img width="700" alt="搜索`symbols`" src="https://javahello.github.io/dev/nvim-lean/images/java-symbols-003.gif">
+</details>
+
+<details>
+<summary>Debug</summary>
+  <img width="700" alt="Debug" src="https://javahello.github.io/dev/nvim-lean/images/debug.gif">
+</details>
 
 ## 我的 VIM 插件列表
 
