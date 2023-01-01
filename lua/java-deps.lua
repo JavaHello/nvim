@@ -3,21 +3,25 @@ local M = {}
 local get_client = function()
   local clients = vim.lsp.get_active_clients()
   for _, client in ipairs(clients) do
-    if client.name == "jdt.ls" then
+    if client.name == "jdtls" then
       return client
     end
   end
 end
 
 local get_root_project_uri = function(client)
-  client = client or get_client()
-  if client then
-    return "file://" .. client.config.root_dir
+  M.client = client or get_client()
+  if M.client then
+    return "file://" .. M.client.config.root_dir
   end
 end
 
 local request = function(bufnr, method, params, handler)
   vim.lsp.buf_request(bufnr, method, params, handler)
+end
+local request_sync = function(bufnr, method, params, timeout)
+  timeout = timeout or M.config.options.request_timeout
+  return vim.lsp.buf_request_sync(bufnr, method, params, timeout)
 end
 
 M.NodeKind = {
@@ -33,6 +37,7 @@ M.NodeKind = {
   CLASS = 11,
   INTERFACE = 12,
   ENUM = 13,
+  JAR = 21,
 }
 M.symbols = {}
 M.symbols.kinds = {
@@ -52,35 +57,45 @@ M.symbols.kinds = {
 }
 
 M.config = {
+  debug = false,
   options = {
     show_guides = true,
-    auto_clise = false,
-    width = 40,
+    auto_close = false,
+    width = 32,
     relative_width = true,
+    show_numbers = false,
+    show_relative_numbers = false,
+    request_timeout = 3000,
     symbols = {
-      FILE = { icon = "", hl = "TSURI" },
-      WORKSPACE = { icon = "", hl = "TSNamespace" },
-      CONTAINER = { icon = "", hl = "TSMethod" },
-      PACKAGE = { icon = "", hl = "TSNamespace" },
-      PRIMARYTYPE = { icon = "ﴯ", hl = "TSType" },
-      PROJECT = { icon = "פּ", hl = "TSType" },
-      PACKAGEROOT = { icon = "", hl = "TSType" },
-      FOLDER = { icon = "", hl = "TSType" },
-      CLASS = { icon = "C", hl = "TSType" },
-      ENUM = { icon = "E", hl = "TSType" },
-      INTERFACE = { icon = "I", hl = "TSType" },
-      JAR = { icon = "", hl = "TSKeyword" },
+      FILE = { icon = "", hl = "@text.uri" },
+      WORKSPACE = { icon = "", hl = "@namespace" },
+      CONTAINER = { icon = "", hl = "@namespace" },
+      PACKAGE = { icon = "", hl = "@namespace" },
+      PRIMARYTYPE = { icon = "ﴯ", hl = "@type" },
+      PROJECT = { icon = "פּ", hl = "@namespace" },
+      PACKAGEROOT = { icon = "", hl = "@namespace" },
+      FOLDER = { icon = "", hl = "@type" },
+      CLASS = { icon = "C", hl = "@type" },
+      ENUM = { icon = "E", hl = "@type" },
+      INTERFACE = { icon = "I", hl = "@type" },
+      JAR = { icon = "", hl = "@namespace" },
     },
   },
 }
 M.state = {
-  root_cache = nil,
+  attach = false,
+  root_cache = {
+    projects = nil,
+    project_uri = nil,
+  },
   root_view = nil,
   jdt_dep_win = nil,
   jdt_dep_buf = nil,
   code_win = 0,
   code_buf = 0,
+  code_buf_uri = nil,
 }
+
 M.project_list = function(code_buf, handler)
   local params = {}
   params.command = "java.project.list"
@@ -96,7 +111,7 @@ M.project_list = function(code_buf, handler)
   end)
 end
 
-M.get_package_data = function(buf, node, handler)
+M.get_package_data = function(buf, node)
   buf = buf or 0
 
   local params0 = {}
@@ -127,13 +142,11 @@ M.get_package_data = function(buf, node, handler)
     params0.arguments.handlerIdentifier = node.handlerIdentifier
   end
   -- 获取项目结构
-  request(buf, "workspace/executeCommand", params0, function(err0, packages)
-    if err0 then
-      print(err0.message)
-    elseif packages then
-      handler(node, packages)
-    end
-  end)
+  local resp, err = request_sync(buf, "workspace/executeCommand", params0)
+  if M.config.debug then
+    print(vim.inspect(resp))
+  end
+  return resp, err
 end
 
 M.write_buf = function(bufnr, lines)
@@ -212,12 +225,6 @@ M.parse_lines = function(root_view)
 end
 
 local function type_kind(node)
-  if node.metaData and node.metaData.TypeKind then
-    return node.metaData.TypeKind + 10
-  end
-  if vim.endswith(node.name, ".jar") then
-    return 21
-  end
   return node.kind
 end
 function M.flatten(items, depth)
@@ -274,33 +281,26 @@ function M.add_highlights(bufnr, hl_info)
 end
 
 local function _auto_close(bufnr)
-  local clean_diagnostic = vim.api.nvim_create_augroup("clean_java_deps_view", { clear = true })
+  local java_deps_view_close = vim.api.nvim_create_augroup("java_deps_view_close", { clear = true })
   vim.api.nvim_create_autocmd("WinClosed", {
-    group = clean_diagnostic,
+    group = java_deps_view_close,
     buffer = bufnr,
     callback = function()
-      vim.api.nvim_del_augroup_by_id(clean_diagnostic)
+      vim.api.nvim_del_augroup_by_id(java_deps_view_close)
       M._clean()
     end,
   })
 end
 local function _render()
-  M.state.root_view = M.flatten(M.state.root_cache.children)
+  M.state.root_view = M.flatten(M.state.root_cache.projects)
   local lines, hl_info = M.parse_lines(M.state.root_view)
-  if M.state.jdt_dep_buf == nil then
+  if M.state.jdt_dep_buf == nil or M.state.jdt_dep_win == nil then
     M.state.jdt_dep_buf, M.state.jdt_dep_win = M.setup_view()
     M.keymaps(M.state.jdt_dep_buf, true)
     _auto_close(M.state.jdt_dep_buf)
   end
   M.write_buf(M.state.jdt_dep_buf, lines)
   M.add_highlights(M.state.jdt_dep_buf, hl_info)
-end
-
-local function setup_keymaps(bufnr)
-  local buf_map = function(key, action)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", key, action, { silent = true, noremap = true })
-  end
-  buf_map("o", ":lua require('java-deps')._open_file(false)<Cr>")
 end
 
 local function get_cmp_uri(code_buf)
@@ -310,24 +310,17 @@ local function get_cmp_uri(code_buf)
   end
 end
 local function handler_debs(bufnr, cnode)
-  if
-    cnode.kind == M.NodeKind.PRIMARYTYPE
-    or cnode.kind == M.NodeKind.FILE
-    or cnode.kind == M.NodeKind.CLASS
-    or cnode.kind == M.NodeKind.INTERFACE
-    or cnode.kind == M.NodeKind.ENUM
-  then
-    return
-  end
   if cnode.children then
     cnode.children = nil
     cnode.isLast = false
     _render()
   else
-    if M.state.code_buf_uri == nil then
-      M.state.code_buf_uri = get_cmp_uri(bufnr)
+    local resp, err = M.get_package_data(bufnr, cnode)
+    if err then
+      vim.notify("Failed: " .. err, vim.log.levels.ERROR)
+      return
     end
-    M.get_package_data(bufnr, cnode, function(node, iresp)
+    (function(node, iresp)
       node.children = {}
       for _, value in ipairs(iresp) do
         if value.uri and vim.startswith(value.uri, M.state.code_buf_uri) then
@@ -336,29 +329,18 @@ local function handler_debs(bufnr, cnode)
         if M.NodeKind.CONTAINER == value.kind then
           value.root_project = node
         end
-        if M.NodeKind.PACKAGEROOT == value.kind and vim.startswith(value.name, "src/") then
-          value.order = 0
+        if M.NodeKind.PACKAGEROOT == value.kind then
+          value.order = value.entryKind
         else
-          value.order = 1
+          value.order = value.entryKind
         end
-        if
-          M.NodeKind.CONTAINER == value.kind
-          and not vim.startswith(value.name, "JRE System Library")
-          and not vim.startswith(value.name, "Maven Dependencies")
-        then
-          M.get_package_data(bufnr, value, function(inode, iiresp)
-            for _, iv in ipairs(iiresp) do
-              if M.NodeKind.PACKAGEROOT == iv.kind and vim.startswith(iv.name, "src/") then
-                iv.order = 0
-              else
-                iv.order = 1
-              end
-              iv.container = inode
-              table.insert(node.children, iv)
-            end
-            sort_node_c(node)
-            _render()
-          end)
+        if M.NodeKind.CONTAINER == value.kind then
+          if value.entryKind == value.kind then
+            handler_debs(bufnr, value)
+            table.insert(node.children, value.children[1])
+          else
+            table.insert(node.children, value)
+          end
         else
           table.insert(node.children, value)
         end
@@ -366,42 +348,43 @@ local function handler_debs(bufnr, cnode)
       node.isLast = true
       sort_node_c(node)
       _render()
-    end)
+    end)(cnode, resp[2].result)
   end
 end
+
 M.java_projects = function()
-  if M.state.root_cache == nil then
-    M.state.root_cache = {}
-    M.state.root_cache.project_uri = get_root_project_uri()
+  if not M.state.attach then
+    vim.notify("Failed: You need to call attach", vim.log.levels.WARN)
+    return
   end
   if M.state.root_cache.project_uri == nil then
-    M.state.root_cache = nil
     vim.notify("Failed to get project root directory", vim.log.levels.WARN)
     return
   end
-  local code_buf = vim.api.nvim_get_current_buf()
-  M.state.code_buf = code_buf
-  M.state.code_buf_uri = get_cmp_uri(code_buf)
   if M.state.root_view == nil then
     M.state.root_view = {}
   end
-  M.project_list(code_buf, function(projects)
+  M.project_list(M.state.code_buf, function(projects)
     for _, project in ipairs(projects) do
       project.order = 0
     end
-    M.state.root_cache.children = projects
-    for _, project in ipairs(M.state.root_cache.children) do
-      handler_debs(code_buf, project)
+    M.state.root_cache.projects = projects
+    for _, project in ipairs(M.state.root_cache.projects) do
+      handler_debs(M.state.code_buf, project)
     end
     _render()
-    setup_keymaps(M.state.jdt_dep_buf)
   end)
 end
 
 function M._open_file(change_focus)
   local current_line = vim.api.nvim_win_get_cursor(M.state.jdt_dep_win)[1]
   local node = M.state.root_view[current_line]
-  handler_debs(M.state.code_buf, node)
+  if node.kind == M.NodeKind.PRIMARYTYPE or node.kind == M.NodeKind.FILE then
+    -- todo open file
+    print("open: " .. node.path)
+  else
+    handler_debs(M.state.code_buf, node)
+  end
   if change_focus then
     vim.fn.win_gotoid(M.state.code_win)
   end
@@ -462,7 +445,6 @@ end
 function M._clean()
   M.state.jdt_dep_buf = nil
   M.state.jdt_dep_win = nil
-  M.state.root_cache = nil
 end
 
 function M.close_jdt_dep()
@@ -491,11 +473,13 @@ function M.setup(config)
   end
 end
 function M.attach(client, bufnr)
-  if M.state.root_cache == nil then
-    M.state.root_cache = {}
+  if not M.state.attach then
+    M.state.attach = true
+    M.state.code_buf = bufnr
+    M.state.code_buf_uri = get_cmp_uri(bufnr)
     M.state.root_cache.project_uri = get_root_project_uri(client)
   end
-  if M.state.root_cache.project_uri then
+  if M.client then
     M.keymaps(bufnr)
   end
 end
@@ -503,9 +487,12 @@ function M.keymaps(bufnr, view)
   local buf_map = function(key, action)
     vim.api.nvim_buf_set_keymap(bufnr, "n", key, action, { silent = true, noremap = true })
   end
-  buf_map("<leader>p", ":lua require('java-deps').java_deps_toggle(false)<Cr>")
   if view then
     buf_map("q", ":lua require('java-deps').close_jdt_dep()<Cr>")
+    buf_map("o", ":lua require('java-deps')._open_file(false)<Cr>")
+    buf_map("<leader>p", ":lua require('java-deps').close_jdt_dep()<Cr>")
+  else
+    buf_map("<leader>p", ":lua require('java-deps').java_deps_toggle(false)<Cr>")
   end
 end
 
