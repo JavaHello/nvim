@@ -34,10 +34,12 @@ M.NodeKind = {
   FOLDER = 7,
   FILE = 8,
 
+  -- metaData.TypeKind
   CLASS = 11,
   INTERFACE = 12,
   ENUM = 13,
-  JAR = 21,
+
+  JAR = 24,
 }
 M.symbols = {}
 M.symbols.kinds = {
@@ -50,10 +52,11 @@ M.symbols.kinds = {
   "FOLDER",
   "FILE",
 
-  [11] = "CLASS",
-  [12] = "INTERFACE",
-  [13] = "ENUM",
-  [21] = "JAR",
+  [M.NodeKind.CLASS] = "CLASS",
+  [M.NodeKind.INTERFACE] = "INTERFACE",
+  [M.NodeKind.ENUM] = "ENUM",
+
+  [M.NodeKind.JAR] = "JAR",
 }
 
 M.config = {
@@ -67,18 +70,18 @@ M.config = {
     show_relative_numbers = false,
     request_timeout = 3000,
     symbols = {
-      FILE = { icon = "", hl = "@text.uri" },
-      WORKSPACE = { icon = "", hl = "@namespace" },
-      CONTAINER = { icon = "", hl = "@namespace" },
-      PACKAGE = { icon = "", hl = "@namespace" },
+      WORKSPACE = { icon = "", hl = "@text.uri" },
+      PROJECT = { icon = "", hl = "@text.uri" },
+      CONTAINER = { icon = "", hl = "@text.uri" },
+      PACKAGEROOT = { icon = "", hl = "@text.uri" },
+      PACKAGE = { icon = "", hl = "@namespace" },
       PRIMARYTYPE = { icon = "ﴯ", hl = "@type" },
-      PROJECT = { icon = "פּ", hl = "@namespace" },
-      PACKAGEROOT = { icon = "", hl = "@namespace" },
-      FOLDER = { icon = "", hl = "@type" },
-      CLASS = { icon = "C", hl = "@type" },
-      ENUM = { icon = "E", hl = "@type" },
-      INTERFACE = { icon = "I", hl = "@type" },
-      JAR = { icon = "", hl = "@namespace" },
+      FOLDER = { icon = "", hl = "@text.uri" },
+      FILE = { icon = "", hl = "@text.uri" },
+      CLASS = { icon = "ﴯ", hl = "@class" },
+      ENUM = { icon = "", hl = "@enum" },
+      INTERFACE = { icon = "", hl = "@interface" },
+      JAR = { icon = "", hl = "@conditional" },
     },
   },
 }
@@ -225,9 +228,15 @@ M.parse_lines = function(root_view)
 end
 
 local function type_kind(node)
+  if node.metaData and node.metaData.TypeKind then
+    return node.metaData.TypeKind + 10
+  end
+  if node.name and vim.endswith(node.name, ".jar") then
+    return M.NodeKind.JAR
+  end
   return node.kind
 end
-function M.flatten(items, depth)
+local function flatten(items, depth)
   if items and items[#items] then
     items[#items].isLast = true
   end
@@ -239,7 +248,7 @@ function M.flatten(items, depth)
     value.icon = M.config.options.symbols[M.symbols.kinds[value.type_kind]].icon
     table.insert(ret, value)
     if value.children ~= nil then
-      local inner = M.flatten(value.children, idepth + 1)
+      local inner = flatten(value.children, idepth + 1)
       for _, value_inner in ipairs(inner) do
         table.insert(ret, value_inner)
       end
@@ -292,7 +301,7 @@ local function _auto_close(bufnr)
   })
 end
 local function _render()
-  M.state.root_view = M.flatten(M.state.root_cache.projects)
+  M.state.root_view = flatten(M.state.root_cache.projects)
   local lines, hl_info = M.parse_lines(M.state.root_view)
   if M.state.jdt_dep_buf == nil or M.state.jdt_dep_win == nil then
     M.state.jdt_dep_buf, M.state.jdt_dep_win = M.setup_view()
@@ -376,12 +385,30 @@ M.java_projects = function()
   end)
 end
 
+function M.resolve_path(buf, uri)
+  local command = { command = "java.resolvePath", arguments = uri }
+  local resp, err = request_sync(buf, "workspace/executeCommand", command)
+  if M.config.debug then
+    print(vim.inspect(resp))
+  end
+  if err then
+    print("resolve_path error: " .. err)
+    return
+  end
+  return resp
+end
+
 function M._open_file(change_focus)
   local current_line = vim.api.nvim_win_get_cursor(M.state.jdt_dep_win)[1]
   local node = M.state.root_view[current_line]
   if node.kind == M.NodeKind.PRIMARYTYPE or node.kind == M.NodeKind.FILE then
     -- todo open file
-    print("open: " .. node.path)
+    local uri = node.uri
+    local resp = M.resolve_path(M.state.code_buf, uri)
+
+    print("open: " .. vim.inspect(resp))
+    -- vim.fn.execute("wincmd w")
+    -- vim.fn.execute("edit `=" .. uri .. "`")
   else
     handler_debs(M.state.code_buf, node)
   end
