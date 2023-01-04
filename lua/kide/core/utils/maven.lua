@@ -74,10 +74,10 @@ M.setup = function()
   local group = vim.api.nvim_create_augroup("kide_jdtls_java_maven", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
-    pattern = { "xml" },
+    pattern = { "xml", "java" },
     desc = "maven_command",
     callback = function(e)
-      if vim.endswith(e.file, "pom.xml") then
+      if vim.endswith(e.file, "pom.xml") or vim.endswith(e.file, ".java") then
         M.maven_command(e.buf)
       end
     end,

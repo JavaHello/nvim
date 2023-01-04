@@ -369,7 +369,6 @@ config["on_attach"] = function(client, buffer)
   -- end
 
   require("nvim-navic").attach(client, buffer)
-  maven.maven_command(buffer)
   -- require('java-deps').attach(client, bufnr)
   -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
 end
