@@ -121,4 +121,15 @@ dbui.filetypes = {
 }
 table.insert(config.extensions, dbui)
 
+-- JavaProjects
+local java_projects = {}
+java_projects.sections = {
+  lualine_a = {
+    { "filename", file_status = false },
+  },
+}
+java_projects.filetypes = {
+  "JavaProjects",
+}
+table.insert(config.extensions, java_projects)
 require("lualine").setup(config)
