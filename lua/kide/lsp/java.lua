@@ -369,7 +369,10 @@ config["on_attach"] = function(client, buffer)
   -- end
 
   require("nvim-navic").attach(client, buffer)
-  -- require('java-deps').attach(client, bufnr)
+  require("java-deps").attach(client, buffer, root_dir)
+  create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
+    nargs = 0,
+  })
   -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
 end
 

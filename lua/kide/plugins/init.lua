@@ -219,6 +219,15 @@ require("packer").startup({
         require("kide.lsp.java").setup()
       end,
     })
+    use({
+      "JavaHello/java-deps.nvim",
+      opt = true,
+      after = "nvim-jdtls",
+      ft = { "java" },
+      config = function()
+        require("java-deps").setup()
+      end,
+    })
     -- use 'NiYanhhhhh/lighttree-java'
 
     -- debug
