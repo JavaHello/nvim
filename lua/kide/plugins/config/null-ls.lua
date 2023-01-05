@@ -23,7 +23,7 @@ local sources = {
   }),
   -- null_ls.builtins.formatting.jq,
   -- xml
-  null_ls.builtins.formatting.xmllint,
+  -- null_ls.builtins.formatting.xmllint,
   -- toml
   null_ls.builtins.formatting.taplo,
   -- sh

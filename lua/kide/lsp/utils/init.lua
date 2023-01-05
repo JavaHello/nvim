@@ -50,7 +50,7 @@ format_lsp_mapping["handlebars"] = "null-ls"
 format_lsp_mapping["nginx"] = "null-ls"
 
 -- xmllint
-format_lsp_mapping["xml"] = "null-ls"
+format_lsp_mapping["xml"] = "lemminx"
 
 -- taplo
 format_lsp_mapping["toml"] = "null-ls"
