@@ -201,15 +201,15 @@ M.is_mac = M.os_type() == M.Mac
 ---@param complete {}
 ---@param opt {multiple:false, multiple_repeated:false, single:false}
 M.command_args_complete = function(complete, opt)
-  local lopt = opt or {}
-  if complete then
+  opt = opt or {}
+  if complete ~= nil then
     return function(_, cmd_line, _)
-      if lopt.multiple then
+      if opt.multiple ~= nil and opt.multiple then
         local args = vim.split(cmd_line, " ")
         return vim.tbl_filter(function(item)
           return not vim.tbl_contains(args, item)
         end, complete)
-      elseif lopt.single then
+      elseif opt.single ~= nil and opt.single then
         local args = vim.split(cmd_line, " ")
         for _, value in ipairs(args) do
           if vim.tbl_contains(complete, value) then

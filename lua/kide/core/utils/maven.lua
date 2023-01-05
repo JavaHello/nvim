@@ -26,15 +26,30 @@ local function pom_file(file)
   return ""
 end
 
-local exec = function(cmd, pom)
-  require("toggleterm").exec(cmd .. settings_opt(M.get_maven_settings()) .. pom_file(pom))
+local exec = function(cmd, pom, opt)
+  opt = opt or {}
+  local Terminal = require("toggleterm.terminal").Terminal
+  -- require("toggleterm").exec(cmd .. settings_opt(M.get_maven_settings()) .. pom_file(pom))
+  local mvn = Terminal:new({
+    cmd = cmd .. settings_opt(M.get_maven_settings()) .. pom_file(pom),
+    close_on_exit = opt.close_on_exit,
+    auto_scroll = true,
+    on_exit = function(_)
+      if opt.update ~= nil and opt.update then
+        vim.defer_fn(function()
+          require("jdtls").update_project_config()
+        end, 500)
+      end
+    end,
+  })
+  mvn:toggle()
 end
-local function create_command(buf, name, cmd, complete)
+local function create_command(buf, name, cmd, complete, opt)
   vim.api.nvim_buf_create_user_command(buf, name, function(opts)
     if opts.args then
-      exec(cmd .. " " .. opts.args, vim.fn.expand("%"))
+      exec(cmd .. " " .. opts.args, vim.fn.expand("%"), opt)
     else
-      exec(cmd, vim.fn.expand("%"))
+      exec(cmd, vim.fn.expand("%"), opt)
     end
   end, {
     nargs = "*",
@@ -45,18 +60,26 @@ end
 local maven_args_complete = utils.command_args_complete
 
 M.maven_command = function(buf)
-  create_command(buf, "MavenCompile", "mvn clean compile", maven_args_complete({ "test-compile" }, { multiple = true }))
+  create_command(
+    buf,
+    "MavenCompile",
+    "mvn clean compile",
+    maven_args_complete({ "test-compile" }, { multiple = true }),
+    { update = true }
+  )
   create_command(
     buf,
     "MavenInstll",
     "mvn clean install",
-    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true })
+    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true }),
+    { update = true }
   )
   create_command(
     buf,
     "MavenPackage",
     "mvn clean package",
-    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true })
+    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true }),
+    { update = true }
   )
   create_command(
     buf,
@@ -64,8 +87,12 @@ M.maven_command = function(buf)
     "mvn dependency:tree",
     maven_args_complete({ "-Doutput=.dependency.txt" }, { multiple = true })
   )
-  create_command(buf, "MavenDependencyAnalyzeDuplicate", "mvn dependency:analyze-duplicate")
-  create_command(buf, "MavenDependencyAnalyzeOnly", "mvn dependency:analyze-only -Dverbose")
+  create_command(buf, "MavenDependencyAnalyzeDuplicate", "mvn dependency:analyze-duplicate", nil, {
+    close_on_exit = false,
+  })
+  create_command(buf, "MavenDependencyAnalyzeOnly", "mvn dependency:analyze-only -Dverbose", nil, {
+    close_on_exit = false,
+  })
   create_command(buf, "MavenDownloadSources", "mvn dependency:sources -DdownloadSources=true")
   create_command(buf, "MavenTest", "mvn test", maven_args_complete({ "-Dtest=" }, {}))
 end
