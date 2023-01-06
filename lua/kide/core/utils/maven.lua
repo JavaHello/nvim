@@ -68,27 +68,28 @@ M.maven_command = function(buf)
     "MavenCompile",
     "mvn clean compile",
     maven_args_complete({ "test-compile" }, { multiple = true }),
-    { update = true }
+    { update = true, close_on_exit = false }
   )
   create_command(
     buf,
     "MavenInstll",
     "mvn clean install",
     maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true }),
-    { update = true }
+    { update = true, close_on_exit = false }
   )
   create_command(
     buf,
     "MavenPackage",
     "mvn clean package",
     maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true }),
-    { update = true }
+    { update = true, close_on_exit = false }
   )
   create_command(
     buf,
     "MavenDependencyTree",
     "mvn dependency:tree",
-    maven_args_complete({ "-Doutput=.dependency.txt" }, { multiple = true })
+    maven_args_complete({ "-Doutput=.dependency.txt" }, { multiple = true }),
+    { close_on_exit = false }
   )
   create_command(buf, "MavenDependencyAnalyzeDuplicate", "mvn dependency:analyze-duplicate", nil, {
     close_on_exit = false,
