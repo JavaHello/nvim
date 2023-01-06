@@ -37,7 +37,10 @@ local exec = function(cmd, pom, opt)
     on_exit = function(_)
       if opt.update ~= nil and opt.update then
         vim.defer_fn(function()
-          require("jdtls").update_project_config()
+          local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+          if filetype == "java" then
+            require("jdtls").update_project_config()
+          end
         end, 500)
       end
     end,
