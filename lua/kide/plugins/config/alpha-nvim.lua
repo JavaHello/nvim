@@ -1,20 +1,11 @@
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
--- local ascli = require("kide.plugins.config.ascli-header")
+local ascli = require("kide.plugins.config.ascli-header")
 
 dashboard.leader = "\\"
 -- Set header
 -- dashboard.section.header.val = ascli[math.random(0, #ascli)]
-dashboard.section.header.val = {
-  "                                                     ",
-  "  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
-  "  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
-  "  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
-  "  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
-  "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
-  "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
-  "                                                     ",
-}
+dashboard.section.header.val = ascli[33]
 local opt = { noremap = true, silent = true }
 -- Set menu
 dashboard.section.buttons.val = {
