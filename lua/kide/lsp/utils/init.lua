@@ -72,6 +72,10 @@ format_lsp_mapping["go"] = "null-ls"
 format_lsp_mapping["c"] = "clangd"
 format_lsp_mapping["cpp"] = "clangd"
 
+
+-- black
+format_lsp_mapping["python"] = "null-ls"
+
 M.filter_format_lsp_client = function(client, bufnr)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
   local cn = format_lsp_mapping[filetype]

@@ -79,6 +79,9 @@ local sources = {
   --   },
   -- }),
   null_ls.builtins.formatting.nginx_beautifier,
+
+  -- python
+  null_ls.builtins.formatting.black,
 }
 
 local lsp_formatting = function(bufnr)
