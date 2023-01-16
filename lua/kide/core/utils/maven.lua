@@ -35,7 +35,7 @@ local exec = function(cmd, pom, opt)
     close_on_exit = opt.close_on_exit,
     auto_scroll = true,
     on_exit = function(_)
-      if opt.update ~= nil and opt.update then
+      if opt.update ~= nil and opt.update and opt.close_on_exit ~= nil and opt.close_on_exit then
         vim.defer_fn(function()
           local filetype = vim.api.nvim_buf_get_option(0, "filetype")
           if filetype == "java" then
