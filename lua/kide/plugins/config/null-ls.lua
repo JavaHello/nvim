@@ -120,6 +120,17 @@ if "1" == os.getenv("SEMGREP_ENABLE") then
     })
   )
 end
+if "1" == os.getenv("PMD_ENABLE") then
+  table.insert(
+    sources,
+    null_ls.builtins.diagnostics.pmd.with({
+      extra_args = {
+        "--rulesets",
+        "category/java/bestpractices.xml,category/jsp/bestpractices.xml",
+      },
+    })
+  )
+end
 
 null_ls.setup({
   sources = sources,
