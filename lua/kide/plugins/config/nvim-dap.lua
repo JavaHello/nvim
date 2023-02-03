@@ -8,6 +8,31 @@ local dap = require("dap")
 local dapui = require("dapui")
 dapui.setup({
   icons = { expanded = "", collapsed = "", current_frame = "" },
+  layouts = {
+    {
+      -- You can change the order of elements in the sidebar
+      elements = {
+        -- Provide IDs as strings or tables with "id" and "size" keys
+        {
+          id = "scopes",
+          size = 0.25, -- Can be float or integer > 1
+        },
+        { id = "breakpoints", size = 0.25 },
+        { id = "stacks", size = 0.25 },
+        { id = "watches", size = 0.25 },
+      },
+      size = 40,
+      position = "left",
+    },
+    {
+      elements = {
+        { id = "console", size = 0.5 },
+        { id = "repl", size = 0.5 },
+      },
+      size = 12,
+      position = "bottom",
+    },
+  },
 })
 
 -- dap.defaults.fallback.terminal_win_cmd = "belowright 12new | set filetype=dap-terminal"
