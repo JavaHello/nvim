@@ -26,16 +26,16 @@ dapui.setup({
     },
     {
       elements = {
-        { id = "console", size = 0.5 },
-        { id = "repl", size = 0.5 },
+        { id = "repl", size = 1 },
+        -- { id = "console", size = 0.5 },
       },
-      size = 12,
+      size = 0.25,
       position = "bottom",
     },
   },
 })
 
--- dap.defaults.fallback.terminal_win_cmd = "belowright 12new | set filetype=dap-terminal"
+dap.defaults.fallback.terminal_win_cmd = "belowright 12new | set filetype=dap-terminal"
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
