@@ -899,6 +899,36 @@ require("packer").startup({
       },
     })
 
+    -- debugprint
+    use({
+      "andrewferrier/debugprint.nvim",
+      opt = true,
+      ft = {
+        "bash",
+        "c",
+        "cpp",
+        "cs",
+        "dart",
+        "dockerfile",
+        "go",
+        "java",
+        "javascript",
+        "lua",
+        "make",
+        "php",
+        "python",
+        "ruby",
+        "rust",
+        "sh",
+        "typescript",
+        "vim",
+        "zsh",
+      },
+      config = function()
+        require("debugprint").setup()
+      end,
+    })
+
     if bootstrap then
       require("packer").sync()
     end
