@@ -117,6 +117,7 @@ if "1" == os.getenv("SEMGREP_ENABLE") then
     null_ls.builtins.diagnostics.semgrep.with({
       filetypes = { "java" },
       extra_args = { "--config", os.getenv("SEMGREP_RULES_PATH") .. "/java" },
+      method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
     })
   )
 end
@@ -128,6 +129,7 @@ if "1" == os.getenv("PMD_ENABLE") then
         "--rulesets",
         "category/java/bestpractices.xml,category/jsp/bestpractices.xml",
       },
+      method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
     })
   )
 end
