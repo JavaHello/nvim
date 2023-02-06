@@ -24,29 +24,35 @@ git clone  https://github.com/JavaHello/nvim.git
 
 ## 快捷键
 
-|         功能         |         按键         |
-| :------------------: | :------------------: |
-|       文件管理       |     `<leader>e`      |
-|       文件搜索       |     `<leader>ff`     |
-|       全局搜索       |     `<leader>fg`     |
-|     全局搜索替换     |     `<leader>fr`     |
-|     搜索 symbols     |     `<leader>fs`     |
-|       Git 操作       |      `:Neogit`       |
-|       Outline        |     `<leader>o`      |
-|       查看实现       |         `gi`         |
-|       查看引用       |         `gr`         |
-|       查看声明       |         `gd`         |
-| 格式化(LSP 提供支持) |     `<leader>=`      |
-|        重命名        |     `<leader>rn`     |
-|     Code Action      |     `<leader>ca`     |
-|        Debug         | `F5`or`:DapContinue` |
-|         断点         |     `<leader>db`     |
-|     翻译 en->zh      |     `<leader>tz`     |
-|     翻译 zh->en      |     `<leader>te`     |
-|       内置终端       |    `:ToggleTerm`     |
-|      Tasks 列表      |     `<leader>ts`     |
-|       代码折叠       |         `zc`         |
-|       代码展开       |      `zo`or`l`       |
+|              功能               |         模式         |           按键            |
+| :-----------------------------: | :------------------: | :-----------------------: |
+|            文件管理             |       `Normal`       |        `<leader>e`        |
+|            文件搜索             |       `Normal`       |       `<leader>ff`        |
+|            全局搜索             | `Normal` or `Visual` |       `<leader>fg`        |
+|          全局搜索替换           | `Normal` or `Visual` |       `<leader>fr`        |
+|          搜索 symbols           | `Normal` or `Visual` |       `<leader>fs`        |
+|            Git 操作             |      `Command`       |    `:Neogit` or `:Git`    |
+|             Outline             |       `Normal`       |        `<leader>o`        |
+|            查看实现             |       `Normal`       |           `gi`            |
+|            查看引用             |       `Normal`       |           `gr`            |
+|            查看声明             |       `Normal`       |           `gd`            |
+|      格式化(LSP 提供支持)       | `Normal` or `Visual` |        `<leader>=`        |
+|             重命名              |       `Normal`       |       `<leader>rn`        |
+|           Code Action           |       `Normal`       |       `<leader>ca`        |
+|              Debug              |       `Normal`       |  `F5` or `:DapContinue`   |
+|              断点               |       `Normal`       |       `<leader>db`        |
+|           翻译 en->zh           | `Normal` or `Visual` |       `<leader>tz`        |
+|           翻译 zh->en           | `Normal` or `Visual` |       `<leader>te`        |
+|            内置终端             |      `Command`       |       `:ToggleTerm`       |
+|           Tasks 列表            |       `Normal`       |       `<leader>ts`        |
+|            代码折叠             |       `Normal`       |           `zc`            |
+|            代码展开             |       `Normal`       |           `zo`            |
+|     Java: Junit Test Method     |       `Normal`       |       `<leader>dm`        |
+|     Java: Junit Test Class      |       `Normal`       |       `<leader>dc`        |
+|            Run Last             |       `Normal`       |       `<leader>dl`        |
+|       Java: 更新项目配置        |      `Command`       |    `:JdtUpdateConfig`     |
+| Java: 刷新 Main 方法 Debug 配置 |      `Command`       | `:JdtRefreshDebugConfigs` |
+|       Java: 预览项目依赖        |      `Command`       |      `:JavaProjects`      |
 
 更多配置参考 [keybindings](./lua/kide/core/keybindings.lua) 文件
 
