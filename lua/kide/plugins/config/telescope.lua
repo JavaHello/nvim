@@ -153,3 +153,8 @@ vim.api.nvim_create_autocmd("BufRead", {
     })
   end,
 })
+
+require("telescope").load_extension("project")
+require("telescope").load_extension("ui-select")
+require("telescope").load_extension("fzf")
+require("telescope").load_extension("env")

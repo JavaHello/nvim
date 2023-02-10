@@ -144,6 +144,9 @@ nnoremap <C-l> <C-w>l
 
   -- ToggleTask
   map("n", "<leader>ts", "<cmd>Telescope toggletasks spawn<cr>", opt)
+
+  -- nvimTree
+  map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
 end
 -- lsp 回调函数快捷键设置
 M.maplsp = function(client, buffer)
@@ -332,8 +335,4 @@ M.ufo_mapkey = function()
   vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
 end
 
-M.nvim_tree = function()
-  -- nvimTree
-  map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
-end
 return M

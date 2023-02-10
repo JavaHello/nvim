@@ -61,7 +61,7 @@ ls.config.set_config({
   -- `nvim-treesitter/nvim-treesitter`). This allows correctly resolving
   -- the current filetype in eg. a markdown-code block or `vim.cmd()`.
   ft_func = function()
-    return vim.split(vim.bo.filetype, ".", true)
+    return vim.split(vim.bo.filetype, ".", { plain = true })
   end,
 })
 

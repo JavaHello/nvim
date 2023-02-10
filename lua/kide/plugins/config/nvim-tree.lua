@@ -106,5 +106,3 @@ require("nvim-tree").setup({
 --    },
 -- }
 
--- nvimTree
-require("kide.core.keybindings").nvim_tree()
