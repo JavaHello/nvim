@@ -23,7 +23,7 @@ require("lazy").setup({
   },
   {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPost" },
+    event = { "BufNewFile", "BufReadPost" },
     config = function()
       require("kide.lsp")
     end,
