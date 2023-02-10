@@ -32,23 +32,12 @@ require("lazy").setup({
   -- 代码片段
   {
     "rafamadriz/friendly-snippets",
-    event = { "InsertEnter" },
     lazy = true,
-  },
-  -- nvim-cmp
-  {
-    "hrsh7th/nvim-cmp",
-    event = { "InsertEnter" },
-    lazy = true,
-    config = function()
-      require("kide.plugins.config.nvim-cmp")
-    end,
   },
   -- LuaSnip
   {
     "L3MON4D3/LuaSnip",
     lazy = true,
-    event = { "InsertEnter" },
     dependencies = { "friendly-snippets" },
     config = function()
       require("kide.plugins.config.luasnip")
@@ -57,19 +46,26 @@ require("lazy").setup({
   {
     "saadparwaiz1/cmp_luasnip",
     dependencies = { "LuaSnip" },
-    event = { "InsertEnter" },
     lazy = true,
   },
   -- lspkind
   {
     "onsails/lspkind-nvim",
     lazy = true,
+  },
+  -- nvim-cmp
+  {
+    "hrsh7th/nvim-cmp",
     event = { "InsertEnter" },
+    dependencies = { "cmp_luasnip", "lspkind-nvim" },
+    lazy = true,
+    config = function()
+      require("kide.plugins.config.nvim-cmp")
+    end,
   },
   {
     "hrsh7th/cmp-nvim-lsp",
     lazy = true,
-    event = { "InsertEnter" },
   },
   {
     "hrsh7th/cmp-buffer",
@@ -256,6 +252,7 @@ require("lazy").setup({
   {
     "lewis6991/gitsigns.nvim",
     layz = true,
+    event = { "BufReadPost" },
     config = function()
       require("kide.plugins.config.gitsigns-nvim")
     end,
@@ -339,6 +336,7 @@ require("lazy").setup({
   -- wildmenu 补全美化
   {
     "gelguy/wilder.nvim",
+    keys = ":",
     config = function()
       require("kide.plugins.config.wilder")
     end,
@@ -403,6 +401,8 @@ require("lazy").setup({
   -- 快捷键查看
   {
     "folke/which-key.nvim",
+    lazy = true,
+    keys = "<leader>",
     config = function()
       require("kide.plugins.config.which-key")
     end,

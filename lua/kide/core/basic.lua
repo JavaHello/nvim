@@ -125,11 +125,12 @@ vim.o.wildmenu = true
 vim.opt.confirm = true
 
 -- vim.g.python_host_prog='/opt/homebrew/bin/python3'
-vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
+-- vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 
 vim.opt.list = true
 vim.opt.cul = true -- cursor line
 
+vim.o.timeout = true
 vim.opt.timeoutlen = 450
 
 vim.opt.mouse = "a"
