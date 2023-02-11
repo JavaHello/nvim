@@ -188,6 +188,7 @@ require("lazy").setup({
     lazy = true,
     dependencies = { "gruvbox.nvim" },
     cmd = { "Telescope" },
+    keys = { "<leader>" },
     tag = "0.1.1",
     config = function()
       require("kide.plugins.config.telescope")
