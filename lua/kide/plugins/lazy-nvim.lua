@@ -168,17 +168,27 @@ require("lazy").setup({
   {
     "mfussenegger/nvim-dap",
     lazy = true,
+    config = function()
+      require("kide.dap")
+    end,
   },
   {
     "rcarriga/nvim-dap-ui",
     lazy = true,
+    dependencies = { "nvim-dap" },
+    keys = { "<leader>d" },
+    config = function()
+      require("kide.plugins.config.nvim-dap-ui")
+    end,
   },
   {
     "theHamsta/nvim-dap-virtual-text",
     lazy = true,
+    dependencies = { "nvim-dap", "telescope.nvim" },
+    keys = { "<leader>d" },
     config = function()
-      require("kide.plugins.config.nvim-dap")
-      require("kide.dap")
+      require("nvim-dap-virtual-text").setup({})
+      require("telescope").load_extension("dap")
     end,
   },
 

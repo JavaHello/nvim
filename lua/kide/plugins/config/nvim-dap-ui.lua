@@ -63,6 +63,3 @@ end, {})
 vim.api.nvim_create_user_command("DapUiToggle", function()
   require("dapui").toggle({})
 end, {})
-
-require("nvim-dap-virtual-text").setup({})
-require("telescope").load_extension("dap")
