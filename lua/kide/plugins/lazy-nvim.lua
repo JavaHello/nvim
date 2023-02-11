@@ -123,7 +123,7 @@ require("lazy").setup({
   -- treesitter (新增)
   {
     "nvim-treesitter/nvim-treesitter",
-    priority = 90,
+    event = { "BufNewFile", "BufReadPost" },
     dependencies = { "gruvbox.nvim" },
     build = ":TSUpdate",
     config = function()
@@ -133,13 +133,7 @@ require("lazy").setup({
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     dependencies = { "nvim-treesitter" },
-  },
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-    dependencies = { "nvim-treesitter" },
-    config = function()
-      require("kide.plugins.config.nvim-treesitter-context")
-    end,
+    event = { "BufNewFile", "BufReadPost" },
   },
 
   -- java
