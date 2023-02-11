@@ -558,7 +558,7 @@ require("lazy").setup({
       "DBUIToggle",
     },
     init = function()
-      require("kide.plugins.config.vim-dadbod")
+      vim.g.db_ui_use_nerd_fonts = 1
     end,
   },
 
