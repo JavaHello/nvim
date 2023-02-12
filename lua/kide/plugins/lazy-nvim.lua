@@ -1,3 +1,9 @@
+local function loadPluginCmd(cmd, module)
+  vim.api.nvim_create_user_command(cmd, function()
+    require(module)
+  end, {})
+end
+
 require("lazy").setup({
 
   {
@@ -179,12 +185,10 @@ require("lazy").setup({
     lazy = true,
     dependencies = { "mfussenegger/nvim-dap" },
     cmd = {
-      "DapUILoad",
+      "LoadDapUI",
     },
     init = function()
-      vim.api.nvim_create_user_command("DapUILoad", function()
-        require("dapui")
-      end, {})
+      loadPluginCmd("LoadDapUI", "dapui")
     end,
     config = function()
       require("kide.plugins.config.nvim-dap-ui")
@@ -445,6 +449,12 @@ require("lazy").setup({
   {
     "junegunn/vim-easy-align",
     lazy = true,
+    config = function()
+      vim.cmd([[
+      xmap ga <Plug>(EasyAlign)
+      nmap ga <Plug>(EasyAlign)
+     ]])
+    end,
   },
 
   -- 表格模式插件
@@ -549,6 +559,9 @@ require("lazy").setup({
     lazy = true,
     cmd = { "Registers" },
     keys = '"',
+    config = function()
+      require("registers").setup()
+    end,
   },
 
   -- databases
@@ -564,6 +577,7 @@ require("lazy").setup({
   {
     "kristijanhusak/vim-dadbod-ui",
     lazy = true,
+    dependencies = { "tpope/vim-dadbod" },
     cmd = {
       "DBUI",
       "DBUIToggle",
