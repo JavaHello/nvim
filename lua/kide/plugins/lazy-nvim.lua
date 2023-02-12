@@ -38,14 +38,14 @@ require("lazy").setup({
   {
     "L3MON4D3/LuaSnip",
     lazy = true,
-    dependencies = { "friendly-snippets" },
+    dependencies = { "rafamadriz/friendly-snippets" },
     config = function()
       require("kide.plugins.config.luasnip")
     end,
   },
   {
     "saadparwaiz1/cmp_luasnip",
-    dependencies = { "LuaSnip" },
+    dependencies = { "L3MON4D3/LuaSnip" },
     lazy = true,
   },
   -- lspkind
@@ -57,7 +57,13 @@ require("lazy").setup({
   {
     "hrsh7th/nvim-cmp",
     event = { "InsertEnter" },
-    dependencies = { "cmp_luasnip", "lspkind-nvim" },
+    dependencies = {
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "saadparwaiz1/cmp_luasnip",
+      "onsails/lspkind-nvim",
+    },
     lazy = true,
     config = function()
       require("kide.plugins.config.nvim-cmp")
@@ -70,18 +76,16 @@ require("lazy").setup({
   {
     "hrsh7th/cmp-buffer",
     lazy = true,
-    event = { "InsertEnter" },
   },
   {
     "hrsh7th/cmp-path",
     lazy = true,
-    event = { "InsertEnter" },
   },
 
   {
     "jose-elias-alvarez/null-ls.nvim",
     lazy = true,
-    event = { "BufReadPost" },
+    event = { "BufNewFile", "BufReadPost" },
     config = function()
       require("kide.plugins.config.null-ls")
     end,
@@ -91,7 +95,8 @@ require("lazy").setup({
   -- use 'morhetz/gruvbox'
   {
     "ellisonleao/gruvbox.nvim",
-    priority = 100,
+    lazy = false,
+    priority = 1000,
     config = function()
       require("kide.plugins.config.gruvbox")
     end,
@@ -113,7 +118,7 @@ require("lazy").setup({
   {
     "akinsho/bufferline.nvim",
     tag = "v3.0.1",
-    dependencies = { "gruvbox.nvim" },
+    dependencies = { "ellisonleao/gruvbox.nvim" },
     requires = "kyazdani42/nvim-web-devicons",
     config = function()
       require("kide.plugins.config.bufferline")
@@ -124,7 +129,7 @@ require("lazy").setup({
   {
     "nvim-treesitter/nvim-treesitter",
     event = { "BufNewFile", "BufReadPost" },
-    dependencies = { "gruvbox.nvim" },
+    dependencies = { "ellisonleao/gruvbox.nvim" },
     build = ":TSUpdate",
     config = function()
       require("kide.plugins.config.nvim-treesitter")
@@ -132,7 +137,7 @@ require("lazy").setup({
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
-    dependencies = { "nvim-treesitter" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
     event = { "BufNewFile", "BufReadPost" },
   },
 
@@ -162,15 +167,25 @@ require("lazy").setup({
   {
     "mfussenegger/nvim-dap",
     lazy = true,
+    event = { "BufNewFile", "BufReadPost" },
     config = function()
       require("kide.dap")
+      require("nvim-dap-virtual-text").setup({})
+      require("telescope").load_extension("dap")
     end,
   },
   {
     "rcarriga/nvim-dap-ui",
     lazy = true,
-    dependencies = { "nvim-dap" },
-    keys = { "<leader>d" },
+    dependencies = { "mfussenegger/nvim-dap" },
+    cmd = {
+      "DapUILoad",
+    },
+    init = function()
+      vim.api.nvim_create_user_command("DapUILoad", function()
+        require("dapui")
+      end, {})
+    end,
     config = function()
       require("kide.plugins.config.nvim-dap-ui")
     end,
@@ -178,19 +193,14 @@ require("lazy").setup({
   {
     "theHamsta/nvim-dap-virtual-text",
     lazy = true,
-    dependencies = { "nvim-dap", "telescope.nvim" },
-    keys = { "<leader>d" },
-    config = function()
-      require("nvim-dap-virtual-text").setup({})
-      require("telescope").load_extension("dap")
-    end,
+    dependencies = { "mfussenegger/nvim-dap" },
   },
 
   -- 搜索插件
   {
     "nvim-telescope/telescope.nvim",
     lazy = true,
-    dependencies = { "gruvbox.nvim" },
+    dependencies = { "ellisonleao/gruvbox.nvim" },
     cmd = { "Telescope" },
     keys = { "<leader>" },
     tag = "0.1.1",
@@ -209,6 +219,7 @@ require("lazy").setup({
   },
   {
     "nvim-telescope/telescope-dap.nvim",
+    dependencies = { "mfussenegger/nvim-dap" },
     lazy = true,
   },
 
@@ -301,7 +312,7 @@ require("lazy").setup({
   -- 状态栏插件
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = { "gruvbox.nvim" },
+    dependencies = { "ellisonleao/gruvbox.nvim" },
     config = function()
       require("kide.plugins.config.lualine")
     end,
@@ -341,7 +352,7 @@ require("lazy").setup({
   -- wildmenu 补全美化
   {
     "gelguy/wilder.nvim",
-    keys = ":",
+    keys = { ":", "/" },
     config = function()
       require("kide.plugins.config.wilder")
     end,

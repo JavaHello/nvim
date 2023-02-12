@@ -105,4 +105,3 @@ require("nvim-tree").setup({
 --       symlink_open = "",
 --    },
 -- }
-
