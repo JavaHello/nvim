@@ -163,9 +163,10 @@ require("lazy").setup({
   {
     "JavaHello/java-deps.nvim",
     lazy = true,
-    ft = { "java" },
+    ft = "java",
+    dependencies = "mfussenegger/nvim-jdtls",
     config = function()
-      require("java-deps").setup()
+      require("java-deps").setup({})
     end,
   },
 
