@@ -46,23 +46,13 @@ end
 dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
-
--- vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
-vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })
--- vim.fn.sign_define("DapBreakpointCondition", { text = "C", texthl = "", linehl = "", numhl = "" })
--- vim.fn.sign_define('DapBreakpointRejected', {text='R', texthl='', linehl='', numhl=''})
--- vim.fn.sign_define('DapLogPoint', {text='L', texthl='', linehl='', numhl=''})
--- vim.fn.sign_define('DapStopped', {text='→', texthl='', linehl='debugPC', numhl=''})
-
-vim.api.nvim_create_user_command("DapUiOpen", function()
+-- nvim-dap
+vim.api.nvim_create_user_command("DapUIOpen", function()
   require("dapui").open({})
 end, {})
-vim.api.nvim_create_user_command("DapUiClose", function()
+vim.api.nvim_create_user_command("DapUIClose", function()
   require("dapui").close({})
 end, {})
-vim.api.nvim_create_user_command("DapUiToggle", function()
+vim.api.nvim_create_user_command("DapUIToggle", function()
   require("dapui").toggle({})
 end, {})
-
-require("nvim-dap-virtual-text").setup({})
-require("telescope").load_extension("dap")

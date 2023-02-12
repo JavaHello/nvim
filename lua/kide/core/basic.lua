@@ -125,11 +125,12 @@ vim.o.wildmenu = true
 vim.opt.confirm = true
 
 -- vim.g.python_host_prog='/opt/homebrew/bin/python3'
-vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
+-- vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 
 vim.opt.list = true
 vim.opt.cul = true -- cursor line
 
+vim.o.timeout = true
 vim.opt.timeoutlen = 450
 
 vim.opt.mouse = "a"
@@ -138,6 +139,14 @@ vim.opt.mouse = "a"
 -- https://stackoverflow.com/questions/8316139/how-to-set-the-default-to-unfolded-when-you-open-a-file
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
+
+-- Highlight on yank
+vim.api.nvim_create_autocmd({ "TextYankPost" }, {
+  pattern = { "*" },
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+})
 
 vim.cmd([[
 set completeopt=menu,menuone,noselect

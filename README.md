@@ -1,8 +1,8 @@
 # NVIM IDE
 
-可配置 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发环境。 极速启动 (60 ~ 100 ms), 注重细节。
+可配置 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发环境。 极速启动 (`startuptime` 20 ~ 70 ms)。
 
-使用 `neovim v0.8.1 +` 版本。
+使用 `neovim v0.8.3`+ 版本。
 
 ## 安装
 

@@ -226,7 +226,6 @@ local config = {
         resourceFilters = {
           "node_modules",
           ".git",
-          ".idea",
         },
       },
       import = {
@@ -236,7 +235,6 @@ local config = {
           "**/archetype-resources/**",
           "**/META-INF/maven/**",
           "**/.git/**",
-          "**/.idea/**",
         },
       },
       referenceCodeLens = { enabled = true },

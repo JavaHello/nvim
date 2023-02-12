@@ -112,7 +112,7 @@ nnoremap <silent> <leader>dl :lua require'dap'.run_last()<CR>
 
   -- nvim-dap-ui
   vim.cmd([[
-nnoremap <silent> <space>dr :lua require("dapui").float_element(vim.Nil, { enter = true}) <CR>
+nnoremap <silent> <leader>dr :lua require("dapui").float_element(vim.Nil, { enter = true}) <CR>
 ]])
 
   -- bufferline.nvim
@@ -144,6 +144,9 @@ nnoremap <C-l> <C-w>l
 
   -- ToggleTask
   map("n", "<leader>ts", "<cmd>Telescope toggletasks spawn<cr>", opt)
+
+  -- nvimTree
+  map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
 end
 -- lsp 回调函数快捷键设置
 M.maplsp = function(client, buffer)
@@ -260,7 +263,6 @@ end
 -- nvim-cmp 自动补全
 M.cmp = function(cmp)
   local luasnip = require("luasnip")
-  local neogen = require("neogen")
   local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
@@ -290,6 +292,7 @@ M.cmp = function(cmp)
     }),
 
     ["<Tab>"] = cmp.mapping(function(fallback)
+      local neogen = require("neogen")
       if cmp.visible() then
         cmp.select_next_item()
       elseif luasnip.expand_or_jumpable() then
@@ -304,6 +307,7 @@ M.cmp = function(cmp)
     end, { "i", "s" }),
 
     ["<S-Tab>"] = cmp.mapping(function(fallback)
+      local neogen = require("neogen")
       if cmp.visible() then
         cmp.select_prev_item()
       elseif luasnip.jumpable(-1) then
@@ -332,8 +336,4 @@ M.ufo_mapkey = function()
   vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
 end
 
-M.nvim_tree = function()
-  -- nvimTree
-  map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
-end
 return M

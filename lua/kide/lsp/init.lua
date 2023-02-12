@@ -1,6 +1,7 @@
 local mason_lspconfig = require("mason-lspconfig")
 mason_lspconfig.setup({
   ensure_installed = {
+    -- "lua-language-server",
     "sumneko_lua",
   },
 })
@@ -9,7 +10,8 @@ mason_lspconfig.setup({
 -- https://github.com/williamboman/nvim-lsp-installer#available-lsps
 -- { key: 语言 value: 配置文件 }
 local server_configs = {
-  sumneko_lua = require("kide.lsp.sumneko_lua"), -- /lua/lsp/lua.lua
+  -- sumneko_lua -> lua_ls
+  lua_ls = require("kide.lsp.lua_ls"), -- /lua/lsp/lua.lua
   -- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
   -- jsonls = require("lsp.jsonls"),
   clangd = require("kide.lsp.clangd"),
@@ -29,11 +31,17 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protoc
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 local utils = require("kide.core.utils")
 
+-- LSP 进度UI
+require("fidget")
 require("mason-lspconfig").setup_handlers({
   -- The first entry (without a key) will be the default handler
   -- and will be called for each installed server that doesn't have
   -- a dedicated handler.
   function(server_name) -- default handler (optional)
+    -- sumneko_lua -> lua_ls
+    if server_name == "sumneko_lua" then
+      server_name = "lua_ls"
+    end
     local lspconfig = require("lspconfig")
     -- tools config
     local cfg = utils.or_default(server_configs[server_name], {})

@@ -72,7 +72,6 @@ format_lsp_mapping["go"] = "null-ls"
 format_lsp_mapping["c"] = "clangd"
 format_lsp_mapping["cpp"] = "clangd"
 
-
 -- black
 format_lsp_mapping["python"] = "null-ls"
 
