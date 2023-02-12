@@ -263,6 +263,7 @@ require("lazy").setup({
     "TimUntersberger/neogit",
     layz = true,
     cmd = "Neogit",
+    dependencies = { "sindrets/diffview.nvim" },
     config = function()
       require("kide.plugins.config.neogit")
     end,
@@ -301,6 +302,7 @@ require("lazy").setup({
   {
     "jedrzejboczar/toggletasks.nvim",
     lazy = true,
+    dependencies = { "akinsho/toggleterm.nvim" },
     config = function()
       require("kide.plugins.config.toggletasks")
     end,
@@ -373,7 +375,7 @@ require("lazy").setup({
 
   {
     "numToStr/Comment.nvim",
-    keys = { "gc", "gb" },
+    keys = { "gcc", "gb" },
     config = function()
       require("kide.plugins.config.comment")
     end,
@@ -444,11 +446,16 @@ require("lazy").setup({
       require("kide.plugins.config.translate")
     end,
   },
-
+  -- StartupTime
+  {
+    "dstein64/vim-startuptime",
+    cmd = "StartupTime",
+  },
   -- 自动对齐插件
   {
     "junegunn/vim-easy-align",
     lazy = true,
+    cmd = "EasyAlign",
     config = function()
       vim.cmd([[
       xmap ga <Plug>(EasyAlign)
