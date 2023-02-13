@@ -111,17 +111,9 @@ local on_attach = function(client, bufnr)
   end
 end
 
-if "1" == os.getenv("SEMGREP_ENABLE") then
-  table.insert(
-    sources,
-    null_ls.builtins.diagnostics.semgrep.with({
-      filetypes = { "java" },
-      extra_args = { "--config", os.getenv("SEMGREP_RULES_PATH") .. "/java" },
-      method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
-    })
-  )
-end
-if "1" == os.getenv("PMD_ENABLE") then
+if "Y" == os.getenv("SEMGREP_ENABLE") then
+  table.insert(sources, null_ls.builtins.diagnostics.semgrep)
+elseif "Y" == os.getenv("PMD_ENABLE") then
   table.insert(
     sources,
     null_ls.builtins.diagnostics.pmd.with({
