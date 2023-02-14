@@ -443,6 +443,7 @@ require("lazy").setup({
   {
     "uga-rosa/translate.nvim",
     lazy = true,
+    cmd = "Translate",
     config = function()
       require("kide.plugins.config.translate")
     end,
