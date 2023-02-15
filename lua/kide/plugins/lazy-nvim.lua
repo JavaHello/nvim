@@ -543,7 +543,11 @@ require("lazy").setup({
     "j-hui/fidget.nvim",
     lazy = true,
     config = function()
-      require("fidget").setup({})
+      require("fidget").setup({
+        text = {
+          done = "",
+        },
+      })
     end,
   },
 
@@ -683,5 +687,11 @@ require("lazy").setup({
     config = function()
       require("chatgpt").setup({})
     end,
+  },
+}, {
+  ui = {
+    icons = {
+      task = " ",
+    },
   },
 })
