@@ -503,4 +503,4 @@ ls.filetype_set("cpp", { "c" })
 -- Mind that this will extend  `ls.snippets` so you need to do it after your own snippets or you
 -- will need to extend the table yourself instead of setting a new one.
 
-require("luasnip.loaders.from_vscode").load() -- Load only python snippets
+require("luasnip.loaders.from_vscode").lazy_load()
