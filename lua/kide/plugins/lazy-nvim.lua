@@ -45,6 +45,7 @@ require("lazy").setup({
     "L3MON4D3/LuaSnip",
     lazy = true,
     dependencies = { "rafamadriz/friendly-snippets" },
+    build = "make install_jsregexp",
     config = function()
       require("kide.plugins.config.luasnip")
     end,
