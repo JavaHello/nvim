@@ -147,6 +147,12 @@ nnoremap <C-l> <C-w>l
 
   -- nvimTree
   map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
+
+  -- set keybinds for both INSERT and VISUAL.
+  vim.api.nvim_set_keymap("i", "<C-n>", "<Plug>luasnip-next-choice", {})
+  vim.api.nvim_set_keymap("s", "<C-n>", "<Plug>luasnip-next-choice", {})
+  vim.api.nvim_set_keymap("i", "<C-p>", "<Plug>luasnip-prev-choice", {})
+  vim.api.nvim_set_keymap("s", "<C-p>", "<Plug>luasnip-prev-choice", {})
 end
 -- lsp 回调函数快捷键设置
 M.maplsp = function(client, buffer)
