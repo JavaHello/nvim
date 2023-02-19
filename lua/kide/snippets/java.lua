@@ -59,7 +59,7 @@ ls.add_snippets("java", {
     c(2, {
       t(""),
       t({ "static " }),
-      t({ "final static " }),
+      t({ "final " }),
     }),
     i(3, "void"),
     t(" "),
