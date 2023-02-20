@@ -159,6 +159,7 @@ M.maplsp = function(client, buffer)
   vim.api.nvim_buf_set_option(buffer, "omnifunc", "v:lua.vim.lsp.omnifunc")
   vim.api.nvim_buf_set_option(buffer, "formatexpr", "v:lua.vim.lsp.formatexpr()")
 
+  local bufopts = { noremap = true, silent = true, buffer = buffer }
   vim.api.nvim_buf_set_keymap(buffer, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
   -- rename
   vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opt)
@@ -224,7 +225,7 @@ M.maplsp = function(client, buffer)
         return require("kide.lsp.utils").filter_format_lsp_client(c, bfn)
       end,
     })
-  end, opt)
+  end, bufopts)
   vim.api.nvim_buf_set_keymap(
     buffer,
     "v",
