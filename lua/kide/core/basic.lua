@@ -32,7 +32,7 @@ vim.opt.ruler = false
 vim.wo.cursorline = true
 
 -- 右侧参考线，超过表示代码太长了，考虑换行
--- vim.wo.colorcolumn = "80"
+vim.wo.colorcolumn = "120"
 
 -- 边搜索边高亮
 vim.o.incsearch = true
@@ -78,17 +78,6 @@ autocmd("FileType", {
     vim.opt_local.expandtab = true
   end,
 })
-
--- vim.cmd("autocmd Filetype lua setlocal ts=2 sw=2 expandtab")
--- vim.cmd("autocmd Filetype js setlocal ts=2 sw=2 expandtab")
--- vim.cmd("autocmd Filetype javascript setlocal ts=2 sw=2 expandtab")
--- vim.cmd("autocmd Filetype json setlocal ts=2 sw=2 expandtab")
--- vim.cmd("autocmd Filetype css setlocal ts=2 sw=2 expandtab")
--- vim.cmd("autocmd Filetype html setlocal ts=2 sw=2 expandtab")
--- vim.cmd("autocmd Filetype xml setlocal ts=2 sw=2 expandtab")
--- vim.cmd("autocmd Filetype yaml setlocal ts=2 sw=2 expandtab")
--- vim.cmd("autocmd Filetype http setlocal ts=2 sw=2 expandtab")
--- vim.cmd("autocmd Filetype markdown setlocal ts=2 sw=2 expandtab")
 
 -- 新行对齐当前行，空格替代tab
 vim.o.expandtab = true
@@ -148,26 +137,25 @@ vim.api.nvim_create_autocmd({ "TextYankPost" }, {
   end,
 })
 
-vim.cmd([[
-set completeopt=menu,menuone,noselect
+vim.opt_global.completeopt = "menu,menuone,noselect"
+if vim.g.neovide then
+  vim.g.neovide_cursor_vfx_mode = "railgun"
+  vim.opt_global.guifont = "Hack Nerd Font Mono,Hack:h13"
+  vim.g.neovide_transparency = 1
+  vim.g.neovide_fullscreen = true
+  vim.g.neovide_input_use_logo = true
+  vim.g.neovide_profiler = false
+end
 
-if exists('g:neovide')
-    " let g:neovide_refresh_rate=60
-    let g:neovide_cursor_vfx_mode = "railgun"
-    set guifont=Hack\ Nerd\ Font\ Mono,Hack:h13
-    " let g:neovide_transparency=1
-    let g:neovide_fullscreen=v:true
-    " let g:neovide_remember_window_size = v:true
-    let g:neovide_input_use_logo=v:true
-    let g:neovide_profiler = v:false
-else
-endif
-if has("autocmd")
-    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
+autocmd("BufReadPost", {
+  pattern = "*",
+  callback = function()
+    local l = vim.fn.line("'\"")
+    if l > 1 and l <= vim.fn.line("$") then
+      vim.fn.execute("normal! g'\"")
+    end
+  end,
+})
 
-" set grepprg=rg\ --vimgrep
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
-" set grepformat^=%f:%l:%c:%m
-set grepformat=%f:%l:%c:%m,%f:%l:%m
-]])
+vim.opt_global.grepprg = "rg --vimgrep --no-heading --smart-case"
+vim.opt_global.grepformat = "%f:%l:%c:%m,%f:%l:%m"

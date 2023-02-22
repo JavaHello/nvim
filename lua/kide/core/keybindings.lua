@@ -4,12 +4,11 @@
 local map = vim.api.nvim_set_keymap
 local opt = { noremap = true, silent = true }
 local keymap = vim.keymap.set
-
 local M = {}
 
 M.setup = function()
   -- Esc
-  -- map('i', 'jk', '<C-\\><C-N>', opt)
+  map("i", "jk", "<C-\\><C-N>", opt)
   -- n 模式下复制内容到系统剪切板
   map("n", "<Leader>c", '"+yy', opt)
   -- v 模式下复制内容到系统剪切板
@@ -18,9 +17,12 @@ M.setup = function()
   map("n", "<Leader>v", '"+p', opt)
   -- 取消搜索高亮显示
   map("n", "<Leader><CR>", ":nohlsearch<CR>", opt)
-  -- %bd 删除所有缓冲区, e# 打开最后一个缓冲区, bd# 关闭[No Name]
-  -- map('n', '<Leader>o', ':%bd|e#|bd#<CR>', opt)
-  -- map('n', '<Leader>o', '<cmd>lua require("kide.core.utils").close_other_bufline()<CR>', opt)
+
+  keymap("n", "<C-h>", "<C-w>h", opt)
+  keymap("n", "<C-j>", "<C-w>j", opt)
+  keymap("n", "<C-k>", "<C-w>k", opt)
+  keymap("n", "<C-l>", "<C-w>l", opt)
+
   vim.api.nvim_create_user_command("BufferCloseOther", function()
     require("kide.core.utils").close_other_bufline()
   end, {})
@@ -39,28 +41,11 @@ M.setup = function()
   map("t", "<Esc>", "<C-\\><C-N>", opt)
   map("t", "jk", "<C-\\><C-N>", opt)
 
-  -- Leaderf
-  -- vim.g.Lf_ShortcutF = '<C-P>'
-  -- map('n', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>', {})
-  -- map('v', '<C-F>', ':<C-U><C-R>=printf("Leaderf! rg -e %s ", leaderf#Rg#visual())<CR>', {})
-  -- map('n', '<space>r', ':Leaderf --nowrap task<CR>', {})
-
-  -- vim-floaterm
-  -- vim.g.floaterm_keymap_new = '<leader>ft'
-  -- map('n', '<F12>', ':FloatermToggle<CR>', opt)
-  -- map('t', '<F12>   <C-\\><C-n>', ':<C-\\><C-n>:FloatermToggle<CR>', opt)
+  -- ToggleTerm
   map("n", "<F12>", ":ToggleTerm<CR>", opt)
 
   -- symbols-outline.nvim
   map("n", "<space>o", ":<C-u>SymbolsOutline<CR>", opt)
-
-  -- trouble.nvim
-  -- see lsp map
-  -- map('n', '<space>x', '<cmd>Trouble<cr>', opt)
-
-  -- lspsaga
-  -- map('n', 'K', ':Lspsaga hover_doc<CR>', opt)
-  -- map('n', 'gr', ':Lspsaga lsp_finder<CR>', opt)
 
   -- Telescope
   map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opt)
@@ -88,59 +73,36 @@ M.setup = function()
   -- camel_case
   require("kide.core.utils").camel_case_init()
 
-  -- vim-easy-align
-  vim.cmd([[
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-]])
-
   -- nvim-dap
-  vim.cmd([[
-nnoremap <silent> <F5> :lua require'dap'.continue()<CR>
-nnoremap <silent> <F6> :lua require'dap'.step_over()<CR>
-nnoremap <silent> <F7> :lua require'dap'.step_into()<CR>
-nnoremap <silent> <F8> :lua require'dap'.step_out()<CR>
-nnoremap <silent> <leader>db :lua require'dap'.toggle_breakpoint()<CR>
-nnoremap <silent> <leader>dB :lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
-nnoremap <silent> <leader>dp :lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
-nnoremap <silent> <leader>dr :lua require'dap'.repl.open()<CR>
-nnoremap <silent> <leader>dl :lua require'dap'.run_last()<CR>
-]])
+  keymap("n", "<F5>", ":lua require'dap'.continue()<CR>", opt)
+  keymap("n", "<F6>", ":lua require'dap'.step_over()<CR>", opt)
+  keymap("n", "<F7>", ":lua require'dap'.step_into()<CR>", opt)
+  keymap("n", "<F8>", ":lua require'dap'.step_out()<CR>", opt)
+  keymap("n", "<leader>db", ":lua require'dap'.toggle_breakpoint()<CR>", opt)
+  keymap("n", "<leader>dB", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", opt)
+  keymap("n", "<leader>dp", ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", opt)
+  keymap("n", "<leader>dr", ":lua require'dap'.repl.open()<CR>", opt)
+  keymap("n", "<leader>dl", ":lua require'dap'.run_last()<CR>", opt)
 
   -- nvim-dap-ui
-  vim.cmd([[
-nnoremap <silent> <leader>dr :lua require("dapui").float_element(vim.Nil, { enter = true}) <CR>
-]])
+  keymap("n", "<leader>ds", ':lua require("dapui").float_element(vim.Nil, { enter = true}) <CR>', opt)
 
   -- bufferline.nvim
-  vim.cmd([[
-nnoremap <silent><leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
-nnoremap <silent><leader>2 <Cmd>BufferLineGoToBuffer 2<CR>
-nnoremap <silent><leader>3 <Cmd>BufferLineGoToBuffer 3<CR>
-nnoremap <silent><leader>4 <Cmd>BufferLineGoToBuffer 4<CR>
-nnoremap <silent><leader>5 <Cmd>BufferLineGoToBuffer 5<CR>
-nnoremap <silent><leader>6 <Cmd>BufferLineGoToBuffer 6<CR>
-nnoremap <silent><leader>7 <Cmd>BufferLineGoToBuffer 7<CR>
-nnoremap <silent><leader>8 <Cmd>BufferLineGoToBuffer 8<CR>
-nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
-
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-]])
+  keymap("n", "<leader>1", "<Cmd>BufferLineGoToBuffer 1<CR>", opt)
+  keymap("n", "<leader>2", "<Cmd>BufferLineGoToBuffer 2<CR>", opt)
+  keymap("n", "<leader>3", "<Cmd>BufferLineGoToBuffer 3<CR>", opt)
+  keymap("n", "<leader>4", "<Cmd>BufferLineGoToBuffer 4<CR>", opt)
+  keymap("n", "<leader>5", "<Cmd>BufferLineGoToBuffer 5<CR>", opt)
+  keymap("n", "<leader>6", "<Cmd>BufferLineGoToBuffer 6<CR>", opt)
+  keymap("n", "<leader>7", "<Cmd>BufferLineGoToBuffer 7<CR>", opt)
+  keymap("n", "<leader>8", "<Cmd>BufferLineGoToBuffer 8<CR>", opt)
+  keymap("n", "<leader>9", "<Cmd>BufferLineGoToBuffer 9<CR>", opt)
 
   -- nvim-spectre
   map("n", "<leader>S", "<cmd>lua require('spectre').open()<CR>", opt)
   -- search current word
   map("n", "<leader>fr", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
   map("v", "<leader>fr", "<esc>:lua require('spectre').open_visual()<CR>", opt)
-  --  search in current file
-  -- map("n", "<leader>fp", "viw:lua require('spectre').open_file_search()<cr>", opt)
-  -- run command :Spectre
 
   -- ToggleTask
   map("n", "<leader>ts", "<cmd>Telescope toggletasks spawn<cr>", opt)
@@ -212,10 +174,6 @@ M.maplsp = function(client, buffer)
     "<cmd>lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })<CR>",
     opt
   )
-  -- mapbuf('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opt)
-  -- leader + =
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>=', '<cmd>lua vim.lsp.buf.format()<CR>', opt)
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>=', '<cmd>lua vim.lsp.buf.range_formatting()<CR>', opt)
 
   keymap("n", "<leader>=", function()
     local bfn = vim.api.nvim_get_current_buf()
@@ -233,12 +191,6 @@ M.maplsp = function(client, buffer)
     '<cmd>lua require("kide.lsp.utils").format_range_operator()<CR>',
     opt
   )
-  -- mapbuf('v', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opt)
-  -- mapbuf('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opt)
-  -- mapbuf('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opt)
-  -- mapbuf('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opt)
-  -- mapbuf('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opt)
-  -- mapbuf('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opt)
 
   vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>xw", "<cmd>Telescope diagnostics<CR>", opt)
   vim.api.nvim_buf_set_keymap(
@@ -248,12 +200,6 @@ M.maplsp = function(client, buffer)
     "<cmd>lua require('telescope.builtin').diagnostics({ severity = vim.diagnostic.severity.ERROR })<CR>",
     opt
   )
-  -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<CR>", opt)
-  -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xx", "<cmd>Trouble<CR>", opt)
-  -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<CR>", opt)
-  -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xd", "<cmd>Trouble document_diagnostics<CR>", opt)
-  -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>xq", "<cmd>Trouble quickfix<CR>", opt)
-
   -- >= 0.8.x
   if client.server_capabilities.documentHighlightProvider then
     vim.cmd(string.format("au CursorHold  <buffer=%d> lua vim.lsp.buf.document_highlight()", buffer))
@@ -275,15 +221,6 @@ M.cmp = function(cmp)
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
   end
   return {
-    -- 上一个
-    -- ['<C-k>'] = cmp.mapping.select_prev_item(),
-    -- 下一个
-    -- ['<Tab>'] = cmp.mapping.select_next_item(),
-    -- ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-    -- ['<Esc>'] = cmp.mapping.close(),
-    -- 确认
-    -- Accept currently selected item. If none selected, `select` first item.
-    -- Set `select` to `false` to only confirm explicitly selected items.
     -- ["<C-d>"] = cmp.mapping.scroll_docs(-4),
     -- ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-p>"] = cmp.mapping.select_prev_item(),
@@ -328,19 +265,16 @@ M.cmp = function(cmp)
   }
 end
 
-M.rest_nvim = function()
-  -- rest-nvim
-  vim.cmd([[
-command! -buffer Http  :lua require'rest-nvim'.run()
-command! -buffer HttpCurl  :lua require'rest-nvim'.run(true)
-command! -buffer HttpLast  :lua require'rest-nvim'.last()
-]])
-end
-
 M.ufo_mapkey = function()
   -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
   vim.keymap.set("n", "zR", require("ufo").openAllFolds)
   vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+end
+
+M.easy_align = function()
+  -- vim-easy-align
+  keymap("n", "ga", "<Plug>(EasyAlign)")
+  keymap("x", "ga", "<Plug>(EasyAlign)")
 end
 
 return M

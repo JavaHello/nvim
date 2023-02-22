@@ -460,10 +460,7 @@ require("lazy").setup({
     lazy = true,
     cmd = "EasyAlign",
     config = function()
-      vim.cmd([[
-      xmap ga <Plug>(EasyAlign)
-      nmap ga <Plug>(EasyAlign)
-     ]])
+      require("kide.core.keybindings").easy_align()
     end,
   },
 
@@ -503,16 +500,7 @@ require("lazy").setup({
     lazy = true,
     ft = "http",
     config = function()
-      vim.cmd([[
-          function! s:http_rest_init() abort
-            lua require('kide.plugins.config.rest-nvim')
-            lua require('kide.core.keybindings').rest_nvim()
-          endfunction
-          augroup http_rest
-              autocmd!
-              autocmd FileType http call s:http_rest_init()
-          augroup end
-         ]])
+      require("kide.plugins.config.rest-nvim")
     end,
   },
 

@@ -148,12 +148,9 @@ M.test = function(a)
   print(a)
 end
 M.camel_case_init = function()
-  vim.cmd([[
-  " command! -complete=customlist,coreutils#cmdline#complete -nargs=* -bang -range
-  command!  -nargs=* -range
-  \ CamelCase
-  \ lua require('kide.core.utils').camel_case_start(<range>, <line1>, <line2>)
-]])
+  vim.api.nvim_create_user_command("CamelCase", function(o)
+    require("kide.core.utils").camel_case_start(o.range, o.line1, o.line2)
+  end, { range = 0, nargs = 0 })
 end
 -- print(M.camel_case("helloWorldAaAaAxC"))
 
