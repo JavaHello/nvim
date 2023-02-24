@@ -21,6 +21,17 @@ local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.expand_conditions")
 
 ls.add_snippets("java", {
+  s("try_catch", {
+    t({ "try {" }),
+    t({ "", "\t" }),
+    i(1),
+    t({ "", "} catch (" }),
+    i(2, "Throwable"),
+    t({ " e) {" }),
+    t({ "", "\t" }),
+    i(3),
+    t({ "", "}" }),
+  }),
   s("sout", {
     t({ "System.out.println(" }),
     i(1),
