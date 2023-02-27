@@ -677,6 +677,13 @@ require("lazy").setup({
       require("chatgpt").setup({})
     end,
   },
+  {
+    "folke/todo-comments.nvim",
+    lazy = true,
+    config = function()
+      require("todo-comments").setup({})
+    end,
+  },
 }, {
   ui = {
     icons = {

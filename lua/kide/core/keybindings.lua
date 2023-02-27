@@ -115,6 +115,15 @@ M.setup = function()
   vim.api.nvim_set_keymap("s", "<C-n>", "<Plug>luasnip-next-choice", {})
   vim.api.nvim_set_keymap("i", "<C-p>", "<Plug>luasnip-prev-choice", {})
   vim.api.nvim_set_keymap("s", "<C-p>", "<Plug>luasnip-prev-choice", {})
+
+  -- todo-comments
+  vim.keymap.set("n", "]t", function()
+    require("todo-comments").jump_next()
+  end, { desc = "Next todo comment" })
+
+  vim.keymap.set("n", "[t", function()
+    require("todo-comments").jump_prev()
+  end, { desc = "Previous todo comment" })
 end
 -- lsp 回调函数快捷键设置
 M.maplsp = function(client, buffer)
