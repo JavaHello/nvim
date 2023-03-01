@@ -170,7 +170,15 @@ require("lazy").setup({
       require("java-deps").setup({})
     end,
   },
-
+  {
+    "scalameta/nvim-metals",
+    lazy = true,
+    ft = "scala",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function ()
+      require("kide.lsp.metals").setup()
+    end
+  },
   -- debug
   {
     "mfussenegger/nvim-dap",
