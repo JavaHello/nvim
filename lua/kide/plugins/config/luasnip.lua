@@ -58,4 +58,4 @@ ls.filetype_set("cpp", { "c" })
 
 -- require("luasnip.loaders.from_vscode").lazy_load()
 
-require("kide.snippets.java")
+require("kide.snippets").setup()
