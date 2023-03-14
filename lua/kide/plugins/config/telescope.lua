@@ -107,6 +107,7 @@ telescope.setup({
       },
       n = {
         -- ["<C-t>"] = trouble.open_with_trouble,
+        ["q"] = require("telescope.actions").close,
       },
     },
   },
