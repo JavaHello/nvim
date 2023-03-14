@@ -175,9 +175,9 @@ require("lazy").setup({
     lazy = true,
     ft = "scala",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function ()
+    config = function()
       require("kide.lsp.metals").setup()
-    end
+    end,
   },
   -- debug
   {
@@ -691,6 +691,14 @@ require("lazy").setup({
     config = function()
       require("todo-comments").setup({})
     end,
+  },
+  {
+    "denstiny/cmp-dictionary-nanny",
+    build = "./install.sh",
+    config = function()
+      require("cmp-dictionary-nanny.config").setup({})
+    end,
+    event = { "InsertEnter" },
   },
 }, {
   ui = {
