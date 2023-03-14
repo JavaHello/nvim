@@ -13,8 +13,6 @@ local overrides = {
   -- cmp, wilder
 }
 
-overrides = vim.tbl_extend("force", overrides, kgrubox.flat_telescope)
-
 require("gruvbox").setup({
   undercurl = true,
   underline = true,

@@ -11,7 +11,7 @@ local colors = {
   yellow = "#fabd2f",
 }
 M.colors = colors
-M.flat_telescope = {
+local flat_telescope = {
 
   TelescopeBorder = {
     fg = colors.darker_black,
@@ -65,4 +65,13 @@ M.flat_telescope = {
 
   TelescopeSelection = { bg = colors.black2, fg = colors.yellow },
 }
+
+M.load_telescope_highlights = function()
+  M.load_highlights(flat_telescope)
+end
+M.load_highlights = function(hl_groups)
+  for hl, col in pairs(hl_groups) do
+    vim.api.nvim_set_hl(0, hl, col)
+  end
+end
 return M
