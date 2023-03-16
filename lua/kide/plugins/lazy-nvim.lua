@@ -387,7 +387,10 @@ require("lazy").setup({
 
   {
     "numToStr/Comment.nvim",
-    keys = { "gcc", "gb" },
+    keys = {
+      { "gcc", mode = { "n" }, desc = "Comment" },
+      { "gc", mode = { "x" }, desc = "Comment" },
+    },
     config = function()
       require("kide.plugins.config.comment")
     end,
