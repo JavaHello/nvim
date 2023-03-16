@@ -706,6 +706,7 @@ require("lazy").setup({
   },
   {
     "JuanZoran/Trans.nvim",
+    enabled = false,
     keys = {
       -- 可以换成其他你想映射的键
       { "mm", mode = { "n", "x" }, "<Cmd>Translate<CR>", desc = " Translate" },
