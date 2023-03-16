@@ -704,6 +704,31 @@ require("lazy").setup({
     end,
     event = { "InsertEnter" },
   },
+  {
+    "JuanZoran/Trans.nvim",
+    keys = {
+      -- 可以换成其他你想映射的键
+      { "mm", mode = { "n", "x" }, "<Cmd>Translate<CR>", desc = " Translate" },
+      { "mk", mode = { "n", "x" }, "<Cmd>TransPlay<CR>", desc = " 自动发音" },
+
+      -- 目前这个功能的视窗还没有做好，可以在配置里将view.i改成hover
+      { "mi", "<Cmd>TranslateInput<CR>", desc = " Translate From Input" },
+    },
+    dependencies = { "kkharji/sqlite.lua", lazy = true },
+    config = function()
+      require("Trans").setup({
+        db_path = "$HOME/.local/share/nvim/data/ultimate.db",
+        icon = {
+          star = "",
+          notfound = " ",
+          yes = "",
+          no = "",
+          cell = "■",
+        },
+      })
+      require("kide.theme.gruvbox").load_trans_highlights()
+    end,
+  },
 }, {
   ui = {
     icons = {

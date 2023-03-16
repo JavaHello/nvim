@@ -9,6 +9,9 @@ local colors = {
   red = "#fb4934",
   green = "#b8bb26",
   yellow = "#fabd2f",
+  yellow2 = "#d79921",
+  blue = "#83a598",
+  blue2 = "#458588",
 }
 M.colors = colors
 local flat_telescope = {
@@ -65,6 +68,51 @@ local flat_telescope = {
 
   TelescopeSelection = { bg = colors.black2, fg = colors.yellow },
 }
+local flat_trans = {
+  TransWord = {
+    fg = colors.green,
+    bold = true,
+  },
+  TransPhonetic = {
+    link = "Linenr",
+  },
+  TransTitle = {
+    fg = colors.white,
+    bg = colors.blue2,
+    bold = true,
+  },
+  TransTitleRound = {
+    fg = colors.blue2,
+  },
+  TransTag = {
+    fg = colors.yellow2,
+  },
+  TransExchange = {
+    link = "TransTag",
+  },
+  TransPos = {
+    link = "TransTag",
+  },
+  TransTranslation = {
+    link = "TransWord",
+  },
+  TransDefinition = {
+    link = "Moremsg",
+  },
+  TransWin = {
+    link = "Normal",
+  },
+  TransBorder = {
+    link = "FloatBorder",
+  },
+  TransCollins = {
+    fg = colors.green,
+    bold = true,
+  },
+  TransFailed = {
+    fg = colors.blue,
+  },
+}
 
 M.load_telescope_highlights = function()
   M.load_highlights(flat_telescope)
@@ -73,5 +121,9 @@ M.load_highlights = function(hl_groups)
   for hl, col in pairs(hl_groups) do
     vim.api.nvim_set_hl(0, hl, col)
   end
+end
+
+M.load_trans_highlights = function()
+  M.load_highlights(flat_trans)
 end
 return M
