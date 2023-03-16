@@ -322,7 +322,9 @@ require("lazy").setup({
   {
     "mg979/vim-visual-multi",
     lazy = true,
-    keys = { "<C-n>" },
+    keys = {
+      { "<C-n>", mode = { "n", "x" }, desc = "visual multi" },
+    },
   },
 
   -- 状态栏插件
