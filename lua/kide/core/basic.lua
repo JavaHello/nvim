@@ -29,34 +29,31 @@ vim.opt.numberwidth = 2
 vim.opt.ruler = false
 
 -- 高亮所在行
-vim.wo.cursorline = true
-vim.wo.cursorcolumn = true
+vim.opt.cursorline = true
+vim.opt.cursorcolumn = true
 
 -- 右侧参考线，超过表示代码太长了，考虑换行
-vim.wo.colorcolumn = "120"
+vim.opt.colorcolumn = "120"
 
 -- 边搜索边高亮
-vim.o.incsearch = true
+vim.opt.incsearch = true
 -- 忽悠大小写
-vim.o.ignorecase = true
+vim.opt.ignorecase = true
 -- 智能大小写
-vim.o.smartcase = true
+vim.opt.smartcase = true
 
-vim.g.encoding = "UTF-8"
+vim.opt_global.encoding = "UTF-8"
 
-vim.o.fileencoding = "UTF-8"
+vim.opt.fileencoding = "UTF-8"
 -- jk移动时光标下上方保留8行
-vim.o.scrolloff = 3
-vim.o.sidescrolloff = 3
+vim.opt.scrolloff = 3
+vim.opt.sidescrolloff = 3
 
 -- 缩进配置
-vim.o.tabstop = 4
-vim.bo.tabstop = 4
-vim.o.softtabstop = 4
--- vim.o.softround=true
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
 -- > < 时移动长度
-vim.o.shiftwidth = 4
-vim.bo.shiftwidth = 4
+vim.opt.shiftwidth = 4
 
 local autocmd = vim.api.nvim_create_autocmd
 autocmd("FileType", {
@@ -81,36 +78,33 @@ autocmd("FileType", {
 })
 
 -- 新行对齐当前行，空格替代tab
-vim.o.expandtab = true
-vim.bo.expandtab = true
-vim.o.autoindent = true
-vim.bo.autoindent = true
-vim.o.smartindent = true
+vim.opt.expandtab = true
+vim.opt.autoindent = true
+vim.opt.smartindent = true
 
 -- 使用增强状态栏后不再需要 vim 的模式提示
-vim.o.showmode = false
+vim.opt.showmode = false
 
 -- 当文件被外部程序修改时，自动加载
-vim.o.autoread = true
-vim.bo.autoread = true
+vim.opt.autoread = true
 
 -- 禁止创建备份文件
-vim.o.backup = false
-vim.o.writebackup = false
-vim.o.swapfile = false
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.swapfile = false
 -- smaller updatetime
-vim.o.updatetime = 300
+vim.opt.updatetime = 300
 
 -- split window 从下边和右边出现
-vim.o.splitbelow = false
-vim.o.splitright = true
+vim.opt.splitbelow = false
+vim.opt.splitright = true
 
 -- 样式
 vim.opt.background = "dark"
 vim.opt.termguicolors = true
 
 -- 补全增强
-vim.o.wildmenu = true
+vim.opt.wildmenu = true
 
 vim.opt.confirm = true
 
@@ -120,15 +114,15 @@ vim.opt.confirm = true
 vim.opt.list = true
 vim.opt.cul = true -- cursor line
 
-vim.o.timeout = true
+vim.opt.timeout = true
 vim.opt.timeoutlen = 450
 
 vim.opt.mouse = "a"
 
 -- 默认不要折叠
 -- https://stackoverflow.com/questions/8316139/how-to-set-the-default-to-unfolded-when-you-open-a-file
-vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-vim.o.foldlevelstart = 99
+vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.opt.foldlevelstart = 99
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd({ "TextYankPost" }, {
