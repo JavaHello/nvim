@@ -64,10 +64,12 @@ require("lazy").setup({
   {
     "hrsh7th/nvim-cmp",
     event = { "InsertEnter" },
+    keys = { ":", "/", "?" },
     dependencies = {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-cmdline",
       "saadparwaiz1/cmp_luasnip",
       "onsails/lspkind-nvim",
     },
@@ -78,6 +80,10 @@ require("lazy").setup({
   },
   {
     "hrsh7th/cmp-nvim-lsp",
+    lazy = true,
+  },
+  {
+    "hrsh7th/cmp-cmdline",
     lazy = true,
   },
   {
@@ -370,7 +376,8 @@ require("lazy").setup({
   -- wildmenu 补全美化
   {
     "gelguy/wilder.nvim",
-    keys = { ":", "/" },
+    enabled = false,
+    keys = { ":", "/", "?" },
     config = function()
       require("kide.plugins.config.wilder")
     end,
