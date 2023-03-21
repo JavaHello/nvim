@@ -32,7 +32,6 @@ cmp.setup({
   }, {
     { name = "path" },
     { name = "buffer" },
-    { name = "cmp-dictionary-nanny" },
   }),
 
   -- 快捷键
@@ -51,7 +50,6 @@ cmp.setup({
         nvim_lsp = "[LSP]",
         luasnip = "[Lsnip]",
         path = "[Path]",
-        ["cmp-dictionary-nanny"] = "[Dict]",
         -- buffer = "[Buffer]",
       },
     }),

@@ -710,6 +710,7 @@ require("lazy").setup({
   },
   {
     "denstiny/cmp-dictionary-nanny",
+    enabled = false,
     build = "./install.sh",
     config = function()
       require("cmp-dictionary-nanny.config").setup({})
