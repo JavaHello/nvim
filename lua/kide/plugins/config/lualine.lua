@@ -7,7 +7,7 @@ local config = {
     component_separators = { left = "", right = "" },
     section_separators = { left = "", right = "" },
     disabled_filetypes = {
-      -- "dap-repl", "dapui_watches", "dapui_stacks", "dapui_breakpoints", "dapui_scopes"
+      "alpha",
     },
     always_divide_middle = true,
   },
