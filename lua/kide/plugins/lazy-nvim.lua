@@ -743,6 +743,14 @@ require("lazy").setup({
       require("kide.theme.gruvbox").load_trans_highlights()
     end,
   },
+
+  {
+    "github/copilot.vim",
+    lazy = true,
+    cmd = {
+      "Copilot",
+    },
+  },
 }, {
   ui = {
     icons = {
