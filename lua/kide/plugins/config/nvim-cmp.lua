@@ -1,6 +1,11 @@
 local lspkind = require("lspkind")
 local cmp = require("cmp")
-
+lspkind.init({
+  symbol_map = {
+    Copilot = "",
+  },
+})
+vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
 cmp.setup({
   -- 指定 snippet 引擎
   snippet = {
@@ -20,6 +25,7 @@ cmp.setup({
   },
   -- 来源
   sources = cmp.config.sources({
+    { name = "copilot" },
     { name = "nvim_lsp" },
     -- For vsnip users.
     -- { name = 'vsnip' },
@@ -50,6 +56,7 @@ cmp.setup({
         nvim_lsp = "[LSP]",
         luasnip = "[Lsnip]",
         path = "[Path]",
+        copilot = "[Copilot]",
         -- buffer = "[Buffer]",
       },
     }),
