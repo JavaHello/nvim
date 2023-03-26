@@ -743,13 +743,25 @@ require("lazy").setup({
       require("kide.theme.gruvbox").load_trans_highlights()
     end,
   },
-
   {
-    "github/copilot.vim",
+    "zbirenbaum/copilot.lua",
     lazy = true,
-    cmd = {
-      "Copilot",
-    },
+    cmd = "Copilot",
+    config = function()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
+    end,
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    lazy = true,
+    dependencies = { "zbirenbaum/copilot.lua" },
+    event = "InsertEnter",
+    config = function()
+      require("copilot_cmp").setup()
+    end,
   },
 }, {
   ui = {
