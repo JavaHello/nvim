@@ -91,7 +91,7 @@ telescope.setup({
       timeout = 1000,
       filetype_hook = function(filepath, bufnr, opts)
         if vim.startswith(filepath, "jdt://") then
-          require("kide.lsp.utils.jdtls").open_jdt_link(filepath, bufnr, opts.preview.timeout)
+          require("kide.lsp.utils.jdtls").open_classfile(filepath, bufnr, opts.preview.timeout)
         end
         return true
       end,
