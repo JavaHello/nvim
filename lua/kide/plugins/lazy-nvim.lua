@@ -1,3 +1,4 @@
+local config = require("kide.config")
 local function loadPluginCmd(cmd, module)
   vim.api.nvim_create_user_command(cmd, function()
     require(module)
@@ -745,6 +746,7 @@ require("lazy").setup({
   },
   {
     "zbirenbaum/copilot.lua",
+    enabled = config.plugin.copilot.enable,
     lazy = true,
     cmd = "Copilot",
     config = function()
@@ -756,6 +758,7 @@ require("lazy").setup({
   },
   {
     "zbirenbaum/copilot-cmp",
+    enabled = config.plugin.copilot.enable,
     lazy = true,
     dependencies = { "zbirenbaum/copilot.lua" },
     event = "InsertEnter",
