@@ -192,7 +192,7 @@ local config = {
     -- '-XX:+UseStringDeduplication',
     -- '-Xms512m',
     "-XX:+UseZGC",
-    "-Xmx4g",
+    "-Xmx1g",
     -- "-Xbootclasspath/a:" .. get_lombok_jar(),
     "-javaagent:" .. get_lombok_jar(),
     "--add-modules=ALL-SYSTEM",
@@ -221,6 +221,12 @@ local config = {
     java = {
       maxConcurrentBuilds = 8,
       home = get_java_home(),
+      jdt = {
+        ls = {
+          -- 暂时不可用
+          lombokSupport = { enabled = true },
+        },
+      },
       project = {
         encoding = "UTF-8",
         resourceFilters = {
@@ -228,6 +234,8 @@ local config = {
           ".git",
         },
       },
+      foldingRange = { enabled = true },
+      selectionRange = { enabled = true },
       import = {
         exclusions = {
           "**/node_modules/**",
@@ -342,6 +350,7 @@ config["init_options"] = {
 }
 
 config["on_attach"] = function(client, buffer)
+  -- client.server_capabilities.semanticTokensProvider = nil
   -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
   -- you make during a debug session immediately.
   -- Remove the option if you do not want that.
