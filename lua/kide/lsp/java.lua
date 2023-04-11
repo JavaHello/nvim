@@ -237,6 +237,8 @@ local config = {
       foldingRange = { enabled = true },
       selectionRange = { enabled = true },
       import = {
+        gradle = { enabled = true },
+        maven = { enabled = true },
         exclusions = {
           "**/node_modules/**",
           "**/.metadata/**",
@@ -245,6 +247,7 @@ local config = {
           "**/.git/**",
         },
       },
+      autobuild = { enabled = true },
       referenceCodeLens = { enabled = true },
       implementationsCodeLens = { enabled = true },
       templates = {
