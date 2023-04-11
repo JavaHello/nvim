@@ -419,10 +419,10 @@ local function markdown_format(input)
     -- input = string.gsub(input, "[\r\n]( +)(%*)", function (i1)
     --   return i1 .. "-"
     -- end)
-    input = string.gsub(input, "%[([%a%$_]+[%.%w%(%),%s ]*)%]%(file:/[^%)]+%)", function(i1)
+    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%s ]*)%]%(file:/[^%)]+%)", function(i1)
       return "`" .. i1 .. "`"
     end)
-    input = string.gsub(input, "%[([%a%$_]+[%.%w%(%),%s ]*)%]%(jdt://[^%)]+%)", function(i1)
+    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%s ]*)%]%(jdt://[^%)]+%)", function(i1)
       return "`" .. i1 .. "`"
     end)
   end
