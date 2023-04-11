@@ -192,7 +192,7 @@ local config = {
     -- '-XX:+UseStringDeduplication',
     -- '-Xms512m',
     "-XX:+UseZGC",
-    "-Xmx4g",
+    "-Xmx1g",
     -- "-Xbootclasspath/a:" .. get_lombok_jar(),
     "-javaagent:" .. get_lombok_jar(),
     "--add-modules=ALL-SYSTEM",
@@ -221,6 +221,12 @@ local config = {
     java = {
       maxConcurrentBuilds = 8,
       home = get_java_home(),
+      jdt = {
+        ls = {
+          -- 暂时不可用
+          lombokSupport = { enabled = true },
+        },
+      },
       project = {
         encoding = "UTF-8",
         resourceFilters = {
@@ -228,7 +234,11 @@ local config = {
           ".git",
         },
       },
+      foldingRange = { enabled = true },
+      selectionRange = { enabled = true },
       import = {
+        gradle = { enabled = true },
+        maven = { enabled = true },
         exclusions = {
           "**/node_modules/**",
           "**/.metadata/**",
@@ -237,6 +247,7 @@ local config = {
           "**/.git/**",
         },
       },
+      autobuild = { enabled = true },
       referenceCodeLens = { enabled = true },
       implementationsCodeLens = { enabled = true },
       templates = {
@@ -342,6 +353,7 @@ config["init_options"] = {
 }
 
 config["on_attach"] = function(client, buffer)
+  -- client.server_capabilities.semanticTokensProvider = nil
   -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
   -- you make during a debug session immediately.
   -- Remove the option if you do not want that.
@@ -407,11 +419,12 @@ local function markdown_format(input)
     -- input = string.gsub(input, "[\r\n]( +)(%*)", function (i1)
     --   return i1 .. "-"
     -- end)
-    input = string.gsub(input, "%[([^:/]*)%]", function(i1)
+    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%s ]*)%]%(file:/[^%)]+%)", function(i1)
       return "`" .. i1 .. "`"
     end)
-    input = string.gsub(input, "%(file:/[^%)]+%)", "")
-    input = string.gsub(input, "%(jdt://[^%)]+%)", "")
+    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%s ]*)%]%(jdt://[^%)]+%)", function(i1)
+      return "`" .. i1 .. "`"
+    end)
   end
   return input
 end
