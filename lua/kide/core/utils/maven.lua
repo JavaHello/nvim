@@ -98,7 +98,7 @@ M.maven_command = function(buf)
     close_on_exit = false,
   })
   create_command(buf, "MavenDownloadSources", "mvn dependency:sources -DdownloadSources=true")
-  create_command(buf, "MavenTest", "mvn test", maven_args_complete({ "-Dtest=" }, {}))
+  create_command(buf, "MavenTest", "mvn test", maven_args_complete({ "-Dtest=" }, {}), { close_on_exit = false })
 end
 
 M.setup = function()
