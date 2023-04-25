@@ -123,6 +123,11 @@ git clone  https://github.com/JavaHello/nvim.git
   <img width="700" alt="Debug" src="https://javahello.github.io/dev/nvim-lean/images/java-deps.png">
 </details>
 
+<details>
+<summary>Maven(pom.xml 自动补全)</summary>
+  <img width="700" alt="Debug" src="https://javahello.github.io/dev/nvim-lean/images/maven.png">
+</details>
+
 ## 我的 VIM 插件列表
 
 | 插件名称                                                              | 插件描述               | 推荐等级 | 备注 |

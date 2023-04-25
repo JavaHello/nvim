@@ -406,13 +406,8 @@ config.handlers["language/status"] = function(_, s)
   end
 end
 
--- 已合并，需要编译最新版本支持
-if not env.JDTLS_HOME then
-  -- java 暂时兼容 fidget, 等待上游支持
-  -- https://github.com/eclipse/eclipse.jdt.ls/pull/2258
-  vim.lsp.handlers["$/progress"] = nil
-  require("fidget").setup({})
-end
+vim.lsp.handlers["$/progress"] = nil
+require("fidget").setup({})
 
 local function markdown_format(input)
   if input then

@@ -22,6 +22,7 @@ local server_configs = {
   gopls = require("kide.lsp.gopls"),
   kotlin_language_server = {},
   vuels = {},
+  lemminx = require("kide.lsp.lemminx"),
 }
 
 -- Setup lspconfig.
@@ -68,6 +69,9 @@ require("mason-lspconfig").setup_handlers({
     end
   end,
 })
+if server_configs.lemminx.setup then
+  server_configs.lemminx.setup()
+end
 
 -- LSP 相关美化参考 https://github.com/NvChad/NvChad
 local function lspSymbol(name, icon)
