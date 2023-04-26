@@ -1,5 +1,3 @@
-local navic = require("nvim-navic")
-
 local config = {
   options = {
     icons_enabled = true,
@@ -30,7 +28,7 @@ local config = {
         end,
       },
       "filename",
-      { navic.get_location, cond = navic.is_available },
+      "navic",
     },
     lualine_x = { "encoding", "fileformat", "filetype" },
     lualine_y = { "progress" },
