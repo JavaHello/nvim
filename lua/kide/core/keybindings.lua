@@ -8,7 +8,7 @@ local M = {}
 
 M.setup = function()
   -- Esc
-  map("i", "jk", "<C-\\><C-N>", opt)
+  -- map("i", "jk", "<C-\\><C-N>", opt)
   -- n 模式下复制内容到系统剪切板
   map("n", "<Leader>c", '"+yy', opt)
   -- v 模式下复制内容到系统剪切板
