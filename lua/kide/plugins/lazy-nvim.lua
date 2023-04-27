@@ -126,7 +126,7 @@ require("lazy").setup({
   -- using packer.nvim
   {
     "akinsho/bufferline.nvim",
-    tag = "v3.0.1",
+    version = "*",
     dependencies = { "ellisonleao/gruvbox.nvim" },
     requires = "kyazdani42/nvim-web-devicons",
     config = function()
