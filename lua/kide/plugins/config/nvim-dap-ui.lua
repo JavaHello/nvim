@@ -26,33 +26,78 @@ dapui.setup({
     },
     {
       elements = {
-        { id = "repl", size = 1 },
-        -- { id = "console", size = 0.5 },
+        { id = "repl", size = 0.3 },
+        { id = "console", size = 0.7 },
       },
       size = 0.25,
       position = "bottom",
     },
   },
 })
+local M = { dapui_active = false }
 
-dap.defaults.fallback.terminal_win_cmd = "belowright 12new | set filetype=dap-terminal"
+local function auto_close(bufnr)
+  local acid
+  acid = vim.api.nvim_create_autocmd({ "BufDelete", "BufHidden" }, {
+    buffer = bufnr,
+    callback = function()
+      if M.dapui_active then
+        require("dapui").close()
+        M.dapui_active = false
+      else
+        dap.repl.close()
+      end
+      vim.api.nvim_del_autocmd(acid)
+    end,
+  })
+end
+
+-- dap.defaults.fallback.terminal_win_cmd = "belowright 12new | set filetype=dap-terminal"
+local dapui_console = dap.defaults.fallback.terminal_win_cmd
+dap.defaults.fallback.terminal_win_cmd = function()
+  if M.dapui_active then
+    local bufnr = dapui_console()
+    auto_close(bufnr)
+    return bufnr
+  else
+    local cur_win = vim.api.nvim_get_current_win()
+    -- open terminal
+    vim.api.nvim_command("belowright 12new")
+    local bufnr = vim.api.nvim_get_current_buf()
+    vim.bo[bufnr].modifiable = false
+    vim.bo[bufnr].swapfile = false
+    vim.bo[bufnr].buftype = "nofile"
+    vim.bo[bufnr].filetype = "dap-terminal"
+
+    local win = vim.api.nvim_get_current_win()
+    vim.api.nvim_set_current_win(cur_win)
+    auto_close(bufnr)
+    return bufnr, win
+  end
+end
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
+  -- dapui.open()
+  if not M.dapui_active then
+    dap.repl.open()
+  end
 end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
-end
+-- dap.listeners.before.event_terminated["dapui_config"] = function()
+--   dapui.close()
+-- end
+-- dap.listeners.before.event_exited["dapui_config"] = function()
+--   dapui.close()
+-- end
 -- nvim-dap
 vim.api.nvim_create_user_command("DapUIOpen", function()
-  require("dapui").open({})
+  M.dapui_active = true
+  require("dapui").open()
 end, {})
 vim.api.nvim_create_user_command("DapUIClose", function()
-  require("dapui").close({})
+  M.dapui_active = false
+  require("dapui").close()
 end, {})
 vim.api.nvim_create_user_command("DapUIToggle", function()
-  require("dapui").toggle({})
+  M.dapui_active = not M.dapui_active
+  require("dapui").toggle()
 end, {})

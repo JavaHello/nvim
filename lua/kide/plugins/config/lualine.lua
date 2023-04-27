@@ -55,6 +55,7 @@ dap.sections = {
 }
 dap.filetypes = {
   "dap-terminal",
+  "dapui_console",
 }
 table.insert(config.extensions, dap)
 
