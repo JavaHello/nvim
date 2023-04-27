@@ -117,7 +117,7 @@ require("lazy").setup({
     "kyazdani42/nvim-tree.lua",
     lazy = true,
     cmd = "NvimTreeToggle",
-    tag = "nightly",
+    version = "*",
     config = function()
       require("kide.plugins.config.nvim-tree")
     end,
