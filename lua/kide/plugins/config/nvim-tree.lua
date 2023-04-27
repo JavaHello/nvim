@@ -49,21 +49,22 @@ require("nvim-tree").setup({
     width = 34,
     -- height = 40,
     side = "left",
+    hide_root_folder = false,
     preserve_window_proportions = false,
     number = false,
     relativenumber = false,
     signcolumn = "yes",
     mappings = {
       custom_only = false,
-      list = {
-
-        { key = "<leader>ff", cb = custom_callback("launch_find_files") },
-        { key = "<leader>fg", cb = custom_callback("launch_live_grep") },
-      },
+      -- list = {
+      --
+      --   { key = "<leader>ff", cb = custom_callback("launch_find_files") },
+      --   { key = "<leader>fg", cb = custom_callback("launch_live_grep") },
+      -- },
     },
   },
   renderer = {
-    hide_root_folder = true,
+    root_folder_label = false,
     indent_markers = {
       enable = false,
       icons = {
