@@ -1,9 +1,4 @@
 local config = require("kide.config")
-local function loadPluginCmd(cmd, module)
-  vim.api.nvim_create_user_command(cmd, function()
-    require(module)
-  end, {})
-end
 
 require("lazy").setup({
 
@@ -190,23 +185,17 @@ require("lazy").setup({
   {
     "mfussenegger/nvim-dap",
     lazy = true,
-    event = { "BufNewFile", "BufReadPost" },
+    event = { "VeryLazy" },
     config = function()
       require("kide.dap")
-      require("nvim-dap-virtual-text").setup({})
-      require("telescope").load_extension("dap")
+      -- require("telescope").load_extension("dap")
     end,
   },
   {
     "rcarriga/nvim-dap-ui",
     lazy = true,
     dependencies = { "mfussenegger/nvim-dap" },
-    cmd = {
-      "LoadDapUI",
-    },
-    init = function()
-      loadPluginCmd("LoadDapUI", "dapui")
-    end,
+    event = { "VeryLazy" },
     config = function()
       require("kide.plugins.config.nvim-dap-ui")
     end,
@@ -214,7 +203,11 @@ require("lazy").setup({
   {
     "theHamsta/nvim-dap-virtual-text",
     lazy = true,
+    event = { "VeryLazy" },
     dependencies = { "mfussenegger/nvim-dap" },
+    config = function()
+      require("nvim-dap-virtual-text").setup({})
+    end,
   },
 
   -- 搜索插件
@@ -222,6 +215,7 @@ require("lazy").setup({
     "nvim-telescope/telescope.nvim",
     lazy = true,
     dependencies = { "ellisonleao/gruvbox.nvim" },
+    event = { "VeryLazy" },
     cmd = { "Telescope" },
     keys = { "<leader>" },
     tag = "0.1.1",
@@ -290,7 +284,7 @@ require("lazy").setup({
   {
     "lewis6991/gitsigns.nvim",
     layz = true,
-    event = { "BufReadPost" },
+    event = { "VeryLazy", "BufReadPost" },
     config = function()
       require("kide.plugins.config.gitsigns-nvim")
     end,
