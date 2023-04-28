@@ -17,6 +17,12 @@ if lemminx_home then
         vim.fn.join(lemminx_jars, ":"),
         "org.eclipse.lemminx.XMLServerLauncher",
       },
+      on_attach = function(client, buffer)
+        require("kide.core.keybindings").maplsp(client, buffer)
+        if client.server_capabilities.documentSymbolProvider then
+          require("nvim-navic").attach(client, buffer)
+        end
+      end,
     })
   end
 end
