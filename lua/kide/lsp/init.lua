@@ -23,6 +23,7 @@ local server_configs = {
   kotlin_language_server = {},
   vuels = {},
   lemminx = require("kide.lsp.lemminx"),
+  gdscript = require("kide.lsp.gdscript"),
 }
 
 -- Setup lspconfig.
@@ -69,8 +70,15 @@ require("mason-lspconfig").setup_handlers({
     end
   end,
 })
-if server_configs.lemminx.setup then
-  server_configs.lemminx.setup()
+
+for _, value in pairs(server_configs) do
+  if value.setup then
+    value.setup({
+      flags = {
+        debounce_text_changes = 150,
+      },
+    })
+  end
 end
 
 -- LSP 相关美化参考 https://github.com/NvChad/NvChad
