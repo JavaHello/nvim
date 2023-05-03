@@ -76,6 +76,18 @@ autocmd("FileType", {
     vim.opt_local.expandtab = true
   end,
 })
+autocmd("FileType", {
+  pattern = {
+    "gd",
+    "gdscript",
+    "gdscript3",
+  },
+  callback = function()
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.expandtab = false
+  end,
+})
 
 -- 新行对齐当前行，空格替代tab
 vim.opt.expandtab = true
