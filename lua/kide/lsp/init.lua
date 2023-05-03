@@ -77,6 +77,14 @@ for _, value in pairs(server_configs) do
       flags = {
         debounce_text_changes = 150,
       },
+      capabilities = capabilities,
+      on_attach = function(client, buffer)
+        -- 绑定快捷键
+        require("kide.core.keybindings").maplsp(client, buffer)
+        if client.server_capabilities.documentSymbolProvider then
+          require("nvim-navic").attach(client, buffer)
+        end
+      end,
     })
   end
 end
