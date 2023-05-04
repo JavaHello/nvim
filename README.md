@@ -2,7 +2,7 @@
 
 可配置 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发环境。 极速启动 (`startuptime` 20 ~ 70 ms)。
 
-使用 `neovim v0.8.3`+ 版本。
+使用 `neovim v0.9.0`+ 版本。
 
 ## 安装
 

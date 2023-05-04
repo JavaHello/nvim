@@ -1,7 +1,7 @@
 local M = {}
 local lemminx_home = os.getenv("LEMMINX_HOME")
 if lemminx_home then
-  M.setup = function()
+  M.setup = function(opt)
     local lspconfig = require("lspconfig")
     local utils = require("kide.core.utils")
 
@@ -10,20 +10,16 @@ if lemminx_home then
       table.insert(lemminx_jars, bundle)
     end
     vim.fn.join(lemminx_jars, utils.is_win and ";" or ":")
-    lspconfig["lemminx"].setup({
+
+    local config = vim.tbl_deep_extend("keep", {
       cmd = {
         "java",
         "-cp",
         vim.fn.join(lemminx_jars, ":"),
         "org.eclipse.lemminx.XMLServerLauncher",
       },
-      on_attach = function(client, buffer)
-        require("kide.core.keybindings").maplsp(client, buffer)
-        if client.server_capabilities.documentSymbolProvider then
-          require("nvim-navic").attach(client, buffer)
-        end
-      end,
-    })
+    }, opt)
+    lspconfig["lemminx"].setup(config)
   end
 end
 
