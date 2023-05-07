@@ -17,7 +17,7 @@ require("lazy").setup({
   {
     "williamboman/mason.nvim",
     lazy = true,
-    cmd = { "Mason", "MasonInstall", "MasonLog", "MasonUninstall" },
+    event = { "VeryLazy" },
     config = function()
       require("kide.plugins.config.mason-nvim")
     end,
