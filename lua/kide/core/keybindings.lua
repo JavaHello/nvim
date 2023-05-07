@@ -17,6 +17,7 @@ M.setup = function()
   map("n", "<Leader>v", '"+p', opt)
   -- 取消搜索高亮显示
   map("n", "<Leader><CR>", ":nohlsearch<CR>", opt)
+  map("n", "<Esc>", ":nohlsearch<CR>", opt)
 
   keymap("n", "<C-h>", "<C-w>h", opt)
   keymap("n", "<C-j>", "<C-w>j", opt)
