@@ -427,6 +427,7 @@ require("lazy").setup({
   {
     "danymat/neogen",
     lazy = true,
+    event = { "VeryLazy" },
     config = function()
       require("kide.plugins.config.neogen")
     end,
