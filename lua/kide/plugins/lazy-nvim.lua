@@ -237,6 +237,16 @@ require("lazy").setup({
     end,
   },
 
+  {
+    "mfussenegger/nvim-dap-python",
+    lazy = true,
+    ft = "java",
+    dependencies = { "mfussenegger/nvim-dap" },
+    config = function()
+      require("dap-python").setup(config.env.py_bin)
+    end,
+  },
+
   -- 搜索插件
   {
     "nvim-telescope/telescope.nvim",
