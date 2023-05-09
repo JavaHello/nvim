@@ -1,10 +1,10 @@
 local M = {
   env = {
-    py_bin = os.getenv("py_bin") or "/usr/bin/python3",
+    py_bin = os.getenv("PY_BIN") or "/usr/bin/python3",
   },
   plugin = {
     copilot = {
-      enable = os.getenv("copilot_enable") or false,
+      enable = os.getenv("COPILOT_ENABLE") or false,
     },
   },
 }

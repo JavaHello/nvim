@@ -181,7 +181,7 @@ require("lazy").setup({
         desc = "jdtls",
         callback = function(e)
           if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
-          -- ignore
+            -- ignore
           else
             require("kide.lsp.java").start()
           end
@@ -331,6 +331,7 @@ require("lazy").setup({
   {
     "akinsho/toggleterm.nvim",
     lazy = true,
+    version = "*",
     cmd = { "ToggleTerm" },
     config = function()
       require("toggleterm").setup({

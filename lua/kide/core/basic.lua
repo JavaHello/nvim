@@ -191,3 +191,15 @@ autocmd("FileType", {
     vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
   end,
 })
+
+-- toggle_term
+autocmd("FileType", {
+  group = augroup("toggle_term"),
+  pattern = {
+    "toggleterm",
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "tt", ":ToggleTerm<CR>", { buffer = event.buf, silent = true })
+  end,
+})
