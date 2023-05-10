@@ -40,7 +40,7 @@ M.setup = function()
 
   -- " 退出 terminal 模式
   map("t", "<Esc>", "<C-\\><C-N>", opt)
-  map("t", "jk", "<C-\\><C-N>", opt)
+  -- map("t", "jk", "<C-\\><C-N>", opt)
 
   -- ToggleTerm
   map("n", "<F12>", ":ToggleTerm<CR>", opt)
