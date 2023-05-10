@@ -63,10 +63,10 @@ M.signs = {
 
 M.diagnostics = {
   icons = {
-    hint = "󰌶",
-    info = "",
-    warning = "",
-    error = "",
+    hint = "",
+    info = "",
+    warning = "",
+    error = "",
   },
 }
 return M
