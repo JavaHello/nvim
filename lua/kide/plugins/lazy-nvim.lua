@@ -58,6 +58,16 @@ require("lazy").setup({
   {
     "onsails/lspkind-nvim",
     lazy = true,
+    event = { "VeryLazy" },
+    config = function()
+      require("lspkind").init({
+        -- preset = "codicons",
+        symbol_map = {
+          Copilot = "",
+        },
+      })
+      vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
+    end,
   },
   -- nvim-cmp
   {
