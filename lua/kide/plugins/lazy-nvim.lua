@@ -9,12 +9,15 @@ require("lazy").setup({
 
   {
     "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("nvim-web-devicons").setup({})
+    end,
     lazy = true,
   },
   {
     "williamboman/mason.nvim",
     lazy = true,
-    cmd = { "Mason", "MasonInstall", "MasonLog", "MasonUninstall" },
+    event = { "VeryLazy" },
     config = function()
       require("kide.plugins.config.mason-nvim")
     end,
@@ -55,11 +58,21 @@ require("lazy").setup({
   {
     "onsails/lspkind-nvim",
     lazy = true,
+    event = { "VeryLazy" },
+    config = function()
+      require("lspkind").init({
+        -- preset = "codicons",
+        symbol_map = {
+          Copilot = "",
+        },
+      })
+      vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
+    end,
   },
   -- nvim-cmp
   {
     "hrsh7th/nvim-cmp",
-    event = { "InsertEnter" },
+    event = { "InsertEnter", "VeryLazy" },
     keys = { ":", "/", "?" },
     dependencies = {
       "hrsh7th/cmp-path",
@@ -104,13 +117,27 @@ require("lazy").setup({
   -- use 'morhetz/gruvbox'
   {
     "ellisonleao/gruvbox.nvim",
+    enabled = true,
     lazy = false,
     priority = 1000,
     config = function()
       require("kide.plugins.config.gruvbox")
     end,
   },
-  -- use 'sainnhe/gruvbox-material'
+  {
+    "sainnhe/gruvbox-material",
+    enabled = false,
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- require("kide.plugins.config.gruvbox")
+
+      vim.opt.background = "dark"
+      vim.g.gruvbox_material_background = "hard"
+      vim.g.gruvbox_material_better_performance = true
+      vim.cmd([[colorscheme gruvbox-material]])
+    end,
+  },
 
   -- 文件管理
   {
@@ -127,7 +154,6 @@ require("lazy").setup({
   {
     "akinsho/bufferline.nvim",
     version = "*",
-    dependencies = { "ellisonleao/gruvbox.nvim" },
     requires = "kyazdani42/nvim-web-devicons",
     config = function()
       require("kide.plugins.config.bufferline")
@@ -138,7 +164,6 @@ require("lazy").setup({
   {
     "nvim-treesitter/nvim-treesitter",
     event = { "BufNewFile", "BufReadPost" },
-    dependencies = { "ellisonleao/gruvbox.nvim" },
     build = ":TSUpdate",
     config = function()
       require("kide.plugins.config.nvim-treesitter")
@@ -178,7 +203,7 @@ require("lazy").setup({
         desc = "jdtls",
         callback = function(e)
           if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
-          -- ignore
+            -- ignore
           else
             require("kide.lsp.java").start()
           end
@@ -234,11 +259,20 @@ require("lazy").setup({
     end,
   },
 
+  {
+    "mfussenegger/nvim-dap-python",
+    lazy = true,
+    ft = "java",
+    dependencies = { "mfussenegger/nvim-dap" },
+    config = function()
+      require("dap-python").setup(config.env.py_bin)
+    end,
+  },
+
   -- 搜索插件
   {
     "nvim-telescope/telescope.nvim",
     lazy = true,
-    dependencies = { "ellisonleao/gruvbox.nvim" },
     event = { "VeryLazy" },
     cmd = { "Telescope" },
     keys = { "<leader>" },
@@ -318,6 +352,7 @@ require("lazy").setup({
   {
     "akinsho/toggleterm.nvim",
     lazy = true,
+    version = "*",
     cmd = { "ToggleTerm" },
     config = function()
       require("toggleterm").setup({
@@ -355,7 +390,6 @@ require("lazy").setup({
   -- 状态栏插件
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = { "ellisonleao/gruvbox.nvim" },
     config = function()
       require("kide.plugins.config.lualine")
     end,
@@ -405,7 +439,7 @@ require("lazy").setup({
   -- 颜色显示
   {
     "norcalli/nvim-colorizer.lua",
-    event = { "BufReadPost", "InsertEnter" },
+    event = { "BufReadPost", "InsertEnter", "VeryLazy" },
     config = function()
       require("kide.plugins.config.nvim-colorizer")
     end,
@@ -424,6 +458,7 @@ require("lazy").setup({
   {
     "danymat/neogen",
     lazy = true,
+    event = { "VeryLazy" },
     config = function()
       require("kide.plugins.config.neogen")
     end,
@@ -465,7 +500,7 @@ require("lazy").setup({
   {
     "folke/which-key.nvim",
     lazy = true,
-    keys = "<leader>",
+    event = { "VeryLazy" },
     config = function()
       require("kide.plugins.config.which-key")
     end,
@@ -513,7 +548,7 @@ require("lazy").setup({
   -- () 自动补全
   {
     "windwp/nvim-autopairs",
-    event = { "InsertEnter" },
+    event = { "InsertEnter", "VeryLazy" },
     config = function()
       require("kide.plugins.config.nvim-autopairs")
     end,
@@ -650,7 +685,8 @@ require("lazy").setup({
   {
     "kylechui/nvim-surround",
     lazy = true,
-    event = { "InsertEnter" },
+    version = "*",
+    event = { "VeryLazy" },
     config = function()
       require("nvim-surround").setup({})
     end,
@@ -728,41 +764,6 @@ require("lazy").setup({
     end,
   },
   {
-    "denstiny/cmp-dictionary-nanny",
-    enabled = false,
-    build = "./install.sh",
-    config = function()
-      require("cmp-dictionary-nanny.config").setup({})
-    end,
-    event = { "InsertEnter" },
-  },
-  {
-    "JuanZoran/Trans.nvim",
-    enabled = false,
-    keys = {
-      -- 可以换成其他你想映射的键
-      { "mm", mode = { "n", "x" }, "<Cmd>Translate<CR>", desc = " Translate" },
-      { "mk", mode = { "n", "x" }, "<Cmd>TransPlay<CR>", desc = " 自动发音" },
-
-      -- 目前这个功能的视窗还没有做好，可以在配置里将view.i改成hover
-      { "mi", "<Cmd>TranslateInput<CR>", desc = " Translate From Input" },
-    },
-    dependencies = { "kkharji/sqlite.lua", lazy = true },
-    config = function()
-      require("Trans").setup({
-        db_path = "$HOME/.local/share/nvim/data/ultimate.db",
-        icon = {
-          star = "",
-          notfound = " ",
-          yes = "",
-          no = "",
-          cell = "■",
-        },
-      })
-      require("kide.theme.gruvbox").load_trans_highlights()
-    end,
-  },
-  {
     "zbirenbaum/copilot.lua",
     enabled = config.plugin.copilot.enable,
     lazy = true,
@@ -779,7 +780,7 @@ require("lazy").setup({
     enabled = config.plugin.copilot.enable,
     lazy = true,
     dependencies = { "zbirenbaum/copilot.lua" },
-    event = "InsertEnter",
+    event = { "InsertEnter", "VeryLazy" },
     config = function()
       require("copilot_cmp").setup()
     end,

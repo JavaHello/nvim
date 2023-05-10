@@ -1,10 +1,10 @@
 require("gitsigns").setup({
   signs = {
-    add = { hl = "DiffAdd", text = "│", numhl = "GitSignsAddNr" },
+    add = { hl = "DiffAdd", text = "", numhl = "GitSignsAddNr" },
     change = { hl = "DiffChange", text = "│", numhl = "GitSignsChangeNr" },
-    delete = { hl = "DiffDelete", text = "", numhl = "GitSignsDeleteNr" },
+    delete = { hl = "DiffDelete", text = "", numhl = "GitSignsDeleteNr" },
     topdelete = { hl = "DiffDelete", text = "‾", numhl = "GitSignsDeleteNr" },
-    changedelete = { hl = "DiffChangeDelete", text = "~", numhl = "GitSignsChangeNr" },
+    changedelete = { hl = "GitSignsChangedelete", text = "", numhl = "GitSignsChangedeleteNr" },
     untracked = { hl = "GitSignsAdd", text = "│", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
   },
   signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`

@@ -17,6 +17,7 @@ M.setup = function()
   map("n", "<Leader>v", '"+p', opt)
   -- 取消搜索高亮显示
   map("n", "<Leader><CR>", ":nohlsearch<CR>", opt)
+  map("n", "<Esc>", ":nohlsearch<CR>", opt)
 
   keymap("n", "<C-h>", "<C-w>h", opt)
   keymap("n", "<C-j>", "<C-w>j", opt)
@@ -39,10 +40,14 @@ M.setup = function()
 
   -- " 退出 terminal 模式
   map("t", "<Esc>", "<C-\\><C-N>", opt)
-  map("t", "jk", "<C-\\><C-N>", opt)
+  -- map("t", "jk", "<C-\\><C-N>", opt)
 
   -- ToggleTerm
   map("n", "<F12>", ":ToggleTerm<CR>", opt)
+  map("t", "<F12>", "<C-\\><C-N>:ToggleTerm<CR>", opt)
+  map("n", "<leader>tt", ":ToggleTerm<CR>", opt)
+  map("v", "<leader>tt", ":ToggleTermSendVisualSelection<CR>", opt)
+  map("t", "tt", "<C-\\><C-N>:ToggleTerm<CR>", opt)
 
   -- symbols-outline.nvim
   map("n", "<space>o", ":<C-u>SymbolsOutline<CR>", opt)
@@ -141,7 +146,7 @@ M.maplsp = function(client, buffer)
   -- mapbuf('n', '<leader>ca', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opt)
   -- go xx
   -- mapbuf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>Trouble lsp_definitions<CR>', opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "n", "gd", "<cmd>Telescope lsp_definitions<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opt)

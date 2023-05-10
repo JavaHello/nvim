@@ -136,14 +136,6 @@ vim.opt.mouse = "a"
 vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.opt.foldlevelstart = 99
 
--- Highlight on yank
-vim.api.nvim_create_autocmd({ "TextYankPost" }, {
-  pattern = { "*" },
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-})
-
 vim.opt_global.completeopt = "menu,menuone,noselect"
 if vim.g.neovide then
   vim.g.neovide_cursor_vfx_mode = "railgun"
@@ -166,3 +158,48 @@ autocmd("BufReadPost", {
 
 vim.opt_global.grepprg = "rg --vimgrep --no-heading --smart-case"
 vim.opt_global.grepformat = "%f:%l:%c:%m,%f:%l:%m"
+
+--- see https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
+local function augroup(name)
+  return vim.api.nvim_create_augroup("kide" .. name, { clear = true })
+end
+-- Highlight on yank
+autocmd({ "TextYankPost" }, {
+  group = augroup("highlight_yank"),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+})
+
+-- close some filetypes with <q>
+autocmd("FileType", {
+  group = augroup("close_with_q"),
+  pattern = {
+    "PlenaryTestPopup",
+    "help",
+    "lspinfo",
+    "man",
+    "notify",
+    "qf",
+    "spectre_panel",
+    "startuptime",
+    "tsplayground",
+    "checkhealth",
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+  end,
+})
+
+-- toggle_term
+autocmd("FileType", {
+  group = augroup("toggle_term"),
+  pattern = {
+    "toggleterm",
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "tt", ":ToggleTerm<CR>", { buffer = event.buf, silent = true })
+  end,
+})
