@@ -117,13 +117,27 @@ require("lazy").setup({
   -- use 'morhetz/gruvbox'
   {
     "ellisonleao/gruvbox.nvim",
+    enabled = true,
     lazy = false,
     priority = 1000,
     config = function()
       require("kide.plugins.config.gruvbox")
     end,
   },
-  -- use 'sainnhe/gruvbox-material'
+  {
+    "sainnhe/gruvbox-material",
+    enabled = false,
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- require("kide.plugins.config.gruvbox")
+
+      vim.opt.background = "dark"
+      vim.g.gruvbox_material_background = "hard"
+      vim.g.gruvbox_material_better_performance = true
+      vim.cmd([[colorscheme gruvbox-material]])
+    end,
+  },
 
   -- 文件管理
   {
@@ -140,7 +154,6 @@ require("lazy").setup({
   {
     "akinsho/bufferline.nvim",
     version = "*",
-    dependencies = { "ellisonleao/gruvbox.nvim" },
     requires = "kyazdani42/nvim-web-devicons",
     config = function()
       require("kide.plugins.config.bufferline")
@@ -151,7 +164,6 @@ require("lazy").setup({
   {
     "nvim-treesitter/nvim-treesitter",
     event = { "BufNewFile", "BufReadPost" },
-    dependencies = { "ellisonleao/gruvbox.nvim" },
     build = ":TSUpdate",
     config = function()
       require("kide.plugins.config.nvim-treesitter")
@@ -261,7 +273,6 @@ require("lazy").setup({
   {
     "nvim-telescope/telescope.nvim",
     lazy = true,
-    dependencies = { "ellisonleao/gruvbox.nvim" },
     event = { "VeryLazy" },
     cmd = { "Telescope" },
     keys = { "<leader>" },
@@ -379,7 +390,6 @@ require("lazy").setup({
   -- 状态栏插件
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = { "ellisonleao/gruvbox.nvim" },
     config = function()
       require("kide.plugins.config.lualine")
     end,
