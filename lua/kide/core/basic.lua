@@ -185,7 +185,19 @@ autocmd("FileType", {
     "startuptime",
     "tsplayground",
     "checkhealth",
+    "fugitive",
+    "gitcommit",
+    "git",
   },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+  end,
+})
+
+autocmd({ "BufReadCmd" }, {
+  group = augroup("git_close_with_q"),
+  pattern = "fugitive://*",
   callback = function(event)
     vim.bo[event.buf].buflisted = false
     vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
