@@ -1,5 +1,4 @@
 local M = {}
-local cutils = require("kide.core.utils")
 local env = {
   HOME = vim.loop.os_homedir(),
   JAVA_HOME = os.getenv("JAVA_HOME"),
@@ -24,13 +23,6 @@ end
 local function get_java_ver_sources(v, dv)
   return os.getenv("JAVA_" .. v .. "_SOURCES") or dv
 end
-local function get_java_ver_doc(v, dv)
-  return os.getenv("JAVA_" .. v .. "_DOC") or dv
-end
-
-local function get_java()
-  return or_default(env.JDTLS_RUN_JAVA, get_java_home() .. "/bin/java")
-end
 
 local function get_jdtls_workspace()
   return or_default(env.JDTLS_WORKSPACE, env.HOME .. "/jdtls-workspace/")
@@ -44,16 +36,6 @@ end
 local function get_jol_jar()
   return env.JOL_JAR or "/opt/software/java/jol-cli-0.16-full.jar"
 end
-
-local _config = (function()
-  if cutils.is_win then
-    return "config_win"
-  elseif cutils.is_mac then
-    return "config_mac"
-  else
-    return "config_linux"
-  end
-end)()
 
 -- see https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
 local ExecutionEnvironment = {
@@ -121,9 +103,8 @@ local function get_jdtls_path()
 end
 local jdtls_path = get_jdtls_path()
 
-local jdtls_launcher = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+local jdtls_launcher = vim.fn.glob(jdtls_path .. "/bin/jdtls")
 
-local jdtls_config = vim.fn.glob(jdtls_path .. "/" .. _config)
 
 local bundles = {}
 -- This bundles definition is the same as in the previous section (java-debug installation)
@@ -173,39 +154,14 @@ local config = {
   -- The command that starts the language server
   -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
   cmd = {
-    get_java(), -- or '/path/to/java11_or_newer/bin/java'
-    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-    "-Dosgi.bundles.defaultStartLevel=4",
-    "-Declipse.product=org.eclipse.jdt.ls.core.product",
-    -- "-Dosgi.configuration.cascaded=true",
-    -- "-Dosgi.sharedConfiguration.area=" .. get_jdtls_home() .. "/config_mac",
-    -- "-Dosgi.sharedConfiguration.area.readOnly=true",
-    "-Dlog.protocol=true",
-    "-Dlog.level=ALL",
-    "-Dsun.zip.disableMemoryMapping=true",
-    -- "-Djava.util.concurrent.ForkJoinPool.common.parallelism=16",
-    -- "-noverify",
-    -- '-XX:+UseParallelGC',
-    -- '-XX:GCTimeRatio=4',
-    -- '-XX:AdaptiveSizePolicyWeight=90',
-    -- '-XX:+UseG1GC',
-    -- '-XX:+UseStringDeduplication',
-    -- '-Xms512m',
-    "-XX:+UseZGC",
-    "-Xmx1g",
-    -- "-Xbootclasspath/a:" .. get_lombok_jar(),
-    "-javaagent:" .. get_lombok_jar(),
-    "--add-modules=ALL-SYSTEM",
-    "--add-opens",
-    "java.base/java.util=ALL-UNNAMED",
-    "--add-opens",
-    "java.base/java.lang=ALL-UNNAMED",
-    "-jar",
     jdtls_launcher,
-    "-configuration",
-    jdtls_config,
-    "-data",
-    workspace_dir,
+    "--jvm-arg=-Dlog.protocol=true",
+    "--jvm-arg=-Dlog.level=ALL",
+    "--jvm-arg=-Dsun.zip.disableMemoryMapping=true",
+    "--jvm-arg=" .. "-javaagent:" .. get_lombok_jar(),
+    "--jvm-arg=" .. "-XX:+UseZGC",
+    "--jvm-arg=" .. "-Xmx1g",
+    "-data=" .. workspace_dir,
   },
   filetypes = { "java" },
 
