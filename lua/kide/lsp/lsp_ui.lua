@@ -27,7 +27,7 @@ M.symbol_map = {
   Struct = { icon = lspkind_symbol_map.Struct, hl = "@type" },
   Event = { icon = lspkind_symbol_map.Event, hl = "@type" },
   Operator = { icon = lspkind_symbol_map.Operator, hl = "@operator" },
-  TypeParameter = { icon = "󰗴", hl = "@parameter" },
+  TypeParameter = { icon = "", hl = "@parameter" },
   ---------------------------------------------------------
   Namespace = { icon = "", hl = "@namespace" },
   Package = { icon = "", hl = "@namespace" },
