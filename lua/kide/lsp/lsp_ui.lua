@@ -27,19 +27,19 @@ M.symbol_map = {
   Struct = { icon = lspkind_symbol_map.Struct, hl = "@type" },
   Event = { icon = lspkind_symbol_map.Event, hl = "@type" },
   Operator = { icon = lspkind_symbol_map.Operator, hl = "@operator" },
-  TypeParameter = { icon = "", hl = "@parameter" },
+  TypeParameter = { icon = "󰗴", hl = "@parameter" },
   ---------------------------------------------------------
-  Namespace = { icon = "", hl = "@namespace" },
+  Namespace = { icon = "", hl = "@namespace" },
   Package = { icon = "", hl = "@namespace" },
   String = { icon = "", hl = "@string" },
   Number = { icon = "", hl = "@number" },
   Boolean = { icon = "", hl = "@boolean" },
-  Array = { icon = "", hl = "@constant" },
-  Object = { icon = "", hl = "@type" },
+  Array = { icon = "", hl = "@constant" },
+  Object = { icon = "", hl = "@type" },
   Key = { icon = "󰌋", hl = "@type" },
   Null = { icon = "󰟢", hl = "@type" },
-  Component = { icon = "", hl = "@function" },
-  Fragment = { icon = "", hl = "@constant" },
+  Component = { icon = "󰡀", hl = "@function" },
+  Fragment = { icon = "", hl = "@constant" },
 }
 
 M.hover_actions = {
