@@ -31,6 +31,8 @@ local function markdown_to_pdf()
           { "--toc" },
           { "--variable", "CJKmainfont=" .. cjk_mainfont() },
           { "--variable", "mainfont=Hack" },
+          { "--variable", "sansfont=Hack" },
+          { "--variable", "monofont=Hack" },
           { "--variable", "geometry:top=2cm, bottom=1.5cm, left=2cm, right=2cm" },
         })
       end, {
