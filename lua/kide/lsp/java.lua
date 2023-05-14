@@ -105,7 +105,6 @@ local jdtls_path = get_jdtls_path()
 
 local jdtls_launcher = vim.fn.glob(jdtls_path .. "/bin/jdtls")
 
-
 local bundles = {}
 -- This bundles definition is the same as in the previous section (java-debug installation)
 local vscode_java_debug_path = vscode.find_one("/vscjava.vscode-java-debug-*/server")
