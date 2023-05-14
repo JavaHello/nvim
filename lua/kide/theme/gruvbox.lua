@@ -68,51 +68,6 @@ local flat_telescope = {
 
   TelescopeSelection = { bg = colors.black2, fg = colors.yellow },
 }
-local flat_trans = {
-  TransWord = {
-    fg = colors.green,
-    bold = true,
-  },
-  TransPhonetic = {
-    link = "Linenr",
-  },
-  TransTitle = {
-    fg = colors.white,
-    bg = colors.blue2,
-    bold = true,
-  },
-  TransTitleRound = {
-    fg = colors.blue2,
-  },
-  TransTag = {
-    fg = colors.yellow2,
-  },
-  TransExchange = {
-    link = "TransTag",
-  },
-  TransPos = {
-    link = "TransTag",
-  },
-  TransTranslation = {
-    link = "TransWord",
-  },
-  TransDefinition = {
-    link = "Moremsg",
-  },
-  TransWin = {
-    link = "Normal",
-  },
-  TransBorder = {
-    link = "FloatBorder",
-  },
-  TransCollins = {
-    fg = colors.green,
-    bold = true,
-  },
-  TransFailed = {
-    fg = colors.blue,
-  },
-}
 
 M.load_telescope_highlights = function()
   M.load_highlights(flat_telescope)
@@ -123,7 +78,4 @@ M.load_highlights = function(hl_groups)
   end
 end
 
-M.load_trans_highlights = function()
-  M.load_highlights(flat_trans)
-end
 return M
