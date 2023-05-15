@@ -44,16 +44,16 @@ M.symbol_map = {
 
 M.hover_actions = {
   width = 120,
-  border = {
-    { "╭", "FloatBorder" },
-    { "─", "FloatBorder" },
-    { "╮", "FloatBorder" },
-    { "│", "FloatBorder" },
-    { "╯", "FloatBorder" },
-    { "─", "FloatBorder" },
-    { "╰", "FloatBorder" },
-    { "│", "FloatBorder" },
-  },
+  -- border = {
+  -- { "╭", "FloatBorder" },
+  -- { "─", "FloatBorder" },
+  -- { "╮", "FloatBorder" },
+  -- { "│", "FloatBorder" },
+  -- { "╯", "FloatBorder" },
+  -- { "─", "FloatBorder" },
+  -- { "╰", "FloatBorder" },
+  -- { "│", "FloatBorder" },
+  -- },
 }
 
 M.signs = {
