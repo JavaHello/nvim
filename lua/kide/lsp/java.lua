@@ -163,10 +163,6 @@ local config = {
     "-data=" .. workspace_dir,
   },
   filetypes = { "java" },
-
-  -- 💀
-  -- This is the default if not provided, you can remove it. Or adjust as needed.
-  -- One dedicated LSP server & client will be started per unique root_dir
   root_dir = root_dir,
 
   -- Here you can configure eclipse.jdt.ls specific settings
@@ -176,18 +172,8 @@ local config = {
     java = {
       maxConcurrentBuilds = 8,
       home = get_java_home(),
-      jdt = {
-        ls = {
-          -- 暂时不可用
-          lombokSupport = { enabled = true },
-        },
-      },
       project = {
         encoding = "UTF-8",
-        resourceFilters = {
-          "node_modules",
-          ".git",
-        },
       },
       foldingRange = { enabled = true },
       selectionRange = { enabled = true },
@@ -221,9 +207,6 @@ local config = {
       },
       eclipse = {
         downloadSources = true,
-      },
-      server = {
-        launchMode = "Hybrid",
       },
       maven = {
         downloadSources = true,
@@ -264,19 +247,11 @@ local config = {
       },
       configuration = {
         maven = {
-          --          userSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
-          --          globalSettings = "/opt/software/apache-maven-3.6.3/conf/settings.xml",
           userSettings = maven.get_maven_settings(),
           globalSettings = maven.get_maven_settings(),
         },
         runtimes = runtimes,
       },
-      -- referencesCodeLens = {
-      --   enabled = true,
-      -- },
-      -- implementationsCodeLens = {
-      --   enabled = true,
-      -- },
     },
   },
 
