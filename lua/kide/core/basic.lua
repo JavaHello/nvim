@@ -188,6 +188,7 @@ autocmd("FileType", {
     "fugitive",
     "gitcommit",
     "git",
+    "dbui",
     "dbout",
   },
   callback = function(event)
