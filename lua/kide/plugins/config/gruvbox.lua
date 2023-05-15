@@ -1,18 +1,3 @@
--- setup must be called before loading the colorscheme
--- Default options:
-
-local kgrubox = require("kide.theme.gruvbox")
-local overrides = {
-  NormalFloat = {
-    bg = kgrubox.colors.black3,
-  },
-  Pmenu = {
-    bg = kgrubox.colors.black2,
-  },
-
-  -- cmp, wilder
-}
-
 require("gruvbox").setup({
   undercurl = true,
   underline = true,
@@ -30,8 +15,11 @@ require("gruvbox").setup({
   invert_intend_guides = false,
   inverse = true, -- invert background for search, diffs, statuslines and errors
   contrast = "", -- can be "hard", "soft" or empty string
-  palette_overrides = {},
-  overrides = overrides,
+  palette_overrides = {
+    dark1 = "#313131",
+    dark2 = "#2e2e2e",
+  },
+  overrides = {},
   dim_inactive = false,
   transparent_mode = false,
 })
