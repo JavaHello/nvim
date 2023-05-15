@@ -27,16 +27,16 @@ end
 
 telescope.setup({
   defaults = {
-    -- vimgrep_arguments = {
-    --   "rg",
-    --   "--color=never",
-    --   "--no-heading",
-    --   "--with-filename",
-    --   "--line-number",
-    --   "--column",
-    --   "--smart-case",
-    -- },
-    -- prompt_prefix = "   ",
+    vimgrep_arguments = {
+      "rg",
+      "-L",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--smart-case",
+    },
     prompt_prefix = "   ",
     selection_caret = " ",
     entry_prefix = "  ",
@@ -59,20 +59,10 @@ telescope.setup({
     },
     winblend = 0,
     -- border = {},
-    -- borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-    -- borderchars = {
-    --   prompt = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
-    --   results = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
-    --   preview = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
-    -- },
-    -- borderchars = {
-    --   prompt = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
-    --   results = { ' ', '▐', '▄', '▌', '▌', '▐', '▟', '▙' };
-    --   preview = { '▀', '▐', '▄', '▌', '▛', '▜', '▟', '▙' };
-    -- },
+    borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
     color_devicons = true,
     -- use_less = true,
-    -- set_env = { ["COLORTERM"] = "gruvbox" }, -- default = nil,
+    set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
     -- file_sorter = require("telescope.sorters").get_fuzzy_file,
     file_ignore_patterns = { "node_modules" },
     -- generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,

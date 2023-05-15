@@ -1,29 +1,31 @@
--- setup must be called before loading the colorscheme
--- Default options:
-
-local kgrubox = require("kide.theme.gruvbox")
-local overrides = {
-  NormalFloat = {
-    bg = kgrubox.colors.black3,
-  },
-  Pmenu = {
-    bg = kgrubox.colors.black2,
-  },
-
-  -- cmp, wilder
-}
-
 require("gruvbox").setup({
   undercurl = true,
   underline = true,
-  inverse = true, -- invert background for search, diffs, statuslines and errors
+  bold = true,
+  italic = {
+    strings = true,
+    comments = true,
+    operators = false,
+    folds = true,
+  },
+  strikethrough = true,
   invert_selection = false,
   invert_signs = false,
   invert_tabline = false,
   invert_intend_guides = false,
-  contrast = "", -- can be "hard" or "soft"
-  overrides = overrides,
+  inverse = true, -- invert background for search, diffs, statuslines and errors
+  contrast = "", -- can be "hard", "soft" or empty string
+  palette_overrides = {},
+  overrides = {
+    NormalFloat = {
+      bg = "#313131",
+    },
+    Pmenu = {
+      bg = "#2e2e2e",
+    },
+  },
+  dim_inactive = false,
+  transparent_mode = false,
 })
-
 vim.opt.background = "dark"
 vim.cmd([[colorscheme gruvbox]])

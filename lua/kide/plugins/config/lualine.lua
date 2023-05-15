@@ -117,6 +117,7 @@ dbui.sections = {
 }
 dbui.filetypes = {
   "dbui",
+  "dbout",
 }
 table.insert(config.extensions, dbui)
 

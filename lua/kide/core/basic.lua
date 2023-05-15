@@ -188,6 +188,8 @@ autocmd("FileType", {
     "fugitive",
     "gitcommit",
     "git",
+    "dbui",
+    "dbout",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false

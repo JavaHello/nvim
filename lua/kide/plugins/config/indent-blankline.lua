@@ -28,6 +28,8 @@ require("indent_blankline").setup({
     "TelescopePrompt",
     "TelescopeResults",
     "",
+    "dbui",
+    "dbout",
   },
   buftype_exclude = { "terminal" },
   use_treesitter = true,
