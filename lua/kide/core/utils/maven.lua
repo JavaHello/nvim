@@ -2,14 +2,14 @@ local utils = require("kide.core.utils")
 local M = {}
 
 local function maven_settings()
-  local maven_home = os.getenv("MAVEN_HOME")
+  local maven_home = vim.env["MAVEN_HOME"]
   if maven_home then
     return maven_home .. "/conf/settings.xml"
   end
 end
 
 M.get_maven_settings = function()
-  return os.getenv("MAVEN_SETTINGS") or maven_settings()
+  return vim.env["MAVEN_SETTINGS"] or maven_settings()
 end
 
 local function settings_opt(settings)

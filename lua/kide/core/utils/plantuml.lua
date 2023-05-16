@@ -5,7 +5,7 @@ local M = {}
 M.config = {}
 
 local function plantuml_jar(default_jar)
-  return os.getenv("PLANTUML_JAR") or default_jar
+  return vim.env["PLANTUML_JAR"] or default_jar
 end
 M.config.jar_path = plantuml_jar("/opt/software/puml/plantuml.jar")
 M.config.cmd = "java"

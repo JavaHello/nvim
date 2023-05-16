@@ -1,12 +1,12 @@
 local M = {}
 local env = {
   HOME = vim.loop.os_homedir(),
-  JAVA_HOME = os.getenv("JAVA_HOME"),
-  JDTLS_RUN_JAVA = os.getenv("JDTLS_RUN_JAVA"),
-  JDTLS_HOME = os.getenv("JDTLS_HOME"),
-  JDTLS_WORKSPACE = os.getenv("JDTLS_WORKSPACE"),
-  LOMBOK_JAR = os.getenv("LOMBOK_JAR"),
-  JOL_JAR = os.getenv("JOL_JAR"),
+  JAVA_HOME = vim.env["JAVA_HOME"],
+  JDTLS_RUN_JAVA = vim.env["JDTLS_RUN_JAVA"],
+  JDTLS_HOME = vim.env["JDTLS_HOME"],
+  JDTLS_WORKSPACE = vim.env["JDTLS_WORKSPACE"],
+  LOMBOK_JAR = vim.env["LOMBOK_JAR"],
+  JOL_JAR = vim.env["JOL_JAR"],
 }
 local maven = require("kide.core.utils.maven")
 
@@ -18,10 +18,10 @@ local function get_java_home()
   return or_default(env.JAVA_HOME, "/opt/software/java/zulu17.34.19-ca-jdk17.0.3-macosx_aarch64")
 end
 local function get_java_ver_home(v, dv)
-  return os.getenv("JAVA_" .. v .. "_HOME") or dv
+  return vim.env["JAVA_" .. v .. "_HOME"] or dv
 end
 local function get_java_ver_sources(v, dv)
-  return os.getenv("JAVA_" .. v .. "_SOURCES") or dv
+  return vim.env["JAVA_" .. v .. "_SOURCES"] or dv
 end
 
 local function get_jdtls_workspace()

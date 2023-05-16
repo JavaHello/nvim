@@ -1,5 +1,5 @@
 local M = {}
-local lemminx_home = os.getenv("LEMMINX_HOME")
+local lemminx_home = vim.env["LEMMINX_HOME"]
 if lemminx_home then
   M.setup = function(opt)
     local lspconfig = require("lspconfig")
