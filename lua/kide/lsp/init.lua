@@ -65,6 +65,8 @@ require("mason-lspconfig").setup_handlers({
       -- Initialize the LSP via rust-tools instead
       cfg.server = scfg
       require("rust-tools").setup(cfg)
+    elseif server_name == "jdtls" then
+      -- ignore
     else
       lspconfig[server_name].setup(scfg)
     end
