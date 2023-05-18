@@ -108,7 +108,7 @@ local function jdtls_launcher()
     return vim.fn.glob(jdtls_path .. "/bin/jdtls")
   end
   if require("mason-registry").has_package("jdtls") then
-    return require("mason-registry").get_package("jdtls"):get_install_path()
+    return require("mason-registry").get_package("jdtls"):get_install_path() .. "/bin/jdtls"
   end
 end
 
