@@ -20,6 +20,17 @@ cd $env:LOCALAPPDATA
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
+## 依赖
+
+- [ripgrep](https://github.com/BurntSushi/ripgrep)
+- [fd](https://github.com/sharkdp/fd)
+- [JDK](https://openjdk.org/) 8/17+
+- [maven](https://maven.apache.org/)
+- [nodejs](https://nodejs.org/en)
+- [yarn](https://yarnpkg.com/)
+
+其他依赖可选安装,使用 [mason.nvim](https://github.com/williamboman/mason.nvim)
+
 > 此配置在 Linux, Mac, Windows (推荐使用 [scoop](https://scoop.sh/) 安装依赖) 系统上长期使用
 
 ## 快捷键
