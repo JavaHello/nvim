@@ -111,9 +111,9 @@ local on_attach = function(client, bufnr)
   end
 end
 
-if "Y" == os.getenv("SEMGREP_ENABLE") then
+if "Y" == vim.env["SEMGREP_ENABLE"] then
   table.insert(sources, null_ls.builtins.diagnostics.semgrep)
-elseif "Y" == os.getenv("PMD_ENABLE") then
+elseif "Y" == vim.env["PMD_ENABLE"] then
   table.insert(
     sources,
     null_ls.builtins.diagnostics.pmd.with({

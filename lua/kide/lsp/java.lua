@@ -1,12 +1,12 @@
 local M = {}
 local env = {
   HOME = vim.loop.os_homedir(),
-  JAVA_HOME = os.getenv("JAVA_HOME"),
-  JDTLS_RUN_JAVA = os.getenv("JDTLS_RUN_JAVA"),
-  JDTLS_HOME = os.getenv("JDTLS_HOME"),
-  JDTLS_WORKSPACE = os.getenv("JDTLS_WORKSPACE"),
-  LOMBOK_JAR = os.getenv("LOMBOK_JAR"),
-  JOL_JAR = os.getenv("JOL_JAR"),
+  JAVA_HOME = vim.env["JAVA_HOME"],
+  JDTLS_RUN_JAVA = vim.env["JDTLS_RUN_JAVA"],
+  JDTLS_HOME = vim.env["JDTLS_HOME"],
+  JDTLS_WORKSPACE = vim.env["JDTLS_WORKSPACE"],
+  LOMBOK_JAR = vim.env["LOMBOK_JAR"],
+  JOL_JAR = vim.env["JOL_JAR"],
 }
 local maven = require("kide.core.utils.maven")
 
@@ -18,10 +18,10 @@ local function get_java_home()
   return or_default(env.JAVA_HOME, "/opt/software/java/zulu17.34.19-ca-jdk17.0.3-macosx_aarch64")
 end
 local function get_java_ver_home(v, dv)
-  return os.getenv("JAVA_" .. v .. "_HOME") or dv
+  return vim.env["JAVA_" .. v .. "_HOME"] or dv
 end
 local function get_java_ver_sources(v, dv)
-  return os.getenv("JAVA_" .. v .. "_SOURCES") or dv
+  return vim.env["JAVA_" .. v .. "_SOURCES"] or dv
 end
 
 local function get_jdtls_workspace()
@@ -101,13 +101,29 @@ local workspace_dir = get_jdtls_workspace() .. project_name
 local function get_jdtls_path()
   return or_default(env.JDTLS_HOME, vscode.find_one("/redhat.java-*/server"))
 end
-local jdtls_path = get_jdtls_path()
 
-local jdtls_launcher = vim.fn.glob(jdtls_path .. "/bin/jdtls")
+local function jdtls_launcher()
+  local jdtls_path = get_jdtls_path()
+  if jdtls_path then
+    return vim.fn.glob(jdtls_path .. "/bin/jdtls")
+  end
+  if require("mason-registry").has_package("jdtls") then
+    return require("mason-registry").get_package("jdtls"):get_install_path() .. "/bin/jdtls"
+  end
+end
 
 local bundles = {}
 -- This bundles definition is the same as in the previous section (java-debug installation)
-local vscode_java_debug_path = vscode.find_one("/vscjava.vscode-java-debug-*/server")
+
+local vscode_java_debug_path = (function()
+  local p = vscode.find_one("/vscjava.vscode-java-debug-*/server")
+  if p then
+    return p
+  end
+  if require("mason-registry").has_package("java-debug-adapter") then
+    return require("mason-registry").get_package("java-debug-adapter"):get_install_path() .. "/extension/server"
+  end
+end)()
 if vscode_java_debug_path then
   vim.list_extend(
     bundles,
@@ -117,7 +133,15 @@ end
 
 -- /opt/software/lsp/java/vscode-java-test/server
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
-local vscode_java_test_path = vscode.find_one("/vscjava.vscode-java-test-*/server")
+local vscode_java_test_path = (function()
+  local p = vscode.find_one("/vscjava.vscode-java-test-*/server")
+  if p then
+    return p
+  end
+  if require("mason-registry").has_package("java-test") then
+    return require("mason-registry").get_package("java-test"):get_install_path() .. "/extension/server"
+  end
+end)()
 if vscode_java_test_path then
   for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
     if not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar") then
@@ -153,7 +177,7 @@ local config = {
   -- The command that starts the language server
   -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
   cmd = {
-    jdtls_launcher,
+    jdtls_launcher(),
     "--jvm-arg=-Dlog.protocol=true",
     "--jvm-arg=-Dlog.level=ALL",
     "--jvm-arg=-Dsun.zip.disableMemoryMapping=true",

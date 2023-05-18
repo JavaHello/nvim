@@ -1,10 +1,10 @@
 local M = {
   env = {
-    py_bin = os.getenv("PY_BIN") or "/usr/bin/python3",
+    py_bin = vim.env["PY_BIN"] or "/usr/bin/python3",
   },
   plugin = {
     copilot = {
-      enable = os.getenv("COPILOT_ENABLE") or false,
+      enable = vim.env["COPILOT_ENABLE"] == "Y" and true or false,
     },
   },
 }
