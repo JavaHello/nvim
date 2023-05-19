@@ -29,9 +29,6 @@ local function get_jdtls_workspace()
 end
 
 local vscode = require("kide.core.vscode")
-local function get_lombok_jar()
-  return or_default(env.LOMBOK_JAR, "/opt/software/lsp/lombok.jar")
-end
 
 local function get_jol_jar()
   return env.JOL_JAR or "/opt/software/java/jol-cli-0.16-full.jar"
@@ -105,11 +102,27 @@ end
 local function jdtls_launcher()
   local jdtls_path = get_jdtls_path()
   if jdtls_path then
-    return vim.fn.glob(jdtls_path .. "/bin/jdtls")
+    jdtls_path = vim.fn.glob(jdtls_path .. "/bin/jdtls")
+  elseif require("mason-registry").has_package("jdtls") then
+    jdtls_path = require("mason-registry").get_package("jdtls"):get_install_path() .. "/bin/jdtls"
   end
-  if require("mason-registry").has_package("jdtls") then
-    return require("mason-registry").get_package("jdtls"):get_install_path() .. "/bin/jdtls"
+  if not jdtls_path then
+    vim.notify("jdtls_path is empty", vim.log.levels.ERROR)
+    return
   end
+  local cmd = {
+    jdtls_path,
+    "--jvm-arg=-Dlog.protocol=true",
+    "--jvm-arg=-Dlog.level=ALL",
+    "--jvm-arg=-Dsun.zip.disableMemoryMapping=true",
+    "--jvm-arg=" .. "-XX:+UseZGC",
+    "--jvm-arg=" .. "-Xmx1g",
+  }
+  if env.LOMBOK_JAR then
+    table.insert(cmd, "--jvm-arg=-javaagent:" .. env.LOMBOK_JAR)
+  end
+  table.insert(cmd, "-data=" .. workspace_dir)
+  return cmd
 end
 
 local bundles = {}
@@ -176,16 +189,7 @@ local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
 local config = {
   -- The command that starts the language server
   -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
-  cmd = {
-    jdtls_launcher(),
-    "--jvm-arg=-Dlog.protocol=true",
-    "--jvm-arg=-Dlog.level=ALL",
-    "--jvm-arg=-Dsun.zip.disableMemoryMapping=true",
-    "--jvm-arg=" .. "-javaagent:" .. get_lombok_jar(),
-    "--jvm-arg=" .. "-XX:+UseZGC",
-    "--jvm-arg=" .. "-Xmx1g",
-    "-data=" .. workspace_dir,
-  },
+  cmd = jdtls_launcher(),
   filetypes = { "java" },
   root_dir = root_dir,
 
