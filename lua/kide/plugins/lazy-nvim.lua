@@ -573,6 +573,18 @@ require("lazy").setup({
     "NTBBloodbath/rest.nvim",
     lazy = true,
     ft = "http",
+    init = function()
+      local group = vim.api.nvim_create_augroup("kide_jdtls_rest_http", { clear = true })
+      vim.api.nvim_create_autocmd({ "FileType" }, {
+        group = group,
+        pattern = { "http" },
+        callback = function(o)
+          vim.api.nvim_buf_create_user_command(o.buf, "Http", ":lua require'rest-nvim'.run()", { nargs = 0 })
+          vim.api.nvim_buf_create_user_command(o.buf, "HttpCurl", ":lua require'rest-nvim'.run(true)", { nargs = 0 })
+          vim.api.nvim_buf_create_user_command(o.buf, "HttpLast", ":lua require'rest-nvim'.last()", { nargs = 0 })
+        end,
+      })
+    end,
     config = function()
       require("kide.plugins.config.rest-nvim")
     end,
