@@ -11,7 +11,8 @@ mason_lspconfig.setup({
 local server_configs = {
   -- sumneko_lua -> lua_ls
   lua_ls = require("kide.lsp.lua_ls"), -- /lua/lsp/lua.lua
-  -- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
+  jdtls = require("kide.lsp.java"), -- /lua/lsp/jdtls.lua
+  metals = require("kide.lsp.metals"), -- /lua/lsp/jdtls.lua
   -- jsonls = require("lsp.jsonls"),
   clangd = require("kide.lsp.clangd"),
   tsserver = require("kide.lsp.tsserver"),
@@ -42,6 +43,10 @@ require("mason-lspconfig").setup_handlers({
     local lspconfig = require("lspconfig")
     -- tools config
     local cfg = utils.or_default(server_configs[server_name], {})
+    -- 自定义启动方式
+    if cfg.setup then
+      return
+    end
 
     -- lspconfig
     local scfg = utils.or_default(cfg.server, {})
@@ -61,15 +66,7 @@ require("mason-lspconfig").setup_handlers({
       debounce_text_changes = 150,
     }
     scfg.capabilities = capabilities
-    if server_name == "rust_analyzer" then
-      -- Initialize the LSP via rust-tools instead
-      cfg.server = scfg
-      require("rust-tools").setup(cfg)
-    elseif server_name == "jdtls" then
-      -- ignore
-    else
-      lspconfig[server_name].setup(scfg)
-    end
+    lspconfig[server_name].setup(scfg)
   end,
 })
 

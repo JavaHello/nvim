@@ -4,11 +4,12 @@ metals_config.settings = {
   showImplicitArguments = true,
 }
 
-metals_config.on_attach = function(client, buffer)
-  require("kide.core.keybindings").maplsp(client, buffer)
-end
-
-M.setup = function()
+M.setup = function(opt)
+  metals_config.on_attach = function(client, buffer)
+    if opt.on_attach then
+      opt.on_attach(client, buffer)
+    end
+  end
   local group = vim.api.nvim_create_augroup("kide_metals", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
@@ -17,7 +18,6 @@ M.setup = function()
       require("metals").initialize_or_attach(metals_config)
     end,
   })
-  return group
 end
 
 return M

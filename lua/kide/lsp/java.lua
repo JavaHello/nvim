@@ -479,35 +479,18 @@ M.start = function()
 end
 
 M.setup = function()
-  vim.g.jdtls_dap_main_class_config_init = true
-  -- au BufReadCmd jdt://* lua require('jdtls').open_jdt_link(vim.fn.expand('<amatch>'))
-  -- command! JdtWipeDataAndRestart lua require('jdtls.setup').wipe_data_and_restart()
-  -- command! JdtShowLogs lua require('jdtls.setup').show_logs()
-  vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
-    pattern = "jdt://*",
-    callback = function(e)
-      require("jdtls").open_classfile(e.file)
-    end,
-  })
-  vim.api.nvim_create_user_command("JdtWipeDataAndRestart", "lua require('jdtls.setup').wipe_data_and_restart()", {})
-  vim.api.nvim_create_user_command("JdtShowLogs", "lua require('jdtls.setup').show_logs()", {})
-
   local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
     pattern = { "java" },
     desc = "jdtls",
     callback = function(e)
-      -- vim.notify("load: " .. o.buf, vim.log.levels.INFO)
-      -- print(vim.inspect(e))
-      -- 忽略 telescope 预览的情况
       if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
         -- ignore
       else
-        M.start()
+        require("kide.lsp.java").start()
       end
     end,
   })
-  return group
 end
 return M

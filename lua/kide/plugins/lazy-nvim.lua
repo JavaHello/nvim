@@ -180,37 +180,6 @@ require("lazy").setup({
     "mfussenegger/nvim-jdtls",
     lazy = true,
     ft = "java",
-    init = function()
-      -- 不加载 nvim-jdtls.vim
-      vim.g.nvim_jdtls = 1
-      vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
-        pattern = "jdt://*",
-        callback = function(e)
-          require("jdtls").open_classfile(e.file)
-        end,
-      })
-      vim.api.nvim_create_user_command(
-        "JdtWipeDataAndRestart",
-        "lua require('jdtls.setup').wipe_data_and_restart()",
-        {}
-      )
-      vim.api.nvim_create_user_command("JdtShowLogs", "lua require('jdtls.setup').show_logs()", {})
-
-      local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
-      vim.api.nvim_create_autocmd({ "FileType" }, {
-        group = group,
-        pattern = { "java" },
-        desc = "jdtls",
-        callback = function(e)
-          if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
-            -- ignore
-          else
-            require("kide.lsp.java").start()
-          end
-        end,
-      })
-      return group
-    end,
   },
   {
     "JavaHello/java-deps.nvim",
@@ -226,9 +195,6 @@ require("lazy").setup({
     lazy = true,
     ft = "scala",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("kide.lsp.metals").setup()
-    end,
   },
   -- debug
   {
