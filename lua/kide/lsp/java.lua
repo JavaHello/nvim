@@ -488,7 +488,7 @@ M.setup = function()
       if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
         -- ignore
       else
-        require("kide.lsp.java").start()
+        M.start()
       end
     end,
   })
