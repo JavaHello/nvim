@@ -1,3 +1,17 @@
+local transparent_mode = false
+local overrides = {}
+if transparent_mode then
+  overrides.Pmenu = {
+    bg = "none",
+  }
+else
+  overrides.NormalFloat = {
+    bg = "#313131",
+  }
+  overrides.Pmenu = {
+    bg = "#2e2e2e",
+  }
+end
 require("gruvbox").setup({
   undercurl = true,
   underline = true,
@@ -16,16 +30,9 @@ require("gruvbox").setup({
   inverse = true, -- invert background for search, diffs, statuslines and errors
   contrast = "", -- can be "hard", "soft" or empty string
   palette_overrides = {},
-  overrides = {
-    NormalFloat = {
-      bg = "#313131",
-    },
-    Pmenu = {
-      bg = "#2e2e2e",
-    },
-  },
+  overrides = overrides,
   dim_inactive = false,
-  transparent_mode = false,
+  transparent_mode = transparent_mode,
 })
 vim.opt.background = "dark"
 vim.cmd([[colorscheme gruvbox]])
