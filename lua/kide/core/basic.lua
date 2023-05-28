@@ -1,4 +1,4 @@
-local config = require('kide.config')
+local config = require("kide.config")
 vim.g.mapleader = " "
 vim.opt.title = true
 
@@ -187,7 +187,6 @@ autocmd("FileType", {
     "tsplayground",
     "checkhealth",
     "fugitive",
-    "gitcommit",
     "git",
     "dbui",
     "dbout",
@@ -217,4 +216,10 @@ autocmd("FileType", {
     vim.bo[event.buf].buflisted = false
     vim.keymap.set("n", "tt", ":ToggleTerm<CR>", { buffer = event.buf, silent = true })
   end,
+})
+
+autocmd("FileType", {
+  group = augroup("gitcommit"),
+  pattern = { "gitcommit" },
+  command = "setlocal spell",
 })

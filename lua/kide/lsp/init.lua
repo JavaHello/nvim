@@ -11,7 +11,8 @@ mason_lspconfig.setup({
 local server_configs = {
   -- sumneko_lua -> lua_ls
   lua_ls = require("kide.lsp.lua_ls"), -- /lua/lsp/lua.lua
-  -- jdtls = require "lsp.java", -- /lua/lsp/jdtls.lua
+  jdtls = require("kide.lsp.java"), -- /lua/lsp/jdtls.lua
+  metals = require("kide.lsp.metals"), -- /lua/lsp/jdtls.lua
   -- jsonls = require("lsp.jsonls"),
   clangd = require("kide.lsp.clangd"),
   tsserver = require("kide.lsp.tsserver"),
@@ -42,6 +43,10 @@ require("mason-lspconfig").setup_handlers({
     local lspconfig = require("lspconfig")
     -- tools config
     local cfg = utils.or_default(server_configs[server_name], {})
+    -- 自定义启动方式
+    if cfg.setup then
+      return
+    end
 
     -- lspconfig
     local scfg = utils.or_default(cfg.server, {})
@@ -61,15 +66,7 @@ require("mason-lspconfig").setup_handlers({
       debounce_text_changes = 150,
     }
     scfg.capabilities = capabilities
-    if server_name == "rust_analyzer" then
-      -- Initialize the LSP via rust-tools instead
-      cfg.server = scfg
-      require("rust-tools").setup(cfg)
-    elseif server_name == "jdtls" then
-      -- ignore
-    else
-      lspconfig[server_name].setup(scfg)
-    end
+    lspconfig[server_name].setup(scfg)
   end,
 })
 
@@ -114,14 +111,104 @@ vim.diagnostic.config({
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, lsp_ui.hover_actions)
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 
--- suppress error messages from lang servers
--- vim.notify = function(msg, log_level)
---   if msg:match "exit code" then
---     return
---   end
---   if log_level == vim.log.levels.ERROR then
---     vim.api.nvim_err_writeln(msg)
---   else
---     vim.api.nvim_echo({ { msg } }, true, {})
---   end
--- end
+local function markdown_format(input)
+  if input then
+    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s :-]*)%]%(file:/[^%)]+%)", function(i1)
+      return "`" .. i1 .. "`"
+    end)
+    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s :-]*)%]%(jdt://[^%)]+%)", function(i1)
+      return "`" .. i1 .. "`"
+    end)
+  end
+  return input
+end
+
+local function split_lines(value)
+  value = string.gsub(value, "\r\n?", "\n")
+  return vim.split(value, "\n", { plain = true })
+end
+local function convert_input_to_markdown_lines(input, contents)
+  contents = contents or {}
+  -- MarkedString variation 1
+  if type(input) == "string" then
+    input = markdown_format(input)
+    vim.list_extend(contents, split_lines(input))
+  else
+    assert(type(input) == "table", "Expected a table for Hover.contents")
+    -- MarkupContent
+    if input.kind then
+      -- The kind can be either plaintext or markdown.
+      -- If it's plaintext, then wrap it in a <text></text> block
+
+      -- Some servers send input.value as empty, so let's ignore this :(
+      local value = input.value or ""
+
+      if input.kind == "plaintext" then
+        -- wrap this in a <text></text> block so that stylize_markdown
+        -- can properly process it as plaintext
+        value = string.format("<text>\n%s\n</text>", value)
+      end
+
+      -- assert(type(value) == 'string')
+      vim.list_extend(contents, split_lines(value))
+      -- MarkupString variation 2
+    elseif input.language then
+      -- Some servers send input.value as empty, so let's ignore this :(
+      -- assert(type(input.value) == 'string')
+      table.insert(contents, "```" .. input.language)
+      vim.list_extend(contents, split_lines(input.value or ""))
+      table.insert(contents, "```")
+      -- By deduction, this must be MarkedString[]
+    else
+      -- Use our existing logic to handle MarkedString
+      for _, marked_string in ipairs(input) do
+        convert_input_to_markdown_lines(marked_string, contents)
+      end
+    end
+  end
+  if (contents[1] == "" or contents[1] == nil) and #contents == 1 then
+    return {}
+  end
+  return contents
+end
+
+local function jhover(_, result, ctx, c)
+  c = c or {}
+  c.focus_id = ctx.method
+  c.stylize_markdown = true
+  if not (result and result.contents) then
+    vim.notify("No information available")
+    return
+  end
+  local markdown_lines = convert_input_to_markdown_lines(result.contents)
+  markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)
+  if vim.tbl_isempty(markdown_lines) then
+    vim.notify("No information available")
+    return
+  end
+  local b, w = vim.lsp.util.open_floating_preview(markdown_lines, "markdown", c)
+  return b, w
+end
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(jhover, lsp_ui.hover_actions)
+local source = require("cmp_nvim_lsp.source")
+source.resolve = function(self, completion_item, callback)
+  -- client is stopped.
+  if self.client.is_stopped() then
+    return callback()
+  end
+
+  -- client has no completion capability.
+  if not self:_get(self.client.server_capabilities, { "completionProvider", "resolveProvider" }) then
+    return callback()
+  end
+
+  self:_request("completionItem/resolve", completion_item, function(_, response)
+    -- print(vim.inspect(response))
+    if response and response.documentation then
+      response.documentation.value = markdown_format(response.documentation.value)
+    end
+    -- print(vim.inspect(response))
+    callback(response or completion_item)
+  end)
+end

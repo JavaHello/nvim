@@ -364,143 +364,17 @@ config.handlers["language/status"] = function(_, s)
   end
 end
 
-vim.lsp.handlers["$/progress"] = nil
-require("fidget").setup({})
-
-local function markdown_format(input)
-  if input then
-    -- input = string.gsub(input, "[\r\n]( +)(%*)", function (i1)
-    --   return i1 .. "-"
-    -- end)
-    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s ]*)%]%(file:/[^%)]+%)", function(i1)
-      return "`" .. i1 .. "`"
-    end)
-    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s ]*)%]%(jdt://[^%)]+%)", function(i1)
-      return "`" .. i1 .. "`"
-    end)
-  end
-  return input
-end
-
-local function split_lines(value)
-  value = string.gsub(value, "\r\n?", "\n")
-  return vim.split(value, "\n", { plain = true })
-end
-function M.convert_input_to_markdown_lines(input, contents)
-  contents = contents or {}
-  -- MarkedString variation 1
-  if type(input) == "string" then
-    input = markdown_format(input)
-    vim.list_extend(contents, split_lines(input))
-  else
-    assert(type(input) == "table", "Expected a table for Hover.contents")
-    -- MarkupContent
-    if input.kind then
-      -- The kind can be either plaintext or markdown.
-      -- If it's plaintext, then wrap it in a <text></text> block
-
-      -- Some servers send input.value as empty, so let's ignore this :(
-      local value = input.value or ""
-
-      if input.kind == "plaintext" then
-        -- wrap this in a <text></text> block so that stylize_markdown
-        -- can properly process it as plaintext
-        value = string.format("<text>\n%s\n</text>", value)
-      end
-
-      -- assert(type(value) == 'string')
-      vim.list_extend(contents, split_lines(value))
-      -- MarkupString variation 2
-    elseif input.language then
-      -- Some servers send input.value as empty, so let's ignore this :(
-      -- assert(type(input.value) == 'string')
-      table.insert(contents, "```" .. input.language)
-      vim.list_extend(contents, split_lines(input.value or ""))
-      table.insert(contents, "```")
-      -- By deduction, this must be MarkedString[]
-    else
-      -- Use our existing logic to handle MarkedString
-      for _, marked_string in ipairs(input) do
-        M.convert_input_to_markdown_lines(marked_string, contents)
-      end
-    end
-  end
-  if (contents[1] == "" or contents[1] == nil) and #contents == 1 then
-    return {}
-  end
-  return contents
-end
-
-local function jhover(_, result, ctx, c)
-  c = c or {}
-  c.focus_id = ctx.method
-  c.stylize_markdown = true
-  if not (result and result.contents) then
-    vim.notify("No information available")
-    return
-  end
-  local markdown_lines = M.convert_input_to_markdown_lines(result.contents)
-  markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)
-  if vim.tbl_isempty(markdown_lines) then
-    vim.notify("No information available")
-    return
-  end
-  local b, w = vim.lsp.util.open_floating_preview(markdown_lines, "markdown", c)
-  -- vim.api.nvim_win_set_option(w, "winblend", 10)
-  return b, w
-end
-
-local lsp_ui = require("kide.lsp.lsp_ui")
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(jhover, lsp_ui.hover_actions)
-local source = require("cmp_nvim_lsp.source")
-source.resolve = function(self, completion_item, callback)
-  -- client is stopped.
-  if self.client.is_stopped() then
-    return callback()
-  end
-
-  -- client has no completion capability.
-  if not self:_get(self.client.server_capabilities, { "completionProvider", "resolveProvider" }) then
-    return callback()
-  end
-
-  self:_request("completionItem/resolve", completion_item, function(_, response)
-    -- print(vim.inspect(response))
-    if response and response.documentation then
-      response.documentation.value = markdown_format(response.documentation.value)
-    end
-    -- print(vim.inspect(response))
-    callback(response or completion_item)
-  end)
-end
-
 M.start = function()
   jdtls.start_or_attach(config)
 end
 
 M.setup = function()
-  vim.g.jdtls_dap_main_class_config_init = true
-  -- au BufReadCmd jdt://* lua require('jdtls').open_jdt_link(vim.fn.expand('<amatch>'))
-  -- command! JdtWipeDataAndRestart lua require('jdtls.setup').wipe_data_and_restart()
-  -- command! JdtShowLogs lua require('jdtls.setup').show_logs()
-  vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
-    pattern = "jdt://*",
-    callback = function(e)
-      require("jdtls").open_classfile(e.file)
-    end,
-  })
-  vim.api.nvim_create_user_command("JdtWipeDataAndRestart", "lua require('jdtls.setup').wipe_data_and_restart()", {})
-  vim.api.nvim_create_user_command("JdtShowLogs", "lua require('jdtls.setup').show_logs()", {})
-
   local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
     pattern = { "java" },
     desc = "jdtls",
     callback = function(e)
-      -- vim.notify("load: " .. o.buf, vim.log.levels.INFO)
-      -- print(vim.inspect(e))
-      -- 忽略 telescope 预览的情况
       if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
         -- ignore
       else
@@ -508,6 +382,6 @@ M.setup = function()
       end
     end,
   })
-  return group
 end
+
 return M
