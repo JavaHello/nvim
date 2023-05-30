@@ -7,7 +7,7 @@ M.extension_path = (function()
   if epath then
     return epath
   elseif require("mason-registry").has_package("codelldb") then
-    return require("mason-registry").get_package("codelldb"):get_install_path()
+    return require("mason-registry").get_package("codelldb"):get_install_path() .. "/extension"
   end
 end)()
 M.codelldb_path = (function()
