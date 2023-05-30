@@ -65,7 +65,12 @@ require("mason-lspconfig").setup_handlers({
     scfg.flags = {
       debounce_text_changes = 150,
     }
-    scfg.capabilities = capabilities
+    if server_name == "clangd" then
+      scfg.capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+      scfg.capabilities.offsetEncoding = { "utf-16" }
+    else
+      scfg.capabilities = capabilities
+    end
     lspconfig[server_name].setup(scfg)
   end,
 })
