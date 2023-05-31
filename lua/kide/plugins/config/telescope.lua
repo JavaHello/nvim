@@ -12,6 +12,62 @@ form_entry.path = function(entry, validate, escape)
   return f_path(entry, validate, escape)
 end
 
+local utils = require("telescope.utils")
+local set = require("telescope.actions.set")
+local action_state = require("telescope.actions.state")
+local l_edit = set.edit
+set.edit = function(prompt_bufnr, command)
+  local entry = action_state.get_selected_entry()
+
+  if not entry then
+    utils.notify("actions.set.edit", {
+      msg = "Nothing currently selected",
+      level = "WARN",
+    })
+    return
+  end
+
+  local filename, row, col
+
+  filename = entry.path or entry.filename
+  if not vim.startswith(filename, "jdt://") then
+    l_edit(prompt_bufnr, command)
+    return
+  end
+
+  row = entry.row or entry.lnum
+  col = vim.F.if_nil(entry.col, 1)
+
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  require("telescope.pickers").on_close_prompt(prompt_bufnr)
+  pcall(vim.api.nvim_set_current_win, picker.original_win_id)
+  local win_id = picker.get_selection_window(picker, entry)
+
+  if picker.push_cursor_on_edit then
+    vim.cmd("normal! m'")
+  end
+
+  if picker.push_tagstack_on_edit then
+    local from = { vim.fn.bufnr("%"), vim.fn.line("."), vim.fn.col("."), 0 }
+    local items = { { tagname = vim.fn.expand("<cword>"), from = from } }
+    vim.fn.settagstack(vim.fn.win_getid(), { items = items }, "t")
+  end
+
+  if win_id ~= 0 and a.nvim_get_current_win() ~= win_id then
+    vim.api.nvim_set_current_win(win_id)
+  end
+
+  if vim.api.nvim_buf_get_name(0) ~= filename or command ~= "edit" then
+    local bufnr = vim.uri_to_bufnr(filename)
+    vim.bo[bufnr].buflisted = true
+    vim.api.nvim_win_set_buf(win_id, bufnr)
+  end
+
+  if row and col then
+    pcall(vim.api.nvim_win_set_cursor, 0, { row, col })
+  end
+end
+
 telescope.setup({
   defaults = {
     vimgrep_arguments = {
@@ -69,7 +125,7 @@ telescope.setup({
       filetype_hook = function(filepath, bufnr, opts)
         if vim.startswith(filepath, "jdt://") then
           require("kide.lsp.utils.jdtls").open_classfile(filepath, bufnr, opts.preview.timeout)
-          return false;
+          return false
         end
         return true
       end,
