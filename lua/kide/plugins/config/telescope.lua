@@ -6,21 +6,8 @@ local telescope = require("telescope")
 local form_entry = require("telescope.from_entry")
 local f_path = form_entry.path
 form_entry.path = function(entry, validate, escape)
-  escape = vim.F.if_nil(escape, true)
-  local path
-  if escape then
-    path = entry.path and vim.fn.fnameescape(entry.path) or nil
-  else
-    path = entry.path
-  end
-  if path == nil then
-    path = entry.filename
-  end
-  if path == nil then
-    path = entry.value
-  end
-  if vim.startswith(path, "jdt://") then
-    return path
+  if entry.filename and vim.startswith(entry.filename, "jdt://") then
+    return entry.filename
   end
   return f_path(entry, validate, escape)
 end
@@ -82,6 +69,7 @@ telescope.setup({
       filetype_hook = function(filepath, bufnr, opts)
         if vim.startswith(filepath, "jdt://") then
           require("kide.lsp.utils.jdtls").open_classfile(filepath, bufnr, opts.preview.timeout)
+          return false;
         end
         return true
       end,
