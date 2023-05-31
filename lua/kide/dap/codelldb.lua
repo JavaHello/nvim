@@ -2,7 +2,14 @@ local M = {}
 local vscode = require("kide.core.vscode")
 local utils = require("kide.core.utils")
 -- Update this path
-M.extension_path = vscode.find_one("/vadimcn.vscode-lldb-*")
+M.extension_path = (function()
+  local epath = vscode.find_one("/vadimcn.vscode-lldb-*")
+  if epath then
+    return epath
+  elseif require("mason-registry").has_package("codelldb") then
+    return require("mason-registry").get_package("codelldb"):get_install_path() .. "/extension"
+  end
+end)()
 M.codelldb_path = (function()
   if M.extension_path then
     if utils.is_win then

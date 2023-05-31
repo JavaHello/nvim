@@ -8,10 +8,7 @@ require("lazy").setup({
   },
 
   {
-    "kyazdani42/nvim-web-devicons",
-    config = function()
-      require("nvim-web-devicons").setup({})
-    end,
+    "nvim-tree/nvim-web-devicons",
     lazy = true,
   },
   {

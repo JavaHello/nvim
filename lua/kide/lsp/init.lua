@@ -27,8 +27,6 @@ local server_configs = {
   gdscript = require("kide.lsp.gdscript"),
 }
 
--- Setup lspconfig.
-local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- 没有确定使用效果参数
 -- capabilities.textDocument.completion.completionItem.snippetSupport = true
 local utils = require("kide.core.utils")
@@ -65,7 +63,10 @@ require("mason-lspconfig").setup_handlers({
     scfg.flags = {
       debounce_text_changes = 150,
     }
-    scfg.capabilities = capabilities
+    scfg.capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+    if server_name == "clangd" then
+      scfg.capabilities.offsetEncoding = { "utf-16" }
+    end
     lspconfig[server_name].setup(scfg)
   end,
 })
@@ -76,7 +77,7 @@ for _, value in pairs(server_configs) do
       flags = {
         debounce_text_changes = 150,
       },
-      capabilities = capabilities,
+      capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
       on_attach = function(client, buffer)
         -- 绑定快捷键
         require("kide.core.keybindings").maplsp(client, buffer)
@@ -113,10 +114,10 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
 
 local function markdown_format(input)
   if input then
-    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s :-]*)%]%(file:/[^%)]+%)", function(i1)
+    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s :%-@]*)%]%(file:/[^%)]+%)", function(i1)
       return "`" .. i1 .. "`"
     end)
-    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s :-]*)%]%(jdt://[^%)]+%)", function(i1)
+    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s :%-@]*)%]%(jdt://[^%)]+%)", function(i1)
       return "`" .. i1 .. "`"
     end)
   end
