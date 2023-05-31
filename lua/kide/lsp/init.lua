@@ -114,10 +114,11 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
 
 local function markdown_format(input)
   if input then
-    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s :-]*)%]%(file:/[^%)]+%)", function(i1)
+    print(input)
+    input = string.gsub(input, "%[([^%]]*)%]%(file:/[^%)]+%)", function(i1)
       return "`" .. i1 .. "`"
     end)
-    input = string.gsub(input, "%[([%a%$_]?[%.%w%(%),\\_%[%]%s :-]*)%]%(jdt://[^%)]+%)", function(i1)
+    input = string.gsub(input, "%[([^%]]*)%]%(jdt://[^%)]+%)", function(i1)
       return "`" .. i1 .. "`"
     end)
   end
