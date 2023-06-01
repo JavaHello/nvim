@@ -132,9 +132,6 @@ M.setup = function()
 end
 -- lsp 回调函数快捷键设置
 M.maplsp = function(client, buffer)
-  vim.api.nvim_buf_set_option(buffer, "omnifunc", "v:lua.vim.lsp.omnifunc")
-  vim.api.nvim_buf_set_option(buffer, "formatexpr", "v:lua.vim.lsp.formatexpr()")
-
   local bufopts = { noremap = true, silent = true, buffer = buffer }
   vim.api.nvim_buf_set_keymap(buffer, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
   -- rename
@@ -149,7 +146,7 @@ M.maplsp = function(client, buffer)
   vim.api.nvim_buf_set_keymap(buffer, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "n", "gt", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opt)
 
-  if client.server_capabilities.definitionProvider then
+  if client.supports_method("textDocument/definition") then
     vim.api.nvim_buf_set_keymap(buffer, "n", "gd", "<cmd>Telescope lsp_definitions<CR>", opt)
   else
     vim.api.nvim_buf_set_keymap(buffer, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opt)
@@ -221,13 +218,12 @@ M.maplsp = function(client, buffer)
     opt
   )
   -- >= 0.8.x
-  if client.server_capabilities.documentHighlightProvider then
+  if client.supports_method("textDocument/documentHighlightProvider") then
     vim.cmd(string.format("au CursorHold  <buffer=%d> lua vim.lsp.buf.document_highlight()", buffer))
     vim.cmd(string.format("au CursorHoldI <buffer=%d> lua vim.lsp.buf.document_highlight()", buffer))
     vim.cmd(string.format("au CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()", buffer))
   end
-  local codeLensProvider = client.server_capabilities.codeLensProvider
-  if codeLensProvider then
+  if client.supports_method("codeLens/resolve") then
     vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", opt)
     vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>ce", "<Cmd>lua vim.lsp.codelens.run()<CR>", opt)
   end
