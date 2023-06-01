@@ -16,7 +16,7 @@ local function sorting()
     cmp.config.compare.length,
     cmp.config.compare.order,
   }
-  if config.plugin.copilot then
+  if config.plugin.copilot.enable then
     table.insert(comparators, 1, require("copilot_cmp.comparators").prioritize)
   end
   return {
