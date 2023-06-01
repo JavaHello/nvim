@@ -1,6 +1,32 @@
 local lspkind = require("lspkind")
 local cmp = require("cmp")
+local config = require("kide.config")
+
+local function sorting()
+  local comparators = {
+    -- Below is the default comparitor list and order for nvim-cmp
+    cmp.config.compare.offset,
+    -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+    cmp.config.compare.exact,
+    cmp.config.compare.score,
+    cmp.config.compare.recently_used,
+    cmp.config.compare.locality,
+    cmp.config.compare.kind,
+    cmp.config.compare.sort_text,
+    cmp.config.compare.length,
+    cmp.config.compare.order,
+  }
+  if config.plugin.copilot then
+    table.insert(comparators, 1, require("copilot_cmp.comparators").prioritize)
+  end
+  return {
+    priority_weight = 2,
+    comparators = comparators,
+  }
+end
+
 cmp.setup({
+  sorting = sorting(),
   -- 指定 snippet 引擎
   snippet = {
     expand = function(args)
