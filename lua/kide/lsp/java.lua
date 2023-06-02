@@ -318,6 +318,8 @@ config["on_attach"] = function(client, buffer)
   -- Remove the option if you do not want that.
   require("jdtls").setup_dap({ hotcodereplace = "auto" })
   require("jdtls.setup").add_commands()
+  -- TODO: 不知道为什么这个值一会有一会没有
+  client.server_capabilities["definitionProvider"] = true
   require("kide.core.keybindings").maplsp(client, buffer)
   -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
   local opts = { silent = true, buffer = buffer }
