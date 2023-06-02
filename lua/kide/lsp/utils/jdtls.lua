@@ -85,6 +85,10 @@ function M.open_classfile(fname, buf, timeout_ms)
     end
   end
 
+  if not api.nvim_buf_is_valid(buf) then
+    return
+  end
+
   if use_cmd then
     local command = {
       command = "java.decompile",
