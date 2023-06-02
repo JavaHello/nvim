@@ -78,9 +78,11 @@ function M.open_classfile(fname, buf, timeout_ms)
   local content
   local function handler(err, result)
     assert(not err, vim.inspect(err))
-    content = result
-    api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(result, "\n", { plain = true }))
-    vim.bo[buf].modifiable = false
+    if api.nvim_buf_is_valid(buf) then
+      content = result
+      api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(result, "\n", { plain = true }))
+      vim.bo[buf].modifiable = false
+    end
   end
 
   if use_cmd then
