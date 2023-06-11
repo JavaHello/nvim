@@ -129,7 +129,7 @@ end
 null_ls.setup({
   sources = sources,
   on_attach = function(client, bufnr)
-    require("kide.core.keybindings").maplsp(client, bufnr)
+    require("kide.core.keybindings").maplsp(client, bufnr, true)
     -- on_attach(client, bufnr)
   end,
   -- debug = true,

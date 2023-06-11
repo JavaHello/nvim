@@ -131,7 +131,7 @@ M.setup = function()
   end, { desc = "Previous todo comment" })
 end
 -- lsp 回调函数快捷键设置
-M.maplsp = function(client, buffer)
+M.maplsp = function(client, buffer, null_ls)
   local bufopts = { noremap = true, silent = true, buffer = buffer }
   vim.api.nvim_buf_set_keymap(buffer, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
   -- rename
@@ -141,38 +141,6 @@ M.maplsp = function(client, buffer)
   vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "v", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opt)
   -- mapbuf('n', '<leader>ca', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opt)
-  -- go xx
-  -- mapbuf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
-  vim.api.nvim_buf_set_keymap(buffer, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opt)
-  vim.api.nvim_buf_set_keymap(buffer, "n", "gt", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opt)
-
-  if client.supports_method("textDocument/definition") then
-    vim.api.nvim_buf_set_keymap(buffer, "n", "gd", "<cmd>Telescope lsp_definitions<CR>", opt)
-  else
-    vim.api.nvim_buf_set_keymap(buffer, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opt)
-  end
-  vim.api.nvim_buf_set_keymap(buffer, "n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
-  vim.api.nvim_buf_set_keymap(buffer, "n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opt)
-  -- mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opt)
-  -- mapbuf('n', 'gD', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opt)
-  -- vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<cmd>Trouble lsp_type_definitions<CR>", opt)
-  -- mapbuf('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opt)
-  -- vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>Trouble lsp_implementations<CR>", opt)
-  vim.api.nvim_buf_set_keymap(buffer, "n", "gi", "<cmd>Telescope lsp_implementations<CR>", opt)
-  -- mapbuf('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opt)
-  -- vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>Trouble lsp_references<CR>", opt)
-  vim.api.nvim_buf_set_keymap(buffer, "n", "gr", "<cmd>Telescope lsp_references<CR>", opt)
-  -- mapbuf('n', 'gr', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opt)
-  -- mapbuf('n', '<space>s', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opt)
-  -- mapbuf('n', '<space>s', '<cmd>lua require"telescope.builtin".lsp_workspace_symbols({ query = vim.fn.input("Query> ") })<CR>', opt)
-  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>fs", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opt)
-  keymap("v", "<leader>fs", function()
-    local tb = require("telescope.builtin")
-    local text = require("kide.core.utils").get_visual_selection()
-    tb.lsp_workspace_symbols({ default_text = text, query = text })
-  end, opt)
-
-  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>fo", "<cmd>Telescope lsp_document_symbols<CR>", opt)
   -- diagnostic
   vim.api.nvim_buf_set_keymap(buffer, "n", "go", "<cmd>lua vim.diagnostic.open_float()<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "n", "[g", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opt)
@@ -217,6 +185,33 @@ M.maplsp = function(client, buffer)
     "<cmd>lua require('telescope.builtin').diagnostics({ severity = vim.diagnostic.severity.ERROR })<CR>",
     opt
   )
+
+  -- -------- null_ls 不支持快捷键不绑定 -------------------------------
+  if null_ls then
+    return
+  end
+  -- go xx
+  -- mapbuf('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gt", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opt)
+
+  if client.supports_method("textDocument/definition") then
+    vim.api.nvim_buf_set_keymap(buffer, "n", "gd", "<cmd>Telescope lsp_definitions<CR>", opt)
+  else
+    vim.api.nvim_buf_set_keymap(buffer, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opt)
+  end
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gi", "<cmd>Telescope lsp_implementations<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "gr", "<cmd>Telescope lsp_references<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>fs", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opt)
+  keymap("v", "<leader>fs", function()
+    local tb = require("telescope.builtin")
+    local text = require("kide.core.utils").get_visual_selection()
+    tb.lsp_workspace_symbols({ default_text = text, query = text })
+  end, opt)
+
+  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>fo", "<cmd>Telescope lsp_document_symbols<CR>", opt)
   -- >= 0.8.x
   if client.supports_method("textDocument/documentHighlightProvider") then
     vim.cmd(string.format("au CursorHold  <buffer=%d> lua vim.lsp.buf.document_highlight()", buffer))
