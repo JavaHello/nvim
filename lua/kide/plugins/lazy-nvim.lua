@@ -580,6 +580,8 @@ require("lazy").setup({
   {
     "j-hui/fidget.nvim",
     lazy = true,
+    tag = "legacy",
+    event = "VeryLazy",
     config = function()
       require("fidget").setup({
         text = {
