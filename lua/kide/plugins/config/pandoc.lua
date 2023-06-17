@@ -5,7 +5,7 @@ require("pandoc").setup({
   },
 })
 
-local uv = vim.loop
+local uv = vim.uv
 require("pandoc.process").spawn = function(bin, args, callback)
   local stdout = uv.new_pipe(false)
   local stderr = uv.new_pipe(false)

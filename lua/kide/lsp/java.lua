@@ -1,6 +1,6 @@
 local M = {}
 local env = {
-  HOME = vim.loop.os_homedir(),
+  HOME = vim.uv.os_homedir(),
   JAVA_HOME = vim.env["JAVA_HOME"],
   JDTLS_RUN_JAVA = vim.env["JDTLS_RUN_JAVA"],
   JDTLS_HOME = vim.env["JDTLS_HOME"],

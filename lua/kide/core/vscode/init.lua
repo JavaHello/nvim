@@ -1,6 +1,6 @@
 local M = {}
 local env = {
-  HOME = vim.loop.os_homedir(),
+  HOME = vim.uv.os_homedir(),
   VSCODE_EXTENSIONS = vim.env["VSCODE_EXTENSIONS"],
 }
 M.get_vscode_extensions = function()

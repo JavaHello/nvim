@@ -46,22 +46,22 @@ M.setup = function(config)
   local dap = require("dap")
   dap.adapters.codelldb = function(on_adapter)
     -- This asks the system for a free port
-    local tcp = vim.loop.new_tcp()
+    local tcp = vim.uv.new_tcp()
     tcp:bind("127.0.0.1", 0)
     local port = tcp:getsockname().port
     tcp:shutdown()
     tcp:close()
 
     -- Start codelldb with the port
-    local stdout = vim.loop.new_pipe(false)
-    local stderr = vim.loop.new_pipe(false)
+    local stdout = vim.uv.new_pipe(false)
+    local stderr = vim.uv.new_pipe(false)
     local opts = {
       stdio = { nil, stdout, stderr },
       args = { "--liblldb", M.liblldb_path, "--port", tostring(port) },
     }
     local handle
     local pid_or_err
-    handle, pid_or_err = vim.loop.spawn(M.config.codelldb_path, opts, function(code)
+    handle, pid_or_err = vim.uv.spawn(M.config.codelldb_path, opts, function(code)
       stdout:close()
       stderr:close()
       handle:close()
