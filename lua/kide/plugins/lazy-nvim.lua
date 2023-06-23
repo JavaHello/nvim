@@ -235,6 +235,24 @@ require("lazy").setup({
       require("dap-python").setup(config.env.py_bin)
     end,
   },
+  {
+    "sakhnik/nvim-gdb",
+    lazy = true,
+    cmd = {
+      "GdbStart",
+      "GdbStartLLDB",
+      "GdbStartPDB",
+      "GdbStartBashDB",
+      "GdbStartRR",
+    },
+    init = function()
+      vim.g.nvimgdb_disable_start_keymaps = 1
+      vim.g.nvimgdb_use_find_executables = 0
+      vim.g.nvimgdb_use_cmake_to_find_executables = 0
+    end,
+    config = function() end,
+    build = ":!./install.sh",
+  },
 
   -- 搜索插件
   {
