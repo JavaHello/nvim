@@ -78,6 +78,7 @@ require("lazy").setup({
       "hrsh7th/cmp-cmdline",
       "saadparwaiz1/cmp_luasnip",
       "onsails/lspkind-nvim",
+      "rcarriga/cmp-dap",
     },
     lazy = true,
     config = function()
@@ -100,7 +101,10 @@ require("lazy").setup({
     "hrsh7th/cmp-path",
     lazy = true,
   },
-
+  {
+    "rcarriga/cmp-dap",
+    lazy = true,
+  },
   {
     "jose-elias-alvarez/null-ls.nvim",
     lazy = true,
