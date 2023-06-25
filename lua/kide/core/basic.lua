@@ -206,17 +206,6 @@ autocmd({ "BufReadCmd" }, {
   end,
 })
 
--- toggle_term
-autocmd("FileType", {
-  group = augroup("toggle_term"),
-  pattern = {
-    "toggleterm",
-  },
-  callback = function(event)
-    vim.bo[event.buf].buflisted = false
-    vim.keymap.set("n", "tt", ":ToggleTerm<CR>", { buffer = event.buf, silent = true })
-  end,
-})
 
 autocmd("FileType", {
   group = augroup("gitcommit"),

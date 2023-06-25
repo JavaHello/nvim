@@ -47,7 +47,7 @@ M.setup = function()
   map("t", "<F12>", "<C-\\><C-N>:ToggleTerm<CR>", opt)
   map("n", "<leader>tt", ":ToggleTerm<CR>", opt)
   map("v", "<leader>tt", ":ToggleTermSendVisualSelection<CR>", opt)
-  map("t", "tt", "<C-\\><C-N>:ToggleTerm<CR>", opt)
+  -- map("t", "tt", "<C-\\><C-N>:ToggleTerm<CR>", opt)
 
   -- symbols-outline.nvim
   map("n", "<space>o", ":<C-u>SymbolsOutline<CR>", opt)
