@@ -371,7 +371,9 @@ M.start = function()
   jdtls.start_or_attach(config)
 end
 
+
 M.setup = function()
+  require('kide.lsp.utils.jdtls').customize_jdtls()
   local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,

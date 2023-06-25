@@ -107,4 +107,81 @@ function M.open_classfile(fname, buf, timeout_ms)
     return content ~= nil
   end)
 end
+
+M.customize_jdtls = function()
+  local function mk_buf_loop(sock, handle_buffer)
+    local buffer = ""
+    return function(err, chunk)
+      assert(not err, err)
+      if chunk then
+        buffer = buffer .. chunk
+      else
+        sock:close()
+        handle_buffer(buffer)
+      end
+    end
+  end
+
+  -- 零时修改等上游修复后删除
+  -- @see https://github.com/mfussenegger/nvim-jdtls/blob/master/lua/jdtls/junit.lua
+  local junit = require("jdtls.junit")
+  junit.mk_test_results = function(bufnr)
+    local tests = {}
+    local handle_buffer = function(buf)
+      junit.__parse(buf, tests)
+    end
+    return {
+      show = function()
+        local items = {}
+        local repl = require("dap.repl")
+        local num_failures = 0
+        for _, test in ipairs(tests) do
+          if test.failed then
+            num_failures = num_failures + 1
+            if test.method then
+              repl.append(" " .. test.method, "$")
+            end
+            for _, msg in ipairs(test.traces) do
+              local match = msg:match(string.format("at %s.%s", test.fq_class, test.method) .. "%(([%a%p]*:%d+)%)")
+              if match then
+                local lnum = vim.split(match, ":")[2]
+                local trace = table.concat(test.traces, "\n")
+                if #trace > 140 then
+                  trace = trace:sub(1, 140) .. "..."
+                end
+                table.insert(items, {
+                  bufnr = bufnr,
+                  lnum = lnum,
+                  text = test.method .. " " .. trace,
+                })
+              end
+              repl.append(msg, "$")
+            end
+          else
+            repl.append(" " .. test.method, "$")
+          end
+        end
+
+        if num_failures > 0 then
+          vim.fn.setqflist({}, "r", {
+            title = "jdtls-tests",
+            items = items,
+          })
+          print(
+            "Tests finished. Results printed to dap-repl.",
+            #items > 0 and "Errors added to quickfix list" or "",
+            string.format("( %d / %d)", num_failures, #tests)
+          )
+        else
+          print("Tests finished. Results printed to dap-repl. All", #tests, "succeeded")
+        end
+        return items
+      end,
+      mk_reader = function(sock)
+        return vim.schedule_wrap(mk_buf_loop(sock, handle_buffer))
+      end,
+    }
+  end
+end
+
 return M
