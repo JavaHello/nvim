@@ -342,8 +342,6 @@ config["on_attach"] = function(client, buffer)
   --   vim.g.jdtls_dap_main_class_config_init = false
   -- end
 
-  require("nvim-navic").attach(client, buffer)
-  require("lsp-inlayhints").on_attach(client, buffer)
   require("java-deps").attach(client, buffer, root_dir)
   create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
     nargs = 0,

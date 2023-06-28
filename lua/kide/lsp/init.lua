@@ -52,10 +52,6 @@ require("mason-lspconfig").setup_handlers({
     scfg.on_attach = function(client, buffer)
       -- 绑定快捷键
       require("kide.core.keybindings").maplsp(client, buffer)
-      require("lsp-inlayhints").on_attach(client, buffer)
-      if client.server_capabilities.documentSymbolProvider then
-        require("nvim-navic").attach(client, buffer)
-      end
       if on_attach then
         on_attach(client, buffer)
       end
@@ -81,10 +77,6 @@ for _, value in pairs(server_configs) do
       on_attach = function(client, buffer)
         -- 绑定快捷键
         require("kide.core.keybindings").maplsp(client, buffer)
-        require("lsp-inlayhints").on_attach(client, buffer)
-        if client.server_capabilities.documentSymbolProvider then
-          require("nvim-navic").attach(client, buffer)
-        end
       end,
     })
   end
@@ -113,6 +105,38 @@ vim.diagnostic.config({
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, lsp_ui.hover_actions)
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 
+-- LspAttach 事件
+vim.api.nvim_create_augroup("LspAttach_inlayhints", {})
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = "LspAttach_inlayhints",
+  callback = function(args)
+    if not (args.data and args.data.client_id) then
+      return
+    end
+
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    require("lsp-inlayhints").on_attach(client, bufnr)
+  end,
+})
+
+vim.api.nvim_create_augroup("LspAttach_navic", {})
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = "LspAttach_navic",
+  callback = function(args)
+    if not (args.data and args.data.client_id) then
+      return
+    end
+
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client.server_capabilities.documentSymbolProvider then
+      require("nvim-navic").attach(client, bufnr)
+    end
+  end,
+})
+
+-- 文档格式化
 local function markdown_format(input)
   if input then
     input = string.gsub(input, '%[([%a%$_]?[%.%w%(%),\\_%[%]%s :%-@"]*)%]%(file:/[^%)]+%)', function(i1)
