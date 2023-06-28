@@ -106,18 +106,11 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, ls
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 
 -- LspAttach 事件
-vim.api.nvim_create_augroup("LspAttach_inlayhints", {})
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = "LspAttach_inlayhints",
-  callback = function(args)
-    if not (args.data and args.data.client_id) then
-      return
-    end
-
-    local bufnr = args.buf
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    require("lsp-inlayhints").on_attach(client, bufnr)
-  end,
+vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
+  callback = function () vim.lsp.buf.inlay_hint(0, true) end,
+})
+vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
+  callback = function () vim.lsp.buf.inlay_hint(0, false) end,
 })
 
 vim.api.nvim_create_augroup("LspAttach_navic", {})

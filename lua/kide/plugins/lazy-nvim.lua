@@ -706,17 +706,6 @@ require("lazy").setup({
     end,
   },
 
-  -- lsp-inlayhints
-  -- TODO: 等待内置，然后删除
-  {
-    "lvimuser/lsp-inlayhints.nvim",
-    lazy = true,
-    branch = "anticonceal",
-    config = function()
-      require("lsp-inlayhints").setup()
-    end,
-  },
-
   -- 笔记
   {
     "mickael-menu/zk-nvim",
