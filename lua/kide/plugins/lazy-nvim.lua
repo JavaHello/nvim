@@ -707,6 +707,7 @@ require("lazy").setup({
   },
 
   -- lsp-inlayhints
+  -- TODO: 等待内置，然后删除
   {
     "lvimuser/lsp-inlayhints.nvim",
     lazy = true,
