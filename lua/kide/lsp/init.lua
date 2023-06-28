@@ -52,6 +52,7 @@ require("mason-lspconfig").setup_handlers({
     scfg.on_attach = function(client, buffer)
       -- 绑定快捷键
       require("kide.core.keybindings").maplsp(client, buffer)
+      require("lsp-inlayhints").on_attach(client, buffer)
       if client.server_capabilities.documentSymbolProvider then
         require("nvim-navic").attach(client, buffer)
       end
@@ -80,6 +81,7 @@ for _, value in pairs(server_configs) do
       on_attach = function(client, buffer)
         -- 绑定快捷键
         require("kide.core.keybindings").maplsp(client, buffer)
+        require("lsp-inlayhints").on_attach(client, buffer)
         if client.server_capabilities.documentSymbolProvider then
           require("nvim-navic").attach(client, buffer)
         end

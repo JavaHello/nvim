@@ -706,6 +706,15 @@ require("lazy").setup({
     end,
   },
 
+  -- lsp-inlayhints
+  {
+    "lvimuser/lsp-inlayhints.nvim",
+    lazy = true,
+    config = function()
+      require("lsp-inlayhints").setup()
+    end,
+  },
+
   -- 笔记
   {
     "mickael-menu/zk-nvim",

@@ -216,6 +216,9 @@ local config = {
           "**/.git/**",
         },
       },
+      inlayhints = {
+        parameterNames = { enabled = true },
+      },
       autobuild = { enabled = true },
       referenceCodeLens = { enabled = true },
       implementationsCodeLens = { enabled = true },
@@ -340,6 +343,7 @@ config["on_attach"] = function(client, buffer)
   -- end
 
   require("nvim-navic").attach(client, buffer)
+  require("lsp-inlayhints").on_attach(client, buffer)
   require("java-deps").attach(client, buffer, root_dir)
   create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
     nargs = 0,
@@ -358,6 +362,9 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protoc
 -- }
 
 config.capabilities = capabilities
+config.flags = {
+  debounce_text_changes = 150,
+}
 config.handlers = {}
 config.handlers["language/status"] = function(_, s)
   -- 使用 progress 查看状态
@@ -367,13 +374,12 @@ config.handlers["language/status"] = function(_, s)
   end
 end
 
-M.start = function()
+M.start = function(_opts)
   jdtls.start_or_attach(config)
 end
 
-
-M.setup = function()
-  require('kide.lsp.utils.jdtls').customize_jdtls()
+M.setup = function(opts)
+  require("kide.lsp.utils.jdtls").customize_jdtls()
   local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
@@ -383,7 +389,7 @@ M.setup = function()
       if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
         -- ignore
       else
-        M.start()
+        M.start(opts)
       end
     end,
   })
