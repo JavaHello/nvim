@@ -213,15 +213,13 @@ M.maplsp = function(client, buffer, null_ls)
 
   vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>fo", "<cmd>Telescope lsp_document_symbols<CR>", opt)
   -- >= 0.8.x
-  if client.supports_method("textDocument/documentHighlightProvider") then
+  if client.server_capabilities.documentHighlightProvider then
     vim.cmd(string.format("au CursorHold  <buffer=%d> lua vim.lsp.buf.document_highlight()", buffer))
     vim.cmd(string.format("au CursorHoldI <buffer=%d> lua vim.lsp.buf.document_highlight()", buffer))
     vim.cmd(string.format("au CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()", buffer))
   end
-  if client.supports_method("codeLens/resolve") then
-    vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", opt)
-    vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>ce", "<Cmd>lua vim.lsp.codelens.run()<CR>", opt)
-  end
+  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", opt)
+  vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>ce", "<Cmd>lua vim.lsp.codelens.run()<CR>", opt)
 end
 
 -- nvim-cmp 自动补全

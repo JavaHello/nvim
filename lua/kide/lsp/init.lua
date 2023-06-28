@@ -5,15 +5,11 @@ mason_lspconfig.setup({
   },
 })
 
--- 安装列表
--- https://github.com/williamboman/nvim-lsp-installer#available-lsps
 -- { key: 语言 value: 配置文件 }
 local server_configs = {
-  -- sumneko_lua -> lua_ls
-  lua_ls = require("kide.lsp.lua_ls"), -- /lua/lsp/lua.lua
-  jdtls = require("kide.lsp.java"), -- /lua/lsp/jdtls.lua
-  metals = require("kide.lsp.metals"), -- /lua/lsp/jdtls.lua
-  -- jsonls = require("lsp.jsonls"),
+  lua_ls = require("kide.lsp.lua_ls"),
+  jdtls = require("kide.lsp.java"),
+  metals = require("kide.lsp.metals"),
   clangd = require("kide.lsp.clangd"),
   tsserver = require("kide.lsp.tsserver"),
   html = require("kide.lsp.html"),
@@ -27,16 +23,10 @@ local server_configs = {
   gdscript = require("kide.lsp.gdscript"),
 }
 
--- 没有确定使用效果参数
--- capabilities.textDocument.completion.completionItem.snippetSupport = true
 local utils = require("kide.core.utils")
 
--- LSP 进度UI
 require("mason-lspconfig").setup_handlers({
-  -- The first entry (without a key) will be the default handler
-  -- and will be called for each installed server that doesn't have
-  -- a dedicated handler.
-  function(server_name) -- default handler (optional)
+  function(server_name)
     local lspconfig = require("lspconfig")
     -- tools config
     local cfg = utils.or_default(server_configs[server_name], {})
@@ -47,7 +37,6 @@ require("mason-lspconfig").setup_handlers({
 
     -- lspconfig
     local scfg = utils.or_default(cfg.server, {})
-    -- scfg = vim.tbl_deep_extend("force", server:get_default_options(), scfg)
     local on_attach = scfg.on_attach
     scfg.on_attach = function(client, buffer)
       -- 绑定快捷键
@@ -67,6 +56,7 @@ require("mason-lspconfig").setup_handlers({
   end,
 })
 
+-- 自定义 LSP 启动方式
 for _, value in pairs(server_configs) do
   if value.setup then
     value.setup({
@@ -106,11 +96,21 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, ls
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 
 -- LspAttach 事件
-vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
-  callback = function () vim.lsp.buf.inlay_hint(0, true) end,
-})
-vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
-  callback = function () vim.lsp.buf.inlay_hint(0, false) end,
+
+vim.api.nvim_create_augroup("LspAttach_inlay_hint", {})
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = "LspAttach_inlay_hint",
+  callback = function(args)
+    if not (args.data and args.data.client_id) then
+      return
+    end
+
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client.server_capabilities.inlayHintProvider then
+      vim.lsp.buf.inlay_hint(bufnr, true)
+    end
+  end,
 })
 
 vim.api.nvim_create_augroup("LspAttach_navic", {})
