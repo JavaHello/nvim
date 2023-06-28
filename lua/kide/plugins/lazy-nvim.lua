@@ -711,6 +711,7 @@ require("lazy").setup({
   {
     "lvimuser/lsp-inlayhints.nvim",
     lazy = true,
+    branch = "anticonceal",
     config = function()
       require("lsp-inlayhints").setup()
     end,
