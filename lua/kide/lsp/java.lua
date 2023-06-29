@@ -334,11 +334,6 @@ config["on_attach"] = function(client, buffer)
   create_command(buffer, "OR", require("jdtls").organize_imports, {
     nargs = 0,
   })
-  create_command(buffer, "InlayHint", function()
-    vim.lsp.buf.inlay_hint(0)
-  end, {
-    nargs = 0,
-  })
 
   require("java-deps").attach(client, buffer, root_dir)
   create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
