@@ -736,7 +736,8 @@ require("lazy").setup({
 
   {
     "akinsho/flutter-tools.nvim",
-    lazy = false,
+    lazy = true,
+    ft = { "dart" },
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
