@@ -37,14 +37,6 @@ require("mason-lspconfig").setup_handlers({
 
     -- lspconfig
     local scfg = utils.or_default(cfg.server, {})
-    local on_attach = scfg.on_attach
-    scfg.on_attach = function(client, buffer)
-      -- 绑定快捷键
-      require("kide.core.keybindings").maplsp(client, buffer)
-      if on_attach then
-        on_attach(client, buffer)
-      end
-    end
     scfg.flags = {
       debounce_text_changes = 150,
     }
@@ -64,10 +56,6 @@ for _, value in pairs(server_configs) do
         debounce_text_changes = 150,
       },
       capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
-      on_attach = function(client, buffer)
-        -- 绑定快捷键
-        require("kide.core.keybindings").maplsp(client, buffer)
-      end,
     })
   end
 end
@@ -96,6 +84,23 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, ls
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 
 -- LspAttach 事件
+vim.api.nvim_create_augroup("LspAttach_keymap", {})
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = "LspAttach_keymap",
+  callback = function(args)
+    if not (args.data and args.data.client_id) then
+      return
+    end
+
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client.name == "copilot" then
+      return
+    end
+    -- 绑定快捷键
+    require("kide.core.keybindings").maplsp(client, bufnr, client.name == "null-ls")
+  end,
+})
 
 vim.api.nvim_create_augroup("LspAttach_inlay_hint", {})
 vim.api.nvim_create_autocmd("LspAttach", {
