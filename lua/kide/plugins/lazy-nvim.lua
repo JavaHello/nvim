@@ -734,6 +734,17 @@ require("lazy").setup({
     end,
   },
 
+  {
+    "akinsho/flutter-tools.nvim",
+    lazy = false,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      require("flutter-tools").setup({}) -- use defaults
+    end,
+  },
+
   -- ui
   {
     "MunifTanjim/nui.nvim",
