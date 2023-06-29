@@ -50,7 +50,7 @@ M.setup = function()
   -- map("t", "tt", "<C-\\><C-N>:ToggleTerm<CR>", opt)
 
   -- symbols-outline.nvim
-  map("n", "<space>o", ":<C-u>SymbolsOutline<CR>", opt)
+  map("n", "<leader>o", ":<C-u>SymbolsOutline<CR>", opt)
 
   -- Telescope
   map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opt)

@@ -20,6 +20,7 @@ require("indent_blankline").setup({
     "dashboard",
     "alpha",
     "Outline",
+    "flutterToolsOutline",
     "TelescopePrompt",
     "TelescopeResults",
     "NeogitStatus",

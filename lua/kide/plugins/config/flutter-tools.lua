@@ -1,5 +1,3 @@
-local config = require("kide.config")
-
 require("flutter-tools").setup({
   lsp = {
     color = { -- show the derived colours for dart variables

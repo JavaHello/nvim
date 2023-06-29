@@ -738,6 +738,22 @@ require("lazy").setup({
     "akinsho/flutter-tools.nvim",
     lazy = true,
     ft = { "dart" },
+    init = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("kide_FlutterOutlineToggle", { clear = true }),
+        pattern = "dart",
+        callback = function(event)
+          vim.keymap.set("n", "<leader>o", "<CMD>FlutterOutlineToggle<CR>", { buffer = event.buf, silent = true })
+        end,
+      })
+      vim.api.nvim_create_autocmd("BufNewFile", {
+        group = vim.api.nvim_create_augroup("kide__FlutterOutlineToggle", { clear = true }),
+        pattern = "Flutter Outline",
+        callback = function(event)
+          vim.keymap.set("n", "<leader>o", "<CMD>FlutterOutlineToggle<CR>", { buffer = event.buf, silent = true })
+        end,
+      })
+    end,
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
