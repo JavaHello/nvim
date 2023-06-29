@@ -742,7 +742,7 @@ require("lazy").setup({
       "nvim-lua/plenary.nvim",
     },
     config = function()
-      require("flutter-tools").setup({}) -- use defaults
+      require("kide.plugins.config.flutter-tools")
     end,
   },
 
