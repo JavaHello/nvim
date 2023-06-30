@@ -70,6 +70,7 @@ autocmd("FileType", {
     "markdown",
     "lisp",
     "sh",
+    "dart",
   },
   callback = function()
     vim.opt_local.tabstop = 2
@@ -205,7 +206,6 @@ autocmd({ "BufReadCmd" }, {
     vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
   end,
 })
-
 
 autocmd("FileType", {
   group = augroup("gitcommit"),
