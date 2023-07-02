@@ -78,6 +78,7 @@ require("lazy").setup({
       "hrsh7th/cmp-cmdline",
       "saadparwaiz1/cmp_luasnip",
       "onsails/lspkind-nvim",
+      "rcarriga/cmp-dap",
     },
     lazy = true,
     config = function()
@@ -100,7 +101,10 @@ require("lazy").setup({
     "hrsh7th/cmp-path",
     lazy = true,
   },
-
+  {
+    "rcarriga/cmp-dap",
+    lazy = true,
+  },
   {
     "jose-elias-alvarez/null-ls.nvim",
     lazy = true,
@@ -230,6 +234,24 @@ require("lazy").setup({
     config = function()
       require("dap-python").setup(config.env.py_bin)
     end,
+  },
+  {
+    "sakhnik/nvim-gdb",
+    lazy = true,
+    cmd = {
+      "GdbStart",
+      "GdbStartLLDB",
+      "GdbStartPDB",
+      "GdbStartBashDB",
+      "GdbStartRR",
+    },
+    init = function()
+      vim.g.nvimgdb_disable_start_keymaps = 1
+      vim.g.nvimgdb_use_find_executables = 0
+      vim.g.nvimgdb_use_cmake_to_find_executables = 0
+    end,
+    config = function() end,
+    build = ":!./install.sh",
   },
 
   -- 搜索插件
@@ -580,6 +602,8 @@ require("lazy").setup({
   {
     "j-hui/fidget.nvim",
     lazy = true,
+    tag = "legacy",
+    event = "VeryLazy",
     config = function()
       require("fidget").setup({
         text = {
@@ -707,6 +731,34 @@ require("lazy").setup({
     event = { "BufReadPost" },
     config = function()
       require("kide.plugins.config.nvim-ufo")
+    end,
+  },
+
+  {
+    "akinsho/flutter-tools.nvim",
+    lazy = true,
+    ft = { "dart" },
+    init = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("kide_FlutterOutlineToggle", { clear = true }),
+        pattern = "dart",
+        callback = function(event)
+          vim.keymap.set("n", "<leader>o", "<CMD>FlutterOutlineToggle<CR>", { buffer = event.buf, silent = true })
+        end,
+      })
+      vim.api.nvim_create_autocmd("BufNewFile", {
+        group = vim.api.nvim_create_augroup("kide__FlutterOutlineToggle", { clear = true }),
+        pattern = "Flutter Outline",
+        callback = function(event)
+          vim.keymap.set("n", "<leader>o", "<CMD>FlutterOutlineToggle<CR>", { buffer = event.buf, silent = true })
+        end,
+      })
+    end,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      require("kide.plugins.config.flutter-tools")
     end,
   },
 

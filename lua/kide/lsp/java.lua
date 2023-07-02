@@ -1,6 +1,6 @@
 local M = {}
 local env = {
-  HOME = vim.loop.os_homedir(),
+  HOME = vim.uv.os_homedir(),
   JAVA_HOME = vim.env["JAVA_HOME"],
   JDTLS_RUN_JAVA = vim.env["JDTLS_RUN_JAVA"],
   JDTLS_HOME = vim.env["JDTLS_HOME"],
@@ -110,6 +110,12 @@ local function jdtls_launcher()
     vim.notify("jdtls_path is empty", vim.log.levels.ERROR)
     return
   end
+
+  local lombok_jar = env.LOMBOK_JAR
+  if not lombok_jar and require("mason-registry").has_package("jdtls") then
+    lombok_jar = require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
+  end
+
   local cmd = {
     jdtls_path,
     "--jvm-arg=-Dlog.protocol=true",
@@ -118,8 +124,8 @@ local function jdtls_launcher()
     "--jvm-arg=" .. "-XX:+UseZGC",
     "--jvm-arg=" .. "-Xmx1g",
   }
-  if env.LOMBOK_JAR then
-    table.insert(cmd, "--jvm-arg=-javaagent:" .. env.LOMBOK_JAR)
+  if lombok_jar then
+    table.insert(cmd, "--jvm-arg=-javaagent:" .. lombok_jar)
   end
   table.insert(cmd, "-data=" .. workspace_dir)
   return cmd
@@ -216,6 +222,9 @@ local config = {
           "**/.git/**",
         },
       },
+      inlayhints = {
+        parameterNames = { enabled = true },
+      },
       autobuild = { enabled = true },
       referenceCodeLens = { enabled = true },
       implementationsCodeLens = { enabled = true },
@@ -250,10 +259,11 @@ local config = {
       completion = {
         favoriteStaticMembers = {
           "org.junit.Assert.*",
-          "org.hamcrest.MatcherAssert.assertThat",
-          "org.hamcrest.Matchers.*",
-          "org.hamcrest.CoreMatchers.*",
-          "org.junit.jupiter.api.Assertions.*",
+          "org.assertj.core.api.Assertions.*",
+          -- "org.hamcrest.MatcherAssert.assertThat",
+          -- "org.hamcrest.Matchers.*",
+          -- "org.hamcrest.CoreMatchers.*",
+          -- "org.junit.jupiter.api.Assertions.*",
           "java.util.Objects.requireNonNull",
           "java.util.Objects.requireNonNullElse",
           "org.mockito.Mockito.*",
@@ -317,7 +327,8 @@ config["on_attach"] = function(client, buffer)
   -- Remove the option if you do not want that.
   require("jdtls").setup_dap({ hotcodereplace = "auto" })
   require("jdtls.setup").add_commands()
-  require("kide.core.keybindings").maplsp(client, buffer)
+  -- TODO: 不知道为什么这个值一会有一会没有
+  client.server_capabilities["definitionProvider"] = true
   -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
   local opts = { silent = true, buffer = buffer }
   vim.keymap.set("n", "<leader>dc", jdtls.test_class, opts)
@@ -329,14 +340,7 @@ config["on_attach"] = function(client, buffer)
   create_command(buffer, "OR", require("jdtls").organize_imports, {
     nargs = 0,
   })
-  -- if vim.g.jdtls_dap_main_class_config_init then
-  --   vim.defer_fn(function()
-  --     require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
-  --   end, 3000)
-  --   vim.g.jdtls_dap_main_class_config_init = false
-  -- end
 
-  require("nvim-navic").attach(client, buffer)
   require("java-deps").attach(client, buffer, root_dir)
   create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
     nargs = 0,
@@ -355,6 +359,9 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protoc
 -- }
 
 config.capabilities = capabilities
+config.flags = {
+  debounce_text_changes = 150,
+}
 config.handlers = {}
 config.handlers["language/status"] = function(_, s)
   -- 使用 progress 查看状态
@@ -364,11 +371,12 @@ config.handlers["language/status"] = function(_, s)
   end
 end
 
-M.start = function()
+M.start = function(_opts)
   jdtls.start_or_attach(config)
 end
 
-M.setup = function()
+M.setup = function(opts)
+  require("kide.lsp.utils.jdtls").customize_jdtls()
   local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
@@ -378,7 +386,7 @@ M.setup = function()
       if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
         -- ignore
       else
-        M.start()
+        M.start(opts)
       end
     end,
   })

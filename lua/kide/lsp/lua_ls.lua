@@ -11,6 +11,9 @@ return {
           -- Setup your lua path
           -- path = runtime_path,
         },
+        hint = {
+          enable = true,
+        },
         diagnostics = {
           -- Get the language server to recognize the `vim` global
           globals = { "vim" },

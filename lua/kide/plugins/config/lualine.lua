@@ -132,4 +132,17 @@ java_projects.filetypes = {
   "JavaProjects",
 }
 table.insert(config.extensions, java_projects)
+
+-- Flutter
+local flutter = {}
+flutter.sections = {
+  lualine_a = {
+    { "filename", file_status = false },
+  },
+}
+flutter.filetypes = {
+  "flutterToolsOutline",
+}
+table.insert(config.extensions, flutter)
+
 require("lualine").setup(config)

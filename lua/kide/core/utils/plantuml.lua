@@ -1,4 +1,4 @@
-local uv = vim.loop
+local uv = vim.uv
 local utils = require("kide.core.utils")
 local plantuml_args_complete = utils.command_args_complete
 local M = {}

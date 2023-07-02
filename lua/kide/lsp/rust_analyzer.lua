@@ -11,6 +11,7 @@ local config = {
   },
   tools = {
     inlay_hints = {
+      auto = false,
       parameter_hints_prefix = " ",
       other_hints_prefix = " ",
     },
