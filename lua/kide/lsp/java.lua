@@ -5,7 +5,7 @@ local env = {
   JDTLS_RUN_JAVA = vim.env["JDTLS_RUN_JAVA"],
   JDTLS_HOME = vim.env["JDTLS_HOME"],
   JDTLS_WORKSPACE = vim.env["JDTLS_WORKSPACE"],
-  LOMBOK_JAR = vim.env["LOMBOK_JAR"],
+  LOMBOK_ENABLE = vim.env["LOMBOK_ENABLE"] or "Y",
   JOL_JAR = vim.env["JOL_JAR"],
 }
 local maven = require("kide.core.utils.maven")
@@ -111,9 +111,12 @@ local function jdtls_launcher()
     return
   end
 
-  local lombok_jar = env.LOMBOK_JAR
-  if not lombok_jar and require("mason-registry").has_package("jdtls") then
-    lombok_jar = require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
+  local lombok_jar = nil
+  if env.LOMBOK_ENABLE == "Y" then
+    lombok_jar = vscode.find_one("/redhat.java-*/lombok/lombok-*.jar")
+    if lombok_jar == nil and require("mason-registry").has_package("jdtls") then
+      lombok_jar = require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
+    end
   end
 
   local cmd = {
@@ -124,7 +127,7 @@ local function jdtls_launcher()
     "--jvm-arg=" .. "-XX:+UseZGC",
     "--jvm-arg=" .. "-Xmx1g",
   }
-  if lombok_jar then
+  if lombok_jar ~= nil then
     table.insert(cmd, "--jvm-arg=-javaagent:" .. lombok_jar)
   end
   table.insert(cmd, "-data=" .. workspace_dir)
