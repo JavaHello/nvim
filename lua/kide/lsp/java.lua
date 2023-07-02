@@ -110,6 +110,12 @@ local function jdtls_launcher()
     vim.notify("jdtls_path is empty", vim.log.levels.ERROR)
     return
   end
+
+  local lombok_jar = env.LOMBOK_JAR
+  if not lombok_jar and require("mason-registry").has_package("jdtls") then
+    lombok_jar = require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
+  end
+
   local cmd = {
     jdtls_path,
     "--jvm-arg=-Dlog.protocol=true",
@@ -118,8 +124,8 @@ local function jdtls_launcher()
     "--jvm-arg=" .. "-XX:+UseZGC",
     "--jvm-arg=" .. "-Xmx1g",
   }
-  if env.LOMBOK_JAR then
-    table.insert(cmd, "--jvm-arg=-javaagent:" .. env.LOMBOK_JAR)
+  if lombok_jar then
+    table.insert(cmd, "--jvm-arg=-javaagent:" .. lombok_jar)
   end
   table.insert(cmd, "-data=" .. workspace_dir)
   return cmd
