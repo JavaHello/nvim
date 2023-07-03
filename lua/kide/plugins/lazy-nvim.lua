@@ -314,7 +314,7 @@ require("lazy").setup({
     end,
   },
   {
-    "TimUntersberger/neogit",
+    "NeogitOrg/neogit",
     layz = true,
     cmd = "Neogit",
     dependencies = { "sindrets/diffview.nvim" },
