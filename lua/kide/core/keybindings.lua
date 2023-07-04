@@ -200,10 +200,17 @@ M.maplsp = function(client, buffer, null_ls)
   else
     vim.api.nvim_buf_set_keymap(buffer, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opt)
   end
+
   vim.api.nvim_buf_set_keymap(buffer, "n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opt)
   vim.api.nvim_buf_set_keymap(buffer, "n", "gi", "<cmd>Telescope lsp_implementations<CR>", opt)
-  vim.api.nvim_buf_set_keymap(buffer, "n", "gr", "<cmd>Telescope lsp_references<CR>", opt)
+  vim.api.nvim_buf_set_keymap(
+    buffer,
+    "n",
+    "gr",
+    "<cmd>lua require('telescope.builtin').lsp_references({jump_type='never'})<CR>",
+    opt
+  )
   vim.api.nvim_buf_set_keymap(buffer, "n", "<leader>fs", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opt)
   keymap("v", "<leader>fs", function()
     local tb = require("telescope.builtin")
