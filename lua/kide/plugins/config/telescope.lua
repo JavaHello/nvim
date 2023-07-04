@@ -68,6 +68,9 @@ set.edit = function(prompt_bufnr, command)
   end
 end
 
+local previewers = require("telescope.previewers")
+previewers.buffer_previewer_maker = require("kide.plugins.config.telescope.buffer_previewer").file_maker
+
 telescope.setup({
   defaults = {
     vimgrep_arguments = {

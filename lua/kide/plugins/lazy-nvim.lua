@@ -261,7 +261,6 @@ require("lazy").setup({
     event = { "VeryLazy" },
     cmd = { "Telescope" },
     keys = { "<leader>" },
-    tag = "0.1.1",
     config = function()
       require("kide.plugins.config.telescope")
     end,
