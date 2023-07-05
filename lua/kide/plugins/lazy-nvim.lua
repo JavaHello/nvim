@@ -801,6 +801,9 @@ require("lazy").setup({
     cmd = "Copilot",
     config = function()
       require("copilot").setup({
+        filetypes = {
+          java = false,
+        },
         suggestion = { enabled = false },
         panel = { enabled = false },
       })
