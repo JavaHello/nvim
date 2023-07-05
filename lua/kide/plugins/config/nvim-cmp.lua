@@ -79,10 +79,10 @@ cmp.setup({
       maxwidth = 50,
       before = function(entry, vim_item)
         -- Source 显示提示来源
-        vim_item.kind = lspkind.symbolic(vim_item.kind, {})
-        local m = vim_item.kind and vim_item.kind .. " " or ""
-        local ms = menu[entry.source.name] and m .. menu[entry.source.name] or m
-        vim_item.kind = ms
+        vim_item.menu = lspkind.symbolic(vim_item.menu, {})
+        local m = vim_item.menu and vim_item.menu .. " " or ""
+        local ms = menu[entry.source.name] and menu[entry.source.name] .. m or m
+        vim_item.menu = ms
         return vim_item
       end,
     }),
