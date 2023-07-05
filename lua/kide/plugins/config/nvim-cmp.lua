@@ -83,14 +83,10 @@ cmp.setup({
         local m = vim_item.menu and vim_item.menu or ""
 
         local ms
-        if entry.source.source.client then
-          if entry.source.source.client.name == "rime_ls" then
-            ms = "[rime]"
-          else
-            ms = menu[entry.source.name] and menu[entry.source.name] .. m or m
-          end
+        if entry.source.source.client and entry.source.source.client.name == "rime_ls" then
+          ms = "[rime]"
         else
-          ms = m
+          ms = menu[entry.source.name] and menu[entry.source.name] .. m or m
         end
         vim_item.menu = ms
         return vim_item
