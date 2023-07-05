@@ -80,8 +80,18 @@ cmp.setup({
       before = function(entry, vim_item)
         -- Source 显示提示来源
         vim_item.menu = lspkind.symbolic(vim_item.menu, {})
-        local m = vim_item.menu and vim_item.menu .. " " or ""
-        local ms = menu[entry.source.name] and menu[entry.source.name] .. m or m
+        local m = vim_item.menu and vim_item.menu or ""
+
+        local ms
+        if entry.source.source.client then
+          if entry.source.source.client.name == "rime_ls" then
+            ms = "[rime]"
+          else
+            ms = menu[entry.source.name] and menu[entry.source.name] .. m or m
+          end
+        else
+          ms = m
+        end
         vim_item.menu = ms
         return vim_item
       end,
