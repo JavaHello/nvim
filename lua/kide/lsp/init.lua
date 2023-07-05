@@ -21,6 +21,7 @@ local server_configs = {
   vuels = {},
   lemminx = require("kide.lsp.lemminx"),
   gdscript = require("kide.lsp.gdscript"),
+  rime_ls = require("kide.lsp.rime_ls"),
 }
 
 local utils = require("kide.core.utils")
