@@ -25,6 +25,13 @@ local function sorting()
   }
 end
 
+local menu = {
+  nvim_lsp = "[LSP]",
+  luasnip = "[Lsnip]",
+  path = "[Path]",
+  copilot = "[Copilot]",
+  -- buffer = "[Buffer]",
+}
 cmp.setup({
   enabled = function()
     return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
@@ -69,25 +76,29 @@ cmp.setup({
   formatting = {
     format = lspkind.cmp_format({
       with_text = true, -- do not show text alongside icons
-      maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+      maxwidth = 50,
       before = function(entry, vim_item)
         -- Source 显示提示来源
-        vim_item.menu = "[" .. string.upper(entry.source.name) .. "]"
+        vim_item.kind = lspkind.symbolic(vim_item.kind, {})
+        local m = vim_item.kind and vim_item.kind .. " " or ""
+        local ms = menu[entry.source.name] and m .. menu[entry.source.name] or m
+        vim_item.kind = ms
         return vim_item
       end,
-      menu = {
-        nvim_lsp = "[LSP]",
-        luasnip = "[Lsnip]",
-        path = "[Path]",
-        copilot = "[Copilot]",
-        -- buffer = "[Buffer]",
-      },
     }),
   },
 })
 
 -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline({ "/", "?" }, {
+cmp.setup.cmdline({ "/" }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = "nvim_lsp_document_symbol" },
+  }, {
+    { name = "buffer" },
+  }),
+})
+cmp.setup.cmdline({ "?" }, {
   mapping = cmp.mapping.preset.cmdline(),
   sources = {
     { name = "buffer" },

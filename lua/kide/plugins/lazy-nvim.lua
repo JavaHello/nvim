@@ -79,6 +79,7 @@ require("lazy").setup({
       "saadparwaiz1/cmp_luasnip",
       "onsails/lspkind-nvim",
       "rcarriga/cmp-dap",
+      "hrsh7th/cmp-nvim-lsp-document-symbol",
     },
     lazy = true,
     config = function()
@@ -103,6 +104,10 @@ require("lazy").setup({
   },
   {
     "rcarriga/cmp-dap",
+    lazy = true,
+  },
+  {
+    "hrsh7th/cmp-nvim-lsp-document-symbol",
     lazy = true,
   },
   {
