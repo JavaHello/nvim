@@ -11,6 +11,9 @@ else
   -- overrides.Pmenu = {
   --   bg = "#2e2e2e",
   -- }
+  overrides.FloatBorder = {
+    fg = "#a89984",
+  }
 end
 require("gruvbox").setup({
   undercurl = true,
