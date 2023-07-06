@@ -32,10 +32,21 @@ local menu = {
   copilot = "[Copilot]",
   -- buffer = "[Buffer]",
 }
+local lsp_ui = require("kide.lsp.lsp_ui")
 cmp.setup({
   enabled = function()
     return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
   end,
+  window = {
+    completion = cmp.config.window.bordered({
+      border = lsp_ui.hover_actions.border,
+      winhighlight = lsp_ui.window.highlight,
+    }),
+    documentation = cmp.config.window.bordered({
+      border = lsp_ui.hover_actions.border,
+      winhighlight = lsp_ui.window.highlight,
+    }),
+  },
   sorting = sorting(),
   -- 指定 snippet 引擎
   snippet = {

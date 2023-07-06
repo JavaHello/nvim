@@ -5,12 +5,12 @@ if transparent_mode then
     bg = "none",
   }
 else
-  overrides.NormalFloat = {
-    bg = "#313131",
-  }
-  overrides.Pmenu = {
-    bg = "#2e2e2e",
-  }
+  -- overrides.NormalFloat = {
+  --   bg = "#313131",
+  -- }
+  -- overrides.Pmenu = {
+  --   bg = "#2e2e2e",
+  -- }
 end
 require("gruvbox").setup({
   undercurl = true,

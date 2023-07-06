@@ -223,9 +223,16 @@ local function jhover(_, result, ctx, config)
     end
     return
   end
-  return vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
+  local bufnr, winnr = vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
+  vim.api.nvim_win_set_option(winnr, "winhighlight", lsp_ui.window.winhighlight)
+  return bufnr, winnr
 end
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(jhover, lsp_ui.hover_actions)
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(function(a, result, ctx, b)
+  local bufnr, winnr = vim.lsp.handlers.signature_help(a, result, ctx, b)
+  vim.api.nvim_win_set_option(winnr, "winhighlight", lsp_ui.window.winhighlight)
+  return bufnr, winnr
+end, lsp_ui.hover_actions)
 
 local source = require("cmp_nvim_lsp.source")
 source.resolve = function(self, completion_item, callback)
