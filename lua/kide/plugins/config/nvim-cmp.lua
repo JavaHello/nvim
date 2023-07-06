@@ -40,11 +40,11 @@ cmp.setup({
   window = {
     completion = cmp.config.window.bordered({
       border = lsp_ui.hover_actions.border,
-      winhighlight = lsp_ui.window.highlight,
+      winhighlight = lsp_ui.window.winhighlight,
     }),
     documentation = cmp.config.window.bordered({
       border = lsp_ui.hover_actions.border,
-      winhighlight = lsp_ui.window.highlight,
+      winhighlight = lsp_ui.window.winhighlight,
     }),
   },
   sorting = sorting(),

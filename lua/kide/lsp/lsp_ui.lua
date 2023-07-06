@@ -43,7 +43,7 @@ M.symbol_map = {
 }
 
 M.window = {
-  winhighlight = "Normal:Normal,FloatBorder:Normal,CursorLine:Visual,Search:None",
+  winhighlight = "Normal:Normal,FloatBorder:LineNr,CursorLine:Visual,Search:None",
 }
 
 M.hover_actions = {
