@@ -160,7 +160,7 @@ require("lazy").setup({
   {
     "akinsho/bufferline.nvim",
     version = "*",
-    requires = "kyazdani42/nvim-web-devicons",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("kide.plugins.config.bufferline")
     end,
@@ -298,7 +298,7 @@ require("lazy").setup({
   -- git
   {
     "tpope/vim-fugitive",
-    layz = true,
+    lazy = true,
     cmd = { "Git" },
   },
   {
@@ -319,8 +319,8 @@ require("lazy").setup({
   },
   {
     "NeogitOrg/neogit",
-    layz = true,
-    cmd = "Neogit",
+    lazy = true,
+    cmd = { "Neogit" },
     dependencies = { "sindrets/diffview.nvim" },
     config = function()
       require("kide.plugins.config.neogit")
@@ -330,7 +330,7 @@ require("lazy").setup({
   -- git edit 状态显示插件
   {
     "lewis6991/gitsigns.nvim",
-    layz = true,
+    lazy = true,
     event = { "VeryLazy", "BufReadPost" },
     config = function()
       require("kide.plugins.config.gitsigns-nvim")
