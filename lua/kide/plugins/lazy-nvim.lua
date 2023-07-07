@@ -427,7 +427,7 @@ require("lazy").setup({
 
   -- 颜色显示
   {
-    "norcalli/nvim-colorizer.lua",
+    "NvChad/nvim-colorizer.lua",
     event = { "BufReadPost", "InsertEnter", "VeryLazy" },
     config = function()
       require("kide.plugins.config.nvim-colorizer")
