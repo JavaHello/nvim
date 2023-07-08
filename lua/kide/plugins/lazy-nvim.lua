@@ -522,9 +522,6 @@ require("lazy").setup({
     "junegunn/vim-easy-align",
     lazy = true,
     cmd = "EasyAlign",
-    config = function()
-      require("kide.core.keybindings").easy_align()
-    end,
   },
 
   -- 表格模式插件

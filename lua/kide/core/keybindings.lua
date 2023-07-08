@@ -290,10 +290,4 @@ M.ufo_mapkey = function()
   vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
 end
 
-M.easy_align = function()
-  -- vim-easy-align
-  keymap("n", "ga", "<Plug>(EasyAlign)")
-  keymap("x", "ga", "<Plug>(EasyAlign)")
-end
-
 return M
