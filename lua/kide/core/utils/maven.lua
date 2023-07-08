@@ -49,6 +49,13 @@ local exec = function(cmd, pom, opt)
 end
 local function create_command(buf, name, cmd, complete, opt)
   vim.api.nvim_buf_create_user_command(buf, name, function(opts)
+    if type(cmd) == "function" then
+      cmd = cmd(opts)
+    end
+    if cmd == nil then
+      return
+    end
+
     if opts.args then
       exec(cmd .. " " .. opts.args, vim.fn.expand("%"), opt)
     else
@@ -62,33 +69,71 @@ end
 
 local maven_args_complete = utils.command_args_complete
 
+local function get_class_name()
+  if require("nvim-treesitter.query").has_query_files("java", "indents") then
+    local ts_utils = require("nvim-treesitter.ts_utils")
+    local node = ts_utils.get_node_at_cursor()
+    if node ~= nil and node:type() ~= "identifier" then
+      node = node:parent()
+    end
+    if node ~= nil and node:type() == "identifier" then
+      return vim.treesitter.get_node_text(node, 0)
+    end
+  end
+end
+
 M.maven_command = function(buf)
+  create_command(
+    buf,
+    "Maven",
+    "mvn",
+    maven_args_complete({
+      "clean",
+      "compile",
+      "test-compile",
+      "verify",
+      "package",
+      "install",
+      "deploy",
+    }, { model = "multiple" }),
+    { update = true, close_on_exit = false }
+  )
+  -- 判断为 java 文件
+  if vim.api.nvim_buf_get_option(buf, "filetype") == "java" then
+    create_command(buf, "MavenExecJava", function(_)
+      local filename = vim.fn.expand("%:p")
+      filename = string.gsub(filename, "^[%-/%w%s]*%/src%/main%/java%/", "")
+      filename = string.gsub(filename, "[/\\]", ".")
+      filename = string.gsub(filename, "%.java$", "")
+      return 'mvn exec:java -Dexec.mainClass="' .. filename .. '"'
+    end, nil, { update = true, close_on_exit = false })
+  end
   create_command(
     buf,
     "MavenCompile",
     "mvn clean compile",
-    maven_args_complete({ "test-compile" }, { multiple = true }),
+    maven_args_complete({ "test-compile" }, { model = "multiple" }),
     { update = true, close_on_exit = false }
   )
   create_command(
     buf,
     "MavenInstll",
     "mvn clean install",
-    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true }),
+    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { model = "single" }),
     { update = true, close_on_exit = false }
   )
   create_command(
     buf,
     "MavenPackage",
     "mvn clean package",
-    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { single = true }),
+    maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { model = "single" }),
     { update = true, close_on_exit = false }
   )
   create_command(
     buf,
     "MavenDependencyTree",
     "mvn dependency:tree",
-    maven_args_complete({ "-Doutput=.dependency.txt" }, { multiple = true }),
+    maven_args_complete({ "-Doutput=.dependency.txt" }, { model = "single" }),
     { close_on_exit = false }
   )
   create_command(buf, "MavenDependencyAnalyzeDuplicate", "mvn dependency:analyze-duplicate", nil, {
@@ -98,7 +143,13 @@ M.maven_command = function(buf)
     close_on_exit = false,
   })
   create_command(buf, "MavenDownloadSources", "mvn dependency:sources -DdownloadSources=true")
-  create_command(buf, "MavenTest", "mvn test", maven_args_complete({ "-Dtest=" }, {}), { close_on_exit = false })
+  create_command(
+    buf,
+    "MavenTest",
+    "mvn test",
+    maven_args_complete({ "-Dtest=" }, { model = "single" }),
+    { close_on_exit = false }
+  )
 end
 
 M.setup = function()
