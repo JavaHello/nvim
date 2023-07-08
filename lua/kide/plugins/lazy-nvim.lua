@@ -25,7 +25,7 @@ require("lazy").setup({
   },
   {
     "neovim/nvim-lspconfig",
-    event = { "BufNewFile", "BufReadPost" },
+    event = { "VeryLazy", "BufNewFile", "BufReadPost" },
     config = function()
       require("kide.lsp")
     end,
@@ -113,7 +113,7 @@ require("lazy").setup({
   {
     "jose-elias-alvarez/null-ls.nvim",
     lazy = true,
-    event = { "BufNewFile", "BufReadPost" },
+    event = { "VeryLazy", "BufNewFile", "BufReadPost" },
     config = function()
       require("kide.plugins.config.null-ls")
     end,
@@ -169,7 +169,7 @@ require("lazy").setup({
   -- treesitter (新增)
   {
     "nvim-treesitter/nvim-treesitter",
-    event = { "BufNewFile", "BufReadPost" },
+    event = { "VeryLazy", "BufNewFile", "BufReadPost" },
     build = ":TSUpdate",
     config = function()
       require("kide.plugins.config.nvim-treesitter")
@@ -178,7 +178,7 @@ require("lazy").setup({
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
-    event = { "BufNewFile", "BufReadPost" },
+    event = { "VeryLazy", "BufNewFile", "BufReadPost" },
   },
 
   -- java
@@ -265,7 +265,6 @@ require("lazy").setup({
     lazy = true,
     event = { "VeryLazy" },
     cmd = { "Telescope" },
-    keys = { "<leader>" },
     config = function()
       require("kide.plugins.config.telescope")
     end,
