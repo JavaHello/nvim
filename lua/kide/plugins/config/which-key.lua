@@ -6,3 +6,5 @@ which_key.setup({
     group = "+", -- symbol prepended to a group
   },
 })
+
+require("kide.theme.gruvbox").load_which_key_highlights()
