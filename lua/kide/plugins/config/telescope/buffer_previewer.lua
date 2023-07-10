@@ -531,7 +531,15 @@ previewers.vimgrep = defaulter(function(opts)
   return previewers.new_buffer_previewer {
     title = "Grep Preview",
     dyn_title = function(_, entry)
-      return Path:new(from_entry.path(entry, false, false)):normalize(cwd)
+      local fp = from_entry.path(entry, false, false)
+      if vim.startswith(fp, 'jdt://') then
+        local url = require('kide.core.utils.url')
+        -- fp = url.unescape(fp)
+        fp = string.gsub(fp, '%%5C', '')
+        local u = url.parse(fp)
+        return u.path
+      end
+      return Path:new(fp):normalize(cwd)
     end,
 
     get_buffer_by_name = function(_, entry)

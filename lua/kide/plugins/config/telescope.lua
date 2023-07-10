@@ -18,6 +18,10 @@ set.edit = require("kide.plugins.config.telescope.actions.set").edit
 local previewers = require("telescope.previewers")
 previewers.buffer_previewer_maker = require("kide.plugins.config.telescope.buffer_previewer").file_maker
 
+local conf = require("telescope.config").values
+conf["qflist_previewer"] = function(...)
+  return require("kide.plugins.config.telescope.buffer_previewer").qflist.new(...)
+end
 telescope.setup({
   defaults = {
     vimgrep_arguments = {
