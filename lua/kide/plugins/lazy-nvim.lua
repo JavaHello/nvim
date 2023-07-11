@@ -791,18 +791,12 @@ require("lazy").setup({
     lazy = true,
     cmd = "Copilot",
     config = function()
-      require("copilot").setup({
-        filetypes = {
-          java = false,
-        },
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      })
+      require("copilot").setup({})
     end,
   },
   {
     "zbirenbaum/copilot-cmp",
-    enabled = config.plugin.copilot.enable,
+    enabled = false,
     lazy = true,
     dependencies = { "zbirenbaum/copilot.lua" },
     event = { "InsertEnter", "VeryLazy" },

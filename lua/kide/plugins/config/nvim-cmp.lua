@@ -1,6 +1,5 @@
 local lspkind = require("lspkind")
 local cmp = require("cmp")
-local config = require("kide.config")
 
 local function sorting()
   local comparators = {
@@ -16,9 +15,6 @@ local function sorting()
     cmp.config.compare.length,
     cmp.config.compare.order,
   }
-  if config.plugin.copilot.enable then
-    table.insert(comparators, 1, require("copilot_cmp.comparators").prioritize)
-  end
   return {
     priority_weight = 2,
     comparators = comparators,
