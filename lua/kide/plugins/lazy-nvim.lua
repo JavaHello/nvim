@@ -641,11 +641,6 @@ require("lazy").setup({
 
   -- databases
   {
-    "nanotee/sqls.nvim",
-    lazy = true,
-    ft = { "sql", "mysql" },
-  },
-  {
     "tpope/vim-dadbod",
     lazy = true,
   },
