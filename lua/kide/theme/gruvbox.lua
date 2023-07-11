@@ -78,4 +78,10 @@ M.load_highlights = function(hl_groups)
   end
 end
 
+M.load_which_key_highlights = function()
+  M.load_highlights({
+    WhichKeyFloat = { bg = colors.black3 },
+  })
+end
+
 return M

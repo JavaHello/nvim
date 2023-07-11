@@ -42,18 +42,31 @@ M.symbol_map = {
   Fragment = { icon = "", hl = "@constant" },
 }
 
+M.window = {
+  winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+}
+
 M.hover_actions = {
-  width = 120,
-  -- border = {
-  -- { "╭", "FloatBorder" },
-  -- { "─", "FloatBorder" },
-  -- { "╮", "FloatBorder" },
-  -- { "│", "FloatBorder" },
-  -- { "╯", "FloatBorder" },
-  -- { "─", "FloatBorder" },
-  -- { "╰", "FloatBorder" },
-  -- { "│", "FloatBorder" },
-  -- },
+  border = {
+    { "╭", "FloatBorder" },
+    { "─", "FloatBorder" },
+    { "╮", "FloatBorder" },
+    { "│", "FloatBorder" },
+    { "╯", "FloatBorder" },
+    { "─", "FloatBorder" },
+    { "╰", "FloatBorder" },
+    { "│", "FloatBorder" },
+  },
+  style = "fillchars",
+  -- Maximal width of the hover window. Nil means no max.
+  max_width = nil,
+
+  -- Maximal height of the hover window. Nil means no max.
+  max_height = nil,
+
+  -- whether the hover action window gets automatically focused
+  -- default: false
+  auto_focus = false,
 }
 
 M.signs = {

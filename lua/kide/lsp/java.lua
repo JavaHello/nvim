@@ -261,12 +261,10 @@ local config = {
       contentProvider = { preferred = "fernflower" },
       completion = {
         favoriteStaticMembers = {
-          "org.junit.Assert.*",
-          "org.assertj.core.api.Assertions.*",
-          -- "org.hamcrest.MatcherAssert.assertThat",
-          -- "org.hamcrest.Matchers.*",
-          -- "org.hamcrest.CoreMatchers.*",
-          -- "org.junit.jupiter.api.Assertions.*",
+          "org.assertj.core.api.Assertions.assertThat",
+          "org.assertj.core.api.Assertions.assertThatThrownBy",
+          "org.assertj.core.api.Assertions.assertThatExceptionOfType",
+          "org.assertj.core.api.Assertions.catchThrowable",
           "java.util.Objects.requireNonNull",
           "java.util.Objects.requireNonNullElse",
           "org.mockito.Mockito.*",

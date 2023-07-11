@@ -49,7 +49,8 @@ vim.opt.fileencoding = "UTF-8"
 -- jk移动时光标下上方保留8行
 vim.opt.scrolloff = 3
 vim.opt.sidescrolloff = 3
-
+vim.opt.signcolumn = "auto"
+vim.opt.pumheight = 20
 -- 缩进配置
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4

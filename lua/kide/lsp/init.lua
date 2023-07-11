@@ -21,6 +21,7 @@ local server_configs = {
   vuels = {},
   lemminx = require("kide.lsp.lemminx"),
   gdscript = require("kide.lsp.gdscript"),
+  rime_ls = require("kide.lsp.rime_ls"),
 }
 
 local utils = require("kide.core.utils")
@@ -80,7 +81,6 @@ vim.diagnostic.config({
   severity_sort = false,
 })
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, lsp_ui.hover_actions)
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 
 -- LspAttach 事件
@@ -202,25 +202,38 @@ local function convert_input_to_markdown_lines(input, contents)
   return contents
 end
 
-local function jhover(_, result, ctx, c)
-  c = c or {}
-  c.focus_id = ctx.method
-  c.stylize_markdown = true
+local function jhover(_, result, ctx, config)
+  config = config or {}
+  config.focus_id = ctx.method
+  if vim.api.nvim_get_current_buf() ~= ctx.bufnr then
+    -- Ignore result since buffer changed. This happens for slow language servers.
+    return
+  end
   if not (result and result.contents) then
-    vim.notify("No information available")
+    if config.silent ~= true then
+      vim.notify("No information available")
+    end
     return
   end
   local markdown_lines = convert_input_to_markdown_lines(result.contents)
   markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)
   if vim.tbl_isempty(markdown_lines) then
-    vim.notify("No information available")
+    if config.silent ~= true then
+      vim.notify("No information available")
+    end
     return
   end
-  local b, w = vim.lsp.util.open_floating_preview(markdown_lines, "markdown", c)
-  return b, w
+  local bufnr, winnr = vim.lsp.util.open_floating_preview(markdown_lines, "markdown", config)
+  vim.api.nvim_win_set_option(winnr, "winhighlight", lsp_ui.window.winhighlight)
+  return bufnr, winnr
 end
-
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(jhover, lsp_ui.hover_actions)
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(function(a, result, ctx, b)
+  local bufnr, winnr = vim.lsp.handlers.signature_help(a, result, ctx, b)
+  vim.api.nvim_win_set_option(winnr, "winhighlight", lsp_ui.window.winhighlight)
+  return bufnr, winnr
+end, lsp_ui.hover_actions)
+
 local source = require("cmp_nvim_lsp.source")
 source.resolve = function(self, completion_item, callback)
   -- client is stopped.
@@ -234,8 +247,8 @@ source.resolve = function(self, completion_item, callback)
   end
 
   self:_request("completionItem/resolve", completion_item, function(_, response)
-    -- print(vim.inspect(response))
-    if response and response.documentation then
+    -- jdtls 文档格式化
+    if self.client.name == "jdtls" and response and response.documentation then
       response.documentation.value = markdown_format(response.documentation.value)
     end
     -- print(vim.inspect(response))
