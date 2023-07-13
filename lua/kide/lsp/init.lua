@@ -143,10 +143,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- 文档格式化
 local function markdown_format(input)
   if input then
-    input = string.gsub(input, '%[([%a%$_]?[%.%w%(%),\\_%[%]%s :%-@"]*)%]%(file:/[^%)]+%)', function(i1)
+    input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@"]*)%]%(file:/[^%)]+%)', function(i1)
       return "`" .. i1 .. "`"
     end)
-    input = string.gsub(input, '%[([%a%$_]?[%.%w%(%),\\_%[%]%s :%-@"]*)%]%(jdt://[^%)]+%)', function(i1)
+    input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@"]*)%]%(jdt://[^%)]+%)', function(i1)
       return "`" .. i1 .. "`"
     end)
   end

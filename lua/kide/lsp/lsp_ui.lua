@@ -59,10 +59,10 @@ M.hover_actions = {
   },
   style = "fillchars",
   -- Maximal width of the hover window. Nil means no max.
-  max_width = nil,
+  max_width = 80,
 
   -- Maximal height of the hover window. Nil means no max.
-  max_height = nil,
+  max_height = 20,
 
   -- whether the hover action window gets automatically focused
   -- default: false
