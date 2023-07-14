@@ -1,6 +1,9 @@
 local config = require("kide.config")
 vim.g.mapleader = " "
 vim.opt.title = true
+vim.opt.exrc = true
+vim.opt.secure = false
+vim.opt.ttyfast = true
 
 vim.opt.clipboard = "unnamedplus"
 
