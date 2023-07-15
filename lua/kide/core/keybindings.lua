@@ -109,6 +109,8 @@ M.setup = function()
   map("n", "<leader>fr", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
   map("v", "<leader>fr", "<esc>:lua require('spectre').open_visual()<CR>", opt)
 
+  -- ToggleTerm
+  map("n", "<leader>ft", "<cmd>TermSelect<cr>", opt)
   -- ToggleTask
   map("n", "<leader>ts", "<cmd>Telescope toggletasks spawn<cr>", opt)
 
