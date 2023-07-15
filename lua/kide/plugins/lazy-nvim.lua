@@ -345,12 +345,10 @@ require("lazy").setup({
     config = function()
       require("toggleterm").setup({
         shade_terminals = true,
-        -- shade_filetypes = { "none", "fzf" },
         direction = "float",
         close_on_exit = true,
         float_opts = {
           border = "single",
-          winblend = 0,
         },
       })
     end,
