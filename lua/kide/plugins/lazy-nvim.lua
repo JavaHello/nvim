@@ -349,7 +349,7 @@ require("lazy").setup({
         direction = "float",
         close_on_exit = true,
         float_opts = {
-          border = "double",
+          border = "single",
           winblend = 0,
         },
       })
