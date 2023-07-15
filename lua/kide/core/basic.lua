@@ -216,3 +216,8 @@ autocmd("FileType", {
   pattern = { "gitcommit" },
   command = "setlocal spell",
 })
+autocmd({ "BufRead", "BufNewFile" }, {
+  group = augroup("spell"),
+  pattern = "*.md",
+  command = "setlocal spell",
+})

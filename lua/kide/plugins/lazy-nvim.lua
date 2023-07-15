@@ -345,7 +345,7 @@ require("lazy").setup({
     config = function()
       require("toggleterm").setup({
         shade_terminals = true,
-        direction = "float",
+        direction = "horizontal",
         close_on_exit = true,
         float_opts = {
           border = "single",
