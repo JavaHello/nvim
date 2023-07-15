@@ -6,12 +6,10 @@ local colors = {
   black2 = "#2e2e2e",
   black3 = "#313131",
   gray = "#928374",
-  red = "#fb4934",
-  green = "#b8bb26",
-  yellow = "#fabd2f",
-  yellow2 = "#d79921",
-  blue = "#83a598",
-  blue2 = "#458588",
+  red = vim.g.terminal_color_1 or "#fb4934",
+  green = vim.g.terminal_color_2 or "#b8bb26",
+  yellow = vim.g.terminal_color_3 or "#fabd2f",
+  blue = vim.g.terminal_color_4 or "#83a598",
 }
 M.colors = colors
 local flat_telescope = {
