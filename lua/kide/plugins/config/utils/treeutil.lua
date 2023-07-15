@@ -1,4 +1,4 @@
-local lib = require("nvim-tree.lib")
+local api = require("nvim-tree.api")
 local openfile = require("nvim-tree.actions.node.open-file")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
@@ -30,11 +30,7 @@ function M.launch_telescope(func_name, opts)
   if not telescope_status_ok then
     return
   end
-  local lib_status_ok, lib = pcall(require, "nvim-tree.lib")
-  if not lib_status_ok then
-    return
-  end
-  local node = lib.get_node_at_cursor()
+  local node = api.tree.get_node_under_cursor()
   local is_folder = node.fs_stat and node.fs_stat.type == "directory" or false
   local basedir = is_folder and node.absolute_path or vim.fn.fnamemodify(node.absolute_path, ":h")
   if node.name == ".." and TreeExplorer ~= nil then
