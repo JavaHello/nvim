@@ -48,13 +48,13 @@ M.window = {
 
 M.hover_actions = {
   border = {
-    { "╭", "FloatBorder" },
+    { "┌", "FloatBorder" },
     { "─", "FloatBorder" },
-    { "╮", "FloatBorder" },
+    { "┐", "FloatBorder" },
     { "│", "FloatBorder" },
-    { "╯", "FloatBorder" },
+    { "┘", "FloatBorder" },
     { "─", "FloatBorder" },
-    { "╰", "FloatBorder" },
+    { "└", "FloatBorder" },
     { "│", "FloatBorder" },
   },
   style = "fillchars",

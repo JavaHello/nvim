@@ -384,7 +384,8 @@ require("lazy").setup({
   -- blankline
   {
     "lukas-reineke/indent-blankline.nvim",
-    event = { "BufReadPost" },
+    enabled = true,
+    event = { "UIEnter" },
     config = function()
       require("kide.plugins.config.indent-blankline")
     end,
