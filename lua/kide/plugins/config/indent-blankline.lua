@@ -16,7 +16,6 @@ require("indent_blankline").setup({
     "help",
     "terminal",
     "packer",
-    "packer",
     -- "markdown",
     "git",
     "text",
