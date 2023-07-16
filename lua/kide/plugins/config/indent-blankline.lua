@@ -38,3 +38,5 @@ require("indent_blankline").setup({
   },
   use_treesitter = true,
 })
+
+require("kide.theme.gruvbox").load_indent_blankline_highlights()

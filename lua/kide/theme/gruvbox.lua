@@ -82,4 +82,10 @@ M.load_which_key_highlights = function()
   })
 end
 
+M.load_indent_blankline_highlights = function()
+  M.load_highlights({
+    IndentBlanklineContextChar = { fg = colors.red },
+  })
+end
+
 return M
