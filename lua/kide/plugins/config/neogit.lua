@@ -62,14 +62,6 @@ neogit.setup({
       folded = true,
     },
   },
-  -- override/add mappings
-  mappings = {
-    -- modify status buffer mappings
-    status = {
-      -- Adds a mapping with "B" as key that does the "BranchPopup" command
-      ["B"] = "BranchPopup",
-    },
-  },
   status = {
     recent_commit_count = 40,
   },
