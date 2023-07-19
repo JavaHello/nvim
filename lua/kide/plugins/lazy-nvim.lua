@@ -123,16 +123,18 @@ require("lazy").setup({
   -- use 'morhetz/gruvbox'
   {
     "ellisonleao/gruvbox.nvim",
-    enabled = false,
+    enabled = true,
     lazy = false,
     priority = 1000,
     config = function()
-      require("kide.plugins.config.gruvbox")
+      require("gruvbox").setup({})
+      vim.opt.background = "dark"
+      vim.cmd([[colorscheme gruvbox]])
     end,
   },
   {
     "sainnhe/gruvbox-material",
-    enabled = true,
+    enabled = false,
     lazy = false,
     priority = 1000,
     config = function()
@@ -142,6 +144,16 @@ require("lazy").setup({
       vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
       vim.g.gruvbox_material_current_word = "underline"
       vim.cmd([[colorscheme gruvbox-material]])
+    end,
+  },
+  {
+    "morhetz/gruvbox",
+    enabled = false,
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.opt.background = "dark"
+      vim.cmd([[colorscheme gruvbox]])
     end,
   },
 
