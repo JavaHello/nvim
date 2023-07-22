@@ -69,6 +69,9 @@ git clone  https://github.com/JavaHello/nvim.git
 
 ## Java 配置
 
+- 查找支持查找`jar` 包 `class`
+- 美化 `lsp_hover/doc` 显示
+
 > 如果不使用 `Java` 语言开发，无需配置
 
 [NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE-vscode.html)
