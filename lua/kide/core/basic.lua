@@ -152,15 +152,16 @@ if vim.g.neovide then
   vim.g.neovide_profiler = false
 end
 
-autocmd("BufReadPost", {
-  pattern = "*",
-  callback = function()
-    local l = vim.fn.line("'\"")
-    if l > 1 and l <= vim.fn.line("$") then
-      vim.fn.execute("normal! g'\"")
-    end
-  end,
-})
+-- use ethanholz/nvim-lastplace
+-- autocmd("BufReadPost", {
+--   pattern = "*",
+--   callback = function()
+--     local l = vim.fn.line("'\"")
+--     if l > 1 and l <= vim.fn.line("$") then
+--       vim.fn.execute("normal! g'\"")
+--     end
+--   end,
+-- })
 
 vim.opt_global.grepprg = "rg --vimgrep --no-heading --smart-case"
 vim.opt_global.grepformat = "%f:%l:%c:%m,%f:%l:%m"
