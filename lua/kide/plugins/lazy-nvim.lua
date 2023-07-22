@@ -614,7 +614,7 @@ require("lazy").setup({
     "j-hui/fidget.nvim",
     lazy = true,
     tag = "legacy",
-    event = "VeryLazy",
+    event = "LspAttach",
     config = function()
       require("fidget").setup({
         text = {
