@@ -134,30 +134,6 @@ require("lazy").setup({
       vim.cmd([[colorscheme gruvbox]])
     end,
   },
-  {
-    "sainnhe/gruvbox-material",
-    enabled = false,
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.opt.background = "dark"
-      vim.g.gruvbox_material_background = "medium"
-      vim.g.gruvbox_material_better_performance = true
-      vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
-      vim.g.gruvbox_material_current_word = "underline"
-      vim.cmd([[colorscheme gruvbox-material]])
-    end,
-  },
-  {
-    "morhetz/gruvbox",
-    enabled = false,
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.opt.background = "dark"
-      vim.cmd([[colorscheme gruvbox]])
-    end,
-  },
 
   -- 文件管理
   {
@@ -1074,16 +1050,6 @@ require("lazy").setup({
     cmd = "Copilot",
     config = function()
       require("copilot").setup({})
-    end,
-  },
-  {
-    "zbirenbaum/copilot-cmp",
-    enabled = false,
-    lazy = true,
-    dependencies = { "zbirenbaum/copilot.lua" },
-    event = { "InsertEnter", "VeryLazy" },
-    config = function()
-      require("copilot_cmp").setup()
     end,
   },
 }, {
