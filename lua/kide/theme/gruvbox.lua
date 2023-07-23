@@ -100,6 +100,7 @@ M.load_noice_highlights = function()
     NoiceCmdlinePopupBorderInput = { fg = colors.yellow, bg = nil },
     NoiceCmdlinePopupBorderLua = { fg = colors.yellow, bg = nil },
     NoiceCmdlinePopupBorderSearch = { fg = colors.yellow, bg = nil },
+    NoiceConfirmBorder = { fg = colors.yellow, bg = nil },
 
     NoiceCmdlinePopupTitle = { fg = colors.yellow, bg = nil },
 
