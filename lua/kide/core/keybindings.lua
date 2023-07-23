@@ -16,50 +16,50 @@ M.setup = function()
   -- n 模式下粘贴系统剪切板的内容
   map("n", "<Leader>v", '"+p', opt)
   -- 取消搜索高亮显示
-  map("n", "<Leader><CR>", ":nohlsearch<CR>", opt)
-  map("n", "<Esc>", ":nohlsearch<CR>", opt)
+  map("n", "<Leader><CR>", "<CMD>nohlsearch<CR>", opt)
+  map("n", "<Esc>", "<CMD>nohlsearch<CR>", opt)
 
   keymap("n", "<C-h>", "<C-w>h", opt)
   keymap("n", "<C-j>", "<C-w>j", opt)
   keymap("n", "<C-k>", "<C-w>k", opt)
   keymap("n", "<C-l>", "<C-w>l", opt)
 
-  map("n", "<up>", ":res +5<CR>", opt)
-  map("n", "<down>", ":res -5<CR>", opt)
-  map("n", "<S-up>", ":res -5<CR>", opt)
-  map("n", "<S-down>", ":res +5<CR>", opt)
-  map("n", "<left>", ":vertical resize+5<CR>", opt)
-  map("n", "<right>", ":vertical resize-5<CR>", opt)
-  map("n", "<S-left>", ":vertical resize-5<CR>", opt)
-  map("n", "<S-right>", ":vertical resize+5<CR>", opt)
+  map("n", "<up>", "<CMD>res +5<CR>", opt)
+  map("n", "<down>", "<CMD>res -5<CR>", opt)
+  map("n", "<S-up>", "<CMD>res -5<CR>", opt)
+  map("n", "<S-down>", "<CMD>res +5<CR>", opt)
+  map("n", "<left>", "<CMD>vertical resize+5<CR>", opt)
+  map("n", "<right>", "<CMD>vertical resize-5<CR>", opt)
+  map("n", "<S-left>", "<CMD>vertical resize-5<CR>", opt)
+  map("n", "<S-right>", "<CMD>vertical resize+5<CR>", opt)
 
   vim.api.nvim_create_user_command("BufferCloseOther", function()
     require("kide.core.utils").close_other_bufline()
   end, {})
-  map("n", "<Leader>s", ":w<CR>", opt)
-  map("n", "<Leader>w", ":Bdelete<CR>", opt)
-  map("n", "<Leader>W", ":%bd<CR>", opt)
-  map("n", "<Leader>q", ":q<CR>", opt)
+  map("n", "<Leader>s", "<CMD>write<CR>", opt)
+  map("n", "<Leader>w", "<CMD>Bdelete<CR>", opt)
+  map("n", "<Leader>W", "<CMD>%bd<CR>", opt)
+  map("n", "<Leader>q", "<CMD>q<CR>", opt)
   -- buffer
-  map("n", "<leader>n", ":BufferLineCycleNext <CR>", opt)
-  map("n", "<leader>p", ":BufferLineCyclePrev <CR>", opt)
+  map("n", "<leader>n", "<CMD>BufferLineCycleNext <CR>", opt)
+  map("n", "<leader>p", "<CMD>BufferLineCyclePrev <CR>", opt)
   -- window
-  map("n", "<A-[>", ":vertical resize +5 <CR>", opt)
-  map("n", "<A-]>", ":vertical resize -5  <CR>", opt)
+  map("n", "<A-[>", "<CMD>vertical resize +5 <CR>", opt)
+  map("n", "<A-]>", "<CMD>vertical resize -5  <CR>", opt)
 
   -- " 退出 terminal 模式
   map("t", "<Esc>", "<C-\\><C-N>", opt)
   -- map("t", "jk", "<C-\\><C-N>", opt)
 
   -- ToggleTerm
-  map("n", "<F12>", ":ToggleTerm<CR>", opt)
-  map("t", "<F12>", "<C-\\><C-N>:ToggleTerm<CR>", opt)
-  map("n", "<leader>tt", ":ToggleTerm<CR>", opt)
-  map("v", "<leader>tt", ":ToggleTermSendVisualSelection<CR>", opt)
+  map("n", "<F12>", "<CMD>ToggleTerm<CR>", opt)
+  map("t", "<F12>", "<C-\\><C-N><CMD>ToggleTerm<CR>", opt)
+  map("n", "<leader>tt", "<CMD>ToggleTerm<CR>", opt)
+  map("v", "<leader>tt", "<CMD>ToggleTermSendVisualSelection<CR>", opt)
   -- map("t", "tt", "<C-\\><C-N>:ToggleTerm<CR>", opt)
 
   -- symbols-outline.nvim
-  map("n", "<leader>o", ":<C-u>SymbolsOutline<CR>", opt)
+  map("n", "<leader>o", "<CMD>SymbolsOutline<CR>", opt)
 
   -- Telescope
   map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opt)
@@ -79,24 +79,29 @@ M.setup = function()
   map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opt)
 
   -- translate
-  map("n", "<leader>tz", ":Translate ZH -source=EN -parse_after=window -output=floating<cr>", opt)
-  map("v", "<leader>tz", ":Translate ZH -source=EN -parse_after=window -output=floating<cr>", opt)
-  map("n", "<leader>te", ":Translate EN -source=ZH -parse_after=window -output=floating<cr>", opt)
-  map("v", "<leader>te", ":Translate EN -source=ZH -parse_after=window -output=floating<cr>", opt)
+  map("n", "<leader>tz", "<CMD>Translate ZH -source=EN -parse_after=window -output=floating<cr>", opt)
+  map("v", "<leader>tz", "<CMD>Translate ZH -source=EN -parse_after=window -output=floating<cr>", opt)
+  map("n", "<leader>te", "<CMD>Translate EN -source=ZH -parse_after=window -output=floating<cr>", opt)
+  map("v", "<leader>te", "<CMD>Translate EN -source=ZH -parse_after=window -output=floating<cr>", opt)
 
   -- camel_case
   require("kide.core.utils").camel_case_init()
 
   -- nvim-dap
-  keymap("n", "<F5>", ":lua require'dap'.continue()<CR>", opt)
-  keymap("n", "<F6>", ":lua require'dap'.step_over()<CR>", opt)
-  keymap("n", "<F7>", ":lua require'dap'.step_into()<CR>", opt)
-  keymap("n", "<F8>", ":lua require'dap'.step_out()<CR>", opt)
-  keymap("n", "<leader>db", ":lua require'dap'.toggle_breakpoint()<CR>", opt)
-  keymap("n", "<leader>dB", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", opt)
-  keymap("n", "<leader>dp", ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", opt)
-  keymap("n", "<leader>dr", ":lua require'dap'.repl.open()<CR>", opt)
-  keymap("n", "<leader>dl", ":lua require'dap'.run_last()<CR>", opt)
+  keymap("n", "<F5>", "<CMD>lua require'dap'.continue()<CR>", opt)
+  keymap("n", "<F6>", "<CMD>lua require'dap'.step_over()<CR>", opt)
+  keymap("n", "<F7>", "<CMD>lua require'dap'.step_into()<CR>", opt)
+  keymap("n", "<F8>", "<CMD>lua require'dap'.step_out()<CR>", opt)
+  keymap("n", "<leader>db", "<CMD>lua require'dap'.toggle_breakpoint()<CR>", opt)
+  keymap("n", "<leader>dB", "<CMD>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", opt)
+  keymap(
+    "n",
+    "<leader>dp",
+    "<CMD>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>",
+    opt
+  )
+  keymap("n", "<leader>dr", "<CMD>lua require'dap'.repl.open()<CR>", opt)
+  keymap("n", "<leader>dl", "<CMD>lua require'dap'.run_last()<CR>", opt)
 
   -- nvim-dap-ui
   keymap("n", "<leader>ds", ':lua require("dapui").float_element(vim.Nil, { enter = true}) <CR>', opt)
@@ -124,7 +129,7 @@ M.setup = function()
   map("n", "<leader>ts", "<cmd>Telescope toggletasks spawn<cr>", opt)
 
   -- nvimTree
-  map("n", "<leader>e", ":NvimTreeToggle<CR>", opt)
+  map("n", "<leader>e", "<CMD>NvimTreeToggle<CR>", opt)
 
   -- set keybinds for both INSERT and VISUAL.
   vim.api.nvim_set_keymap("i", "<C-n>", "<Plug>luasnip-next-choice", {})
