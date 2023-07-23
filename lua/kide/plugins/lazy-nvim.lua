@@ -156,6 +156,10 @@ require("lazy").setup({
       require("kide.plugins.config.bufferline")
     end,
   },
+  {
+    "famiu/bufdelete.nvim",
+    cmd = { "Bdelete" },
+  },
 
   -- treesitter (新增)
   {
