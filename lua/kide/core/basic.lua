@@ -52,7 +52,6 @@ vim.opt.fileencoding = "UTF-8"
 -- jk移动时光标下上方保留8行
 vim.opt.scrolloff = 3
 vim.opt.sidescrolloff = 3
-vim.opt.signcolumn = "auto"
 vim.opt.pumheight = 20
 -- 缩进配置
 vim.opt.tabstop = 4
@@ -137,20 +136,17 @@ vim.opt.timeoutlen = 450
 
 vim.opt.mouse = "a"
 
+-- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+vim.opt.foldcolumn = "0"
+vim.opt.foldenable = true
+vim.opt.signcolumn = "auto"
+
 -- 默认不要折叠
 -- https://stackoverflow.com/questions/8316139/how-to-set-the-default-to-unfolded-when-you-open-a-file
 vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.opt.foldlevelstart = 99
 
 vim.opt_global.completeopt = "menu,menuone,noselect"
-if vim.g.neovide then
-  vim.g.neovide_cursor_vfx_mode = "railgun"
-  vim.opt_global.guifont = "Hack Nerd Font Mono,Hack:h13"
-  vim.g.neovide_transparency = 1
-  vim.g.neovide_fullscreen = true
-  vim.g.neovide_input_use_logo = true
-  vim.g.neovide_profiler = false
-end
 
 -- use ethanholz/nvim-lastplace
 -- autocmd("BufReadPost", {

@@ -77,8 +77,12 @@ M.load_highlights = function(hl_groups)
 end
 
 M.load_which_key_highlights = function()
+  local bg
+  if not vim.g.transparent_mode then
+    bg = colors.black3
+  end
   M.load_highlights({
-    WhichKeyFloat = { bg = colors.black3 },
+    WhichKeyFloat = { bg = bg },
   })
 end
 
