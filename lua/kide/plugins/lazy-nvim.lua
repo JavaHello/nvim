@@ -513,6 +513,7 @@ require("lazy").setup({
         render = "default",
         timeout = 3000,
         minimum_width = 50,
+        background_colour = "#000000",
         icons = {
           ERROR = "",
           WARN = "",
@@ -523,6 +524,41 @@ require("lazy").setup({
       })
 
       vim.notify = notify
+    end,
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
+    config = function()
+      require("noice").setup({
+        messages = {
+          enabled = true, -- enables the Noice messages UI
+          view = "notify", -- default view for messages
+          view_error = "notify", -- view for errors
+          view_warn = "notify", -- view for warnings
+          view_history = "messages", -- view for :messages
+          view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
+        },
+        lsp = {
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = false,
+            ["vim.lsp.util.stylize_markdown"] = false,
+            ["cmp.entry.get_documentation"] = false,
+          },
+          hover = {
+            enabled = false,
+          },
+          signature = {
+            enabled = false,
+          },
+        },
+      })
+      require("kide.theme.gruvbox").load_noice_highlights()
+      require("telescope").load_extension("noice")
     end,
   },
 
@@ -790,21 +826,6 @@ require("lazy").setup({
     end,
   },
 
-  -- LSP 进度
-  {
-    "j-hui/fidget.nvim",
-    lazy = true,
-    tag = "legacy",
-    event = "LspAttach",
-    config = function()
-      require("fidget").setup({
-        text = {
-          done = "",
-        },
-      })
-    end,
-  },
-
   -- 查找替换
   {
     "windwp/nvim-spectre",
@@ -970,8 +991,7 @@ require("lazy").setup({
           end
         end
 
-        return require("ufo")
-          .getFolds(bufnr, "lsp")
+        return require("ufo").getFolds(bufnr, "lsp")
           :catch(function(err)
             return handleFallbackException(err, "treesitter")
           end)

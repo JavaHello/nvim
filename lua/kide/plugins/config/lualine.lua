@@ -30,7 +30,30 @@ local config = {
       "filename",
       -- "navic",
     },
-    lualine_x = { "encoding", "fileformat", "filetype" },
+    lualine_x = {
+      {
+        require("noice").api.status.message.get_hl,
+        cond = require("noice").api.status.message.has,
+      },
+      {
+        require("noice").api.status.command.get,
+        cond = require("noice").api.status.command.has,
+        color = { fg = "#fabd2f" },
+      },
+      {
+        require("noice").api.status.mode.get,
+        cond = require("noice").api.status.mode.has,
+        color = { fg = "#fabd2f" },
+      },
+      {
+        require("noice").api.status.search.get,
+        cond = require("noice").api.status.search.has,
+        color = { fg = "#fabd2f" },
+      },
+      "encoding",
+      "fileformat",
+      "filetype",
+    },
     lualine_y = { "progress" },
     lualine_z = { "location" },
   },

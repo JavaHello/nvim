@@ -92,4 +92,24 @@ M.load_indent_blankline_highlights = function()
   })
 end
 
+M.load_noice_highlights = function()
+  M.load_highlights({
+    NoiceCmdlinePopupBorderCmdline = { fg = colors.yellow, bg = nil },
+    NoiceCmdlinePopupBorderFilter = { fg = colors.yellow, bg = nil },
+    NoiceCmdlinePopupBorderHelp = { fg = colors.yellow, bg = nil },
+    NoiceCmdlinePopupBorderInput = { fg = colors.yellow, bg = nil },
+    NoiceCmdlinePopupBorderLua = { fg = colors.yellow, bg = nil },
+    NoiceCmdlinePopupBorderSearch = { fg = colors.yellow, bg = nil },
+
+    NoiceCmdlinePopupTitle = { fg = colors.yellow, bg = nil },
+
+    NoiceCmdlineIconCmdline = { fg = colors.yellow, bg = nil },
+    NoiceCmdlineIconFilter = { fg = colors.yellow, bg = nil },
+    NoiceCmdlineIconHelp = { fg = colors.yellow, bg = nil },
+    NoiceCmdlineIconInput = { fg = colors.yellow, bg = nil },
+    NoiceCmdlineIconLua = { fg = colors.yellow, bg = nil },
+    NoiceCmdlineIconSearch = { fg = colors.yellow, bg = nil },
+  })
+end
+
 return M
