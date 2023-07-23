@@ -28,7 +28,7 @@ local config = {
         end,
       },
       "filename",
-      "navic",
+      -- "navic",
     },
     lualine_x = { "encoding", "fileformat", "filetype" },
     lualine_y = { "progress" },

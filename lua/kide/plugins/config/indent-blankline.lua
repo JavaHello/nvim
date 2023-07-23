@@ -9,10 +9,14 @@ require("indent_blankline").setup({
   disable_with_nolist = true,
   -- filetype_exclude = { "help", "terminal", "packer", "NvimTree", "git", "text" },
   filetype_exclude = {
+    "lspinfo",
+    "packer",
+    "checkhealth",
+    "man",
     "help",
     "terminal",
     "packer",
-    "markdown",
+    -- "markdown",
     "git",
     "text",
     "txt",
@@ -32,19 +36,7 @@ require("indent_blankline").setup({
     "dbui",
     "dbout",
   },
-  buftype_exclude = { "terminal" },
   use_treesitter = true,
-  context_patterns = {
-    "class",
-    "function",
-    "method",
-    "block",
-    "list_literal",
-    "selector",
-    "^if",
-    "^table",
-    "if_statement",
-    "while",
-    "for",
-  },
 })
+
+require("kide.theme.gruvbox").load_indent_blankline_highlights()

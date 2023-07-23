@@ -16,7 +16,7 @@ require("lazy").setup({
     lazy = true,
     event = { "VeryLazy" },
     config = function()
-      require("kide.plugins.config.mason-nvim")
+      require("mason").setup()
     end,
   },
   {
@@ -127,21 +127,11 @@ require("lazy").setup({
     lazy = false,
     priority = 1000,
     config = function()
-      require("kide.plugins.config.gruvbox")
-    end,
-  },
-  {
-    "sainnhe/gruvbox-material",
-    enabled = false,
-    lazy = false,
-    priority = 1000,
-    config = function()
-      -- require("kide.plugins.config.gruvbox")
-
+      require("gruvbox").setup({
+        transparent_mode = vim.g.transparent_mode,
+      })
       vim.opt.background = "dark"
-      vim.g.gruvbox_material_background = "hard"
-      vim.g.gruvbox_material_better_performance = true
-      vim.cmd([[colorscheme gruvbox-material]])
+      vim.cmd([[colorscheme gruvbox]])
     end,
   },
 
@@ -160,10 +150,15 @@ require("lazy").setup({
   {
     "akinsho/bufferline.nvim",
     version = "*",
+    event = { "UIEnter" },
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("kide.plugins.config.bufferline")
     end,
+  },
+  {
+    "famiu/bufdelete.nvim",
+    cmd = { "Bdelete" },
   },
 
   -- treesitter (新增)
@@ -172,7 +167,94 @@ require("lazy").setup({
     event = { "VeryLazy", "BufNewFile", "BufReadPost" },
     build = ":TSUpdate",
     config = function()
-      require("kide.plugins.config.nvim-treesitter")
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = {
+          "markdown",
+        },
+        sync_install = false,
+        ignore_install = {},
+
+        highlight = {
+          enable = true,
+          disable = {},
+          additional_vim_regex_highlighting = false,
+        },
+        indent = {
+          enable = true,
+        },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "gnn",
+            node_incremental = "grn",
+            scope_incremental = "grc",
+            node_decremental = "grm",
+          },
+        },
+        textobjects = {
+          move = {
+            enable = true,
+            set_jumps = true, -- whether to set jumps in the jumplist
+            goto_next_start = {
+              ["]m"] = "@function.outer",
+              ["]]"] = { query = "@class.outer", desc = "Next class start" },
+              ["]o"] = "@loop.*",
+              ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+              ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
+            },
+            goto_next_end = {
+              ["]M"] = "@function.outer",
+              ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+              ["[m"] = "@function.outer",
+              ["[["] = "@class.outer",
+              ["[o"] = "@loop.*",
+              ["[s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+              ["[z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
+            },
+            goto_previous_end = {
+              ["[M"] = "@function.outer",
+              ["[]"] = "@class.outer",
+            },
+            goto_next = {
+              ["]d"] = "@conditional.outer",
+            },
+            goto_previous = {
+              ["[d"] = "@conditional.outer",
+            },
+          },
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+              ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
+            },
+            selection_modes = {
+              ["@parameter.outer"] = "v", -- charwise
+              ["@function.outer"] = "V", -- linewise
+              ["@class.outer"] = "<c-v>", -- blockwise
+            },
+            include_surrounding_whitespace = false,
+          },
+          swap = {
+            enable = true,
+            swap_next = {
+              ["<leader>a"] = "@parameter.inner",
+            },
+            swap_previous = {
+              ["<leader>A"] = "@parameter.inner",
+            },
+          },
+        },
+      })
+      -- 开启 Folding see nvim-ufo
+      -- vim.wo.foldmethod = "expr"
+      -- vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
     end,
   },
   {
@@ -313,7 +395,7 @@ require("lazy").setup({
       "DiffviewToggleFiles",
     },
     config = function()
-      require("kide.plugins.config.diffview-nvim")
+      require("diffview").setup({})
     end,
   },
   {
@@ -345,12 +427,10 @@ require("lazy").setup({
     config = function()
       require("toggleterm").setup({
         shade_terminals = true,
-        -- shade_filetypes = { "none", "fzf" },
-        direction = "float",
+        direction = "horizontal",
         close_on_exit = true,
         float_opts = {
-          border = "double",
-          winblend = 0,
+          border = "single",
         },
       })
     end,
@@ -362,7 +442,19 @@ require("lazy").setup({
     lazy = true,
     dependencies = { "akinsho/toggleterm.nvim" },
     config = function()
-      require("kide.plugins.config.toggletasks")
+      require("toggletasks").setup({
+        search_paths = {
+          ".tasks",
+          ".toggletasks",
+          ".nvim/toggletasks",
+          ".nvim/tasks",
+        },
+        toggleterm = {
+          close_on_exit = true,
+        },
+      })
+
+      require("telescope").load_extension("toggletasks")
     end,
   },
 
@@ -378,6 +470,8 @@ require("lazy").setup({
   -- 状态栏插件
   {
     "nvim-lualine/lualine.nvim",
+    lazy = true,
+    event = { "UIEnter" },
     config = function()
       require("kide.plugins.config.lualine")
     end,
@@ -386,7 +480,8 @@ require("lazy").setup({
   -- blankline
   {
     "lukas-reineke/indent-blankline.nvim",
-    event = { "BufReadPost" },
+    enabled = true,
+    event = { "UIEnter" },
     config = function()
       require("kide.plugins.config.indent-blankline")
     end,
@@ -410,17 +505,24 @@ require("lazy").setup({
   {
     "rcarriga/nvim-notify",
     config = function()
-      require("kide.plugins.config.nvim-notify")
-    end,
-  },
+      local notify = require("notify")
+      notify.setup({
+        stages = "fade_in_slide_out",
+        on_open = nil,
+        on_close = nil,
+        render = "default",
+        timeout = 3000,
+        minimum_width = 50,
+        icons = {
+          ERROR = "",
+          WARN = "",
+          INFO = "",
+          DEBUG = "",
+          TRACE = "✎",
+        },
+      })
 
-  -- wildmenu 补全美化
-  {
-    "gelguy/wilder.nvim",
-    enabled = false,
-    keys = { ":", "/", "?" },
-    config = function()
-      require("kide.plugins.config.wilder")
+      vim.notify = notify
     end,
   },
 
@@ -429,7 +531,33 @@ require("lazy").setup({
     "NvChad/nvim-colorizer.lua",
     event = { "BufReadPost", "InsertEnter", "VeryLazy" },
     config = function()
-      require("kide.plugins.config.nvim-colorizer")
+      require("colorizer").setup({
+        filetypes = { "*" },
+        user_default_options = {
+          RGB = true, -- #RGB hex codes
+          RRGGBB = true, -- #RRGGBB hex codes
+          names = false, -- "Name" codes like Blue or blue
+          RRGGBBAA = false, -- #RRGGBBAA hex codes
+          AARRGGBB = false, -- 0xAARRGGBB hex codes
+          rgb_fn = false, -- CSS rgb() and rgba() functions
+          hsl_fn = false, -- CSS hsl() and hsla() functions
+          css = false, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+          css_fn = false, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+          -- Available modes for `mode`: foreground, background,  virtualtext
+          mode = "background", -- Set the display mode.
+          -- Available methods are false / true / "normal" / "lsp" / "both"
+          -- True is same as normal
+          tailwind = false, -- Enable tailwind colors
+          -- parsers can contain values used in |user_default_options|
+          sass = { enable = false, parsers = { "css" } }, -- Enable sass colors
+          virtualtext = "■",
+          -- update color values even if buffer is not focused
+          -- example use: cmp_menu, cmp_docs
+          always_update = false,
+        },
+        -- all the sub-options of filetypes apply to buftypes
+        buftypes = {},
+      })
     end,
   },
 
@@ -440,7 +568,7 @@ require("lazy").setup({
       { "gc", mode = { "x" }, desc = "Comment" },
     },
     config = function()
-      require("kide.plugins.config.comment")
+      require("Comment").setup()
     end,
   },
   {
@@ -448,7 +576,11 @@ require("lazy").setup({
     lazy = true,
     event = { "VeryLazy" },
     config = function()
-      require("kide.plugins.config.neogen")
+      require("neogen").setup({
+        snippet_engine = "luasnip",
+        enabled = true,
+        input_after_comment = true,
+      })
     end,
   },
 
@@ -459,7 +591,7 @@ require("lazy").setup({
     ft = "markdown",
     build = "cd app && yarn install",
     config = function()
-      require("kide.plugins.config.markdown-preview")
+      vim.g.mkdp_page_title = "${name}"
     end,
   },
   -- mackdown cli 预览插件
@@ -498,7 +630,31 @@ require("lazy").setup({
   {
     "goolord/alpha-nvim",
     config = function()
-      require("kide.plugins.config.alpha-nvim")
+      local alpha = require("alpha")
+      local dashboard = require("alpha.themes.dashboard")
+      dashboard.section.header.val = {
+        " ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗",
+        " ████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║",
+        " ██╔██╗ ██║ █████╗  ██║   ██║ ██║   ██║ ██║ ██╔████╔██║",
+        " ██║╚██╗██║ ██╔══╝  ██║   ██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║",
+        " ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║",
+        " ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝",
+      }
+      local opt = { noremap = true, silent = true }
+      dashboard.section.buttons.val = {
+        dashboard.button("<leader>  ff", "󰈞  Find File", ":Telescope find_files<CR>", opt),
+        dashboard.button("<leader>  fg", "󰈭  Find Word  ", ":Telescope live_grep<CR>", opt),
+        dashboard.button(
+          "<leader>  fp",
+          "  Recent Projects",
+          ":lua require'telescope'.extensions.project.project{ display_type = 'full' }<CR>",
+          opt
+        ),
+        dashboard.button("<leader>  fo", "  Recent File", ":Telescope oldfiles<CR>", opt),
+        dashboard.button("<leader>  ns", "  Settings", ":e $MYVIMRC | :cd %:p:h <CR>", opt),
+        dashboard.button("<leader>  q ", "󰅙  Quit NVIM", ":qa<CR>", opt),
+      }
+      alpha.setup(dashboard.opts)
     end,
   },
 
@@ -508,7 +664,18 @@ require("lazy").setup({
     lazy = true,
     cmd = "Translate",
     config = function()
-      require("kide.plugins.config.translate")
+      require("translate").setup({
+        default = {
+          command = "translate_shell",
+        },
+        preset = {
+          output = {
+            split = {
+              append = true,
+            },
+          },
+        },
+      })
     end,
   },
   -- StartupTime
@@ -535,7 +702,11 @@ require("lazy").setup({
     "windwp/nvim-autopairs",
     event = { "InsertEnter", "VeryLazy" },
     config = function()
-      require("kide.plugins.config.nvim-autopairs")
+      local autopairs = require("nvim-autopairs")
+      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+      autopairs.setup({})
+      local cmp = require("cmp")
+      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
     end,
   },
 
@@ -571,7 +742,28 @@ require("lazy").setup({
       })
     end,
     config = function()
-      require("kide.plugins.config.rest-nvim")
+      require("rest-nvim").setup({
+        -- Open request results in a horizontal split
+        result_split_horizontal = false,
+        -- Skip SSL verification, useful for unknown certificates
+        skip_ssl_verification = false,
+        -- Highlight request on run
+        highlight = {
+          enabled = true,
+          timeout = 150,
+        },
+        result = {
+          -- toggle showing URL, HTTP info, headers at top the of result window
+          show_url = true,
+          show_http_info = true,
+          show_headers = true,
+        },
+        -- Jump to request line on run
+        jump_to_request = false,
+        env_file = ".env",
+        custom_dynamic_variables = {},
+        yank_dry_run = true,
+      })
     end,
   },
 
@@ -603,7 +795,7 @@ require("lazy").setup({
     "j-hui/fidget.nvim",
     lazy = true,
     tag = "legacy",
-    event = "VeryLazy",
+    event = "LspAttach",
     config = function()
       require("fidget").setup({
         text = {
@@ -697,7 +889,44 @@ require("lazy").setup({
     "SmiteshP/nvim-navic",
     lazy = true,
     config = function()
-      require("kide.plugins.config.nvim-navic")
+      local navic = require("nvim-navic")
+      local symbol_map = require("kide.lsp.lsp_ui").symbol_map
+      navic.setup({
+        icons = {
+          File = symbol_map.File.icon .. " ",
+          Module = symbol_map.Module.icon .. " ",
+          Namespace = symbol_map.Namespace.icon .. " ",
+          Package = symbol_map.Package.icon .. " ",
+          Class = symbol_map.Class.icon .. " ",
+          Method = symbol_map.Method.icon .. " ",
+          Property = symbol_map.Property.icon .. " ",
+          Field = symbol_map.Field.icon .. " ",
+          Constructor = symbol_map.Constructor.icon .. " ",
+          Enum = symbol_map.Enum.icon .. "",
+          Interface = symbol_map.Interface.icon .. "",
+          Function = symbol_map.Function.icon .. " ",
+          Variable = symbol_map.Variable.icon .. " ",
+          Constant = symbol_map.Constant.icon .. " ",
+          String = symbol_map.String.icon .. " ",
+          Number = symbol_map.Number.icon .. " ",
+          Boolean = symbol_map.Boolean.icon .. " ",
+          Array = symbol_map.Array.icon .. " ",
+          Object = symbol_map.Object.icon .. " ",
+          Key = symbol_map.Key.icon .. " ",
+          Null = symbol_map.Null.icon .. " ",
+          EnumMember = symbol_map.EnumMember.icon .. " ",
+          Struct = symbol_map.Struct.icon .. " ",
+          Event = symbol_map.Event.icon .. " ",
+          Operator = symbol_map.Operator.icon .. " ",
+          TypeParameter = symbol_map.TypeParameter.icon .. " ",
+        },
+        lazy_update_context = true,
+        highlight = true,
+        safe_output = true,
+        separator = " > ",
+        -- depth_limit = 0,
+        -- depth_limit_indicator = "..",
+      })
     end,
   },
 
@@ -723,9 +952,80 @@ require("lazy").setup({
   {
     "kevinhwang91/nvim-ufo",
     lazy = true,
+    event = { "VeryLazy" },
+    config = function()
+      -- lsp->treesitter->indent
+      local ftMap = {
+        vim = "indent",
+        python = { "indent" },
+        git = "",
+      }
+
+      local function customizeSelector(bufnr)
+        local function handleFallbackException(err, providerName)
+          if type(err) == "string" and err:match("UfoFallbackException") then
+            return require("ufo").getFolds(bufnr, providerName)
+          else
+            return require("promise").reject(err)
+          end
+        end
+
+        return require("ufo")
+          .getFolds(bufnr, "lsp")
+          :catch(function(err)
+            return handleFallbackException(err, "treesitter")
+          end)
+          :catch(function(err)
+            return handleFallbackException(err, "indent")
+          end)
+      end
+      local handler = function(virtText, lnum, endLnum, width, truncate)
+        local newVirtText = {}
+        local suffix = (" 󰁂 %d "):format(endLnum - lnum)
+        local sufWidth = vim.fn.strdisplaywidth(suffix)
+        local targetWidth = width - sufWidth
+        local curWidth = 0
+        for _, chunk in ipairs(virtText) do
+          local chunkText = chunk[1]
+          local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+          if targetWidth > curWidth + chunkWidth then
+            table.insert(newVirtText, chunk)
+          else
+            chunkText = truncate(chunkText, targetWidth - curWidth)
+            local hlGroup = chunk[2]
+            table.insert(newVirtText, { chunkText, hlGroup })
+            chunkWidth = vim.fn.strdisplaywidth(chunkText)
+            -- str width returned from truncate() may less than 2nd argument, need padding
+            if curWidth + chunkWidth < targetWidth then
+              suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
+            end
+            break
+          end
+          curWidth = curWidth + chunkWidth
+        end
+        table.insert(newVirtText, { suffix, "MoreMsg" })
+        return newVirtText
+      end
+      require("ufo").setup({
+        provider_selector = function(bufnr, filetype, buftype)
+          return ftMap[filetype] or customizeSelector
+        end,
+        fold_virt_text_handler = handler,
+      })
+      require("kide.core.keybindings").ufo_mapkey()
+    end,
+  },
+
+  {
+    "ethanholz/nvim-lastplace",
+    lazy = true,
     event = { "BufReadPost" },
     config = function()
-      require("kide.plugins.config.nvim-ufo")
+      require("nvim-lastplace").setup({
+        lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
+        lastplace_ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
+        lastplace_open_folds = true,
+      })
     end,
   },
 
@@ -792,16 +1092,6 @@ require("lazy").setup({
     cmd = "Copilot",
     config = function()
       require("copilot").setup({})
-    end,
-  },
-  {
-    "zbirenbaum/copilot-cmp",
-    enabled = false,
-    lazy = true,
-    dependencies = { "zbirenbaum/copilot.lua" },
-    event = { "InsertEnter", "VeryLazy" },
-    config = function()
-      require("copilot_cmp").setup()
     end,
   },
 }, {

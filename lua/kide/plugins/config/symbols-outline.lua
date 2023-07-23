@@ -12,7 +12,7 @@ require("symbols-outline").setup({
   show_numbers = false,
   show_relative_numbers = false,
   show_symbol_details = true,
-  preview_bg_highlight = "Pmenu",
+  preview_bg_highlight = "Normal,FloatBorder:Normal,CursorLine:Visual,Search:None",
   autofold_depth = nil,
   auto_unfold_hover = true,
   fold_markers = { "", "" },

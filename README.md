@@ -1,6 +1,6 @@
 # NVIM IDE
 
-可配置 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发环境。 极速启动 (`startuptime` 20 ~ 70 ms)。
+可配置 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发环境。 极速启动 (`startuptime` 15 ~ 60 ms)。
 
 使用 `neovim-nightly` 版本。
 
@@ -68,6 +68,9 @@ git clone  https://github.com/JavaHello/nvim.git
 更多配置参考 [keybindings](./lua/kide/core/keybindings.lua) 文件
 
 ## Java 配置
+
+- 添加了`telescope`支持查找`jar` 包 `class`
+- 美化 `lsp_hover/doc` 显示
 
 > 如果不使用 `Java` 语言开发，无需配置
 

@@ -24,11 +24,20 @@ M.setup = function()
   keymap("n", "<C-k>", "<C-w>k", opt)
   keymap("n", "<C-l>", "<C-w>l", opt)
 
+  map("n", "<up>", ":res +5<CR>", opt)
+  map("n", "<down>", ":res -5<CR>", opt)
+  map("n", "<S-up>", ":res -5<CR>", opt)
+  map("n", "<S-down>", ":res +5<CR>", opt)
+  map("n", "<left>", ":vertical resize+5<CR>", opt)
+  map("n", "<right>", ":vertical resize-5<CR>", opt)
+  map("n", "<S-left>", ":vertical resize-5<CR>", opt)
+  map("n", "<S-right>", ":vertical resize+5<CR>", opt)
+
   vim.api.nvim_create_user_command("BufferCloseOther", function()
     require("kide.core.utils").close_other_bufline()
   end, {})
   map("n", "<Leader>s", ":w<CR>", opt)
-  map("n", "<Leader>w", ":bd<CR>", opt)
+  map("n", "<Leader>w", ":Bdelete<CR>", opt)
   map("n", "<Leader>W", ":%bd<CR>", opt)
   map("n", "<Leader>q", ":q<CR>", opt)
   -- buffer
@@ -109,6 +118,8 @@ M.setup = function()
   map("n", "<leader>fr", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", opt)
   map("v", "<leader>fr", "<esc>:lua require('spectre').open_visual()<CR>", opt)
 
+  -- ToggleTerm
+  map("n", "<leader>ft", "<cmd>TermSelect<cr>", opt)
   -- ToggleTask
   map("n", "<leader>ts", "<cmd>Telescope toggletasks spawn<cr>", opt)
 
