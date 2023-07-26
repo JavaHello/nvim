@@ -917,6 +917,7 @@ require("lazy").setup({
   {
     "lalitmee/browse.nvim",
     lazy = true,
+    event = { "VeryLazy" },
     cmd = {
       "Browse",
     },
