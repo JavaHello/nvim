@@ -1155,7 +1155,7 @@ require("lazy").setup({
 }, {
   ui = {
     icons = {
-      task = " ",
+      task = "✓ ",
     },
   },
 })
