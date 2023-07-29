@@ -130,7 +130,8 @@ local function jdtls_launcher()
   if lombok_jar ~= nil then
     table.insert(cmd, "--jvm-arg=-javaagent:" .. lombok_jar)
   end
-  table.insert(cmd, "-data=" .. workspace_dir)
+  table.insert(cmd, "-data")
+  table.insert(cmd, workspace_dir)
   return cmd
 end
 
