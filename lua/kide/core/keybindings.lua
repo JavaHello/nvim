@@ -37,7 +37,7 @@ M.setup = function()
     require("kide.core.utils").close_other_bufline()
   end, {})
   map("n", "<Leader>s", "<CMD>write<CR>", opt)
-  map("n", "<Leader>w", "<CMD>Bdelete<CR>", opt)
+  map("n", "<Leader>w", "<CMD>bdelete<CR>", opt)
   map("n", "<Leader>W", "<CMD>%bd<CR>", opt)
   map("n", "<Leader>q", "<CMD>q<CR>", opt)
   -- buffer
