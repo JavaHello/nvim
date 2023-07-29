@@ -817,7 +817,16 @@ require("lazy").setup({
   {
     "folke/flash.nvim",
     event = "VeryLazy",
-    opts = {},
+    opts = {
+      modes = {
+        search = {
+          enabled = false,
+        },
+        char = {
+          enabled = false,
+        },
+      },
+    },
     -- stylua: ignore
     keys = {
       {
