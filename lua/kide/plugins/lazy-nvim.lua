@@ -1123,6 +1123,29 @@ require("lazy").setup({
       require("kide.plugins.config.flutter-tools")
     end,
   },
+  {
+    "ThePrimeagen/refactoring.nvim",
+    lazy = true,
+    ft = {
+      "typescript",
+      "javascript",
+      "lua",
+      "c",
+      "cpp",
+      "go",
+      "python",
+      "java",
+      "php",
+      "ruby",
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("refactoring").setup({})
+    end,
+  },
 
   -- ui
   {
