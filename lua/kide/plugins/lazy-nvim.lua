@@ -1175,13 +1175,27 @@ require("lazy").setup({
       require("todo-comments").setup({})
     end,
   },
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   enabled = config.plugin.copilot.enable,
+  --   lazy = true,
+  --   cmd = "Copilot",
+  --   config = function()
+  --     require("copilot").setup({})
+  --   end,
+  -- },
   {
-    "zbirenbaum/copilot.lua",
+    "github/copilot.vim",
     enabled = config.plugin.copilot.enable,
-    lazy = true,
-    cmd = "Copilot",
     config = function()
-      require("copilot").setup({})
+      vim.g.copilot_enabled = true
+      vim.g.copilot_no_tab_map = true
+      vim.cmd('imap <silent><script><expr> <C-C> copilot#Accept("")')
+      vim.cmd([[
+			let g:copilot_filetypes = {
+	       \ 'TelescopePrompt': v:false,
+	     \ }
+			]])
     end,
   },
 }, {
