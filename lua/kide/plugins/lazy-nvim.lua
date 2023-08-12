@@ -1161,11 +1161,7 @@ require("lazy").setup({
       "ChatGPT",
     },
     config = function()
-      require("chatgpt").setup({
-        keymaps = {
-          submit = "<C-e>",
-        },
-      })
+      require("chatgpt").setup({})
     end,
   },
   {
