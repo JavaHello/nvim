@@ -2,9 +2,14 @@ local M = {}
 local metals_config = require("metals").bare_config()
 metals_config.settings = {
   showImplicitArguments = true,
+  excludedPackages = {
+    "akka.actor.typed.javadsl",
+    "com.github.swagger.akka.javadsl",
+  },
 }
 
 M.setup = function(opt)
+  metals_config.capabilities = opt.capabilities
   metals_config.on_attach = function(client, buffer)
     if opt.on_attach then
       opt.on_attach(client, buffer)
@@ -13,7 +18,7 @@ M.setup = function(opt)
   local group = vim.api.nvim_create_augroup("kide_metals", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
-    pattern = { "scala" },
+    pattern = { "scala", "sbt" },
     callback = function()
       require("metals").initialize_or_attach(metals_config)
     end,
