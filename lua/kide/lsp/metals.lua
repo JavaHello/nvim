@@ -6,8 +6,10 @@ metals_config.settings = {
     "akka.actor.typed.javadsl",
     "com.github.swagger.akka.javadsl",
   },
+  ammoniteJvmProperties = { "-Xmx1G", "-Xms100M", "-XX:+UseZGC" },
+  serverProperties = { "-Xmx1G", "-Xms100M", "-XX:+UseZGC" },
 }
-
+-- metals_config.init_options.statusBarProvider = "on"
 M.setup = function(opt)
   metals_config.capabilities = opt.capabilities
   metals_config.on_attach = function(client, buffer)
