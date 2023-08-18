@@ -817,7 +817,16 @@ require("lazy").setup({
   {
     "folke/flash.nvim",
     event = "VeryLazy",
-    opts = {},
+    opts = {
+      modes = {
+        search = {
+          enabled = false,
+        },
+        char = {
+          enabled = false,
+        },
+      },
+    },
     -- stylua: ignore
     keys = {
       {
@@ -917,6 +926,7 @@ require("lazy").setup({
   {
     "lalitmee/browse.nvim",
     lazy = true,
+    event = { "VeryLazy" },
     cmd = {
       "Browse",
     },
@@ -1113,6 +1123,29 @@ require("lazy").setup({
       require("kide.plugins.config.flutter-tools")
     end,
   },
+  {
+    "ThePrimeagen/refactoring.nvim",
+    lazy = true,
+    ft = {
+      "typescript",
+      "javascript",
+      "lua",
+      "c",
+      "cpp",
+      "go",
+      "python",
+      "java",
+      "php",
+      "ruby",
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("refactoring").setup({})
+    end,
+  },
 
   -- ui
   {
@@ -1128,11 +1161,7 @@ require("lazy").setup({
       "ChatGPT",
     },
     config = function()
-      require("chatgpt").setup({
-        keymaps = {
-          submit = "<C-e>",
-        },
-      })
+      require("chatgpt").setup({})
     end,
   },
   {
@@ -1142,19 +1171,33 @@ require("lazy").setup({
       require("todo-comments").setup({})
     end,
   },
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   enabled = config.plugin.copilot.enable,
+  --   lazy = true,
+  --   cmd = "Copilot",
+  --   config = function()
+  --     require("copilot").setup({})
+  --   end,
+  -- },
   {
-    "zbirenbaum/copilot.lua",
+    "github/copilot.vim",
     enabled = config.plugin.copilot.enable,
-    lazy = true,
-    cmd = "Copilot",
     config = function()
-      require("copilot").setup({})
+      vim.g.copilot_enabled = true
+      vim.g.copilot_no_tab_map = true
+      vim.cmd('imap <silent><script><expr> <C-C> copilot#Accept("")')
+      vim.cmd([[
+			let g:copilot_filetypes = {
+	       \ 'TelescopePrompt': v:false,
+	     \ }
+			]])
     end,
   },
 }, {
   ui = {
     icons = {
-      task = " ",
+      task = "✓ ",
     },
   },
 })

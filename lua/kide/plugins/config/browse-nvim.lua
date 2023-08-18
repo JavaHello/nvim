@@ -9,6 +9,18 @@ local bookmarks = {
   "https://docs.spring.io/spring-framework/docs/5.3.12/reference/html/",
   "https://github.com/",
   "https://stackoverflow.com/",
+  "https://mvnrepository.com/",
+  ["github"] = {
+    ["name"] = "search github from neovim",
+    ["code_search"] = "https://github.com/search?q=%s&type=code",
+    ["repo_search"] = "https://github.com/search?q=%s&type=repositories",
+    ["issues_search"] = "https://github.com/search?q=%s&type=issues",
+    ["pulls_search"] = "https://github.com/search?q=%s&type=pullrequests",
+  },
+  ["maven"] = {
+    ["name"] = "search maven from neovim",
+    ["jar_search"] = "https://mvnrepository.com/search?q=%s",
+  },
 }
 
 local function command(name, rhs, opts)

@@ -66,9 +66,6 @@ require("nvim-tree").setup({
     number = false,
     relativenumber = false,
     signcolumn = "yes",
-    mappings = {
-      custom_only = false,
-    },
   },
   renderer = {
     root_folder_label = false,

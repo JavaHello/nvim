@@ -1,5 +1,8 @@
-require("bufferline").setup({
+local bufferline = require("bufferline")
+bufferline.setup({
   options = {
+    mode = "buffers",
+    style_preset = bufferline.style_preset.minimal,
     -- 使用 nvim 内置lsp
     diagnostics = "nvim_lsp",
     diagnostics_indicator = function(count, level, diagnostics_dict, context)
@@ -15,17 +18,6 @@ require("bufferline").setup({
       {
         filetype = "NvimTree",
         text = function()
-          -- return "File Explorer"
-          -- git symbolic-ref --short -q HEAD
-          -- git --no-pager rev-parse --show-toplevel --absolute-git-dir --abbrev-ref HEAD
-          -- git --no-pager rev-parse --short HEAD
-          -- local b = vim.fn.trim(vim.fn.system("git symbolic-ref --short -q HEAD"))
-          -- if string.match(b, "fatal") then
-          -- 	b = ""
-          -- else
-          -- 	b = "  " .. b
-          -- end
-          -- return vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t") .. b
           return "File Explorer"
         end,
         padding = 1,
@@ -79,12 +71,11 @@ require("bufferline").setup({
         text_align = "left",
       },
     },
+    indicator = {
+      style = "none",
+    },
     color_icons = true,
     show_buffer_close_icons = true,
-    -- show_buffer_default_icon = true,
     show_close_icon = false,
-    show_tab_indicators = true,
-    -- separator_style = "slant" | "thick" | "thin" | { 'any', 'any' },
-    -- separator_style = "slant",
   },
 })

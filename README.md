@@ -52,8 +52,6 @@ git clone  https://github.com/JavaHello/nvim.git
 |           Code Action           |       `Normal`       |       `<leader>ca`        |
 |              Debug              |       `Normal`       |  `F5` or `:DapContinue`   |
 |              断点               |       `Normal`       |       `<leader>db`        |
-|           翻译 en->zh           | `Normal` or `Visual` |       `<leader>tz`        |
-|           翻译 zh->en           | `Normal` or `Visual` |       `<leader>te`        |
 |            内置终端             |      `Command`       |       `:ToggleTerm`       |
 |           Tasks 列表            |       `Normal`       |       `<leader>ts`        |
 |            代码折叠             |       `Normal`       |           `zc`            |
@@ -71,6 +69,7 @@ git clone  https://github.com/JavaHello/nvim.git
 
 - 添加了`telescope`支持查找`jar` 包 `class`
 - 美化 `lsp_hover/doc` 显示
+- `maven pom.xml` 自动补全(目前需要手动打包)
 
 > 如果不使用 `Java` 语言开发，无需配置
 

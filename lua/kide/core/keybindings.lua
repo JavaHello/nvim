@@ -37,7 +37,7 @@ M.setup = function()
     require("kide.core.utils").close_other_bufline()
   end, {})
   map("n", "<Leader>s", "<CMD>write<CR>", opt)
-  map("n", "<Leader>w", "<CMD>Bdelete<CR>", opt)
+  map("n", "<Leader>w", "<CMD>bdelete<CR>", opt)
   map("n", "<Leader>W", "<CMD>%bd<CR>", opt)
   map("n", "<Leader>q", "<CMD>q<CR>", opt)
   -- buffer
@@ -77,12 +77,6 @@ M.setup = function()
   end, opt)
   map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opt)
   map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opt)
-
-  -- translate
-  map("n", "<leader>tz", "<CMD>Translate ZH -source=EN -parse_after=window -output=floating<cr>", opt)
-  map("v", "<leader>tz", "<CMD>Translate ZH -source=EN -parse_after=window -output=floating<cr>", opt)
-  map("n", "<leader>te", "<CMD>Translate EN -source=ZH -parse_after=window -output=floating<cr>", opt)
-  map("v", "<leader>te", "<CMD>Translate EN -source=ZH -parse_after=window -output=floating<cr>", opt)
 
   -- camel_case
   require("kide.core.utils").camel_case_init()
