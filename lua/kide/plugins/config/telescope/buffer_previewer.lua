@@ -255,7 +255,11 @@ previewers.file_maker = function(filepath, bufnr, opts)
   end
   if opts.bufname ~= filepath then
     if not vim.in_fast_event() then
-      filepath = vim.fn.expand(filepath)
+      local fp = vim.fn.expand(filepath)
+      -- windows jdt:// 路径解析为空
+      if fp ~= nil and fp ~= "" then
+        filepath = fp
+      end
     end
     -- jdt:// path is a special case, we need to call the filetype hook
     if vim.startswith(filepath, "jdt://") and type(opts.preview.filetype_hook) == "function" then
