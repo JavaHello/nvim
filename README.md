@@ -20,6 +20,9 @@ cd $env:LOCALAPPDATA
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
+- `nvim-telescope/telescope-fzf-native.nvim` 需要在`mingw`环境下编译
+- `L3MON4D3/LuaSnip` 需要在`mingw`环境下编译, 如果出现 `ld` 错误, 需要手动指定 `lua51.dll` 目录
+
 ## 依赖
 
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
