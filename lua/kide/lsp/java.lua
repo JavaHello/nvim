@@ -1,6 +1,6 @@
 local M = {}
 local env = {
-  HOME = vim.uv.os_homedir(),
+  HOME = vim.env["HOME"],
   JAVA_HOME = vim.env["JAVA_HOME"],
   JDTLS_RUN_JAVA = vim.env["JDTLS_RUN_JAVA"],
   JDTLS_HOME = vim.env["JDTLS_HOME"],
@@ -143,7 +143,6 @@ local function jdtls_launcher()
     table.insert(cmd, vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar"))
     table.insert(cmd, "-data")
     table.insert(cmd, workspace_dir)
-    print(vim.inspect(cmd))
     return cmd
   end
   if jdtls_path then
