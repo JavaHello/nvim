@@ -1,6 +1,6 @@
 local M = {}
 local env = {
-  HOME = vim.uv.os_homedir(),
+  HOME = vim.env["HOME"],
   JAVA_HOME = vim.env["JAVA_HOME"],
   JDTLS_RUN_JAVA = vim.env["JDTLS_RUN_JAVA"],
   JDTLS_HOME = vim.env["JDTLS_HOME"],
@@ -99,8 +99,52 @@ local function get_jdtls_path()
   return or_default(env.JDTLS_HOME, vscode.find_one("/redhat.java-*/server"))
 end
 
+local function get_lombok_jar()
+  local lombok_jar = nil
+  if env.LOMBOK_ENABLE == "Y" then
+    lombok_jar = vscode.find_one("/redhat.java-*/lombok/lombok-*.jar")
+    if lombok_jar == nil and require("mason-registry").has_package("jdtls") then
+      lombok_jar = require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
+    end
+  end
+  return lombok_jar
+end
+
 local function jdtls_launcher()
   local jdtls_path = get_jdtls_path()
+  if require("kide.core.utils").is_win then
+    if jdtls_path then
+    elseif require("mason-registry").has_package("jdtls") then
+      jdtls_path = require("mason-registry").get_package("jdtls"):get_install_path()
+    end
+
+    local lombok_jar = get_lombok_jar()
+    local cmd = {
+      "java",
+      "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+      "-Dosgi.bundles.defaultStartLevel=4",
+      "-Declipse.product=org.eclipse.jdt.ls.core.product",
+      "-Dosgi.checkConfiguration=true",
+      "-Dosgi.sharedConfiguration.area=" .. vim.fn.glob(jdtls_path .. "/config_win"),
+      "-Dosgi.sharedConfiguration.area.readOnly=true",
+      "-Dosgi.configuration.cascaded=true",
+      "-Xms1G",
+      "--add-modules=ALL-SYSTEM",
+      "-XX:+UseZGC",
+      "--add-opens",
+      "java.base/java.util=ALL-UNNAMED",
+      "--add-opens",
+      "java.base/java.lang=ALL-UNNAMED",
+    }
+    if lombok_jar ~= nil then
+      table.insert(cmd, "-javaagent:" .. lombok_jar)
+    end
+    table.insert(cmd, "-jar")
+    table.insert(cmd, vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar"))
+    table.insert(cmd, "-data")
+    table.insert(cmd, workspace_dir)
+    return cmd
+  end
   if jdtls_path then
     jdtls_path = vim.fn.glob(jdtls_path .. "/bin/jdtls")
   elseif require("mason-registry").has_package("jdtls") then
@@ -111,13 +155,7 @@ local function jdtls_launcher()
     return
   end
 
-  local lombok_jar = nil
-  if env.LOMBOK_ENABLE == "Y" then
-    lombok_jar = vscode.find_one("/redhat.java-*/lombok/lombok-*.jar")
-    if lombok_jar == nil and require("mason-registry").has_package("jdtls") then
-      lombok_jar = require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
-    end
-  end
+  local lombok_jar = get_lombok_jar()
 
   local cmd = {
     jdtls_path,
