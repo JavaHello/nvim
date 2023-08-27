@@ -2,7 +2,7 @@
 
 可配置 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发环境。 极速启动 (`startuptime` 15 ~ 60 ms)。
 
-使用 `neovim-nightly` 版本。
+使用 `neovim-nightly` 版本, [安装步骤](https://github.com/neovim/neovim/wiki/Installing-Neovim)。
 
 ## 安装
 
@@ -34,7 +34,7 @@ git clone  https://github.com/JavaHello/nvim.git
 
 其他依赖可选安装,使用 [mason.nvim](https://github.com/williamboman/mason.nvim)
 
-> 此配置在 Linux, Mac, Windows (推荐使用 [scoop](https://scoop.sh/) 安装依赖) 系统上长期使用
+> 此配置在 Linux, Mac, Windows 系统上长期使用, Windows 下推荐使用 [scoop](https://scoop.sh/) 安装依赖
 
 ## 快捷键
 
