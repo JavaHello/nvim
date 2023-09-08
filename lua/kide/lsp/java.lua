@@ -25,7 +25,7 @@ local function get_java_ver_sources(v, dv)
 end
 
 local function get_jdtls_workspace()
-  return or_default(env.JDTLS_WORKSPACE, env.HOME .. "/jdtls-workspace/")
+  return or_default(env.JDTLS_WORKSPACE, env.HOME .. "/.jdtls-workspace/")
 end
 
 local vscode = require("kide.core.vscode")
