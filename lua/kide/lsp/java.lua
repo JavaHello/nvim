@@ -25,7 +25,7 @@ local function get_java_ver_sources(v, dv)
 end
 
 local function get_jdtls_workspace()
-  return or_default(env.JDTLS_WORKSPACE, env.HOME .. "/jdtls-workspace/")
+  return or_default(env.JDTLS_WORKSPACE, env.HOME .. "/.jdtls-workspace/")
 end
 
 local vscode = require("kide.core.vscode")
@@ -91,9 +91,10 @@ local runtimes = (function()
   return result
 end)()
 
-local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-
-local workspace_dir = get_jdtls_workspace() .. project_name
+-- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
+local rwdir = root_dir or vim.fn.getcwd()
+local workspace_dir = get_jdtls_workspace() .. require("kide.core.utils.md5").sumhexa(rwdir)
 -- local jdtls_path = vscode.find_one("/redhat.java-*/server")
 local function get_jdtls_path()
   return or_default(env.JDTLS_HOME, vscode.find_one("/redhat.java-*/server"))
@@ -229,8 +230,6 @@ local vscode_pde_path = vscode.find_one("/yaozheng.vscode-pde-*/server")
 if vscode_pde_path then
   vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
 end
-
-local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
 
 -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
