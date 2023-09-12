@@ -2,7 +2,7 @@
 
 可配置 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发环境。 极速启动 (`startuptime` 15 ~ 60 ms)。
 
-使用 `neovim-nightly` 版本, [安装步骤](https://github.com/neovim/neovim/wiki/Installing-Neovim)。
+使用 [stable](https://github.com/neovim/neovim/releases/tag/stable) 和 [neovim-nightly](https://github.com/neovim/neovim/releases) 版本, [安装步骤](https://github.com/neovim/neovim/wiki/Installing-Neovim)。
 
 ## 安装
 
