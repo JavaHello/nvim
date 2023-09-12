@@ -201,7 +201,7 @@ action_set.edit = function(prompt_bufnr, command)
           vim.bo[bufnr].buflisted = true
           vim.api.nvim_win_set_buf(win_id, bufnr)
       else
-        filename = Path:new(filename):normalize(vim.uv.cwd())
+        filename = Path:new(filename):normalize(vim.loop.cwd())
         pcall(vim.cmd, string.format("%s %s", command, vim.fn.fnameescape(filename)))
       end
     end
