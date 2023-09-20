@@ -4,6 +4,8 @@ vim.opt.title = true
 vim.opt.exrc = true
 vim.opt.secure = false
 vim.opt.ttyfast = true
+-- 相见恨晚的参数...
+vim.opt_global.jumpoptions = "stack"
 
 vim.opt.clipboard = "unnamedplus"
 
