@@ -218,7 +218,12 @@ M.init = function()
     vim.api.nvim_win_set_option(winnr, "winhighlight", lsp_ui.window.winhighlight)
     return bufnr, winnr
   end
-  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(jhover, lsp_ui.hover_actions)
+  -- https://github.com/neovim/neovim/pull/25073 美化 hover
+  if vim.fn.has("nvim-0.10") == 0 then
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(jhover, lsp_ui.hover_actions)
+  else
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, lsp_ui.hover_actions)
+  end
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(function(a, result, ctx, b)
     local bufnr, winnr = vim.lsp.handlers.signature_help(a, result, ctx, b)
     vim.api.nvim_win_set_option(winnr, "winhighlight", lsp_ui.window.winhighlight)
