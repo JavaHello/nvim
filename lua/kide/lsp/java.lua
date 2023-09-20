@@ -414,7 +414,8 @@ config.handlers["language/status"] = function(_, s)
   end
 end
 
-M.start = function(_opts)
+M.config = config
+M.start = function(_)
   jdtls.start_or_attach(config)
 end
 
