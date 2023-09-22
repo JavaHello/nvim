@@ -341,6 +341,24 @@ require("lazy").setup({
     build = ":!./install.sh",
   },
 
+  {
+    "klen/nvim-test",
+    lazy = true,
+    ft = {
+      "go",
+      "javascript",
+      "typescript",
+      "lua",
+      "python",
+      "rust",
+    },
+    config = function()
+      require("nvim-test").setup({
+        term = "toggleterm",
+      })
+    end,
+  },
+
   -- 搜索插件
   {
     "nvim-telescope/telescope.nvim",
