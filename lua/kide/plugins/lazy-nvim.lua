@@ -499,6 +499,7 @@ require("lazy").setup({
   {
     "lukas-reineke/indent-blankline.nvim",
     enabled = true,
+    main = "ibl",
     event = { "UIEnter" },
     config = function()
       require("kide.plugins.config.indent-blankline")
