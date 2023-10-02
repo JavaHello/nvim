@@ -88,7 +88,7 @@ end
 
 M.load_indent_blankline_highlights = function()
   M.load_highlights({
-    IndentBlanklineContextChar = { fg = colors.red },
+    IblScope = { fg = colors.red },
   })
 end
 
