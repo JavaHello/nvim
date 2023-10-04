@@ -9,6 +9,7 @@ local pipe = (function()
 end)()
 M.setup = function()
   -- serverstart([{address}])
+  -- godot param: --server /tmp/godot.pipe --remote-send "<esc>:n {file}<CR>:call cursor({line},{col})<CR>"
   vim.api.nvim_create_user_command("GododNvimServerStart", function()
     print("start: " .. pipe)
     vim.fn.serverstart(pipe)
