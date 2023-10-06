@@ -8,11 +8,11 @@ end
 
 if vim.g.neovide then
   vim.g.neovide_cursor_vfx_mode = "railgun"
-  vim.opt_global.guifont = "Hack Nerd Font Mono,Hack:h13"
+  vim.opt_global.guifont = "CaskaydiaCove Nerd Font Mono:h13"
   vim.g.neovide_fullscreen = false
   vim.g.neovide_input_use_logo = true
   local alpha = function()
-    return string.format("%x", math.floor(255 * vim.g.transparency or 0.8))
+    return string.format("%x", math.floor(255 * (vim.g.transparency or 0.8)))
   end
   -- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
   vim.g.neovide_transparency = 0.0

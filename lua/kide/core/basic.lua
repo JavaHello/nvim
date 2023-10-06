@@ -4,6 +4,8 @@ vim.opt.title = true
 vim.opt.exrc = true
 vim.opt.secure = false
 vim.opt.ttyfast = true
+-- 相见恨晚的参数...
+vim.opt_global.jumpoptions = "stack"
 
 vim.opt.clipboard = "unnamedplus"
 
@@ -211,10 +213,10 @@ autocmd({ "BufReadCmd" }, {
 autocmd("FileType", {
   group = augroup("gitcommit"),
   pattern = { "gitcommit" },
-  command = "setlocal spell",
+  command = "setlocal spell spelllang=en_us,cjk",
 })
 autocmd({ "BufRead", "BufNewFile" }, {
   group = augroup("spell"),
   pattern = "*.md",
-  command = "setlocal spell",
+  command = "setlocal spell spelllang=en_us,cjk",
 })

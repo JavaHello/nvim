@@ -341,6 +341,24 @@ require("lazy").setup({
     build = ":!./install.sh",
   },
 
+  {
+    "klen/nvim-test",
+    lazy = true,
+    ft = {
+      "go",
+      "javascript",
+      "typescript",
+      "lua",
+      "python",
+      "rust",
+    },
+    config = function()
+      require("nvim-test").setup({
+        term = "toggleterm",
+      })
+    end,
+  },
+
   -- 搜索插件
   {
     "nvim-telescope/telescope.nvim",
@@ -481,6 +499,7 @@ require("lazy").setup({
   {
     "lukas-reineke/indent-blankline.nvim",
     enabled = true,
+    main = "ibl",
     event = { "UIEnter" },
     config = function()
       require("kide.plugins.config.indent-blankline")
@@ -1218,6 +1237,24 @@ require("lazy").setup({
 	     \ }
 			]])
     end,
+  },
+  {
+    "linux-cultist/venv-selector.nvim",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "nvim-telescope/telescope.nvim",
+      "mfussenegger/nvim-dap-python",
+    },
+    opts = {},
+    event = "VeryLazy",
+    keys = {
+      {
+        "<leader>vs",
+        "<cmd>:VenvSelect<cr>",
+        "<leader>vc",
+        "<cmd>:VenvSelectCached<cr>",
+      },
+    },
   },
 }, {
   ui = {
