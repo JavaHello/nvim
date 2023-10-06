@@ -10,6 +10,18 @@ local env = {
 }
 local maven = require("kide.core.utils.maven")
 
+local jdtls_java = (function()
+  local jdtls_run_java = env.JDTLS_RUN_JAVA
+  if jdtls_run_java then
+    return jdtls_run_java
+  end
+  local java_home = env.JAVA_HOME
+  if java_home then
+    return java_home .. "/bin/java"
+  end
+  return "java"
+end)()
+
 local function or_default(a, v)
   return require("kide.core.utils").or_default(a, v)
 end
@@ -131,7 +143,7 @@ local function jdtls_launcher()
   end
   local lombok_jar = get_lombok_jar()
   local cmd = {
-    "java",
+    jdtls_java,
     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
     "-Dosgi.bundles.defaultStartLevel=4",
     "-Declipse.product=org.eclipse.jdt.ls.core.product",
