@@ -113,62 +113,47 @@ end
 
 local function jdtls_launcher()
   local jdtls_path = get_jdtls_path()
-  if require("kide.core.utils").is_win then
-    if jdtls_path then
-    elseif require("mason-registry").has_package("jdtls") then
-      jdtls_path = require("mason-registry").get_package("jdtls"):get_install_path()
-    end
-
-    local lombok_jar = get_lombok_jar()
-    local cmd = {
-      "java",
-      "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-      "-Dosgi.bundles.defaultStartLevel=4",
-      "-Declipse.product=org.eclipse.jdt.ls.core.product",
-      "-Dosgi.checkConfiguration=true",
-      "-Dosgi.sharedConfiguration.area=" .. vim.fn.glob(jdtls_path .. "/config_win"),
-      "-Dosgi.sharedConfiguration.area.readOnly=true",
-      "-Dosgi.configuration.cascaded=true",
-      "-Xms1G",
-      "--add-modules=ALL-SYSTEM",
-      "-XX:+UseZGC",
-      "--add-opens",
-      "java.base/java.util=ALL-UNNAMED",
-      "--add-opens",
-      "java.base/java.lang=ALL-UNNAMED",
-    }
-    if lombok_jar ~= nil then
-      table.insert(cmd, "-javaagent:" .. lombok_jar)
-    end
-    table.insert(cmd, "-jar")
-    table.insert(cmd, vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar"))
-    table.insert(cmd, "-data")
-    table.insert(cmd, workspace_dir)
-    return cmd
-  end
   if jdtls_path then
-    jdtls_path = vim.fn.glob(jdtls_path .. "/bin/jdtls")
   elseif require("mason-registry").has_package("jdtls") then
-    jdtls_path = require("mason-registry").get_package("jdtls"):get_install_path() .. "/bin/jdtls"
+    jdtls_path = require("mason-registry").get_package("jdtls"):get_install_path()
   end
-  if not jdtls_path then
-    vim.notify("jdtls_path is empty", vim.log.levels.ERROR)
-    return
+  local utils = require("kide.core.utils")
+  local jdtls_config = nil
+  if utils.is_mac then
+    jdtls_config = "/config_mac"
+  elseif utils.is_linux then
+    jdtls_config = "/config_linux"
+  elseif utils.is_win then
+    jdtls_config = "/config_win"
+  else
+    vim.notify("jdtls: unknown os", vim.log.levels.ERROR)
+    return nil
   end
-
   local lombok_jar = get_lombok_jar()
-
   local cmd = {
-    jdtls_path,
-    "--jvm-arg=-Dlog.protocol=true",
-    "--jvm-arg=-Dlog.level=ALL",
-    "--jvm-arg=-Dsun.zip.disableMemoryMapping=true",
-    "--jvm-arg=" .. "-XX:+UseZGC",
-    "--jvm-arg=" .. "-Xmx1g",
+    "java",
+    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    "-Dosgi.bundles.defaultStartLevel=4",
+    "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    "-Dosgi.checkConfiguration=true",
+    "-Dosgi.sharedConfiguration.area=" .. vim.fn.glob(jdtls_path .. jdtls_config),
+    "-Dosgi.sharedConfiguration.area.readOnly=true",
+    "-Dosgi.configuration.cascaded=true",
+    "-Dlog.protocol=true",
+    "-Dlog.level=ALL",
+    "-Xmx4g",
+    "-XX:+UseZGC",
+    "--add-modules=ALL-SYSTEM",
+    "--add-opens",
+    "java.base/java.util=ALL-UNNAMED",
+    "--add-opens",
+    "java.base/java.lang=ALL-UNNAMED",
   }
   if lombok_jar ~= nil then
-    table.insert(cmd, "--jvm-arg=-javaagent:" .. lombok_jar)
+    table.insert(cmd, "-javaagent:" .. lombok_jar)
   end
+  table.insert(cmd, "-jar")
+  table.insert(cmd, vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar"))
   table.insert(cmd, "-data")
   table.insert(cmd, workspace_dir)
   return cmd
