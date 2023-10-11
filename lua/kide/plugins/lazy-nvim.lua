@@ -1256,6 +1256,27 @@ require("lazy").setup({
       },
     },
   },
+  -- {
+  --   "xbase-lab/xbase",
+  --   build = "make install",
+  --   event = "VeryLazy",
+  --   dependencies = {
+  --     "neovim/nvim-lspconfig",
+  --   },
+  --   config = function()
+  --     require("xbase").setup({
+  --       mappings = {
+  --         enable = true,
+  --         build_picker = 0,
+  --         run_picker = 0,
+  --         watch_picker = 0,
+  --         all_picker = 0,
+  --         toggle_split_log_buffer = 0,
+  --         toggle_vsplit_log_buffer = 0,
+  --       },
+  --     })
+  --   end,
+  -- },
 }, {
   ui = {
     icons = {

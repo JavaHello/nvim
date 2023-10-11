@@ -23,6 +23,7 @@ local server_configs = {
   lemminx = require("kide.lsp.lemminx"),
   gdscript = require("kide.lsp.gdscript"),
   rime_ls = require("kide.lsp.rime_ls"),
+  sourcekit = require("kide.lsp.sourcekit"),
 }
 
 local utils = require("kide.core.utils")
