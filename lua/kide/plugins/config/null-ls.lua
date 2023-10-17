@@ -82,6 +82,9 @@ local sources = {
 
   -- python
   null_ls.builtins.formatting.black,
+
+  -- swift
+  null_ls.builtins.formatting.swiftformat,
 }
 
 local lsp_formatting = function(bufnr)
