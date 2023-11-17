@@ -112,6 +112,15 @@ require("lazy").setup({
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
+    enabled = false,
+    lazy = true,
+    event = { "VeryLazy", "BufNewFile", "BufReadPost" },
+    config = function()
+      require("kide.plugins.config.null-ls")
+    end,
+  },
+  {
+    "nvimtools/none-ls.nvim",
     lazy = true,
     event = { "VeryLazy", "BufNewFile", "BufReadPost" },
     config = function()
@@ -271,6 +280,7 @@ require("lazy").setup({
   },
   {
     "JavaHello/java-deps.nvim",
+    dir = "/Users/luokai/workspace/VimProjects/java-deps.nvim",
     lazy = true,
     ft = "java",
     dependencies = "mfussenegger/nvim-jdtls",
