@@ -280,7 +280,6 @@ require("lazy").setup({
   },
   {
     "JavaHello/java-deps.nvim",
-    dir = "/Users/luokai/workspace/VimProjects/java-deps.nvim",
     lazy = true,
     ft = "java",
     dependencies = "mfussenegger/nvim-jdtls",
