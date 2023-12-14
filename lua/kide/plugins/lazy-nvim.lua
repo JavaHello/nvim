@@ -431,7 +431,16 @@ require("lazy").setup({
     cmd = { "Neogit" },
     dependencies = { "sindrets/diffview.nvim" },
     config = function()
-      require("kide.plugins.config.neogit")
+      local lsp_ui = require("kide.lsp.lsp_ui")
+      local neogit = require("neogit")
+
+      neogit.setup({
+        signs = {
+          section = { lsp_ui.signs.closed, lsp_ui.signs.opened },
+          item = { lsp_ui.signs.closed, lsp_ui.signs.opened },
+          hunk = { "", "" },
+        },
+      })
     end,
   },
 
