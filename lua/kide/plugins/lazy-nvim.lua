@@ -1284,8 +1284,26 @@ require("lazy").setup({
   {
     "ibhagwan/fzf-lua",
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    cmd = {
+      "FzfLua",
+    },
     config = function()
-      require("fzf-lua").setup({})
+      require("fzf-lua").setup({
+        git_diff = {
+          pager = "delta --width=$FZF_PREVIEW_COLUMNS",
+        },
+        git = {
+          status = {
+            preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
+          },
+          commits = {
+            preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
+          },
+          bcommits = {
+            preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
+          },
+        },
+      })
     end,
   },
   -- {

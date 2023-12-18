@@ -1,3 +1,4 @@
+vim.loader.enable()
 -- math.randomseed(os.time())
 -- 判断终端是否配置了透明背景
 if vim.env["TRANSPARENT_MODE"] == "Y" then
