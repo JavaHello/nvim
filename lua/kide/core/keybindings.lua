@@ -10,11 +10,11 @@ M.setup = function()
   -- Esc
   -- map("i", "jk", "<C-\\><C-N>", opt)
   -- n 模式下复制内容到系统剪切板
-  map("n", "<Leader>c", '"+yy', opt)
+  -- map("n", "<Leader>c", '"+yy', opt)
   -- v 模式下复制内容到系统剪切板
-  map("v", "<Leader>c", '"+yy', opt)
+  -- map("v", "<Leader>c", '"+yy', opt)
   -- n 模式下粘贴系统剪切板的内容
-  map("n", "<Leader>v", '"+p', opt)
+  -- map("n", "<Leader>v", '"+p', opt)
   -- 取消搜索高亮显示
   map("n", "<Leader><CR>", "<CMD>nohlsearch<CR>", opt)
   map("n", "<Esc>", "<CMD>nohlsearch<CR>", opt)
