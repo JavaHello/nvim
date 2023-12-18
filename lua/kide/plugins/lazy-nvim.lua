@@ -1274,6 +1274,20 @@ require("lazy").setup({
       },
     },
   },
+
+  {
+    "eandrju/cellular-automaton.nvim",
+    cmd = {
+      "CellularAutomaton",
+    },
+  },
+  {
+    "ibhagwan/fzf-lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("fzf-lua").setup({})
+    end,
+  },
   -- {
   --   "xbase-lab/xbase",
   --   build = "make install",
