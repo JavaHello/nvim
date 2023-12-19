@@ -116,14 +116,27 @@ local function lspSymbol(name, icon)
 end
 M.init = function()
   local lsp_ui = M
-  lspSymbol("Error", lsp_ui.diagnostics.icons.error)
-  lspSymbol("Info", lsp_ui.diagnostics.icons.info)
-  lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
-  lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
 
+  local signs = nil
+  if vim.fn.has("nvim-0.10") == 0 then
+    lspSymbol("Error", lsp_ui.diagnostics.icons.error)
+    lspSymbol("Info", lsp_ui.diagnostics.icons.info)
+    lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
+    lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
+    signs = true
+  else
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = lsp_ui.diagnostics.icons.error,
+        [vim.diagnostic.severity.WARN] = lsp_ui.diagnostics.icons.warning,
+        [vim.diagnostic.severity.HINT] = lsp_ui.diagnostics.icons.hint,
+        [vim.diagnostic.severity.INFO] = lsp_ui.diagnostics.icons.info,
+      },
+    }
+  end
   vim.diagnostic.config({
     virtual_text = true,
-    signs = true,
+    signs = signs,
     underline = true,
     update_in_insert = false,
     severity_sort = false,
