@@ -12,7 +12,6 @@ M.setup = function(opt)
     return
   end
 
-  local lombok_jar = vscode.get_lombok_jar()
   local cmd = {
     "java",
     "-jar",
@@ -21,19 +20,9 @@ M.setup = function(opt)
     "-analyzers",
     analyzer_java,
   }
-  if lombok_jar ~= nil then
-    table.insert(cmd, "-Dsonar.java.libraries=" .. lombok_jar)
-  end
   require("sonarlint").setup({
     server = {
-      cmd = {
-        "java",
-        "-jar",
-        sonarlint_ls,
-        "-stdio",
-        "-analyzers",
-        analyzer_java,
-      },
+      cmd = cmd,
     },
     filetypes = {
       "java",
