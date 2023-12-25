@@ -1306,6 +1306,11 @@ require("lazy").setup({
       })
     end,
   },
+
+  {
+    "https://gitlab.com/schrieveslaach/sonarlint.nvim.git",
+    ft = { "java" },
+  },
   -- {
   --   "xbase-lab/xbase",
   --   build = "make install",

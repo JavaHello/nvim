@@ -24,6 +24,7 @@ local server_configs = {
   gdscript = require("kide.lsp.gdscript"),
   rime_ls = require("kide.lsp.rime_ls"),
   sourcekit = require("kide.lsp.sourcekit"),
+  sonarlint = require("kide.lsp.sonarlint"),
 }
 
 local utils = require("kide.core.utils")
