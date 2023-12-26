@@ -113,4 +113,14 @@ M.load_noice_highlights = function()
   })
 end
 
+local load_nvim_ui_highlights = function()
+  M.load_highlights({
+    NormalFloat = { fg = colors.black2 },
+    FloatBorder = { fg = colors.white },
+  })
+end
+if not vim.g.transparent_mode then
+  load_nvim_ui_highlights()
+end
+
 return M
