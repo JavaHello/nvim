@@ -115,8 +115,8 @@ end
 
 local load_nvim_ui_highlights = function()
   M.load_highlights({
-    NormalFloat = { fg = colors.black2 },
-    FloatBorder = { fg = colors.white },
+    NormalFloat = { fg = colors.white, bg = colors.black },
+    FloatBorder = { fg = colors.white, bg = nil },
   })
 end
 if not vim.g.transparent_mode then
