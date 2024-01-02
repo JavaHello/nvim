@@ -118,13 +118,7 @@ M.init = function()
   local lsp_ui = M
 
   local signs = nil
-  if vim.fn.has("nvim-0.10") == 0 then
-    lspSymbol("Error", lsp_ui.diagnostics.icons.error)
-    lspSymbol("Info", lsp_ui.diagnostics.icons.info)
-    lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
-    lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
-    signs = true
-  else
+  if vim.fn.has("nvim-0.10") == 1 then
     signs = {
       text = {
         [vim.diagnostic.severity.ERROR] = lsp_ui.diagnostics.icons.error,
@@ -133,6 +127,12 @@ M.init = function()
         [vim.diagnostic.severity.INFO] = lsp_ui.diagnostics.icons.info,
       },
     }
+  else
+    lspSymbol("Error", lsp_ui.diagnostics.icons.error)
+    lspSymbol("Info", lsp_ui.diagnostics.icons.info)
+    lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
+    lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
+    signs = true
   end
   vim.diagnostic.config({
     virtual_text = true,
