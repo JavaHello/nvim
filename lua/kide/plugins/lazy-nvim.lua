@@ -1100,7 +1100,8 @@ require("lazy").setup({
           end
         end
 
-        return require("ufo").getFolds(bufnr, "lsp")
+        return require("ufo")
+          .getFolds(bufnr, "lsp")
           :catch(function(err)
             return handleFallbackException(err, "treesitter")
           end)
@@ -1336,6 +1337,37 @@ require("lazy").setup({
     end,
     event = { "CmdlineEnter" },
     ft = { "go", "gomod" },
+  },
+  {
+    "nvim-neotest/neotest",
+    lazy = true,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    ft = {
+      "java",
+      "rust",
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-java")({
+            ignore_wrapper = false, -- whether to ignore maven/gradle wrapper
+          }),
+          require("neotest-rust"),
+        },
+      })
+    end,
+  },
+  {
+    "rcasia/neotest-java",
+    ft = { "java" },
+  },
+  {
+    "rouge8/neotest-rust",
+    ft = { "rust" },
   },
   -- {
   --   "xbase-lab/xbase",
