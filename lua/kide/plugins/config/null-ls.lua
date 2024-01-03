@@ -116,15 +116,26 @@ end
 
 if "Y" == vim.env["SEMGREP_ENABLE"] then
   table.insert(sources, null_ls.builtins.diagnostics.semgrep)
-elseif "Y" == vim.env["PMD_ENABLE"] then
+end
+if "Y" == vim.env["PMD_ENABLE"] then
   table.insert(
     sources,
     null_ls.builtins.diagnostics.pmd.with({
+      filetypes = {
+        "java",
+        "jsp",
+      },
+      args = {
+        "check",
+        "--format",
+        "json",
+        "--dir",
+        "$FILENAME",
+      },
       extra_args = {
         "--rulesets",
         "category/java/bestpractices.xml,category/jsp/bestpractices.xml",
       },
-      method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
     })
   )
 end

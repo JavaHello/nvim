@@ -5,7 +5,6 @@ local env = {
   JDTLS_RUN_JAVA = vim.env["JDTLS_RUN_JAVA"],
   JDTLS_HOME = vim.env["JDTLS_HOME"],
   JDTLS_WORKSPACE = vim.env["JDTLS_WORKSPACE"],
-  LOMBOK_ENABLE = vim.env["LOMBOK_ENABLE"] or "Y",
   JOL_JAR = vim.env["JOL_JAR"],
 }
 local maven = require("kide.core.utils.maven")
@@ -112,17 +111,6 @@ local function get_jdtls_path()
   return or_default(env.JDTLS_HOME, vscode.find_one("/redhat.java-*/server"))
 end
 
-local function get_lombok_jar()
-  local lombok_jar = nil
-  if env.LOMBOK_ENABLE == "Y" then
-    lombok_jar = vscode.find_one("/redhat.java-*/lombok/lombok-*.jar")
-    if lombok_jar == nil and require("mason-registry").has_package("jdtls") then
-      lombok_jar = require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
-    end
-  end
-  return lombok_jar
-end
-
 local function jdtls_launcher()
   local jdtls_path = get_jdtls_path()
   if jdtls_path then
@@ -141,7 +129,7 @@ local function jdtls_launcher()
     vim.notify("jdtls: unknown os", vim.log.levels.ERROR)
     return nil
   end
-  local lombok_jar = get_lombok_jar()
+  local lombok_jar = vscode.get_lombok_jar()
   local cmd = {
     jdtls_java,
     "-Declipse.application=org.eclipse.jdt.ls.core.id1",

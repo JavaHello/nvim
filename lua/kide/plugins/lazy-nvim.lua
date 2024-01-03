@@ -112,6 +112,15 @@ require("lazy").setup({
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
+    enabled = false,
+    lazy = true,
+    event = { "VeryLazy", "BufNewFile", "BufReadPost" },
+    config = function()
+      require("kide.plugins.config.null-ls")
+    end,
+  },
+  {
+    "nvimtools/none-ls.nvim",
     lazy = true,
     event = { "VeryLazy", "BufNewFile", "BufReadPost" },
     config = function()
@@ -422,7 +431,16 @@ require("lazy").setup({
     cmd = { "Neogit" },
     dependencies = { "sindrets/diffview.nvim" },
     config = function()
-      require("kide.plugins.config.neogit")
+      local lsp_ui = require("kide.lsp.lsp_ui")
+      local neogit = require("neogit")
+
+      neogit.setup({
+        signs = {
+          section = { lsp_ui.signs.closed, lsp_ui.signs.opened },
+          item = { lsp_ui.signs.closed, lsp_ui.signs.opened },
+          hunk = { "", "" },
+        },
+      })
     end,
   },
 
@@ -1255,6 +1273,69 @@ require("lazy").setup({
         "<cmd>:VenvSelectCached<cr>",
       },
     },
+  },
+
+  {
+    "eandrju/cellular-automaton.nvim",
+    cmd = {
+      "CellularAutomaton",
+    },
+  },
+  {
+    "ibhagwan/fzf-lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    cmd = {
+      "FzfLua",
+    },
+    config = function()
+      require("fzf-lua").setup({
+        git_diff = {
+          pager = "delta --width=$FZF_PREVIEW_COLUMNS",
+        },
+        git = {
+          status = {
+            preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
+          },
+          commits = {
+            preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
+          },
+          bcommits = {
+            preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS",
+          },
+        },
+      })
+    end,
+  },
+
+  {
+    "https://gitlab.com/schrieveslaach/sonarlint.nvim.git",
+    ft = { "java" },
+  },
+  {
+    "saecki/crates.nvim",
+    event = { "BufRead Cargo.toml" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("crates").setup({
+        null_ls = {
+          enabled = true,
+          name = "crates.nvim",
+        },
+      })
+    end,
+  },
+  {
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = { "CmdlineEnter" },
+    ft = { "go", "gomod" },
   },
   -- {
   --   "xbase-lab/xbase",

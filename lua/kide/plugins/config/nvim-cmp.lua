@@ -96,6 +96,10 @@ cmp.setup({
           ms = menu[entry.source.name] and menu[entry.source.name] .. m or m
         end
         vim_item.menu = ms
+        -- 判断 ms 长度，如果大于40，就截取前40个字符
+        if #ms > 40 then
+          vim_item.menu = string.sub(ms, 1, 40) .. "..."
+        end
         return vim_item
       end,
     }),

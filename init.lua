@@ -1,3 +1,4 @@
+vim.loader.enable()
 -- math.randomseed(os.time())
 -- 判断终端是否配置了透明背景
 if vim.env["TRANSPARENT_MODE"] == "Y" then
@@ -7,6 +8,7 @@ else
 end
 
 if vim.g.neovide then
+  vim.g.transparent_mode = false
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.opt_global.guifont = "CaskaydiaCove Nerd Font Mono:h13"
   vim.g.neovide_fullscreen = false

@@ -1,6 +1,7 @@
 local M = {}
 local env = {
   VSCODE_EXTENSIONS = vim.env["VSCODE_EXTENSIONS"],
+  LOMBOK_ENABLE = vim.env["LOMBOK_ENABLE"] or "Y",
 }
 M.get_vscode_extensions = function()
   return env.VSCODE_EXTENSIONS or "~/.vscode/extensions"
@@ -16,6 +17,17 @@ M.find_one = function(extension_path)
     end
     return v
   end
+end
+
+M.get_lombok_jar = function()
+  local lombok_jar = nil
+  if env.LOMBOK_ENABLE == "Y" then
+    lombok_jar = M.find_one("/redhat.java-*/lombok/lombok-*.jar")
+    if lombok_jar == nil and require("mason-registry").has_package("jdtls") then
+      lombok_jar = require("mason-registry").get_package("jdtls"):get_install_path() .. "/lombok.jar"
+    end
+  end
+  return lombok_jar
 end
 
 return M
