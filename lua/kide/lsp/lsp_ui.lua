@@ -124,6 +124,10 @@ M.init = function()
     update_in_insert = false,
     severity_sort = false,
   }
+  lspSymbol("Error", lsp_ui.diagnostics.icons.error)
+  lspSymbol("Info", lsp_ui.diagnostics.icons.info)
+  lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
+  lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
   if vim.fn.has("nvim-0.10") == 1 then
     diagnostics_conf.signs = {
       text = {
@@ -133,12 +137,6 @@ M.init = function()
         [vim.diagnostic.severity.INFO] = lsp_ui.diagnostics.icons.info,
       },
     }
-  else
-    lspSymbol("Error", lsp_ui.diagnostics.icons.error)
-    lspSymbol("Info", lsp_ui.diagnostics.icons.info)
-    lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
-    lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
-    diagnostics_conf.signs = true
   end
   vim.diagnostic.config(diagnostics_conf)
 
