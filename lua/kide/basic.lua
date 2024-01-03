@@ -127,7 +127,6 @@ vim.opt.wildmenu = true
 
 vim.opt.confirm = true
 
--- vim.g.python_host_prog='/opt/homebrew/bin/python3'
 vim.g.python3_host_prog = config.env.py_bin
 
 vim.opt.list = true

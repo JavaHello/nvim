@@ -117,9 +117,15 @@ end
 M.init = function()
   local lsp_ui = M
 
-  local signs = nil
+  local diagnostics_conf = {
+    virtual_text = true,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = false,
+  }
   if vim.fn.has("nvim-0.10") == 1 then
-    signs = {
+    diagnostics_conf.signs = {
       text = {
         [vim.diagnostic.severity.ERROR] = lsp_ui.diagnostics.icons.error,
         [vim.diagnostic.severity.WARN] = lsp_ui.diagnostics.icons.warning,
@@ -132,15 +138,9 @@ M.init = function()
     lspSymbol("Info", lsp_ui.diagnostics.icons.info)
     lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
     lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
-    signs = true
+    diagnostics_conf.signs = true
   end
-  vim.diagnostic.config({
-    virtual_text = true,
-    signs = signs,
-    underline = true,
-    update_in_insert = false,
-    severity_sort = false,
-  })
+  vim.diagnostic.config(diagnostics_conf)
 
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 
