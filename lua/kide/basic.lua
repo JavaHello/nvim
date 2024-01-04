@@ -61,6 +61,10 @@ vim.opt.softtabstop = 4
 -- > < 时移动长度
 vim.opt.shiftwidth = 4
 
+if vim.fn.has("nvim-0.10") == 1 then
+  vim.opt.smoothscroll = true
+end
+
 local autocmd = vim.api.nvim_create_autocmd
 autocmd("FileType", {
   pattern = {

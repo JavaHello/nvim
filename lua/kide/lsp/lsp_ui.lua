@@ -114,9 +114,8 @@ local function lspSymbol(name, icon)
   local hl = "DiagnosticSign" .. name
   vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
 end
-M.init = function()
-  local lsp_ui = M
 
+local function lspDiagnosticConf(lsp_ui)
   local diagnostics_conf = {
     virtual_text = true,
     signs = true,
@@ -139,21 +138,23 @@ M.init = function()
     }
   end
   vim.diagnostic.config(diagnostics_conf)
+end
 
-  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
-
-  -- 文档格式化
-  local function markdown_format(input)
-    if input then
-      input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@<>]*)%]%(file:/[^%)]+%)', function(i1)
-        return "`" .. i1 .. "`"
-      end)
-      input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@<>]*)%]%(jdt://[^%)]+%)', function(i1)
-        return "`" .. i1 .. "`"
-      end)
-    end
-    return input
+-- 文档格式化
+local function markdown_format(input)
+  if input then
+    input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@<>]*)%]%(file:/[^%)]+%)', function(i1)
+      return "`" .. i1 .. "`"
+    end)
+    input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@<>]*)%]%(jdt://[^%)]+%)', function(i1)
+      return "`" .. i1 .. "`"
+    end)
   end
+  return input
+end
+
+local function lspDocUI(lsp_ui)
+  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
 
   local function split_lines(value)
     value = string.gsub(value, "\r\n?", "\n")
@@ -240,7 +241,9 @@ M.init = function()
     vim.api.nvim_win_set_option(winnr, "winhighlight", lsp_ui.window.winhighlight)
     return bufnr, winnr
   end, lsp_ui.hover_actions)
+end
 
+local function cmpDocUI()
   local source = require("cmp_nvim_lsp.source")
   source.resolve = function(self, completion_item, callback)
     -- client is stopped.
@@ -262,6 +265,13 @@ M.init = function()
       callback(response or completion_item)
     end)
   end
+end
+
+M.init = function()
+  local lsp_ui = M
+  lspDiagnosticConf(lsp_ui)
+  lspDocUI(lsp_ui)
+  cmpDocUI()
 end
 
 return M
