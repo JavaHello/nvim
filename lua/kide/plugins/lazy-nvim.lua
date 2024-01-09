@@ -111,15 +111,6 @@ require("lazy").setup({
     lazy = true,
   },
   {
-    "jose-elias-alvarez/null-ls.nvim",
-    enabled = false,
-    lazy = true,
-    event = { "VeryLazy", "BufNewFile", "BufReadPost" },
-    config = function()
-      require("kide.plugins.config.null-ls")
-    end,
-  },
-  {
     "nvimtools/none-ls.nvim",
     lazy = true,
     event = { "VeryLazy", "BufNewFile", "BufReadPost" },
@@ -1100,8 +1091,7 @@ require("lazy").setup({
           end
         end
 
-        return require("ufo")
-          .getFolds(bufnr, "lsp")
+        return require("ufo").getFolds(bufnr, "lsp")
           :catch(function(err)
             return handleFallbackException(err, "treesitter")
           end)
