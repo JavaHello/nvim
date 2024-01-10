@@ -197,6 +197,7 @@ autocmd("FileType", {
     "git",
     "dbui",
     "dbout",
+    "httpResult",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
