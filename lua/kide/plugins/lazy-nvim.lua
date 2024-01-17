@@ -1091,7 +1091,8 @@ require("lazy").setup({
           end
         end
 
-        return require("ufo").getFolds(bufnr, "lsp")
+        return require("ufo")
+          .getFolds(bufnr, "lsp")
           :catch(function(err)
             return handleFallbackException(err, "treesitter")
           end)
@@ -1359,6 +1360,25 @@ require("lazy").setup({
     "rouge8/neotest-rust",
     ft = { "rust" },
   },
+  {
+    "kawre/leetcode.nvim",
+    lazy = "leetcode.nvim" ~= vim.fn.argv()[1],
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "nvim-lua/plenary.nvim", -- required by telescope
+      "MunifTanjim/nui.nvim",
+    },
+    opts = {
+      lang = "c",
+      cn = { -- leetcode.cn
+        enabled = true, ---@type boolean
+        translator = true, ---@type boolean
+        translate_problems = true, ---@type boolean
+      },
+      directory = vim.fn.stdpath("data") .. "/leetcode/",
+    },
+  },
+
   -- {
   --   "xbase-lab/xbase",
   --   build = "make install",
