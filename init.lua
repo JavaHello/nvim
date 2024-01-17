@@ -33,5 +33,6 @@ if vim.g.neovide then
   vim.g.neovide_padding_left = 0
 end
 
+require("kide.basic")
 require("kide.core")
 require("kide.plugins")

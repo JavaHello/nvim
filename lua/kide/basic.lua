@@ -61,6 +61,10 @@ vim.opt.softtabstop = 4
 -- > < 时移动长度
 vim.opt.shiftwidth = 4
 
+if vim.fn.has("nvim-0.10") == 1 then
+  vim.opt.smoothscroll = true
+end
+
 local autocmd = vim.api.nvim_create_autocmd
 autocmd("FileType", {
   pattern = {
@@ -127,7 +131,6 @@ vim.opt.wildmenu = true
 
 vim.opt.confirm = true
 
--- vim.g.python_host_prog='/opt/homebrew/bin/python3'
 vim.g.python3_host_prog = config.env.py_bin
 
 vim.opt.list = true
@@ -194,6 +197,7 @@ autocmd("FileType", {
     "git",
     "dbui",
     "dbout",
+    "httpResult",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false

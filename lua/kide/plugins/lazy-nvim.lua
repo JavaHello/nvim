@@ -111,15 +111,6 @@ require("lazy").setup({
     lazy = true,
   },
   {
-    "jose-elias-alvarez/null-ls.nvim",
-    enabled = false,
-    lazy = true,
-    event = { "VeryLazy", "BufNewFile", "BufReadPost" },
-    config = function()
-      require("kide.plugins.config.null-ls")
-    end,
-  },
-  {
     "nvimtools/none-ls.nvim",
     lazy = true,
     event = { "VeryLazy", "BufNewFile", "BufReadPost" },
@@ -1336,6 +1327,37 @@ require("lazy").setup({
     end,
     event = { "CmdlineEnter" },
     ft = { "go", "gomod" },
+  },
+  {
+    "nvim-neotest/neotest",
+    lazy = true,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    ft = {
+      "java",
+      "rust",
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-java")({
+            ignore_wrapper = false, -- whether to ignore maven/gradle wrapper
+          }),
+          require("neotest-rust"),
+        },
+      })
+    end,
+  },
+  {
+    "rcasia/neotest-java",
+    ft = { "java" },
+  },
+  {
+    "rouge8/neotest-rust",
+    ft = { "rust" },
   },
   -- {
   --   "xbase-lab/xbase",

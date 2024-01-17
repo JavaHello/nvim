@@ -85,7 +85,7 @@ local runtimes = (function()
         version,
         fglob(vim.fn.glob(java_home .. "/src.zip")) or fglob(vim.fn.glob(java_home .. "/lib/src.zip"))
       )
-      if ExecutionEnvironment.JavaSE_1_8 == value then
+      if ExecutionEnvironment.JavaSE_17 == value then
         default_jdk = true
       end
       table.insert(result, {
@@ -97,7 +97,7 @@ local runtimes = (function()
     end
   end
   if #result == 0 then
-    vim.notify("Please config Java runtimes (JAVA_8_HOME...)")
+    vim.notify("Please config Java runtimes (JAVA_17_HOME...)")
   end
   return result
 end)()
@@ -357,6 +357,7 @@ config["on_attach"] = function(client, buffer)
   local opts = { silent = true, buffer = buffer }
   vim.keymap.set("n", "<leader>dc", jdtls.test_class, opts)
   vim.keymap.set("n", "<leader>dm", jdtls.test_nearest_method, opts)
+  vim.keymap.set("n", "<leader>ds", jdtls.pick_test, opts)
   vim.keymap.set("n", "crv", jdtls.extract_variable, opts)
   vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
   vim.keymap.set("n", "crc", jdtls.extract_constant, opts)

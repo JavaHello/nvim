@@ -114,12 +114,21 @@ local function lspSymbol(name, icon)
   local hl = "DiagnosticSign" .. name
   vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
 end
-M.init = function()
-  local lsp_ui = M
 
-  local signs = nil
+local function lspDiagnosticConf(lsp_ui)
+  local diagnostics_conf = {
+    virtual_text = true,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = false,
+  }
+  lspSymbol("Error", lsp_ui.diagnostics.icons.error)
+  lspSymbol("Info", lsp_ui.diagnostics.icons.info)
+  lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
+  lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
   if vim.fn.has("nvim-0.10") == 1 then
-    signs = {
+    diagnostics_conf.signs = {
       text = {
         [vim.diagnostic.severity.ERROR] = lsp_ui.diagnostics.icons.error,
         [vim.diagnostic.severity.WARN] = lsp_ui.diagnostics.icons.warning,
@@ -127,35 +136,25 @@ M.init = function()
         [vim.diagnostic.severity.INFO] = lsp_ui.diagnostics.icons.info,
       },
     }
-  else
-    lspSymbol("Error", lsp_ui.diagnostics.icons.error)
-    lspSymbol("Info", lsp_ui.diagnostics.icons.info)
-    lspSymbol("Hint", lsp_ui.diagnostics.icons.hint)
-    lspSymbol("Warn", lsp_ui.diagnostics.icons.warning)
-    signs = true
   end
-  vim.diagnostic.config({
-    virtual_text = true,
-    signs = signs,
-    underline = true,
-    update_in_insert = false,
-    severity_sort = false,
-  })
+  vim.diagnostic.config(diagnostics_conf)
+end
 
+-- 文档格式化
+local function markdown_format(input)
+  if input then
+    input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@<>]*)%]%(file:/[^%)]+%)', function(i1)
+      return "`" .. i1 .. "`"
+    end)
+    input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@<>]*)%]%(jdt://[^%)]+%)', function(i1)
+      return "`" .. i1 .. "`"
+    end)
+  end
+  return input
+end
+
+local function lspDocUI(lsp_ui)
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, lsp_ui.hover_actions)
-
-  -- 文档格式化
-  local function markdown_format(input)
-    if input then
-      input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@<>]*)%]%(file:/[^%)]+%)', function(i1)
-        return "`" .. i1 .. "`"
-      end)
-      input = string.gsub(input, '%[([%a%$_]?[%.%w%(%)*"+,\\_%[%]%s :%-@<>]*)%]%(jdt://[^%)]+%)', function(i1)
-        return "`" .. i1 .. "`"
-      end)
-    end
-    return input
-  end
 
   local function split_lines(value)
     value = string.gsub(value, "\r\n?", "\n")
@@ -242,7 +241,9 @@ M.init = function()
     vim.api.nvim_win_set_option(winnr, "winhighlight", lsp_ui.window.winhighlight)
     return bufnr, winnr
   end, lsp_ui.hover_actions)
+end
 
+local function cmpDocUI()
   local source = require("cmp_nvim_lsp.source")
   source.resolve = function(self, completion_item, callback)
     -- client is stopped.
@@ -264,6 +265,13 @@ M.init = function()
       callback(response or completion_item)
     end)
   end
+end
+
+M.init = function()
+  local lsp_ui = M
+  lspDiagnosticConf(lsp_ui)
+  lspDocUI(lsp_ui)
+  cmpDocUI()
 end
 
 return M

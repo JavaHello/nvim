@@ -19,6 +19,9 @@ local fmt = require("luasnip.extras.fmt").fmt
 local fmta = require("luasnip.extras.fmt").fmta
 local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.expand_conditions")
+local postfix = require("luasnip.extras.postfix").postfix
+local ts_post = require("luasnip.extras.treesitter_postfix").treesitter_postfix
+local postfix_builtin = require("luasnip.extras.treesitter_postfix").builtin
 
 ls.add_snippets("java", {
   s("try_catch", {
@@ -60,6 +63,41 @@ ls.add_snippets("java", {
     i(1),
     t({ ");" }),
   }),
+  -- ts_post({
+  --   matchTSNode = postfix_builtin.tsnode_matcher.find_topmost_types({
+  --     "identifier",
+  --     "method_invocation",
+  --     "field_access",
+  --     "string_literal",
+  --     "decimal_integer_literal",
+  --     "decimal_floating_point_literal",
+  --   }),
+  --   trig = ".println",
+  -- }, {
+  --   l("System.out.println(" .. l.LS_TSMATCH .. ");"),
+  -- }),
+  postfix({
+    trig = ".info",
+    name = "log info",
+    match_pattern = '"?[%w%.%_%-%%(%)%[%] "%\']+$',
+  }, {
+    d(1, function(_, parent)
+      if parent.snippet.env.POSTFIX_MATCH == nil then
+        return nil
+      end
+      local node_sp = parent.snippet.env.POSTFIX_MATCH:match("^%s+")
+      local node_content = parent.snippet.env.POSTFIX_MATCH:gsub("^%s*(.-)%s*$", "%1")
+      return sn(nil, {
+        t({ node_sp }),
+        t({ 'log.info("' }),
+        i(1),
+        t({ ': {}", ' }),
+        t({ node_content }),
+        t({ ");" }),
+      })
+    end),
+  }),
+
   s("main", {
     t({ "public static void main(String[] args) {" }),
     t({ "", "\t" }),

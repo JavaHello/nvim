@@ -98,7 +98,7 @@ M.setup = function()
   keymap("n", "<leader>dl", "<CMD>lua require'dap'.run_last()<CR>", opt)
 
   -- nvim-dap-ui
-  keymap("n", "<leader>ds", ':lua require("dapui").float_element(vim.Nil, { enter = true}) <CR>', opt)
+  keymap("n", "<leader>df", ':lua require("dapui").float_element(vim.Nil, { enter = true}) <CR>', opt)
 
   -- bufferline.nvim
   keymap("n", "<leader>1", "<Cmd>BufferLineGoToBuffer 1<CR>", opt)
