@@ -1,6 +1,9 @@
 local function get_python_path()
   if vim.env.VIRTUAL_ENV then
-    return vim.fs.joinpath(vim.env.VIRTUAL_ENV, "bin", "python")
+    if vim.fn.has("nvim-0.10") == 1 then
+      return vim.fs.joinpath(vim.env.VIRTUAL_ENV, "bin", "python")
+    end
+    return vim.env.VIRTUAL_ENV .. "/bin" .. "/python"
   end
   if vim.env.PY_BIN then
     return vim.env.PY_BIN
