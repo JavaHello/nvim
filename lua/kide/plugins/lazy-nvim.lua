@@ -123,7 +123,7 @@ require("lazy").setup({
   -- use 'morhetz/gruvbox'
   {
     "ellisonleao/gruvbox.nvim",
-    enabled = true,
+    enabled = false,
     lazy = false,
     priority = 1000,
     config = function()
@@ -132,6 +132,42 @@ require("lazy").setup({
       })
       vim.opt.background = "dark"
       vim.cmd([[colorscheme gruvbox]])
+    end,
+  },
+  {
+    "sainnhe/gruvbox-material",
+    enabled = true,
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.opt.background = "dark"
+      vim.g.gruvbox_material_background = "medium"
+      vim.g.gruvbox_material_foreground = "medium"
+      vim.g.gruvbox_material_disable_italic_comment = 0
+      vim.g.gruvbox_material_better_performance = 1
+      vim.g.gruvbox_material_enable_bold = 1
+      vim.g.gruvbox_material_enable_italic = 1
+      vim.g.gruvbox_material_cursor = "auto"
+      if vim.g.transparent_mode then
+        vim.g.gruvbox_material_transparent_background = 2
+      end
+      vim.g.gruvbox_material_dim_inactive_windows = 0
+      vim.g.gruvbox_material_visual = "grey background" -- reverse
+      vim.g.gruvbox_material_menu_selection_background = "grey"
+      vim.g.gruvbox_material_sign_column_background = "none"
+      vim.g.gruvbox_material_spell_foreground = "none"
+      vim.g.gruvbox_material_ui_contrast = "low"
+      vim.g.gruvbox_material_show_eob = 1
+      vim.g.gruvbox_material_float_style = "bright"
+      vim.g.gruvbox_material_diagnostic_text_highlight = 0
+      vim.g.gruvbox_material_diagnostic_line_highlight = 1
+      vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
+      vim.g.gruvbox_material_current_word = "underline"
+      vim.g.gruvbox_material_disable_terminal_colors = 1
+      vim.g.gruvbox_material_statusline_style = "original"
+      vim.g.gruvbox_material_lightline_disable_bold = 0
+      -- gruvbox_material_colors_override
+      vim.cmd([[colorscheme gruvbox-material]])
     end,
   },
 
@@ -1091,8 +1127,7 @@ require("lazy").setup({
           end
         end
 
-        return require("ufo")
-          .getFolds(bufnr, "lsp")
+        return require("ufo").getFolds(bufnr, "lsp")
           :catch(function(err)
             return handleFallbackException(err, "treesitter")
           end)
