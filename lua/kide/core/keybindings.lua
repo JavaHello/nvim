@@ -39,7 +39,7 @@ M.setup = function()
   map("n", "<Leader>s", "<CMD>write<CR>", opt)
   map("n", "<Leader>w", "<CMD>bdelete<CR>", opt)
   map("n", "<Leader>W", "<CMD>%bd<CR>", opt)
-  map("n", "<Leader>q", "<CMD>q<CR>", opt)
+  -- map("n", "<Leader>q", "<CMD>q<CR>", opt)
   -- buffer
   map("n", "<leader>n", "<CMD>BufferLineCycleNext <CR>", opt)
   map("n", "<leader>p", "<CMD>BufferLineCyclePrev <CR>", opt)
