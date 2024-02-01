@@ -1244,13 +1244,11 @@ require("lazy").setup({
 
   -- chatgpt
   {
-    "jackMort/ChatGPT.nvim",
-    lazy = true,
-    cmd = {
-      "ChatGPT",
-    },
+    "robitx/gp.nvim",
     config = function()
-      require("chatgpt").setup({})
+      require("gp").setup({
+        openai_api_endpoint = vim.env["OPENAI_API_ENDPOINT"],
+      })
     end,
   },
   {
