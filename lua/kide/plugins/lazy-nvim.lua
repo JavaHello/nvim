@@ -1282,6 +1282,32 @@ require("lazy").setup({
     end,
   },
   {
+    "jellydn/CopilotChat.nvim",
+    opts = {
+      mode = "split",
+      prompts = {
+        Explain = "Explain how it works. Answer in Chinese",
+        Review = "Review the following code and provide concise suggestions. Answer in Chinese",
+        Tests = "Briefly explain how the selected code works, then generate unit tests. Answer in Chinese",
+        Refactor = "Refactor the code to improve clarity and readability. Answer in Chinese",
+      },
+    },
+    build = function()
+      vim.defer_fn(function()
+        vim.cmd("UpdateRemotePlugins")
+        vim.notify("CopilotChat - Updated remote plugins. Please restart Neovim.")
+      end, 3000)
+    end,
+    event = "VeryLazy",
+    keys = {
+      { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
+      { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
+      { "<leader>ccr", "<cmd>CopilotChatReview<cr>", desc = "CopilotChat - Review code" },
+      { "<leader>ccR", "<cmd>CopilotChatRefactor<cr>", desc = "CopilotChat - Refactor code" },
+    },
+  },
+
+  {
     "linux-cultist/venv-selector.nvim",
     dependencies = {
       "neovim/nvim-lspconfig",
