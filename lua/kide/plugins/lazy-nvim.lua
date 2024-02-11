@@ -1282,7 +1282,7 @@ require("lazy").setup({
     end,
   },
   {
-    "jellydn/CopilotChat.nvim",
+    "CopilotC-Nvim/CopilotChat.nvim",
     opts = {
       mode = "split",
       prompts = {
