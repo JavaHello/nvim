@@ -123,7 +123,7 @@ require("lazy").setup({
   -- use 'morhetz/gruvbox'
   {
     "ellisonleao/gruvbox.nvim",
-    enabled = true,
+    enabled = false,
     lazy = false,
     priority = 1000,
     config = function()
@@ -132,6 +132,42 @@ require("lazy").setup({
       })
       vim.opt.background = "dark"
       vim.cmd([[colorscheme gruvbox]])
+    end,
+  },
+  {
+    "sainnhe/gruvbox-material",
+    enabled = true,
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.opt.background = "dark"
+      vim.g.gruvbox_material_background = "medium"
+      vim.g.gruvbox_material_foreground = "medium"
+      vim.g.gruvbox_material_disable_italic_comment = 0
+      vim.g.gruvbox_material_better_performance = 1
+      vim.g.gruvbox_material_enable_bold = 1
+      vim.g.gruvbox_material_enable_italic = 1
+      vim.g.gruvbox_material_cursor = "auto"
+      if vim.g.transparent_mode then
+        vim.g.gruvbox_material_transparent_background = 2
+      end
+      vim.g.gruvbox_material_dim_inactive_windows = 0
+      vim.g.gruvbox_material_visual = "grey background" -- reverse
+      vim.g.gruvbox_material_menu_selection_background = "grey"
+      vim.g.gruvbox_material_sign_column_background = "none"
+      vim.g.gruvbox_material_spell_foreground = "none"
+      vim.g.gruvbox_material_ui_contrast = "low"
+      vim.g.gruvbox_material_show_eob = 1
+      vim.g.gruvbox_material_float_style = "bright"
+      vim.g.gruvbox_material_diagnostic_text_highlight = 0
+      vim.g.gruvbox_material_diagnostic_line_highlight = 1
+      vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
+      vim.g.gruvbox_material_current_word = "underline"
+      vim.g.gruvbox_material_disable_terminal_colors = 1
+      vim.g.gruvbox_material_statusline_style = "original"
+      vim.g.gruvbox_material_lightline_disable_bold = 0
+      -- gruvbox_material_colors_override
+      vim.cmd([[colorscheme gruvbox-material]])
     end,
   },
 
@@ -1053,7 +1089,7 @@ require("lazy").setup({
 
   -- 笔记
   {
-    "mickael-menu/zk-nvim",
+    "zk-org/zk-nvim",
     lazy = true,
     cmd = {
       "ZkIndex",
@@ -1208,13 +1244,11 @@ require("lazy").setup({
 
   -- chatgpt
   {
-    "jackMort/ChatGPT.nvim",
-    lazy = true,
-    cmd = {
-      "ChatGPT",
-    },
+    "robitx/gp.nvim",
     config = function()
-      require("chatgpt").setup({})
+      require("gp").setup({
+        openai_api_endpoint = vim.env["OPENAI_API_ENDPOINT"],
+      })
     end,
   },
   {
@@ -1247,6 +1281,32 @@ require("lazy").setup({
 			]])
     end,
   },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    opts = {
+      mode = "split",
+      prompts = {
+        Explain = "Explain how it works. Answer in Chinese",
+        Review = "Review the following code and provide concise suggestions. Answer in Chinese",
+        Tests = "Briefly explain how the selected code works, then generate unit tests. Answer in Chinese",
+        Refactor = "Refactor the code to improve clarity and readability. Answer in Chinese",
+      },
+    },
+    build = function()
+      vim.defer_fn(function()
+        vim.cmd("UpdateRemotePlugins")
+        vim.notify("CopilotChat - Updated remote plugins. Please restart Neovim.")
+      end, 3000)
+    end,
+    event = "VeryLazy",
+    keys = {
+      { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
+      { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
+      { "<leader>ccr", "<cmd>CopilotChatReview<cr>", desc = "CopilotChat - Review code" },
+      { "<leader>ccR", "<cmd>CopilotChatRefactor<cr>", desc = "CopilotChat - Refactor code" },
+    },
+  },
+
   {
     "linux-cultist/venv-selector.nvim",
     dependencies = {
@@ -1359,6 +1419,25 @@ require("lazy").setup({
     "rouge8/neotest-rust",
     ft = { "rust" },
   },
+  {
+    "kawre/leetcode.nvim",
+    lazy = "leetcode.nvim" ~= vim.fn.argv()[1],
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "nvim-lua/plenary.nvim", -- required by telescope
+      "MunifTanjim/nui.nvim",
+    },
+    opts = {
+      lang = "c",
+      cn = { -- leetcode.cn
+        enabled = true, ---@type boolean
+        translator = true, ---@type boolean
+        translate_problems = true, ---@type boolean
+      },
+      directory = vim.fn.stdpath("data") .. "/leetcode/",
+    },
+  },
+
   -- {
   --   "xbase-lab/xbase",
   --   build = "make install",

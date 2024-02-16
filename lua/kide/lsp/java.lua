@@ -25,9 +25,6 @@ local function or_default(a, v)
   return require("kide.core.utils").or_default(a, v)
 end
 
-local function get_java_home()
-  return or_default(env.JAVA_HOME, "/opt/software/java/zulu17.34.19-ca-jdk17.0.3-macosx_aarch64")
-end
 local function get_java_ver_home(v, dv)
   return vim.env["JAVA_" .. v .. "_HOME"] or dv
 end
@@ -231,7 +228,7 @@ local config = {
   settings = {
     java = {
       maxConcurrentBuilds = 8,
-      home = get_java_home(),
+      home = env.JAVA_HOME,
       project = {
         encoding = "UTF-8",
       },
