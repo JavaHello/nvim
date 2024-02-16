@@ -1089,7 +1089,7 @@ require("lazy").setup({
 
   -- 笔记
   {
-    "mickael-menu/zk-nvim",
+    "zk-org/zk-nvim",
     lazy = true,
     cmd = {
       "ZkIndex",
