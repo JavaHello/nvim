@@ -45,7 +45,7 @@ git clone  https://github.com/JavaHello/nvim.git
 |            全局搜索             | `Normal` or `Visual` |       `<leader>fg`        |
 |          全局搜索替换           | `Normal` or `Visual` |       `<leader>fr`        |
 |          搜索 symbols           | `Normal` or `Visual` |       `<leader>fs`        |
-|            Git 操作             |      `Command`       |    `:Neogit` or `:Git`    |
+|            Git 操作             |      `Command`       |          `:Git`           |
 |             Outline             |       `Normal`       |        `<leader>o`        |
 |            查看实现             |       `Normal`       |           `gi`            |
 |            查看引用             |       `Normal`       |           `gr`            |

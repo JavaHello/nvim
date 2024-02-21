@@ -452,24 +452,6 @@ require("lazy").setup({
       require("diffview").setup({})
     end,
   },
-  {
-    "NeogitOrg/neogit",
-    lazy = true,
-    cmd = { "Neogit" },
-    dependencies = { "sindrets/diffview.nvim" },
-    config = function()
-      local lsp_ui = require("kide.lsp.lsp_ui")
-      local neogit = require("neogit")
-
-      neogit.setup({
-        signs = {
-          section = { lsp_ui.signs.closed, lsp_ui.signs.opened },
-          item = { lsp_ui.signs.closed, lsp_ui.signs.opened },
-          hunk = { "", "" },
-        },
-      })
-    end,
-  },
 
   -- git edit 状态显示插件
   {
