@@ -58,7 +58,7 @@ require("nvim-tree").setup({
     timeout = 400,
   },
   view = {
-    width = 34,
+    width = 40,
     -- height = 40,
     side = "left",
     preserve_window_proportions = false,
@@ -77,33 +77,32 @@ require("nvim-tree").setup({
         none = " ",
       },
     },
+    icons = {
+      glyphs = {
+        folder = {
+          arrow_closed = "",
+          arrow_open = "",
+          default = "",
+          open = "",
+          empty = "",
+          empty_open = "",
+          symlink = "",
+          symlink_open = "",
+        },
+        git = {
+          unstaged = "󰄱",
+          staged = "",
+          unmerged = "",
+          renamed = "➜",
+          untracked = "",
+          deleted = "",
+          ignored = "◌",
+        },
+      },
+    },
   },
   trash = {
     cmd = "trash",
     require_confirm = true,
   },
 })
-
--- local g = vim.g
-
--- g.nvim_tree_icons = {
---    default = "",
---    symlink = "",
---    git = {
---       deleted = "",
---       ignored = "◌",
---       renamed = "➜",
---       staged = "✓",
---       unmerged = "",
---       unstaged = "✗",
---       untracked = "★",
---    },
---    folder = {
---       default = "",
---       empty = "",
---       empty_open = "",
---       open = "",
---       symlink = "",
---       symlink_open = "",
---    },
--- }

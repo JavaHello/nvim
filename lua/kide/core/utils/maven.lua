@@ -2,14 +2,17 @@ local utils = require("kide.core.utils")
 local M = {}
 
 local function maven_settings()
+  if vim.fn.filereadable(vim.fn.expand("~/.m2/settings.xml")) == 1 then
+    return vim.fn.expand("~/.m2/settings.xml")
+  end
   local maven_home = vim.env["MAVEN_HOME"]
-  if maven_home then
+  if maven_home and vim.fn.filereadable(maven_home .. "/conf/settings.xml") then
     return maven_home .. "/conf/settings.xml"
   end
 end
 
 M.get_maven_settings = function()
-  return vim.env["MAVEN_SETTINGS"] or maven_settings()
+  return vim.env["MAVEN_SETTINGS_XML"] or maven_settings()
 end
 
 local function settings_opt(settings)
@@ -83,21 +86,6 @@ local function get_class_name()
 end
 
 M.maven_command = function(buf)
-  create_command(
-    buf,
-    "Maven",
-    "mvn",
-    maven_args_complete({
-      "clean",
-      "compile",
-      "test-compile",
-      "verify",
-      "package",
-      "install",
-      "deploy",
-    }, { model = "multiple" }),
-    { update = true, close_on_exit = false }
-  )
   -- 判断为 java 文件
   if vim.api.nvim_buf_get_option(buf, "filetype") == "java" then
     create_command(buf, "MavenExecJava", function(_)
@@ -163,6 +151,26 @@ M.setup = function()
         M.maven_command(e.buf)
       end
     end,
+  })
+
+  local opt = { update = true, close_on_exit = false }
+  vim.api.nvim_create_user_command("Maven", function(opts)
+    if opts.args then
+      exec("mvn " .. opts.args, vim.fn.expand("%"), opt)
+    else
+      exec("mvn", vim.fn.expand("%"), opt)
+    end
+  end, {
+    nargs = "*",
+    complete = maven_args_complete({
+      "clean",
+      "compile",
+      "test-compile",
+      "verify",
+      "package",
+      "install",
+      "deploy",
+    }, { model = "multiple" }),
   })
 end
 return M
