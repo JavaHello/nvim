@@ -979,7 +979,7 @@ require("lazy").setup({
       vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup("kide_vim_dadbod_completion", { clear = true }),
         pattern = { "sql", "mysql", "plsql" },
-        callback = function(event)
+        callback = function(_)
           require("cmp").setup.buffer({ sources = { { name = "vim-dadbod-completion" } } })
         end,
       })
@@ -997,7 +997,6 @@ require("lazy").setup({
   {
     "lalitmee/browse.nvim",
     lazy = true,
-    event = { "VeryLazy" },
     cmd = {
       "Browse",
     },
@@ -1145,7 +1144,7 @@ require("lazy").setup({
         return newVirtText
       end
       require("ufo").setup({
-        provider_selector = function(bufnr, filetype, buftype)
+        provider_selector = function(_, filetype, _)
           return ftMap[filetype] or customizeSelector
         end,
         fold_virt_text_handler = handler,
@@ -1227,6 +1226,8 @@ require("lazy").setup({
   -- chatgpt
   {
     "robitx/gp.nvim",
+    lazy = true,
+    event = { "VeryLazy" },
     config = function()
       require("gp").setup({
         openai_api_endpoint = vim.env["OPENAI_API_ENDPOINT"],
@@ -1236,6 +1237,11 @@ require("lazy").setup({
   {
     "folke/todo-comments.nvim",
     lazy = true,
+    cmd = {
+      "TodoTelescope",
+      "TodoLocList",
+      "TodoQuickFix",
+    },
     config = function()
       require("todo-comments").setup({})
     end,
@@ -1418,6 +1424,26 @@ require("lazy").setup({
       },
       directory = vim.fn.stdpath("data") .. "/leetcode/",
     },
+  },
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    event = "VeryLazy",
+    lazy = true,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      local harpoon = require("harpoon")
+
+      -- REQUIRED
+      harpoon:setup({})
+      -- REQUIRED
+      vim.keymap.set("n", "<leader>fa", function()
+        harpoon:list():append()
+      end, { desc = "Harpoon Append" })
+      vim.keymap.set("n", "<C-e>", function()
+        harpoon.ui:toggle_quick_menu(harpoon:list())
+      end)
+    end,
   },
 
   -- {
