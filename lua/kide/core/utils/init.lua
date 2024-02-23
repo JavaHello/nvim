@@ -239,4 +239,16 @@ end
 M.get_extension = function(str)
   return str:match(".+%.(%w+)$")
 end
+
+M.tmpdir = function()
+  if M.is_win then
+    return os.getenv("TEMP")
+  else
+    return "/tmp"
+  end
+end
+
+M.tmpdir_file = function(file)
+  return M.tmpdir() .. "/" .. file
+end
 return M
