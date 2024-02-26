@@ -1277,12 +1277,18 @@ require("lazy").setup({
     enabled = config.plugin.codeium.enable,
     config = function()
       vim.g.codeium_disable_bindings = 1
-      vim.cmd([[
-        imap <script><silent><nowait><expr> <C-c> codeium#Accept()
-        imap <C-;>   <Cmd>call codeium#CycleCompletions(1)<CR>
-        imap <C-,>   <Cmd>call codeium#CycleCompletions(-1)<CR>
-        imap <C-x>   <Cmd>call codeium#Clear()<CR>
-      ]])
+      vim.keymap.set("i", "<C-c>", function()
+        return vim.fn["codeium#Accept"]()
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-;>", function()
+        return vim.fn["codeium#CycleCompletions"](1)
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-,>", function()
+        return vim.fn["codeium#CycleCompletions"](-1)
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-x>", function()
+        return vim.fn["codeium#Clear"]()
+      end, { expr = true, silent = true })
     end,
   },
   {
