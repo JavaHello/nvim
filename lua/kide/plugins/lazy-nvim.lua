@@ -114,6 +114,9 @@ require("lazy").setup({
     "nvimtools/none-ls.nvim",
     lazy = true,
     event = { "VeryLazy", "BufNewFile", "BufReadPost" },
+    dependencies = {
+      "gbprod/none-ls-shellcheck.nvim",
+    },
     config = function()
       require("kide.plugins.config.null-ls")
     end,

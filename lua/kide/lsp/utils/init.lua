@@ -53,7 +53,7 @@ format_lsp_mapping["nginx"] = "null-ls"
 format_lsp_mapping["xml"] = "lemminx"
 
 -- taplo
-format_lsp_mapping["toml"] = "null-ls"
+format_lsp_mapping["toml"] = "taplo"
 
 -- shfmt
 format_lsp_mapping["sh"] = "null-ls"
@@ -78,7 +78,7 @@ format_lsp_mapping["python"] = "null-ls"
 M.filter_format_lsp_client = function(client, bufnr)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
   local cn = format_lsp_mapping[filetype]
-  if cn == nil then
+  if cn == nil and client.name ~= "null-ls" then
     return true
   end
   return client.name == cn
