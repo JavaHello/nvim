@@ -1272,6 +1272,20 @@ require("lazy").setup({
     end,
   },
   {
+    "Exafunction/codeium.vim",
+    event = "BufEnter",
+    enabled = config.plugin.codeium.enable,
+    config = function()
+      vim.g.codeium_disable_bindings = 1
+      vim.cmd([[
+        imap <script><silent><nowait><expr> <C-c> codeium#Accept()
+        imap <C-;>   <Cmd>call codeium#CycleCompletions(1)<CR>
+        imap <C-,>   <Cmd>call codeium#CycleCompletions(-1)<CR>
+        imap <C-x>   <Cmd>call codeium#Clear()<CR>
+      ]])
+    end,
+  },
+  {
     "CopilotC-Nvim/CopilotChat.nvim",
     opts = {
       mode = "split",
