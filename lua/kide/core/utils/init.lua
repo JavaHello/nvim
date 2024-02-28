@@ -251,4 +251,29 @@ end
 M.tmpdir_file = function(file)
   return M.tmpdir() .. "/" .. file
 end
+M.cpu_thread_count = 0
+
+M.get_cpu_thread_count = function()
+  if M.cpu_thread_count > 0 then
+    return M.cpu_thread_count
+  end
+  local cmd
+  if M.is_mac then
+    cmd = "sysctl -n hw.logicalcpu"
+  elseif M.is_linux then
+    cmd = "nproc"
+  else
+    cmd = "echo %NUMBER_OF_PROCESSORS%"
+  end
+  local handle = io.popen(cmd)
+  local result = handle:read("*a")
+  handle:close()
+  local c = tonumber(result)
+  if c then
+    M.cpu_thread_count = c
+  else
+    M.cpu_thread_count = 8
+  end
+end
+
 return M
