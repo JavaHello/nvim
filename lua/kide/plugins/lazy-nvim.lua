@@ -1229,7 +1229,10 @@ require("lazy").setup({
   {
     "robitx/gp.nvim",
     lazy = true,
-    event = { "VeryLazy" },
+    cmd = {
+      "GpNew",
+      "GpChatNew",
+    },
     config = function()
       require("gp").setup({
         openai_api_endpoint = vim.env["OPENAI_API_ENDPOINT"],
