@@ -24,6 +24,9 @@ local M = {
     copilot = {
       enable = vim.env["COPILOT_ENABLE"] == "Y" and true or false,
     },
+    codeium = {
+      enable = vim.env["CODEIUM_ENABLE"] == "Y" and true or false,
+    },
   },
 }
 return M

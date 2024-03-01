@@ -25,6 +25,11 @@ local server_configs = {
   rime_ls = require("kide.lsp.rime_ls"),
   sourcekit = require("kide.lsp.sourcekit"),
   sonarlint = require("kide.lsp.sonarlint"),
+  taplo = {
+    setup = function(cfg)
+      require("lspconfig").taplo.setup(cfg)
+    end,
+  },
 }
 
 local utils = require("kide.core.utils")

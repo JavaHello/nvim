@@ -20,9 +20,9 @@ local jdtls_java = (function()
   end
   return "java"
 end)()
-
+local utils = require("kide.core.utils")
 local function or_default(a, v)
-  return require("kide.core.utils").or_default(a, v)
+  return utils.or_default(a, v)
 end
 
 local function get_java_ver_home(v, dv)
@@ -227,7 +227,8 @@ local config = {
   -- for a list of options
   settings = {
     java = {
-      maxConcurrentBuilds = 8,
+      autobuild = { enabled = true },
+      maxConcurrentBuilds = utils.get_cpu_thread_count(),
       home = env.JAVA_HOME,
       project = {
         encoding = "UTF-8",
@@ -248,7 +249,6 @@ local config = {
       inlayhints = {
         parameterNames = { enabled = true },
       },
-      autobuild = { enabled = true },
       referenceCodeLens = { enabled = true },
       implementationsCodeLens = { enabled = true },
       templates = {
@@ -341,6 +341,69 @@ config["init_options"] = {
   extendedClientCapabilities = extendedClientCapabilities,
 }
 
+M.async_profiler_home = vim.env["ASYNC_PROFILER_HOME"]
+local function get_async_profiler_ddl()
+  if M.async_profiler_home then
+    if utils.is_mac then
+      return vim.fn.glob(M.async_profiler_home .. "/build/lib/libasyncProfiler.dylib")
+    elseif utils.is_linux then
+      return vim.fn.glob(M.async_profiler_home .. "/build/lib/libasyncProfiler.so")
+    else
+      return vim.fn.glob(M.async_profiler_home .. "/build/lib/libasyncProfiler.dll")
+    end
+  end
+end
+local function get_async_profiler_cov()
+  if M.async_profiler_home then
+    return vim.fn.glob(M.async_profiler_home .. "/target/async-profiler-converter-3.0.jar")
+  end
+end
+
+-- see https://github.com/mfussenegger/dotfiles/blob/master/vim/.config/nvim/ftplugin/java.lua
+local function test_with_profile(test_fn)
+  return function()
+    local choices = {
+      "cpu,alloc=2m,lock=10ms",
+      "cpu",
+      "alloc",
+      "wall",
+      "context-switches",
+      "cycles",
+      "instructions",
+      "cache-misses",
+    }
+    local select_opts = {
+      format_item = tostring,
+    }
+    vim.ui.select(choices, select_opts, function(choice)
+      if not choice then
+        return
+      end
+      local async_profiler_so = get_async_profiler_ddl()
+      local event = "event=" .. choice
+      local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,"
+      vmArgs = vmArgs .. event .. ",file=" .. utils.tmpdir_file("profile.jfr")
+      test_fn({
+        config_overrides = {
+          vmArgs = vmArgs,
+          noDebug = true,
+        },
+        after_test = function()
+          vim.fn.system(
+            "java -jar "
+              .. get_async_profiler_cov()
+              .. " jfr2flame "
+              .. utils.tmpdir_file("profile.jfr")
+              .. " "
+              .. utils.tmpdir_file("profile.html")
+          )
+          utils.open_fn(utils.tmpdir_file("profile.html"))
+        end,
+      })
+    end)
+  end
+end
+
 config["on_attach"] = function(client, buffer)
   -- client.server_capabilities.semanticTokensProvider = nil
   -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
@@ -352,12 +415,35 @@ config["on_attach"] = function(client, buffer)
   client.server_capabilities["definitionProvider"] = true
   -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
   local opts = { silent = true, buffer = buffer }
-  vim.keymap.set("n", "<leader>dc", jdtls.test_class, opts)
-  vim.keymap.set("n", "<leader>dm", jdtls.test_nearest_method, opts)
-  vim.keymap.set("n", "<leader>ds", jdtls.pick_test, opts)
-  vim.keymap.set("n", "crv", jdtls.extract_variable, opts)
-  vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], opts)
-  vim.keymap.set("n", "crc", jdtls.extract_constant, opts)
+  local function desc_opts(desc)
+    return { silent = true, buffer = buffer, desc = desc }
+  end
+
+  local function with_compile(fn)
+    return function()
+      if vim.bo.modified then
+        vim.cmd("w")
+      end
+      client.request_sync("java/buildWorkspace", false, 5000, buffer)
+      fn()
+    end
+  end
+  vim.keymap.set("n", "<leader>dc", with_compile(jdtls.test_class), desc_opts("Test class"))
+  vim.keymap.set("n", "<leader>dm", with_compile(jdtls.test_nearest_method), desc_opts("Test method"))
+  vim.keymap.set("n", "<leader>ds", with_compile(jdtls.pick_test), desc_opts("Select test"))
+  vim.keymap.set("n", "crv", jdtls.extract_variable, desc_opts("Extract variable"))
+  vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], desc_opts("Extract method"))
+  vim.keymap.set("n", "crc", jdtls.extract_constant, desc_opts("Extract constant"))
+
+  if M.async_profiler_home then
+    vim.keymap.set(
+      "n",
+      "<leader>dM",
+      with_compile(test_with_profile(jdtls.test_nearest_method)),
+      desc_opts("Test method with profiling")
+    )
+  end
+
   local create_command = vim.api.nvim_buf_create_user_command
   create_command(buffer, "OR", require("jdtls").organize_imports, {
     nargs = 0,
@@ -368,6 +454,21 @@ config["on_attach"] = function(client, buffer)
     nargs = 0,
   })
   -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
+
+  create_command(
+    buffer,
+    "JdtRun",
+    with_compile(function()
+      local main_config_opts = {
+        verbose = false,
+        on_ready = require("dap").continue,
+      }
+      require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
+    end),
+    {
+      nargs = 0,
+    }
+  )
 end
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())

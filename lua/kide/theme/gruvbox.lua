@@ -123,4 +123,11 @@ if not vim.g.transparent_mode then
   load_nvim_ui_highlights()
 end
 
+local load_win_bar_highlights = function()
+  M.load_highlights({
+    WinBar = { fg = colors.white, bg = colors.black },
+  })
+end
+load_win_bar_highlights()
+
 return M

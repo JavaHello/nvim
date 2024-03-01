@@ -114,6 +114,9 @@ require("lazy").setup({
     "nvimtools/none-ls.nvim",
     lazy = true,
     event = { "VeryLazy", "BufNewFile", "BufReadPost" },
+    dependencies = {
+      "gbprod/none-ls-shellcheck.nvim",
+    },
     config = function()
       require("kide.plugins.config.null-ls")
     end,
@@ -574,7 +577,6 @@ require("lazy").setup({
   },
   {
     "j-hui/fidget.nvim",
-    tag = "legacy",
     event = "LspAttach",
     opts = {
       -- options
@@ -979,7 +981,7 @@ require("lazy").setup({
       vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup("kide_vim_dadbod_completion", { clear = true }),
         pattern = { "sql", "mysql", "plsql" },
-        callback = function(event)
+        callback = function(_)
           require("cmp").setup.buffer({ sources = { { name = "vim-dadbod-completion" } } })
         end,
       })
@@ -997,7 +999,6 @@ require("lazy").setup({
   {
     "lalitmee/browse.nvim",
     lazy = true,
-    event = { "VeryLazy" },
     cmd = {
       "Browse",
     },
@@ -1145,7 +1146,7 @@ require("lazy").setup({
         return newVirtText
       end
       require("ufo").setup({
-        provider_selector = function(bufnr, filetype, buftype)
+        provider_selector = function(_, filetype, _)
           return ftMap[filetype] or customizeSelector
         end,
         fold_virt_text_handler = handler,
@@ -1227,6 +1228,11 @@ require("lazy").setup({
   -- chatgpt
   {
     "robitx/gp.nvim",
+    lazy = true,
+    cmd = {
+      "GpNew",
+      "GpChatNew",
+    },
     config = function()
       require("gp").setup({
         openai_api_endpoint = vim.env["OPENAI_API_ENDPOINT"],
@@ -1236,6 +1242,11 @@ require("lazy").setup({
   {
     "folke/todo-comments.nvim",
     lazy = true,
+    cmd = {
+      "TodoTelescope",
+      "TodoLocList",
+      "TodoQuickFix",
+    },
     config = function()
       require("todo-comments").setup({})
     end,
@@ -1261,6 +1272,26 @@ require("lazy").setup({
 	       \ 'TelescopePrompt': v:false,
 	     \ }
 			]])
+    end,
+  },
+  {
+    "Exafunction/codeium.vim",
+    event = "BufEnter",
+    enabled = config.plugin.codeium.enable,
+    config = function()
+      vim.g.codeium_disable_bindings = 1
+      vim.keymap.set("i", "<C-c>", function()
+        return vim.fn["codeium#Accept"]()
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-;>", function()
+        return vim.fn["codeium#CycleCompletions"](1)
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-,>", function()
+        return vim.fn["codeium#CycleCompletions"](-1)
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-x>", function()
+        return vim.fn["codeium#Clear"]()
+      end, { expr = true, silent = true })
     end,
   },
   {
@@ -1418,6 +1449,26 @@ require("lazy").setup({
       },
       directory = vim.fn.stdpath("data") .. "/leetcode/",
     },
+  },
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    event = "VeryLazy",
+    lazy = true,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      local harpoon = require("harpoon")
+
+      -- REQUIRED
+      harpoon:setup({})
+      -- REQUIRED
+      vim.keymap.set("n", "<leader>fa", function()
+        harpoon:list():append()
+      end, { desc = "Harpoon Append" })
+      vim.keymap.set("n", "<C-e>", function()
+        harpoon.ui:toggle_quick_menu(harpoon:list())
+      end)
+    end,
   },
 
   -- {
