@@ -165,12 +165,16 @@ require("lazy").setup({
       vim.g.gruvbox_material_diagnostic_text_highlight = 0
       vim.g.gruvbox_material_diagnostic_line_highlight = 1
       vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
-      vim.g.gruvbox_material_current_word = "underline"
+      vim.g.gruvbox_material_current_word = "grey background"
       vim.g.gruvbox_material_disable_terminal_colors = 1
       vim.g.gruvbox_material_statusline_style = "original"
       vim.g.gruvbox_material_lightline_disable_bold = 0
       -- gruvbox_material_colors_override
       vim.cmd([[colorscheme gruvbox-material]])
+
+      vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "Orange" })
+      -- #fe8019, #fabd2f
+      vim.api.nvim_set_hl(0, "CurrentWord", { fg = "#fe8019", ctermbg = 237, bg = "#3c3836", bold = true })
     end,
   },
 
