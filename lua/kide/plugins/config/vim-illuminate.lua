@@ -17,6 +17,7 @@ require("illuminate").configure({
     "vista_kind",
     "help",
     "terminal",
+    "term://*",
     "packer",
     "markdown",
     "git",
