@@ -165,12 +165,16 @@ require("lazy").setup({
       vim.g.gruvbox_material_diagnostic_text_highlight = 0
       vim.g.gruvbox_material_diagnostic_line_highlight = 1
       vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
-      vim.g.gruvbox_material_current_word = "underline"
+      vim.g.gruvbox_material_current_word = "grey background"
       vim.g.gruvbox_material_disable_terminal_colors = 1
       vim.g.gruvbox_material_statusline_style = "original"
       vim.g.gruvbox_material_lightline_disable_bold = 0
       -- gruvbox_material_colors_override
       vim.cmd([[colorscheme gruvbox-material]])
+
+      vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "Orange" })
+      -- #fe8019, #fabd2f
+      vim.api.nvim_set_hl(0, "CurrentWord", { fg = "#fe8019", ctermbg = 237, bg = "#3c3836", bold = true })
     end,
   },
 
@@ -1405,6 +1409,7 @@ require("lazy").setup({
     "nvim-neotest/neotest",
     lazy = true,
     dependencies = {
+      "nvim-neotest/nvim-nio",
       "nvim-lua/plenary.nvim",
       "antoinemadec/FixCursorHold.nvim",
       "nvim-treesitter/nvim-treesitter",
@@ -1492,6 +1497,21 @@ require("lazy").setup({
   --     })
   --   end,
   -- },
+
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "VeryLazy",
+    opts = {
+      hint_prefix = "󰏚 ",
+    },
+    config = function(_, opts)
+      require("lsp_signature").setup(opts)
+
+      vim.keymap.set({ "n" }, "<Leader>k", function()
+        vim.lsp.buf.signature_help()
+      end, { silent = true, noremap = true, desc = "toggle signature" })
+    end,
+  },
 }, {
   ui = {
     icons = {

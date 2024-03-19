@@ -17,6 +17,7 @@ require("illuminate").configure({
     "vista_kind",
     "help",
     "terminal",
+    "term://*",
     "packer",
     "markdown",
     "git",
@@ -49,3 +50,6 @@ require("illuminate").configure({
   -- under_cursor: whether or not to illuminate under the cursor
   under_cursor = true,
 })
+
+vim.keymap.set("n", "]r", require("illuminate").goto_next_reference, { desc = "Move to next reference" })
+vim.keymap.set("n", "[r", require("illuminate").goto_prev_reference, { desc = "Move to previous reference" })
