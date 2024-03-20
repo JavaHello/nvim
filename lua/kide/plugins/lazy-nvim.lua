@@ -824,6 +824,7 @@ require("lazy").setup({
 
   {
     "NTBBloodbath/rest.nvim",
+    dependencies = { "luarocks.nvim" },
     lazy = true,
     ft = "http",
     init = function()
