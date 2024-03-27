@@ -102,7 +102,7 @@ end)()
 -- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
 local rwdir = root_dir or vim.fn.getcwd()
-local workspace_dir = get_jdtls_workspace() .. require("kide.core.utils.md5").sumhexa(rwdir)
+local workspace_dir = get_jdtls_workspace() .. require("md5").sumhexa(rwdir)
 -- local jdtls_path = vscode.find_one("/redhat.java-*/server")
 local function get_jdtls_path()
   return or_default(env.JDTLS_HOME, vscode.find_one("/redhat.java-*/server"))
@@ -114,7 +114,6 @@ local function jdtls_launcher()
   elseif require("mason-registry").has_package("jdtls") then
     jdtls_path = require("mason-registry").get_package("jdtls"):get_install_path()
   end
-  local utils = require("kide.core.utils")
   local jdtls_config = nil
   if utils.is_mac then
     jdtls_config = "/config_mac"
