@@ -1513,6 +1513,11 @@ require("lazy").setup({
       "SudaRead",
     },
   },
+  {
+    "chrisbra/csv.vim",
+    lazy = true,
+    ft = { "csv" },
+  },
 }, {
   ui = {
     icons = {
