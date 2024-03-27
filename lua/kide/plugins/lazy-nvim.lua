@@ -1505,6 +1505,14 @@ require("lazy").setup({
       end, { silent = true, noremap = true, desc = "toggle signature" })
     end,
   },
+  {
+    "lambdalisue/suda.vim",
+    lazy = true,
+    cmd = {
+      "SudaWrite",
+      "SudaRead",
+    },
+  },
 }, {
   ui = {
     icons = {
