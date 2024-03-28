@@ -413,7 +413,6 @@ config["on_attach"] = function(client, buffer)
   -- TODO: 不知道为什么这个值一会有一会没有
   client.server_capabilities["definitionProvider"] = true
   -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
-  local opts = { silent = true, buffer = buffer }
   local function desc_opts(desc)
     return { silent = true, buffer = buffer, desc = desc }
   end
@@ -460,7 +459,7 @@ config["on_attach"] = function(client, buffer)
     with_compile(function()
       local main_config_opts = {
         verbose = false,
-        on_ready = require("dap").continue,
+        on_ready = require("dap")["continue"],
       }
       require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
     end),
