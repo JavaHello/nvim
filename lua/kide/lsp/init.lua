@@ -123,3 +123,66 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
   end,
 })
+
+local CLIENT_CACHE = {}
+local function clientCache(client_id)
+  if not CLIENT_CACHE[client_id] then
+    CLIENT_CACHE[client_id] = {
+      CursorHold = {},
+      CursorHoldI = {},
+      CursorMoved = {},
+    }
+  end
+  return CLIENT_CACHE[client_id]
+end
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+    if client.server_capabilities.documentHighlightProvider then
+      if not clientCache(args.data.client_id).CursorHold[bufnr] then
+        clientCache(args.data.client_id).CursorHold[bufnr] = vim.api.nvim_create_autocmd("CursorHold", {
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.buf.document_highlight()
+          end,
+        })
+      end
+      if not clientCache(args.data.client_id).CursorHoldI[bufnr] then
+        clientCache(args.data.client_id).CursorHoldI[bufnr] = vim.api.nvim_create_autocmd("CursorHoldI", {
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.buf.document_highlight()
+          end,
+        })
+      end
+      if not clientCache(args.data.client_id).CursorMoved[bufnr] then
+        clientCache(args.data.client_id).CursorMoved[bufnr] = vim.api.nvim_create_autocmd("CursorMoved", {
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.buf.clear_references()
+          end,
+        })
+      end
+    end
+  end,
+})
+vim.api.nvim_create_autocmd("LspDetach", {
+  callback = function(args)
+    local bufnr = args.buf
+    -- local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if clientCache(args.data.client_id).CursorHold[bufnr] then
+      vim.api.nvim_del_autocmd(clientCache(args.data.client_id).CursorHold[bufnr])
+      clientCache(args.data.client_id).CursorHold[bufnr] = nil
+    end
+    if clientCache(args.data.client_id).CursorHoldI[bufnr] then
+      vim.api.nvim_del_autocmd(clientCache(args.data.client_id).CursorHoldI[bufnr])
+      clientCache(args.data.client_id).CursorHoldI[bufnr] = nil
+    end
+    if clientCache(args.data.client_id).CursorMoved[bufnr] then
+      vim.api.nvim_del_autocmd(clientCache(args.data.client_id).CursorMoved[bufnr])
+      clientCache(args.data.client_id).CursorMoved[bufnr] = nil
+    end
+  end,
+})
