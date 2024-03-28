@@ -174,7 +174,7 @@ require("lazy").setup({
 
       vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "Orange" })
       -- #fe8019, #fabd2f
-      vim.api.nvim_set_hl(0, "CurrentWord", { fg = "#fe8019", ctermbg = 237, bg = "#3c3836", bold = true })
+      vim.api.nvim_set_hl(0, "CurrentWord", { fg = "#fe8019", ctermbg = 237, bg = nil, bold = true })
     end,
   },
 
@@ -528,15 +528,35 @@ require("lazy").setup({
     end,
   },
 
-  -- 多光标插件
   {
-    "mg979/vim-visual-multi",
+    "smoka7/hydra.nvim",
     lazy = true,
-    keys = {
-      { "<C-n>", mode = { "n", "x" }, desc = "visual multi" },
-    },
+    config = function()
+      require("kide.theme.gruvbox").load_hydra_highlights()
+    end,
   },
 
+  -- 多光标插件
+  {
+    "smoka7/multicursors.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "smoka7/hydra.nvim",
+    },
+    cmd = { "MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor" },
+    keys = {
+      {
+        mode = { "v", "n" },
+        "<Leader>m",
+        "<cmd>MCstart<cr>",
+        desc = "Create a selection for selected text or word under the cursor",
+      },
+    },
+    config = function()
+      require("multicursors").setup({})
+      require("kide.theme.gruvbox").load_multi_cursor_highlights()
+    end,
+  },
   -- 状态栏插件
   {
     "nvim-lualine/lualine.nvim",

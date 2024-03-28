@@ -1,3 +1,15 @@
+local function is_active()
+  local ok, hydra = pcall(require, "hydra.statusline")
+  return ok and hydra.is_active()
+end
+
+local function get_name()
+  local ok, hydra = pcall(require, "hydra.statusline")
+  if ok then
+    return hydra.get_name()
+  end
+  return ""
+end
 local config = {
   options = {
     icons_enabled = true,
@@ -11,7 +23,12 @@ local config = {
   },
   sections = {
     lualine_a = { "mode" },
-    lualine_b = { "branch", "diff", "diagnostics" },
+    lualine_b = {
+      "branch",
+      "diff",
+      "diagnostics",
+      { get_name, cond = is_active },
+    },
     -- lualine_c = {'filename', 'lsp_progress'},
     lualine_c = {
       {
