@@ -590,34 +590,13 @@ require("lazy").setup({
     end,
   },
 
-  {
-    "smoka7/hydra.nvim",
-    lazy = true,
-    config = function()
-      require("kide.theme.gruvbox").load_hydra_highlights()
-    end,
-  },
-
   -- 多光标插件
   {
-    "smoka7/multicursors.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "smoka7/hydra.nvim",
-    },
-    cmd = { "MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor" },
+    "mg979/vim-visual-multi",
+    lazy = true,
     keys = {
-      {
-        mode = { "v", "n" },
-        "<Leader>m",
-        "<cmd>MCstart<cr>",
-        desc = "Create a selection for selected text or word under the cursor",
-      },
+      { "<C-n>", mode = { "n", "x" }, desc = "visual multi" },
     },
-    config = function()
-      require("multicursors").setup({})
-      require("kide.theme.gruvbox").load_multi_cursor_highlights()
-    end,
   },
   -- 状态栏插件
   {
@@ -1101,6 +1080,9 @@ require("lazy").setup({
   {
     "anuvyklack/hydra.nvim",
     lazy = true,
+    config = function()
+      require("kide.theme.gruvbox").load_hydra_highlights()
+    end,
   },
 
   -- 代码状态栏导航
