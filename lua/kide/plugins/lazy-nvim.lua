@@ -1372,7 +1372,14 @@ require("lazy").setup({
         vim.notify("CopilotChat - Updated remote plugins. Please restart Neovim.")
       end, 3000)
     end,
-    event = "VeryLazy",
+    lazy = true,
+    cmd = {
+      "CopilotChat",
+      "CopilotChatExplain",
+      "CopilotChatTests",
+      "CopilotChatReview",
+      "CopilotChatRefactor",
+    },
     keys = {
       { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
       { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
