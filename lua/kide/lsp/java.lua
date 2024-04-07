@@ -404,15 +404,6 @@ local function test_with_profile(test_fn)
 end
 
 config["on_attach"] = function(client, buffer)
-  -- client.server_capabilities.semanticTokensProvider = nil
-  -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
-  -- you make during a debug session immediately.
-  -- Remove the option if you do not want that.
-  require("jdtls").setup_dap({ hotcodereplace = "auto" })
-  require("jdtls.setup").add_commands()
-  -- TODO: 不知道为什么这个值一会有一会没有
-  client.server_capabilities["definitionProvider"] = true
-  -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
   local function desc_opts(desc)
     return { silent = true, buffer = buffer, desc = desc }
   end
@@ -491,14 +482,15 @@ config.handlers = {}
 config.handlers["language/status"] = function(_, s)
   -- 使用 progress 查看状态
   -- print("jdtls " .. s.type .. ": " .. s.message)
-  if "ServiceReady" == s.type then
-    require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
-  end
+  -- ServiceReady 不能用来判断是否完全启动
+  -- if "ServiceReady" == s.type then
+  --   require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
+  -- end
 end
 
 M.config = config
 M.start = function(_)
-  jdtls.start_or_attach(config)
+  jdtls.start_or_attach(config, { dap = { hotcodereplace = "auto" } })
 end
 
 M.setup = function(opts)
