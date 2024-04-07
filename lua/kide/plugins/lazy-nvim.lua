@@ -1171,7 +1171,8 @@ require("lazy").setup({
           end
         end
 
-        return require("ufo").getFolds(bufnr, "lsp")
+        return require("ufo")
+          .getFolds(bufnr, "lsp")
           :catch(function(err)
             return handleFallbackException(err, "treesitter")
           end)
@@ -1567,6 +1568,7 @@ require("lazy").setup({
     event = "VeryLazy",
     opts = {
       hint_prefix = "󰏚 ",
+      cursorhold_update = false,
     },
     config = function(_, opts)
       require("lsp_signature").setup(opts)
