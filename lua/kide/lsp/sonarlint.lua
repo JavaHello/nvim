@@ -1,5 +1,8 @@
 local M = {}
 M.setup = function(opt)
+  if not ("Y" == vim.env["SONARLINT_ENABLE"]) then
+    return
+  end
   local vscode = require("kide.core.vscode")
   local sonarlint_ls = vscode.find_one("/sonarsource.sonarlint-vscode*/server/sonarlint-ls.jar")
   local analyzer_java = vscode.find_one("/sonarsource.sonarlint-vscode*/analyzers/sonarjava.jar")
