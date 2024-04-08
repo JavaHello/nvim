@@ -1171,8 +1171,7 @@ require("lazy").setup({
           end
         end
 
-        return require("ufo")
-          .getFolds(bufnr, "lsp")
+        return require("ufo").getFolds(bufnr, "lsp")
           :catch(function(err)
             return handleFallbackException(err, "treesitter")
           end)
@@ -1358,13 +1357,16 @@ require("lazy").setup({
   },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      "github/copilot.vim",
+      "nvim-lua/plenary.nvim",
+    },
     opts = {
-      mode = "split",
       prompts = {
-        Explain = "Explain how it works. Answer in Chinese",
-        Review = "Review the following code and provide concise suggestions. Answer in Chinese",
-        Tests = "Briefly explain how the selected code works, then generate unit tests. Answer in Chinese",
-        Refactor = "Refactor the code to improve clarity and readability. Answer in Chinese",
+        Explain = {
+          prompt = "/COPILOT_EXPLAIN Write an explanation for the code above as paragraphs of text. Answer in Chinese",
+        },
       },
     },
     build = function()
@@ -1373,20 +1375,7 @@ require("lazy").setup({
         vim.notify("CopilotChat - Updated remote plugins. Please restart Neovim.")
       end, 3000)
     end,
-    lazy = true,
-    cmd = {
-      "CopilotChat",
-      "CopilotChatExplain",
-      "CopilotChatTests",
-      "CopilotChatReview",
-      "CopilotChatRefactor",
-    },
-    keys = {
-      { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
-      { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
-      { "<leader>ccr", "<cmd>CopilotChatReview<cr>", desc = "CopilotChat - Review code" },
-      { "<leader>ccR", "<cmd>CopilotChatRefactor<cr>", desc = "CopilotChat - Refactor code" },
-    },
+    event = "VeryLazy",
   },
 
   {

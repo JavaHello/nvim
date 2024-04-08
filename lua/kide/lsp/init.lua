@@ -25,6 +25,7 @@ local server_configs = {
   rime_ls = require("kide.lsp.rime_ls"),
   sourcekit = require("kide.lsp.sourcekit"),
   sonarlint = require("kide.lsp.sonarlint"),
+  spring_boot = require("kide.lsp.spring_boot"),
   taplo = {
     setup = function(cfg)
       require("lspconfig").taplo.setup(cfg)

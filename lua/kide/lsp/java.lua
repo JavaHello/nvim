@@ -215,6 +215,15 @@ if vscode_pde_path then
   vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
 end
 
+local spring_boot_path = vscode.find_one("/vmware.vscode-spring-boot-*/jars")
+if spring_boot_path then
+  for _, bundle in ipairs(vim.split(vim.fn.glob(spring_boot_path .. "/*.jar"), "\n")) do
+    if not vim.endswith(bundle, "xml-ls-extension.jar") and not vim.endswith(bundle, "commons-lsp-extensions.jar") then
+      table.insert(bundles, bundle)
+    end
+  end
+end
+
 -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
 local config = {
@@ -464,10 +473,15 @@ config["on_attach"] = function(client, buffer)
 end
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-capabilities.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true,
-}
+if capabilities.textDocument.foldingRange then
+  capabilities.textDocument.foldingRange.dynamicRegistration = false
+  capabilities.textDocument.foldingRange.lineFoldingOnly = true
+else
+  capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true,
+  }
+end
 -- capabilities.experimental = {
 --   hoverActions = true,
 --   hoverRange = true,
@@ -489,6 +503,9 @@ config.handlers["language/status"] = function(_, s)
   -- if "ServiceReady" == s.type then
   --   require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
   -- end
+  if "ServiceReady" == s.type then
+    require("kide.lsp.spring_boot").setup({}, "jdtls")
+  end
 end
 
 M.config = config
