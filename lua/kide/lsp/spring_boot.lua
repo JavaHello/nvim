@@ -1,8 +1,11 @@
 local vscode = require("kide.core.vscode")
 local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" }) or vim.loop.cwd()
+local bootls_path = vscode.find_one("/vmware.vscode-spring-boot-*/language-server")
 
 local function spring_boot_ls_launcher()
-  local bootls_path = vscode.find_one("/vmware.vscode-spring-boot-*/language-server")
+  if not bootls_path then
+    return
+  end
   local classpath = {}
   table.insert(classpath, bootls_path .. "/BOOT-INF/classes")
   table.insert(classpath, bootls_path .. "/BOOT-INF/lib/*")
@@ -12,16 +15,12 @@ local function spring_boot_ls_launcher()
     "-XX:TieredStopAtLevel=1",
     "-Xmx1G",
     "-XX:+UseZGC",
-    "--add-modules=ALL-SYSTEM",
-    "--add-opens",
-    "java.base/java.util=ALL-UNNAMED",
-    "--add-opens",
-    "java.base/java.lang=ALL-UNNAMED",
     "-cp",
     table.concat(classpath, ":"),
     "-Dsts.lsp.client=vscode",
     "-Dsts.log.file=" .. root_dir .. "/.spring-boot-ls.log",
     "-Dspring.config.location=file:" .. bootls_path .. "/BOOT-INF/classes/application.properties",
+    "-Dlogging.level.org.springframework=DEBUG",
     "org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp",
   }
 
@@ -36,7 +35,7 @@ local config = {
   root_dir = root_dir,
   init_options = {
     workspaceFolders = root_dir,
-    enableJdtClasspath = true,
+    enableJdtClasspath = false,
   },
   settings = {
     spring_boot = {},
@@ -45,7 +44,17 @@ local config = {
 }
 
 config["on_attach"] = function(client, buffer)
-  print("Attaching to spring-boot")
+end
+
+config["on_init"] = function(client, _)
+  client.request("workspace/executeCommand", {
+    command = "sts.vscode-spring-boot.enableClasspathListening",
+    arguments = { true },
+  }, function(err, _)
+    if err then
+      vim.notify("Error enabling classpath listening", vim.log.levels.ERROR)
+    end
+  end, 0)
 end
 
 --[[
@@ -60,18 +69,14 @@ end
                   :no-wait t))))
 ]]
 config.handlers["sts/addClasspathListener"] = function(_, result)
-  print("sts/addClasspathListener")
-  print(vim.inspect(result))
   local err, resp = require("kide.lsp.utils.jdtls").execute_command({
     command = "sts.java.addClasspathListener",
     arguments = { result.callbackCommandId },
-  }, nil, 0)
+  }, nil)
   if err then
-    print("Error executing command")
-    print(vim.inspect(err))
+    vim.notify("Error adding classpath listener", vim.log.levels.ERROR)
   end
-  print(vim.inspect(resp))
-  return err, resp
+  return resp
 end
 
 config.handlers["sts/removeClasspathListener"] = function(_, result)
@@ -107,6 +112,16 @@ config.handlers["sts/javaSuperTypes"] = function(err, result, ctx, config)
 end
 config.handlers["sts/highlight"] = function() end
 
+config.handlers["sts/javaCodeComplete"] = function(err, result, ctx, config)
+  print("sts/javaCodeComplete")
+  print(vim.inspect(result))
+end
+
+config.handlers["sts/javaType"] = function(err, result, ctx, config)
+  print("sts/javaType")
+  print(vim.inspect(result))
+end
+
 local M = {}
 local initialized = false
 M.setup = function(opts, mode)
@@ -117,6 +132,10 @@ M.setup = function(opts, mode)
     return
   end
   initialized = true
+  if not bootls_path then
+    return
+  end
+
   config.flags = opts.flags
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())

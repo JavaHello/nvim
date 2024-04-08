@@ -118,6 +118,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     local bufnr = args.buf
     local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client.name == "spring-boot" then
+      return
+    end
     if client.server_capabilities.documentSymbolProvider then
       vim.opt_local.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
       require("nvim-navic").attach(client, bufnr)
