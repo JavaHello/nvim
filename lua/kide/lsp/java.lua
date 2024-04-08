@@ -187,7 +187,10 @@ local vscode_java_test_path = (function()
 end)()
 if vscode_java_test_path then
   for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
-    if not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar") then
+    if
+      not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar")
+      and not vim.endswith(bundle, "jacocoagent.jar")
+    then
       table.insert(bundles, bundle)
     end
   end
