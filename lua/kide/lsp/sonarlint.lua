@@ -1,35 +1,34 @@
 local M = {}
-M.setup = function(opt)
-  if not ("Y" == vim.env["SONARLINT_ENABLE"]) then
-    return
-  end
-  local vscode = require("kide.core.vscode")
-  local sonarlint_ls = vscode.find_one("/sonarsource.sonarlint-vscode*/server/sonarlint-ls.jar")
-  local analyzer_java = vscode.find_one("/sonarsource.sonarlint-vscode*/analyzers/sonarjava.jar")
-  if not sonarlint_ls then
-    vim.notify("sonarlint-ls.jar not found", vim.log.levels.WARN)
-    return
-  end
-  if not analyzer_java then
-    vim.notify("sonarjava.jar not found", vim.log.levels.WARN)
-    return
-  end
 
-  local cmd = {
-    "java",
-    "-jar",
-    sonarlint_ls,
-    "-stdio",
-    "-analyzers",
-    analyzer_java,
-  }
-  require("sonarlint").setup({
-    server = {
-      cmd = cmd,
-    },
-    filetypes = {
-      "java",
-    },
-  })
+if "Y" == vim.env["SONARLINT_ENABLE"] then
+  M.setup = function()
+    local vscode = require("kide.core.vscode")
+    local utils = require("kide.core.utils")
+    local sonarlint_ls = vscode.find_one("/sonarsource.sonarlint-vscode*/server/sonarlint-ls.jar")
+    if not sonarlint_ls then
+      vim.notify("sonarlint not found", vim.log.levels.WARN)
+      return
+    end
+    local analyzer_path = vscode.find_one("/sonarsource.sonarlint-vscode*/analyzers")
+
+    local analyzer_jar = vim.split(vim.fn.glob(analyzer_path .. "/*.jar"), "\n")
+
+    local cmd = {
+      utils.java_bin(),
+      "-jar",
+      sonarlint_ls,
+      "-stdio",
+      "-analyzers",
+    }
+    vim.list_extend(cmd, analyzer_jar)
+    require("sonarlint").setup({
+      server = {
+        cmd = cmd,
+      },
+      filetypes = {
+        "java",
+      },
+    })
+  end
 end
 return M
