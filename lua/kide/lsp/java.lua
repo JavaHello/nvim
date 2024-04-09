@@ -102,7 +102,7 @@ end)()
 -- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
 local rwdir = root_dir or vim.fn.getcwd()
-local workspace_dir = get_jdtls_workspace() .. require("kide.core.utils.md5").sumhexa(rwdir)
+local workspace_dir = get_jdtls_workspace() .. require("md5").sumhexa(rwdir)
 -- local jdtls_path = vscode.find_one("/redhat.java-*/server")
 local function get_jdtls_path()
   return or_default(env.JDTLS_HOME, vscode.find_one("/redhat.java-*/server"))
@@ -114,7 +114,6 @@ local function jdtls_launcher()
   elseif require("mason-registry").has_package("jdtls") then
     jdtls_path = require("mason-registry").get_package("jdtls"):get_install_path()
   end
-  local utils = require("kide.core.utils")
   local jdtls_config = nil
   if utils.is_mac then
     jdtls_config = "/config_mac"
@@ -188,7 +187,10 @@ local vscode_java_test_path = (function()
 end)()
 if vscode_java_test_path then
   for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
-    if not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar") then
+    if
+      not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar")
+      and not vim.endswith(bundle, "jacocoagent.jar")
+    then
       table.insert(bundles, bundle)
     end
   end
@@ -209,8 +211,17 @@ if java_dependency_path then
 end
 
 local vscode_pde_path = vscode.find_one("/yaozheng.vscode-pde-*/server")
-if vscode_pde_path then
+if vscode_pde_path and "Y" == vim.env["VSCODE_PDE_ENABLE"] then
   vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
+end
+
+local spring_boot_path = vscode.find_one("/vmware.vscode-spring-boot-*/jars")
+if spring_boot_path then
+  for _, bundle in ipairs(vim.split(vim.fn.glob(spring_boot_path .. "/*.jar"), "\n")) do
+    if not vim.endswith(bundle, "xml-ls-extension.jar") and not vim.endswith(bundle, "commons-lsp-extensions.jar") then
+      table.insert(bundles, bundle)
+    end
+  end
 end
 
 -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
@@ -328,6 +339,10 @@ local config = {
   --   workspace = workspace_dir
   -- },
 }
+config.commands = {}
+config.commands["_java.reloadBundles.command"] = function()
+  return {}
+end
 
 local jdtls = require("jdtls")
 jdtls.jol_path = get_jol_jar()
@@ -405,16 +420,6 @@ local function test_with_profile(test_fn)
 end
 
 config["on_attach"] = function(client, buffer)
-  -- client.server_capabilities.semanticTokensProvider = nil
-  -- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
-  -- you make during a debug session immediately.
-  -- Remove the option if you do not want that.
-  require("jdtls").setup_dap({ hotcodereplace = "auto" })
-  require("jdtls.setup").add_commands()
-  -- TODO: 不知道为什么这个值一会有一会没有
-  client.server_capabilities["definitionProvider"] = true
-  -- require('jdtls.dap').setup_dap_main_class_configs({ verbose = true })
-  local opts = { silent = true, buffer = buffer }
   local function desc_opts(desc)
     return { silent = true, buffer = buffer, desc = desc }
   end
@@ -461,7 +466,7 @@ config["on_attach"] = function(client, buffer)
     with_compile(function()
       local main_config_opts = {
         verbose = false,
-        on_ready = require("dap").continue,
+        on_ready = require("dap")["continue"],
       }
       require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
     end),
@@ -472,10 +477,15 @@ config["on_attach"] = function(client, buffer)
 end
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-capabilities.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true,
-}
+if capabilities.textDocument.foldingRange then
+  capabilities.textDocument.foldingRange.dynamicRegistration = false
+  capabilities.textDocument.foldingRange.lineFoldingOnly = true
+else
+  capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true,
+  }
+end
 -- capabilities.experimental = {
 --   hoverActions = true,
 --   hoverRange = true,
@@ -493,14 +503,29 @@ config.handlers = {}
 config.handlers["language/status"] = function(_, s)
   -- 使用 progress 查看状态
   -- print("jdtls " .. s.type .. ": " .. s.message)
-  if "ServiceReady" == s.type then
-    require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
+  -- ServiceReady 不能用来判断是否完全启动
+  -- if "ServiceReady" == s.type then
+  --   require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
+  -- end
+end
+
+config["on_init"] = function(client, _)
+  local boot_client = vim.lsp.get_active_clients({ name = "spring-boot" })
+  if boot_client and #boot_client > 0 then
+    boot_client[1].request("workspace/executeCommand", {
+      command = "sts.vscode-spring-boot.enableClasspathListening",
+      arguments = { true },
+    }, function(err, _)
+      if err then
+        vim.notify("Error enabling classpath listening", vim.log.levels.ERROR)
+      end
+    end, 0)
   end
 end
 
 M.config = config
 M.start = function(_)
-  jdtls.start_or_attach(config)
+  jdtls.start_or_attach(config, { dap = { hotcodereplace = "auto" } })
 end
 
 M.setup = function(opts)

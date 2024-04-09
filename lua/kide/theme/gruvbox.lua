@@ -130,4 +130,25 @@ local load_win_bar_highlights = function()
 end
 load_win_bar_highlights()
 
+M.load_hydra_highlights = function()
+  local bg
+  if not vim.g.transparent_mode then
+    bg = colors.black3
+  end
+  M.load_highlights({
+    HydraHint = { bg = bg },
+    HydraRed = { fg = colors.red },
+    HydraBlue = { fg = colors.blue },
+    HydraAmaranth = { fg = colors.red },
+    HydraTeal = { fg = colors.green },
+    HydraPink = { fg = colors.red },
+  })
+end
+M.load_multi_cursor_highlights = function()
+  M.load_highlights({
+    MultiCursor = { fg = "#ebdbb2", bg = "#cc241d" },
+    MultiCursorMain = { fg = "#fbf1c7", bg = "#9d0006" },
+  })
+end
+
 return M

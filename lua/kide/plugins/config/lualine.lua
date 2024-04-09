@@ -11,7 +11,11 @@ local config = {
   },
   sections = {
     lualine_a = { "mode" },
-    lualine_b = { "branch", "diff", "diagnostics" },
+    lualine_b = {
+      "branch",
+      "diff",
+      "diagnostics",
+    },
     -- lualine_c = {'filename', 'lsp_progress'},
     lualine_c = {
       {

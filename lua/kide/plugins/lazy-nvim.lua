@@ -43,7 +43,67 @@ require("lazy").setup({
     dependencies = { "rafamadriz/friendly-snippets" },
     build = "make install_jsregexp",
     config = function()
-      require("kide.plugins.config.luasnip")
+      local ls = require("luasnip")
+
+      local s = ls.snippet
+      local t = ls.text_node
+      local types = require("luasnip.util.types")
+
+      -- Every unspecified option will be set to the default.
+      ls.config.set_config({
+        history = true,
+        -- Update more often, :h events for more info.
+        updateevents = "TextChanged,TextChangedI",
+        delete_check_events = "TextChanged",
+        ext_opts = {
+          [types.choiceNode] = {
+            active = {
+              virt_text = { { "●", "GruvboxOrange" } },
+            },
+          },
+          [types.insertNode] = {
+            active = {
+              virt_text = { { "●", "GruvboxBlue" } },
+            },
+          },
+        },
+
+        -- treesitter-hl has 100, use something higher (default is 200).
+        ext_base_prio = 300,
+        -- minimal increase in priority.
+        ext_prio_increase = 1,
+        enable_autosnippets = true,
+        -- mapping for cutting selected text so it's usable as SELECT_DEDENT,
+        -- SELECT_RAW or TM_SELECTED_TEXT (mapped via xmap).
+        store_selection_keys = "<Tab>",
+        -- luasnip uses this function to get the currently active filetype. This
+        -- is the (rather uninteresting) default, but it's possible to use
+        -- eg. treesitter for getting the current filetype by setting ft_func to
+        -- require("luasnip.extras.filetype_functions").from_cursor (requires
+        -- `nvim-treesitter/nvim-treesitter`). This allows correctly resolving
+        -- the current filetype in eg. a markdown-code block or `vim.cmd()`.
+        ft_func = function()
+          return vim.split(vim.bo.filetype, ".", { plain = true })
+        end,
+      })
+
+      -- autotriggered snippets have to be defined in a separate table, luasnip.autosnippets.
+      ls.autosnippets = {
+        all = {
+          s("autotrigger", {
+            t("autosnippet"),
+          }),
+        },
+      }
+
+      -- in a lua file: search lua-, then c-, then all-snippets.
+      ls.filetype_extend("lua", { "c" })
+      -- in a cpp file: search c-snippets, then all-snippets only (no cpp-snippets!!).
+      ls.filetype_set("cpp", { "c" })
+
+      -- require("luasnip.loaders.from_vscode").lazy_load()
+
+      require("kide.snippets").setup()
     end,
   },
   {
@@ -174,7 +234,7 @@ require("lazy").setup({
 
       vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "Orange" })
       -- #fe8019, #fabd2f
-      vim.api.nvim_set_hl(0, "CurrentWord", { fg = "#fe8019", ctermbg = 237, bg = "#3c3836", bold = true })
+      vim.api.nvim_set_hl(0, "CurrentWord", { fg = "#fe8019", ctermbg = 237, bg = nil, bold = true })
     end,
   },
 
@@ -214,6 +274,8 @@ require("lazy").setup({
         ensure_installed = {
           "markdown",
         },
+        modules = {},
+        auto_install = true,
         sync_install = false,
         ignore_install = {},
 
@@ -469,6 +531,24 @@ require("lazy").setup({
       require("kide.plugins.config.gitsigns-nvim")
     end,
   },
+  {
+    "SuperBo/fugit2.nvim",
+    opts = {},
+    enabled = false,
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-tree/nvim-web-devicons",
+      "nvim-lua/plenary.nvim",
+      {
+        "chrisgrieser/nvim-tinygit", -- optional: for Github PR view
+        dependencies = { "stevearc/dressing.nvim" },
+      },
+    },
+    cmd = { "Fugit2", "Fugit2Graph" },
+    keys = {
+      { "<leader>F", mode = "n", "<cmd>Fugit2<cr>" },
+    },
+  },
 
   -- 浮动窗口插件
   {
@@ -518,7 +598,6 @@ require("lazy").setup({
       { "<C-n>", mode = { "n", "x" }, desc = "visual multi" },
     },
   },
-
   -- 状态栏插件
   {
     "nvim-lualine/lualine.nvim",
@@ -821,46 +900,21 @@ require("lazy").setup({
     "simrat39/rust-tools.nvim",
     lazy = true,
   },
-
   {
-    "NTBBloodbath/rest.nvim",
+    "vhyrro/luarocks.nvim",
+    priority = 1000,
+    opt = {
+      rocks = { "md5" },
+    },
+    config = true,
+  },
+  {
+    "rest-nvim/rest.nvim",
+    dependencies = { "luarocks.nvim" },
     lazy = true,
     ft = "http",
-    init = function()
-      local group = vim.api.nvim_create_augroup("kide_jdtls_rest_http", { clear = true })
-      vim.api.nvim_create_autocmd({ "FileType" }, {
-        group = group,
-        pattern = { "http" },
-        callback = function(o)
-          vim.api.nvim_buf_create_user_command(o.buf, "Http", ":lua require'rest-nvim'.run()", { nargs = 0 })
-          vim.api.nvim_buf_create_user_command(o.buf, "HttpCurl", ":lua require'rest-nvim'.run(true)", { nargs = 0 })
-          vim.api.nvim_buf_create_user_command(o.buf, "HttpLast", ":lua require'rest-nvim'.last()", { nargs = 0 })
-        end,
-      })
-    end,
     config = function()
-      require("rest-nvim").setup({
-        -- Open request results in a horizontal split
-        result_split_horizontal = false,
-        -- Skip SSL verification, useful for unknown certificates
-        skip_ssl_verification = false,
-        -- Highlight request on run
-        highlight = {
-          enabled = true,
-          timeout = 150,
-        },
-        result = {
-          -- toggle showing URL, HTTP info, headers at top the of result window
-          show_url = true,
-          show_http_info = true,
-          show_headers = true,
-        },
-        -- Jump to request line on run
-        jump_to_request = false,
-        env_file = ".env",
-        custom_dynamic_variables = {},
-        yank_dry_run = true,
-      })
+      require("rest-nvim").setup({})
     end,
   },
 
@@ -1026,6 +1080,9 @@ require("lazy").setup({
   {
     "anuvyklack/hydra.nvim",
     lazy = true,
+    config = function()
+      require("kide.theme.gruvbox").load_hydra_highlights()
+    end,
   },
 
   -- 代码状态栏导航
@@ -1300,13 +1357,16 @@ require("lazy").setup({
   },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      "github/copilot.vim",
+      "nvim-lua/plenary.nvim",
+    },
     opts = {
-      mode = "split",
       prompts = {
-        Explain = "Explain how it works. Answer in Chinese",
-        Review = "Review the following code and provide concise suggestions. Answer in Chinese",
-        Tests = "Briefly explain how the selected code works, then generate unit tests. Answer in Chinese",
-        Refactor = "Refactor the code to improve clarity and readability. Answer in Chinese",
+        Explain = {
+          prompt = "/COPILOT_EXPLAIN Write an explanation for the code above as paragraphs of text. Answer in Chinese",
+        },
       },
     },
     build = function()
@@ -1316,12 +1376,6 @@ require("lazy").setup({
       end, 3000)
     end,
     event = "VeryLazy",
-    keys = {
-      { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
-      { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
-      { "<leader>ccr", "<cmd>CopilotChatReview<cr>", desc = "CopilotChat - Review code" },
-      { "<leader>ccR", "<cmd>CopilotChatRefactor<cr>", desc = "CopilotChat - Refactor code" },
-    },
   },
 
   {
@@ -1503,6 +1557,7 @@ require("lazy").setup({
     event = "VeryLazy",
     opts = {
       hint_prefix = "󰏚 ",
+      cursorhold_update = false,
     },
     config = function(_, opts)
       require("lsp_signature").setup(opts)
@@ -1511,6 +1566,19 @@ require("lazy").setup({
         vim.lsp.buf.signature_help()
       end, { silent = true, noremap = true, desc = "toggle signature" })
     end,
+  },
+  {
+    "lambdalisue/suda.vim",
+    lazy = true,
+    cmd = {
+      "SudaWrite",
+      "SudaRead",
+    },
+  },
+  {
+    "chrisbra/csv.vim",
+    lazy = true,
+    ft = { "csv" },
   },
 }, {
   ui = {

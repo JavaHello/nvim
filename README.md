@@ -82,6 +82,12 @@ git clone  https://github.com/JavaHello/nvim.git
 - 如果使用长时间后感觉卡顿，关闭下所有`buffer`, `:%bw`。
 - 搜索依赖`jar`包`class`很慢的问题。在搜索框输入会频繁的请求`LSP server`导致内存和`CPU`提升,通常需要好几秒才会返回结果。建议复制类名称到搜索框，或者选择类名后按下`<leader>fs`, 这样会很快搜索出相关的`class`。
 
+### Spring Boot LS
+
+依赖 vscode 插件 [VScode Spring Boot](https://marketplace.visualstudio.com/items?itemName=vmware.vscode-spring-boot),需要添加环境变量 `SPRING_BOOT_LS_ENABLE=Y`
+
+- [x] 查找`symbols`,`bean`定义，`bean`引用，`bean`实现等。
+
 ### 功能演示
 
 <details>
@@ -142,6 +148,11 @@ git clone  https://github.com/JavaHello/nvim.git
 <details>
 <summary>Maven(pom.xml 自动补全)</summary>
   <img width="700" alt="Debug" src="https://javahello.github.io/dev/nvim-lean/images/maven.png">
+</details>
+
+<details>
+<summary>查找 Spring Boot symbols</summary>
+  <img width="700" alt="Debug" src="https://javahello.github.io/dev/nvim-lean/images/spring-boot.png">
 </details>
 
 ## 我的 VIM 插件列表

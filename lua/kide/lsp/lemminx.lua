@@ -1,5 +1,6 @@
 local M = {}
 local lemminx_home = vim.env["LEMMINX_HOME"]
+
 if lemminx_home then
   M.setup = function(opt)
     local lspconfig = require("lspconfig")
@@ -13,7 +14,7 @@ if lemminx_home then
 
     local config = vim.tbl_deep_extend("keep", {
       cmd = {
-        "java",
+        utils.java_bin(),
         "-cp",
         vim.fn.join(lemminx_jars, ":"),
         "org.eclipse.lemminx.XMLServerLauncher",
