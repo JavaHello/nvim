@@ -4,6 +4,7 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
   local vscode = require("kide.core.vscode")
   local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" }) or vim.loop.cwd()
   local bootls_path = vscode.find_one("/vmware.vscode-spring-boot-*/language-server")
+  local utils = require("kide.core.utils")
 
   local function spring_boot_ls_launcher()
     if not bootls_path then
@@ -14,12 +15,12 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
     table.insert(classpath, bootls_path .. "/BOOT-INF/lib/*")
 
     local cmd = {
-      "java",
+      utils.java_bin(),
       "-XX:TieredStopAtLevel=1",
       "-Xmx1G",
       "-XX:+UseZGC",
       "-cp",
-      table.concat(classpath, ":"),
+      table.concat(classpath, utils.is_win and ";" or ":"),
       "-Dsts.lsp.client=vscode",
       "-Dsts.log.file=" .. root_dir .. "/.spring-boot-ls.log",
       "-Dspring.config.location=file:" .. bootls_path .. "/BOOT-INF/classes/application.properties",
@@ -198,4 +199,5 @@ end
 -- 参考资料
 -- https://github.com/spring-projects/sts4/issues/76
 -- https://github.com/spring-projects/sts4/issues/1128
+-- https://github.com/emacs-lsp/lsp-java/blob/master/lsp-java-boot.el
 return M
