@@ -211,7 +211,7 @@ if java_dependency_path then
 end
 
 local vscode_pde_path = vscode.find_one("/yaozheng.vscode-pde-*/server")
-if vscode_pde_path then
+if vscode_pde_path and "Y" == vim.env["VSCODE_PDE_ENABLE"] then
   vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
 end
 
@@ -339,6 +339,10 @@ local config = {
   --   workspace = workspace_dir
   -- },
 }
+config.commands = {}
+config.commands["_java.reloadBundles.command"] = function()
+  return {}
+end
 
 local jdtls = require("jdtls")
 jdtls.jol_path = get_jol_jar()
@@ -503,8 +507,19 @@ config.handlers["language/status"] = function(_, s)
   -- if "ServiceReady" == s.type then
   --   require("jdtls.dap").setup_dap_main_class_configs({ verbose = true })
   -- end
-  if "ServiceReady" == s.type then
-    require("kide.lsp.spring_boot").setup({}, "jdtls")
+end
+
+config["on_init"] = function(client, _)
+  local boot_client = vim.lsp.get_active_clients({ name = "spring-boot" })
+  if boot_client and #boot_client > 0 then
+    boot_client[1].request("workspace/executeCommand", {
+      command = "sts.vscode-spring-boot.enableClasspathListening",
+      arguments = { true },
+    }, function(err, _)
+      if err then
+        vim.notify("Error enabling classpath listening", vim.log.levels.ERROR)
+      end
+    end, 0)
   end
 end
 
