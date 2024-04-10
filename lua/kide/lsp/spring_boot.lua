@@ -83,12 +83,12 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
   }
 
   config["on_attach"] = function(client, buffer)
-    local filename = vim.api.nvim_buf_get_name(buffer)
-    if is_application_properties_file(filename) or is_application_yml_file(filename) then
-      client.server_capabilities.hoverProvider = true
-    else
-      client.server_capabilities.hoverProvider = false
-    end
+    -- local filename = vim.api.nvim_buf_get_name(buffer)
+    -- if is_application_properties_file(filename) or is_application_yml_file(filename) then
+    --   client.server_capabilities.hoverProvider = true
+    -- else
+    --   client.server_capabilities.hoverProvider = false
+    -- end
   end
 
   config["on_init"] = function(client, _)
@@ -174,6 +174,10 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
   end
 
   config.handlers["sts/javaLocation"] = function(err, result, ctx, config)
+    if err then
+      vim.notify("Error getting java location", vim.log.levels.ERROR)
+      return
+    end
     return jdtls_execute_command("sts.java.location", result)
   end
 
@@ -193,8 +197,11 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
   end
 
   config.handlers["sts/javaSubTypes"] = function(err, result, ctx, config)
-    print("sts/javaSubTypes")
-    print(vim.inspect(result))
+    if err then
+      vim.notify("Error getting java sub types", vim.log.levels.ERROR)
+      return
+    end
+    return jdtls_execute_command("sts.java.hierarchy.subtypes", result)
   end
 
   config.handlers["sts/javaSuperTypes"] = function(err, result, ctx, config)
