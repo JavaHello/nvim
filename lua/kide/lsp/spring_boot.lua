@@ -142,15 +142,14 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
     return resp
   end
 
-  config.handlers["sts/removeClasspathListener"] = function(_, result)
-    local err, resp = require("kide.lsp.utils.jdtls").execute_command({
-      command = "sts.java.removeClasspathListener",
-      arguments = { result.callbackCommandId },
-    }, nil)
+  config.handlers["sts/removeClasspathListener"] = function(err, result)
+    -- lsp stop
     if err then
-      vim.notify("Error adding classpath listener", vim.log.levels.ERROR)
+      vim.notify("Error removing classpath listener", vim.log.levels.ERROR)
+      return
     end
-    return resp
+    vim.lsp.commands[result.callbackCommandId] = nil
+    return jdtls_execute_command("sts.java.removeClasspathListener", { result.callbackCommandId })
   end
 
   -- --------------------------------
