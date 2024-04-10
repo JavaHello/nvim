@@ -103,6 +103,17 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
     -- end, 0)
   end
 
+  local jdtls_execute_command = function(command, result)
+    local err, resp = require("jdtls.util").execute_command({
+      command = command,
+      arguments = result,
+    })
+    if err then
+      vim.notify("Error executeCommand: " .. command, vim.log.levels.ERROR)
+    end
+    return resp
+  end
+
   config.handlers["sts/addClasspathListener"] = function(_, result)
     local jdtls_client = vim.lsp.get_active_clients({ name = "jdtls" })
     if not jdtls_client or #jdtls_client == 0 then
@@ -138,18 +149,6 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
     }, nil)
     if err then
       vim.notify("Error adding classpath listener", vim.log.levels.ERROR)
-    end
-    return resp
-  end
-
-  function jdtls_execute_command(command, result)
-    print("jdtls_execute_command: " .. command)
-    local err, resp = require("jdtls.util").execute_command({
-      command = command,
-      arguments = result,
-    })
-    if err then
-      vim.notify("Error executeCommand: " .. command, vim.log.levels.ERROR)
     end
     return resp
   end
