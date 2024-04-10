@@ -174,8 +174,7 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
   end
 
   config.handlers["sts/javaLocation"] = function(err, result, ctx, config)
-    print("sts/javaLocation")
-    print(vim.inspect(result))
+    return jdtls_execute_command("sts.java.location", result)
   end
 
   config.handlers["sts/javadoc"] = function(err, result, ctx, config)
@@ -200,11 +199,6 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
 
   config.handlers["sts/javaSuperTypes"] = function(err, result, ctx, config)
     print("sts/javaSuperTypes")
-    print(vim.inspect(result))
-  end
-
-  config.handlers["sts/progress"] = function(err, result, ctx, config)
-    print("sts/progress")
     print(vim.inspect(result))
   end
 
