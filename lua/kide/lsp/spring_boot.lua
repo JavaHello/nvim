@@ -32,10 +32,30 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
     return cmd
   end
 
+  local is_application_yml_file = function(filename)
+    local r = string.match(filename, "application.*%.ya?ml$") or string.match(filename, "bootstrap.*%.ya?ml$")
+    return r ~= nil
+  end
+
+  local is_application_properties_file = function(filename)
+    local r = string.match(filename, "application.*%.properties$") or string.match(filename, "bootstrap.*%.properties$")
+    return r ~= nil
+  end
+
+  local is_application_properties_buf = function(bufnr)
+    local rfilename = vim.api.nvim_buf_get_name(bufnr)
+    return is_application_properties_file(rfilename)
+  end
+
+  local is_application_yml_buf = function(bufnr)
+    local rfilename = vim.api.nvim_buf_get_name(bufnr)
+    return is_application_yml_file(rfilename)
+  end
+
   local config = {
     cmd = spring_boot_ls_launcher(),
     name = "spring-boot",
-    filetypes = { "java", "yaml" },
+    filetypes = { "java", "yaml", "jproperties" },
     root_dir = root_dir,
     init_options = {
       workspaceFolders = root_dir,
@@ -46,10 +66,29 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
     },
     handlers = {},
     commands = {},
+    get_language_id = function(bufnr, filetype)
+      if filetype == "yaml" then
+        local filename = vim.api.nvim_buf_get_name(bufnr)
+        if is_application_yml_file(filename) then
+          return "spring-boot-properties-yaml"
+        end
+      elseif filetype == "jproperties" then
+        local filename = vim.api.nvim_buf_get_name(bufnr)
+        if is_application_properties_file(filename) then
+          return "spring-boot-properties"
+        end
+      end
+      return filetype
+    end,
   }
 
   config["on_attach"] = function(client, buffer)
-    client.server_capabilities.hoverProvider = false
+    local filename = vim.api.nvim_buf_get_name(buffer)
+    if is_application_properties_file(filename) or is_application_yml_file(filename) then
+      client.server_capabilities.hoverProvider = true
+    else
+      client.server_capabilities.hoverProvider = false
+    end
   end
 
   config["on_init"] = function(client, _)
@@ -71,10 +110,10 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
       return "ok"
     end
 
-    local err, resp = require("kide.lsp.utils.jdtls").execute_command({
+    local err, resp = require("jdtls.util").execute_command({
       command = "sts.java.addClasspathListener",
       arguments = { result.callbackCommandId },
-    }, nil)
+    })
     if err then
       vim.notify("Error adding classpath listener", vim.log.levels.ERROR)
     else
@@ -103,19 +142,37 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
     return resp
   end
 
+  function jdtls_execute_command(command, result)
+    print("jdtls_execute_command: " .. command)
+    local err, resp = require("jdtls.util").execute_command({
+      command = command,
+      arguments = result,
+    })
+    if err then
+      vim.notify("Error executeCommand: " .. command, vim.log.levels.ERROR)
+    end
+    return resp
+  end
+
   -- --------------------------------
-  config.handlers["sts/javaType"] = function(err, result, ctx, config)
-    print("sts/javaType")
-    print(vim.inspect(result))
+  config.handlers["sts/javaType"] = function(err, result)
+    if err then
+      vim.notify("Error getting java type", vim.log.levels.ERROR)
+      return
+    end
+    return jdtls_execute_command("sts.java.type", result)
+  end
+  config.handlers["sts/javaCodeComplete"] = function(err, result)
+    if err then
+      vim.notify("Error getting java code complete", vim.log.levels.ERROR)
+      return
+    end
+    return jdtls_execute_command("sts.java.code.completions", result)
   end
 
   config.handlers["sts/javadocHoverLink"] = function(_, result)
     print("sts/javadocHoverLink")
     print(vim.inspect(result))
-    return require("kide.lsp.utils.jdtls").execute_command({
-      command = "sts.java.javadocHoverLink",
-      arguments = { result.callbackCommandId },
-    })
   end
 
   config.handlers["sts/javaLocation"] = function(err, result, ctx, config)
@@ -148,11 +205,6 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
     print(vim.inspect(result))
   end
 
-  config.handlers["sts/javaCodeComplete"] = function(err, result, ctx, config)
-    print("sts/javaCodeComplete")
-    print(vim.inspect(result))
-  end
-
   config.handlers["sts/progress"] = function(err, result, ctx, config)
     print("sts/progress")
     print(vim.inspect(result))
@@ -160,8 +212,8 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
 
   config.handlers["sts/highlight"] = function() end
   config.handlers["sts/moveCursor"] = function(err, result, ctx, config)
-    print("sts/moveCursor")
-    print(vim.inspect(result))
+    -- TODO: move cursor
+    return { applied = true }
   end
 
   M.setup = function(opts)
@@ -183,14 +235,16 @@ if "Y" == vim.env["SPRING_BOOT_LS_ENABLE"] then
     local group = vim.api.nvim_create_augroup("kide_spring_boot_java", { clear = true })
     vim.api.nvim_create_autocmd({ "FileType" }, {
       group = group,
-      pattern = { "java", "yaml" },
+      pattern = { "java", "yaml", "jproperties" },
       desc = "Spring Boot Language Server",
       callback = function(e)
         if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
-          -- ignore
-        else
-          vim.lsp.start(config)
+          return
         end
+        if vim.endswith(e.file, "pom.xml") then
+          return
+        end
+        vim.lsp.start(config)
       end,
     })
   end
