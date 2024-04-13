@@ -374,6 +374,17 @@ require("lazy").setup({
     lazy = true,
     ft = "java",
   },
+  -- rust
+  {
+    "JavaHello/spring-boot.nvim",
+    lazy = true,
+    ft = "java",
+    dependencies = {
+      "mfussenegger/nvim-jdtls",
+      "ibhagwan/fzf-lua",
+    },
+  },
+
   {
     "JavaHello/java-deps.nvim",
     lazy = true,
