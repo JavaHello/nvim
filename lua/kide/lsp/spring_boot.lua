@@ -1,9 +1,12 @@
 local M = {}
-M.setup = function (opts)
+M.setup = function(opts)
   local config = {
-    server = opts
+    server = opts,
   }
-  require('spring_boot').setup(opts)
-  
+
+  local ok, spring_boot = pcall(require, "spring_boot")
+  if ok then
+    spring_boot.setup(config)
+  end
 end
 return M

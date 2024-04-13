@@ -215,16 +215,11 @@ if vscode_pde_path and "Y" == vim.env["VSCODE_PDE_ENABLE"] then
   vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
 end
 
--- local spring_boot_path = vscode.find_one("/vmware.vscode-spring-boot-*/jars")
--- if spring_boot_path then
---   for _, bundle in ipairs(vim.split(vim.fn.glob(spring_boot_path .. "/*.jar"), "\n")) do
---     if not vim.endswith(bundle, "xml-ls-extension.jar") and not vim.endswith(bundle, "commons-lsp-extensions.jar") then
---       table.insert(bundles, bundle)
---     end
---   end
--- end
+local ok, spring_boot = pcall(require, "spring_boot")
 
-vim.list_extend(bundles, require("spring_boot").java_extensions())
+if ok then
+  vim.list_extend(bundles, spring_boot.java_extensions())
+end
 
 -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
@@ -512,17 +507,6 @@ config.handlers["language/status"] = function(_, s)
 end
 
 config["on_init"] = function(client, _)
-  -- local boot_client = vim.lsp.get_active_clients({ name = "spring-boot" })
-  -- if boot_client and #boot_client > 0 then
-  --   boot_client[1].request("workspace/executeCommand", {
-  --     command = "sts.vscode-spring-boot.enableClasspathListening",
-  --     arguments = { true },
-  --   }, function(err, _)
-  --     if err then
-  --       vim.notify("Error enabling classpath listening", vim.log.levels.ERROR)
-  --     end
-  --   end, 0)
-  -- end
   require("spring_boot").enable_classpath_listening()
 end
 
