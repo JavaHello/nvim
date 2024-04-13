@@ -87,6 +87,7 @@ git clone  https://github.com/JavaHello/nvim.git
 依赖 vscode 插件 [VScode Spring Boot](https://marketplace.visualstudio.com/items?itemName=vmware.vscode-spring-boot),需要添加环境变量 `SPRING_BOOT_LS_ENABLE=Y`
 
 - [x] 查找`symbols`,`bean`定义，`bean`引用，`bean`实现等。
+- [x] `application.properties`, `application.yml` 文件提示
 
 ### 功能演示
 
