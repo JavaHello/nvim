@@ -10,7 +10,7 @@ end
 if vim.g.neovide then
   vim.g.transparent_mode = false
   vim.g.neovide_cursor_vfx_mode = "railgun"
-  vim.opt_global.guifont = "CaskaydiaCove Nerd Font Mono:h13"
+  vim.opt_global.guifont = "CaskaydiaCove Nerd Font Mono:h15"
   vim.g.neovide_fullscreen = false
   vim.g.neovide_input_use_logo = true
   local alpha = function()
