@@ -506,10 +506,6 @@ config.handlers["language/status"] = function(_, s)
   -- end
 end
 
-config["on_init"] = function(client, _)
-  require("spring_boot").enable_classpath_listening()
-end
-
 M.config = config
 M.start = function(_)
   jdtls.start_or_attach(config, { dap = { hotcodereplace = "auto" } })
