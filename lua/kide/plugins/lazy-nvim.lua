@@ -252,7 +252,6 @@ require("lazy").setup({
   -- using packer.nvim
   {
     "akinsho/bufferline.nvim",
-    version = "*",
     event = { "UIEnter" },
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
