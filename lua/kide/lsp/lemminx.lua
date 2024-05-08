@@ -1,10 +1,10 @@
 local M = {}
 local lemminx_home = vim.env["LEMMINX_HOME"]
 
-if lemminx_home then
-  M.setup = function(opt)
-    local lspconfig = require("lspconfig")
-    local utils = require("kide.core.utils")
+M.setup = function(opt)
+  if lemminx_home then
+    local lspconfig = require "lspconfig"
+    local utils = require "kide.core.utils"
 
     local lemminx_jars = {}
     for _, bundle in ipairs(vim.split(vim.fn.glob(lemminx_home .. "/*.jar"), "\n")) do

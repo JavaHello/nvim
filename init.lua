@@ -1,38 +1,40 @@
-vim.loader.enable()
--- math.randomseed(os.time())
--- 判断终端是否配置了透明背景
-if vim.env["TRANSPARENT_MODE"] == "Y" then
-  vim.g.transparent_mode = true
-else
-  vim.g.transparent_mode = false
+vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
+vim.g.mapleader = " "
+
+-- bootstrap lazy and all plugins
+local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+
+if not vim.loop.fs_stat(lazypath) then
+  local repo = "https://github.com/folke/lazy.nvim.git"
+  vim.fn.system { "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath }
 end
 
-if vim.g.neovide then
-  vim.g.transparent_mode = false
-  vim.g.neovide_cursor_vfx_mode = "railgun"
-  vim.opt_global.guifont = "CaskaydiaCove Nerd Font Mono:h15"
-  vim.g.neovide_fullscreen = false
-  vim.g.neovide_input_use_logo = true
-  local alpha = function()
-    return string.format("%x", math.floor(255 * (vim.g.transparency or 0.8)))
-  end
-  -- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
-  vim.g.neovide_transparency = 0.0
-  vim.g.transparency = 0.8
-  vim.g.neovide_background_color = "#282828" .. alpha()
+vim.opt.rtp:prepend(lazypath)
 
-  vim.g.neovide_floating_blur_amount_x = 2.0
-  vim.g.neovide_floating_blur_amount_y = 2.0
+local lazy_config = require "configs.lazy"
 
-  vim.g.neovide_hide_mouse_when_typing = true
+-- load plugins
+require("lazy").setup({
+  {
+    "NvChad/NvChad",
+    lazy = false,
+    branch = "v2.5",
+    import = "nvchad.plugins",
+    config = function()
+      require "options"
+    end,
+  },
 
-  vim.g.neovide_profiler = false
-  vim.g.neovide_padding_top = 0
-  vim.g.neovide_padding_bottom = 0
-  vim.g.neovide_padding_right = 0
-  vim.g.neovide_padding_left = 0
-end
+  { import = "plugins" },
+}, lazy_config)
 
-require("kide.basic")
-require("kide.core")
-require("kide.plugins")
+-- load theme
+dofile(vim.g.base46_cache .. "defaults")
+dofile(vim.g.base46_cache .. "statusline")
+
+require "nvchad.autocmds"
+
+vim.schedule(function()
+  require "mappings"
+  require "kide"
+end)

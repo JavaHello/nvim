@@ -1,4 +1,4 @@
-local utils = require("kide.core.utils")
+local utils = require "kide.core.utils"
 local M = {}
 
 local function delete_file(hf)
@@ -16,10 +16,10 @@ end
 -- fd -I -H project$ | xargs rm -rf
 -- fd -I -H factorypath$ | xargs rm -rf
 local function clean_jdtls()
-  local del_files = delete_file("settings") or ""
-  del_files = del_files .. (delete_file("classpath") or "")
-  del_files = del_files .. (delete_file("project") or "")
-  del_files = del_files .. (delete_file("factorypath") or "")
+  local del_files = delete_file "settings" or ""
+  del_files = del_files .. (delete_file "classpath" or "")
+  del_files = del_files .. (delete_file "project" or "")
+  del_files = del_files .. (delete_file "factorypath" or "")
   vim.notify("delete: \n" .. del_files, vim.log.levels.INFO)
 end
 

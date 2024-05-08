@@ -1,0 +1,43 @@
+local lspkind = require "nvchad.icons.lspkind"
+local M = {}
+M.symbol_map = {
+  Text = { icon = lspkind.Text },
+  Method = { icon = lspkind.Method, hl = "@method" },
+  Function = { icon = lspkind.Function, hl = "@function" },
+  Constructor = { icon = lspkind.Constructor, hl = "@constructor" },
+  Field = { icon = lspkind.Field, hl = "@field" },
+  Variable = { icon = lspkind.Variable, hl = "@constant" },
+  Class = { icon = lspkind.Class, hl = "@type" },
+  Interface = { icon = lspkind.Interface, hl = "@type" },
+  Module = { icon = lspkind.Module, hl = "@namespace" },
+  Property = { icon = lspkind.Property, hl = "@method" },
+  Unit = { icon = lspkind.Unit },
+  Value = { icon = lspkind.Value },
+  Enum = { icon = lspkind.Enum, hl = "@lsp.type.enum" },
+  Keyword = { icon = lspkind.Keyword },
+  Snippet = { icon = lspkind.Snippet },
+  Color = { icon = lspkind.Color },
+  File = { icon = lspkind.File, hl = "@text.uri" },
+  Reference = { icon = lspkind.Reference },
+  Folder = { icon = lspkind.Folder },
+  EnumMember = { icon = lspkind.EnumMember, hl = "@field" },
+  Constant = { icon = lspkind.Constant, hl = "@constant" },
+  Struct = { icon = lspkind.Struct, hl = "@type" },
+  Event = { icon = lspkind.Event, hl = "@type" },
+  Operator = { icon = lspkind.Operator, hl = "@operator" },
+  TypeParameter = { icon = "", hl = "@parameter" },
+  Key = { icon = lspkind.Keyword, hl = "@type" },
+  Null = { icon = lspkind.Null, hl = "@type" },
+  Namespace = { icon = lspkind.Namespace, hl = "@namespace" },
+  Package = { icon = lspkind.Package, hl = "@namespace" },
+  String = { icon = lspkind.String, hl = "@string" },
+  Number = { icon = lspkind.Number, hl = "@number" },
+  Boolean = { icon = lspkind.Boolean, hl = "@boolean" },
+  Array = { icon = lspkind.Array, hl = "@constant" },
+  Object = { icon = lspkind.Object, hl = "@type" },
+  ---------------------------------------------------------
+  Component = { icon = "󰡀", hl = "@function" },
+  Fragment = { icon = "", hl = "@constant" },
+}
+
+return M

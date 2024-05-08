@@ -7,7 +7,7 @@ local env = {
   JDTLS_WORKSPACE = vim.env["JDTLS_WORKSPACE"],
   JOL_JAR = vim.env["JOL_JAR"],
 }
-local maven = require("kide.core.utils.maven")
+local maven = require "kide.core.utils.maven"
 
 local jdtls_java = (function()
   local jdtls_run_java = env.JDTLS_RUN_JAVA
@@ -20,10 +20,7 @@ local jdtls_java = (function()
   end
   return "java"
 end)()
-local utils = require("kide.core.utils")
-local function or_default(a, v)
-  return utils.or_default(a, v)
-end
+local utils = require "kide.core.utils"
 
 local function get_java_ver_home(v, dv)
   return vim.env["JAVA_" .. v .. "_HOME"] or dv
@@ -33,10 +30,10 @@ local function get_java_ver_sources(v, dv)
 end
 
 local function get_jdtls_workspace()
-  return or_default(env.JDTLS_WORKSPACE, env.HOME .. "/.jdtls-workspace/")
+  return env.JDTLS_WORKSPACE or env.HOME .. "/.jdtls-workspace/"
 end
 
-local vscode = require("kide.core.vscode")
+local vscode = require "kide.core.vscode"
 
 local function get_jol_jar()
   return env.JOL_JAR or "/opt/software/java/jol-cli-0.16-full.jar"
@@ -94,24 +91,24 @@ local runtimes = (function()
     end
   end
   if #result == 0 then
-    vim.notify("Please config Java runtimes (JAVA_17_HOME...)")
+    vim.notify "Please config Java runtimes (JAVA_17_HOME...)"
   end
   return result
 end)()
 
 -- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
+local root_dir = require("jdtls.setup").find_root { ".git", "mvnw", "gradlew" }
 local rwdir = root_dir or vim.fn.getcwd()
-local workspace_dir = get_jdtls_workspace() .. require("md5").sumhexa(rwdir)
+local workspace_dir = get_jdtls_workspace() .. require("kide.core.utils.md5").sumhexa(rwdir)
 -- local jdtls_path = vscode.find_one("/redhat.java-*/server")
 local function get_jdtls_path()
-  return or_default(env.JDTLS_HOME, vscode.find_one("/redhat.java-*/server"))
+  return env.JDTLS_HOME or vscode.find_one "/redhat.java-*/server"
 end
 
 local function jdtls_launcher()
   local jdtls_path = get_jdtls_path()
   if jdtls_path then
-  elseif require("mason-registry").has_package("jdtls") then
+  elseif require("mason-registry").has_package "jdtls" then
     jdtls_path = require("mason-registry").get_package("jdtls"):get_install_path()
   end
   local jdtls_config = nil
@@ -159,11 +156,11 @@ local bundles = {}
 -- This bundles definition is the same as in the previous section (java-debug installation)
 
 local vscode_java_debug_path = (function()
-  local p = vscode.find_one("/vscjava.vscode-java-debug-*/server")
+  local p = vscode.find_one "/vscjava.vscode-java-debug-*/server"
   if p then
     return p
   end
-  if require("mason-registry").has_package("java-debug-adapter") then
+  if require("mason-registry").has_package "java-debug-adapter" then
     return require("mason-registry").get_package("java-debug-adapter"):get_install_path() .. "/extension/server"
   end
 end)()
@@ -177,11 +174,11 @@ end
 -- /opt/software/lsp/java/vscode-java-test/server
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
 local vscode_java_test_path = (function()
-  local p = vscode.find_one("/vscjava.vscode-java-test-*/server")
+  local p = vscode.find_one "/vscjava.vscode-java-test-*/server"
   if p then
     return p
   end
-  if require("mason-registry").has_package("java-test") then
+  if require("mason-registry").has_package "java-test" then
     return require("mason-registry").get_package("java-test"):get_install_path() .. "/extension/server"
   end
 end)()
@@ -197,7 +194,7 @@ if vscode_java_test_path then
 end
 
 -- /opt/software/lsp/java/vscode-java-decompiler/server/
-local java_decoompiler_path = vscode.find_one("/dgileadi.java-decompiler-*/server")
+local java_decoompiler_path = vscode.find_one "/dgileadi.java-decompiler-*/server"
 if java_decoompiler_path then
   vim.list_extend(bundles, vim.split(vim.fn.glob(java_decoompiler_path .. "/*.jar"), "\n"))
 end
@@ -205,12 +202,12 @@ end
 -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
 -- /opt/software/lsp/java/vscode-java-dependency/server/
-local java_dependency_path = vscode.find_one("/vscjava.vscode-java-dependency-*/server")
+local java_dependency_path = vscode.find_one "/vscjava.vscode-java-dependency-*/server"
 if java_dependency_path then
   vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
 end
 
-local vscode_pde_path = vscode.find_one("/yaozheng.vscode-pde-*/server")
+local vscode_pde_path = vscode.find_one "/yaozheng.vscode-pde-*/server"
 if vscode_pde_path and "Y" == vim.env["VSCODE_PDE_ENABLE"] then
   vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
 end
@@ -341,7 +338,7 @@ config.commands["_java.reloadBundles.command"] = function()
   return {}
 end
 
-local jdtls = require("jdtls")
+local jdtls = require "jdtls"
 jdtls.jol_path = get_jol_jar()
 
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
@@ -394,8 +391,8 @@ local function test_with_profile(test_fn)
       local async_profiler_so = get_async_profiler_ddl()
       local event = "event=" .. choice
       local vmArgs = "-ea -agentpath:" .. async_profiler_so .. "=start,"
-      vmArgs = vmArgs .. event .. ",file=" .. utils.tmpdir_file("profile.jfr")
-      test_fn({
+      vmArgs = vmArgs .. event .. ",file=" .. utils.tmpdir_file "profile.jfr"
+      test_fn {
         config_overrides = {
           vmArgs = vmArgs,
           noDebug = true,
@@ -405,94 +402,17 @@ local function test_with_profile(test_fn)
             "java -jar "
               .. get_async_profiler_cov()
               .. " jfr2flame "
-              .. utils.tmpdir_file("profile.jfr")
+              .. utils.tmpdir_file "profile.jfr"
               .. " "
-              .. utils.tmpdir_file("profile.html")
+              .. utils.tmpdir_file "profile.html"
           )
-          utils.open_fn(utils.tmpdir_file("profile.html"))
+          utils.open_fn(utils.tmpdir_file "profile.html")
         end,
-      })
+      }
     end)
   end
 end
 
-config["on_attach"] = function(client, buffer)
-  local function desc_opts(desc)
-    return { silent = true, buffer = buffer, desc = desc }
-  end
-
-  local function with_compile(fn)
-    return function()
-      if vim.bo.modified then
-        vim.cmd("w")
-      end
-      client.request_sync("java/buildWorkspace", false, 5000, buffer)
-      fn()
-    end
-  end
-  vim.keymap.set("n", "<leader>dc", with_compile(jdtls.test_class), desc_opts("Test class"))
-  vim.keymap.set("n", "<leader>dm", with_compile(jdtls.test_nearest_method), desc_opts("Test method"))
-  vim.keymap.set("n", "<leader>ds", with_compile(jdtls.pick_test), desc_opts("Select test"))
-  vim.keymap.set("n", "crv", jdtls.extract_variable, desc_opts("Extract variable"))
-  vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], desc_opts("Extract method"))
-  vim.keymap.set("n", "crc", jdtls.extract_constant, desc_opts("Extract constant"))
-
-  if M.async_profiler_home then
-    vim.keymap.set(
-      "n",
-      "<leader>dM",
-      with_compile(test_with_profile(jdtls.test_nearest_method)),
-      desc_opts("Test method with profiling")
-    )
-  end
-
-  local create_command = vim.api.nvim_buf_create_user_command
-  create_command(buffer, "OR", require("jdtls").organize_imports, {
-    nargs = 0,
-  })
-
-  require("java-deps").attach(client, buffer, root_dir)
-  create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
-    nargs = 0,
-  })
-  -- vim.notify(vim.api.nvim_buf_get_name(bufnr), vim.log.levels.INFO)
-
-  create_command(
-    buffer,
-    "JdtRun",
-    with_compile(function()
-      local main_config_opts = {
-        verbose = false,
-        on_ready = require("dap")["continue"],
-      }
-      require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
-    end),
-    {
-      nargs = 0,
-    }
-  )
-end
-
-local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-if capabilities.textDocument.foldingRange then
-  capabilities.textDocument.foldingRange.dynamicRegistration = false
-  capabilities.textDocument.foldingRange.lineFoldingOnly = true
-else
-  capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
-    lineFoldingOnly = true,
-  }
-end
--- capabilities.experimental = {
---   hoverActions = true,
---   hoverRange = true,
---   serverStatusNotification = true,
---   snippetTextEdit = true,
---   codeActionGroup = true,
---   ssr = true,
--- }
-
-config.capabilities = capabilities
 config.flags = {
   debounce_text_changes = 150,
 }
@@ -507,12 +427,76 @@ config.handlers["language/status"] = function(_, s)
 end
 
 M.config = config
-M.start = function(_)
+M.start = function()
   jdtls.start_or_attach(config, { dap = { hotcodereplace = "auto" } })
 end
 
 M.setup = function(opts)
-  require("kide.lsp.utils.jdtls").customize_jdtls()
+  local on_attach = opts.on_attach
+  config.on_attach = function(client, buffer)
+    vim.api.nvim_buf_set_option(buffer, "shiftwidth", 4)
+    vim.api.nvim_buf_set_option(buffer, "tabstop", 4)
+    vim.api.nvim_buf_set_option(buffer, "softtabstop", 4)
+    local function desc_opts(desc)
+      return { silent = true, buffer = buffer, desc = desc }
+    end
+
+    local function with_compile(fn)
+      return function()
+        if vim.bo.modified then
+          vim.cmd "w"
+        end
+        client.request_sync("java/buildWorkspace", false, 5000, buffer)
+        fn()
+      end
+    end
+    vim.keymap.set("n", "<leader>dc", with_compile(jdtls.test_class), desc_opts "Test class")
+    vim.keymap.set("n", "<leader>dm", with_compile(jdtls.test_nearest_method), desc_opts "Test method")
+    vim.keymap.set("n", "<leader>ds", with_compile(jdtls.pick_test), desc_opts "Select test")
+    vim.keymap.set("n", "crv", jdtls.extract_variable, desc_opts "Extract variable")
+    vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], desc_opts "Extract method")
+    vim.keymap.set("n", "crc", jdtls.extract_constant, desc_opts "Extract constant")
+
+    if M.async_profiler_home then
+      vim.keymap.set(
+        "n",
+        "<leader>dM",
+        with_compile(test_with_profile(jdtls.test_nearest_method)),
+        desc_opts "Test method with profiling"
+      )
+    end
+
+    local create_command = vim.api.nvim_buf_create_user_command
+    create_command(buffer, "OR", require("jdtls").organize_imports, {
+      nargs = 0,
+    })
+
+    -- require("java-deps").attach(client, buffer, root_dir)
+    -- create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
+    --   nargs = 0,
+    -- })
+
+    create_command(
+      buffer,
+      "JdtRun",
+      with_compile(function()
+        local main_config_opts = {
+          verbose = false,
+          on_ready = require("dap")["continue"],
+        }
+        require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
+      end),
+      {
+        nargs = 0,
+      }
+    )
+
+    on_attach(client, buffer)
+  end
+
+  config.capabilities = opts.capabilities
+  config.on_init = opts.on_init
+  -- require("kide.lsp.utils.jdtls").customize_jdtls()
   local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
   vim.api.nvim_create_autocmd({ "FileType" }, {
     group = group,
@@ -522,7 +506,7 @@ M.setup = function(opts)
       if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
         -- ignore
       else
-        M.start(opts)
+        M.start()
       end
     end,
   })

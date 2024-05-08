@@ -1,8 +1,7 @@
 # NVIM IDE
 
-可配置 `Java`, `Rust`, `C/C++`, `JavaScript` 等编程语言开发环境。 极速启动 (`startuptime` 15 ~ 60 ms)。
-
-使用 [stable](https://github.com/neovim/neovim/releases/tag/stable) 和 [neovim-nightly](https://github.com/neovim/neovim/releases) 版本, [安装步骤](https://github.com/neovim/neovim/wiki/Installing-Neovim)。
+使用 [NvChad](https://github.com/NvChad/NvChad) 做为基础配置, `NvChad` 基础配置和快捷建未做修改, 建议先阅读 `NvChad` 相关的文档。
+主要添加了 `Java`, `Python`, `Rust` 语言的 `LSP`, `DAP` 配置
 
 ## 安装
 
@@ -20,9 +19,6 @@ cd $env:LOCALAPPDATA
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
-- `nvim-telescope/telescope-fzf-native.nvim` 需要在`mingw`环境下编译
-- `L3MON4D3/LuaSnip` 需要在`mingw`环境下编译, 如果出现 `ld` 错误, 需要手动指定 `lua51.dll` 目录
-
 ## 依赖
 
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
@@ -34,7 +30,7 @@ git clone  https://github.com/JavaHello/nvim.git
 
 其他依赖可选安装,使用 [mason.nvim](https://github.com/williamboman/mason.nvim)
 
-> 此配置在 Linux, Mac, Windows 系统上长期使用, Windows 下推荐使用 [scoop](https://scoop.sh/) 安装依赖
+> 此配置在 Linux, Mac 系统上长期使用, Windows 下推荐使用 [scoop](https://scoop.sh/) 安装依赖
 
 ## 快捷键
 
@@ -42,23 +38,19 @@ git clone  https://github.com/JavaHello/nvim.git
 | :-----------------------------: | :------------------: | :-----------------------: |
 |            文件管理             |       `Normal`       |        `<leader>e`        |
 |            文件搜索             |       `Normal`       |       `<leader>ff`        |
-|            全局搜索             | `Normal` or `Visual` |       `<leader>fg`        |
+|            全局搜索             | `Normal` or `Visual` |       `<leader>fw`        |
 |          全局搜索替换           | `Normal` or `Visual` |       `<leader>fr`        |
-|          搜索 symbols           | `Normal` or `Visual` |       `<leader>fs`        |
 |            Git 操作             |      `Command`       |          `:Git`           |
 |             Outline             |       `Normal`       |        `<leader>o`        |
 |            查看实现             |       `Normal`       |           `gi`            |
 |            查看引用             |       `Normal`       |           `gr`            |
 |            查看声明             |       `Normal`       |           `gd`            |
-|      格式化(LSP 提供支持)       | `Normal` or `Visual` |        `<leader>=`        |
-|             重命名              |       `Normal`       |       `<leader>rn`        |
+|      格式化(LSP 提供支持)       | `Normal` or `Visual` |       `<leader>fm`        |
+|             重命名              |       `Normal`       |       `<leader>ra`        |
 |           Code Action           |       `Normal`       |       `<leader>ca`        |
-|              Debug              |       `Normal`       |  `F5` or `:DapContinue`   |
+|              Debug              |       `Normal`       |      `:DapContinue`       |
 |              断点               |       `Normal`       |       `<leader>db`        |
-|            内置终端             |      `Command`       |       `:ToggleTerm`       |
-|           Tasks 列表            |       `Normal`       |       `<leader>ts`        |
-|            代码折叠             |       `Normal`       |           `zc`            |
-|            代码展开             |       `Normal`       |           `zo`            |
+|            内置终端             |      `Command`       |     `<A-h> or <A-v>`      |
 |     Java: Junit Test Method     |       `Normal`       |       `<leader>dm`        |
 |     Java: Junit Test Class      |       `Normal`       |       `<leader>dc`        |
 |            Run Last             |       `Normal`       |       `<leader>dl`        |
@@ -66,113 +58,16 @@ git clone  https://github.com/JavaHello/nvim.git
 | Java: 刷新 Main 方法 Debug 配置 |      `Command`       | `:JdtRefreshDebugConfigs` |
 |       Java: 预览项目依赖        |      `Command`       |      `:JavaProjects`      |
 
-更多配置参考 [keybindings](./lua/kide/core/keybindings.lua) 文件
+更多配置参考 [mappings](./lua/mappings.lua) 文件
 
 ## Java 配置
 
-- 添加了`telescope`支持查找`jar` 包 `class`
-- 美化 `lsp_hover/doc` 显示
 - `maven pom.xml` 自动补全(目前需要[手动打包](https://www.bilibili.com/video/BV12N4y1f7Bh/))
 
-> 如果不使用 `Java` 语言开发，无需配置
-
-[NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE-vscode.html)
-更新了配置，全部使用 vscode 扩展，简化安装步骤。
-
-- 如果使用长时间后感觉卡顿，关闭下所有`buffer`, `:%bw`。
-- 搜索依赖`jar`包`class`很慢的问题。在搜索框输入会频繁的请求`LSP server`导致内存和`CPU`提升,通常需要好几秒才会返回结果。建议复制类名称到搜索框，或者选择类名后按下`<leader>fs`, 这样会很快搜索出相关的`class`。
+- [NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE-vscode.html) 更新了配置，全部使用 vscode 扩展，简化安装步骤。
 
 ### Spring Boot LS
 
-依赖 vscode 插件 [VScode Spring Boot](https://marketplace.visualstudio.com/items?itemName=vmware.vscode-spring-boot),需要添加环境变量 `SPRING_BOOT_LS_ENABLE=Y`
-
+- 依赖 vscode 插件 [VScode Spring Boot](https://marketplace.visualstudio.com/items?itemName=vmware.vscode-spring-boot)
 - [x] 查找`symbols`,`bean`定义，`bean`引用，`bean`实现等。
 - [x] `application.properties`, `application.yml` 文件提示
-
-### 功能演示
-
-<details>
-<summary>启动页</summary>
-  <img width="700" alt="启动页" src="https://javahello.github.io/dev/nvim-lean/images/home.png">
-</details>
-
-<details>
-<summary>查找文件</summary>
-  <img width="700" alt="查找文件" src="https://javahello.github.io/dev/nvim-lean/images/telescope-theme-1.png">
-</details>
-
-<details>
-<summary>全局搜索</summary>
-  <img width="700" alt="全局搜索" src="https://javahello.github.io/dev/nvim-lean/images/find-word.gif">
-</details>
-
-<details>
-<summary>全局搜索替换</summary>
-  <img width="700" alt="全局搜索替换" src="https://javahello.github.io/dev/nvim-lean/images/fr.gif">
-</details>
-
-<details>
-<summary>文件管理</summary>
-  <img width="700" alt="文件管理" src="https://javahello.github.io/dev/nvim-lean/images/file-tree.gif">
-</details>
-
-<details>
-<summary>大纲</summary>
-  <img width="700" alt="大纲" src="https://javahello.github.io/dev/nvim-lean/images/outline.gif">
-</details>
-
-<details>
-<summary>查看引用</summary>
-  <img width="700" alt="查看引用" src="https://javahello.github.io/dev/nvim-lean/images/java-ref-001.gif">
-</details>
-
-<details>
-<summary>查看实现</summary>
-  <img width="700" alt="查看实现" src="https://javahello.github.io/dev/nvim-lean/images/java-impl-002.gif">
-</details>
-
-<details>
-<summary>搜索 symbols</summary>
-  <img width="700" alt="搜索`symbols`" src="https://javahello.github.io/dev/nvim-lean/images/java-symbols-003.gif">
-</details>
-
-<details>
-<summary>Debug</summary>
-  <img width="700" alt="Debug" src="https://javahello.github.io/dev/nvim-lean/images/debug.gif">
-</details>
-
-<details>
-<summary>JavaProjects</summary>
-  <img width="700" alt="Debug" src="https://javahello.github.io/dev/nvim-lean/images/java-deps.png">
-</details>
-
-<details>
-<summary>Maven(pom.xml 自动补全)</summary>
-  <img width="700" alt="Debug" src="https://javahello.github.io/dev/nvim-lean/images/maven.png">
-</details>
-
-<details>
-<summary>查找 Spring Boot symbols</summary>
-  <img width="700" alt="Debug" src="https://javahello.github.io/dev/nvim-lean/images/spring-boot.png">
-</details>
-
-## 我的 VIM 插件列表
-
-| 插件名称                                                              | 插件描述               | 推荐等级 | 备注 |
-| --------------------------------------------------------------------- | ---------------------- | -------- | ---- |
-| [nvim-cmp](https://github.com/hrsh7th/nvim-cmp)                       | LSP 代码提示插件       | 10       |      |
-| [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)    | 模糊查找插件，窗口预览 | 10       |      |
-| [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)          | 状态栏插件             | 8        |      |
-| [vim-table-mode](https://github.com/dhruvasagar/vim-table-mode)       | table 模式插件         | 8        |      |
-| [toggletasks.nvim](https://github.com/jedrzejboczar/toggletasks.nvim) | 任务执行插件           | 8        |      |
-
-## Neovim 插件列表
-
-- Neovim 精选插件[yutkat/my-neovim-pluginlist](https://github.com/yutkat/my-neovim-pluginlist)
-- Neovim 精选插件[rockerBOO/awesome-neovim](https://github.com/rockerBOO/awesome-neovim)
-- Neovim 精选插件[neovimcraft](http://neovimcraft.com/)
-- 推荐[NvChad](https://github.com/NvChad/NvChad), 部分插件和配置参考了 `NvChad`
-
-## 感谢使用
-
-打造一个高效美观的终端环境。欢迎提供各种建议，插件推荐，快捷键定义，主题配色等。

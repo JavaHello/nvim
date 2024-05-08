@@ -1,9 +1,9 @@
-local utils = require("kide.core.utils")
+local utils = require "kide.core.utils"
 local M = {}
 
 local function maven_settings()
-  if vim.fn.filereadable(vim.fn.expand("~/.m2/settings.xml")) == 1 then
-    return vim.fn.expand("~/.m2/settings.xml")
+  if vim.fn.filereadable(vim.fn.expand "~/.m2/settings.xml") == 1 then
+    return vim.fn.expand "~/.m2/settings.xml"
   end
   local maven_home = vim.env["MAVEN_HOME"]
   if maven_home and vim.fn.filereadable(maven_home .. "/conf/settings.xml") then
@@ -31,24 +31,13 @@ end
 
 local exec = function(cmd, pom, opt)
   opt = opt or {}
-  local Terminal = require("toggleterm.terminal").Terminal
-  -- require("toggleterm").exec(cmd .. settings_opt(M.get_maven_settings()) .. pom_file(pom))
-  local mvn = Terminal:new({
+
+  require("nvchad.term").runner {
+    pos = "sp",
     cmd = cmd .. settings_opt(M.get_maven_settings()) .. pom_file(pom),
-    close_on_exit = opt.close_on_exit,
-    auto_scroll = true,
-    on_exit = function(_)
-      if opt.update ~= nil and opt.update and opt.close_on_exit ~= nil and opt.close_on_exit then
-        vim.defer_fn(function()
-          local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-          if filetype == "java" then
-            require("jdtls").update_project_config()
-          end
-        end, 500)
-      end
-    end,
-  })
-  mvn:toggle()
+    id = "maven",
+    clear_cmd = true,
+  }
 end
 local function create_command(buf, name, cmd, complete, opt)
   vim.api.nvim_buf_create_user_command(buf, name, function(opts)
@@ -60,9 +49,9 @@ local function create_command(buf, name, cmd, complete, opt)
     end
 
     if opts.args then
-      exec(cmd .. " " .. opts.args, vim.fn.expand("%"), opt)
+      exec(cmd .. " " .. opts.args, vim.fn.expand "%", opt)
     else
-      exec(cmd, vim.fn.expand("%"), opt)
+      exec(cmd, vim.fn.expand "%", opt)
     end
   end, {
     nargs = "*",
@@ -72,24 +61,11 @@ end
 
 local maven_args_complete = utils.command_args_complete
 
-local function get_class_name()
-  if require("nvim-treesitter.query").has_query_files("java", "indents") then
-    local ts_utils = require("nvim-treesitter.ts_utils")
-    local node = ts_utils.get_node_at_cursor()
-    if node ~= nil and node:type() ~= "identifier" then
-      node = node:parent()
-    end
-    if node ~= nil and node:type() == "identifier" then
-      return vim.treesitter.get_node_text(node, 0)
-    end
-  end
-end
-
 M.maven_command = function(buf)
   -- 判断为 java 文件
   if vim.api.nvim_buf_get_option(buf, "filetype") == "java" then
     create_command(buf, "MavenExecJava", function(_)
-      local filename = vim.fn.expand("%:p")
+      local filename = vim.fn.expand "%:p"
       filename = string.gsub(filename, "^[%-/%w%s]*%/src%/main%/java%/", "")
       filename = string.gsub(filename, "[/\\]", ".")
       filename = string.gsub(filename, "%.java$", "")
@@ -156,9 +132,9 @@ M.setup = function()
   local opt = { update = true, close_on_exit = false }
   vim.api.nvim_create_user_command("Maven", function(opts)
     if opts.args then
-      exec("mvn " .. opts.args, vim.fn.expand("%"), opt)
+      exec("mvn " .. opts.args, vim.fn.expand "%", opt)
     else
-      exec("mvn", vim.fn.expand("%"), opt)
+      exec("mvn", vim.fn.expand "%", opt)
     end
   end, {
     nargs = "*",

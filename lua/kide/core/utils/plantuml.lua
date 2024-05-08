@@ -1,5 +1,5 @@
 local uv = vim.loop
-local utils = require("kide.core.utils")
+local utils = require "kide.core.utils"
 local plantuml_args_complete = utils.command_args_complete
 local M = {}
 M.config = {}
@@ -7,7 +7,7 @@ M.config = {}
 local function plantuml_jar(default_jar)
   return vim.env["PLANTUML_JAR"] or default_jar
 end
-M.config.jar_path = plantuml_jar("/opt/software/puml/plantuml.jar")
+M.config.jar_path = plantuml_jar "/opt/software/puml/plantuml.jar"
 M.config.cmd = "java"
 M.config.defaultTo = "svg"
 M.types = {}
@@ -45,7 +45,7 @@ local function exec(opt)
     vim.notify("Plantuml: 没有文件 " .. M.config.jar_path, vim.log.levels.ERROR)
     return
   end
-  if not vim.fn.executable("java") then
+  if not vim.fn.executable "java" then
     vim.notify("Plantuml: 没有 java 环境", vim.log.levels.ERROR)
     return
   end
@@ -53,6 +53,7 @@ local function exec(opt)
     if vim.startswith(item, "-t") then
       return true
     end
+    return false
   end, opt.args)
   if not out_type or vim.tbl_count(out_type) == 0 then
     local ot = to_type()
@@ -66,7 +67,7 @@ local function exec(opt)
   end
   local ofile = out_file(ot, opt.file)
 
-  local p = vim.fn.expand("%:p:h")
+  local p = vim.fn.expand "%:p:h"
   table.insert(opt.args, 1, "-jar")
   table.insert(opt.args, 2, M.config.jar_path)
   table.insert(opt.args, opt.file)
@@ -87,13 +88,19 @@ local function exec(opt)
           process.stderr:read_stop()
           process.stderr:close()
           if data then
-            vim.notify("Plantuml: " .. data, vim.log.levels.WARN)
+            vim.schedule(function()
+              vim.notify("Plantuml: " .. data, vim.log.levels.WARN)
+            end)
           else
-            vim.notify("Plantuml: export error " .. code, vim.log.levels.WARN)
+            vim.schedule(function()
+              vim.notify("Plantuml: export error " .. code, vim.log.levels.WARN)
+            end)
           end
         end)
       else
-        vim.notify("Plantuml: export success", vim.log.levels.INFO)
+        vim.schedule(function()
+          vim.notify("Plantuml: export success", vim.log.levels.INFO)
+        end)
         utils.open_fn(ofile)
       end
     end
@@ -108,10 +115,10 @@ local function init()
     desc = "Export Plantuml file",
     callback = function(o)
       vim.api.nvim_buf_create_user_command(o.buf, "Plantuml", function(opts)
-        exec({
+        exec {
           args = opts.fargs,
           file = o.file,
-        })
+        }
       end, {
         nargs = "*",
         complete = plantuml_args_complete(complete_list, { single = true }),
