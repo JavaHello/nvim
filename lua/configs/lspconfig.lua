@@ -53,6 +53,7 @@ require("kide.lsp.lemminx").setup {
 
 require("kide.lsp.sonarlint").setup()
 
+-- python
 require("kide.lsp.pyright").setup {
   on_attach = on_attach,
   on_init = on_init,
