@@ -50,3 +50,14 @@ autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*.md",
   command = "setlocal spell spelllang=en_us,cjk",
 })
+
+-- outline
+autocmd("FileType", {
+  group = augroup "OUTLINE",
+  pattern = {
+    "OUTLINE",
+  },
+  callback = function(_)
+    vim.api.nvim_win_set_option(vim.api.nvim_get_current_win(), "signcolumn", "no")
+  end,
+})

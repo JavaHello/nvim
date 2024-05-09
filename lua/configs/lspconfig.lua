@@ -44,14 +44,14 @@ require("spring_boot").setup {
     capabilities = capabilities,
   },
 }
+require("kide.lsp.sonarlint").setup()
 
+-- XML
 require("kide.lsp.lemminx").setup {
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
 }
-
-require("kide.lsp.sonarlint").setup()
 
 -- python
 require("kide.lsp.pyright").setup {
@@ -59,3 +59,11 @@ require("kide.lsp.pyright").setup {
   on_init = on_init,
   capabilities = capabilities,
 }
+
+-- SQL
+-- lspconfig.sqls.setup {
+--   cmd = { "sqls", "-config", "~/.config/sqls/config.yml" },
+--   on_attach = on_attach,
+--   on_init = on_init,
+--   capabilities = capabilities,
+-- }

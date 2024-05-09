@@ -149,17 +149,24 @@ M.camel_case_init = function()
 end
 -- print(M.camel_case("helloWorldAaAaAxC"))
 
+-- see https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/utils.lua#L120
 M.get_visual_selection = function()
-  vim.cmd 'noau normal! "vy"'
-  local text = vim.fn.getreg "v"
-  vim.fn.setreg("v", {})
-
-  text = string.gsub(text, "\n", "")
-  if #text > 0 then
-    return text
-  else
+  local start_pos = vim.api.nvim_buf_get_mark(0, "<")
+  local end_pos = vim.api.nvim_buf_get_mark(0, ">")
+  local lines = vim.fn.getline(start_pos[1], end_pos[1])
+  -- add when only select in 1 line
+  local plusEnd = 0
+  local plusStart = 1
+  if #lines == 0 then
     return ""
+  elseif #lines == 1 then
+    plusEnd = 1
+    plusStart = 1
   end
+  lines[#lines] = string.sub(lines[#lines], 0, end_pos[2] + plusEnd)
+  lines[1] = string.sub(lines[1], start_pos[2] + plusStart, string.len(lines[1]))
+  local query = table.concat(lines, "")
+  return query
 end
 
 M.run_cmd = function(cmd)

@@ -11,7 +11,18 @@ map("n", ";", ":", { desc = "CMD enter command mode" })
 
 -- dap
 map("n", "<leader>db", "<CMD>lua require'dap'.toggle_breakpoint()<CR>", { desc = "Dap toggle breakpoint" })
-map("n", "<leader>dB", "<CMD>lua require'dap'.toggle_breakpoint()<CR>", { desc = "Dap toggle breakpoint" })
+map(
+  "n",
+  "<leader>dB",
+  "<CMD>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>",
+  { desc = "Dap breakpoint condition" }
+)
+map("n", "<leader>dp", "<CMD>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", {
+  desc = "Dap Log point message",
+})
+map("n", "<leader>dl", "<CMD>lua require'dap'.run_last()<CR>", {
+  desc = "Dap run last",
+})
 
 -- outline
 map("n", "<leader>o", "<CMD>SymbolsOutline<CR>", { desc = "Symbols Outline" })
@@ -20,11 +31,20 @@ command("CloseOtherBuffer", function()
   require("nvchad.tabufline").closeOtherBufs()
 end, { desc = "Closes all bufs except current one" })
 
-map("v", "<leader>fw", function()
-  local tb = require "telescope.builtin"
+-- Telescope
+map("v", "<leader>ff", function()
+  -- vim.fn.getpos 获取最新光标位置
+  vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.core.utils").get_visual_selection()
+  local tb = require "telescope.builtin"
+  tb.find_files { default_text = text }
+end, { desc = "telescope find files", silent = true, noremap = true })
+map("v", "<leader>fw", function()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+  local text = require("kide.core.utils").get_visual_selection()
+  local tb = require "telescope.builtin"
   tb.live_grep { default_text = text }
-end, { desc = "telescope live grep" })
+end, { desc = "telescope live grep", silent = true, noremap = true })
 
 -- Git
 map("n", "]c", function()
@@ -48,3 +68,73 @@ map("n", "[c", function()
   end)
   return "<Ignore>"
 end, { expr = true, desc = "Git Prev Hunk" })
+
+-- LSP
+map("n", "[e", function()
+  vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }
+end, { desc = "lsp prev diagnostic error" })
+map("n", "]e", function()
+  vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }
+end, { desc = "lsp next diagnostic error" })
+
+map("v", "<leader>fs", function()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+  local text = require("kide.core.utils").get_visual_selection()
+  require("fzf-lua").lsp_live_workspace_symbols { default_text = text, query = text }
+end, { desc = "Lsp Workspace Symbols", silent = true, noremap = true })
+
+map("n", "<leader>fs", function()
+  require("fzf-lua").lsp_live_workspace_symbols {}
+end, { desc = "Lsp Workspace Symbols" })
+
+command("WorkspaceSymbols", function(opts)
+  if opts.range > 0 then
+    local text = require("kide.core.utils").get_visual_selection()
+    vim.lsp.buf.workspace_symbol(text)
+  else
+    vim.lsp.buf.workspace_symbol(opts.args)
+  end
+end, {
+  desc = "Lsp Workspace Symbols",
+  nargs = "?",
+  range = true,
+})
+
+local severity_key = {
+  "ERROR",
+  "WARN",
+  "INFO",
+  "HINT",
+}
+command("DiagnosticsWorkspace", function(opts)
+  local level = opts.args
+  if level == nil or level == "" then
+    vim.diagnostic.setqflist()
+  else
+    vim.diagnostic.setqflist { severity = level }
+  end
+end, {
+  desc = "Diagnostics Workspace",
+  nargs = "?",
+  complete = function(al, _, _)
+    return vim.tbl_filter(function(item)
+      return vim.startswith(item, al)
+    end, severity_key)
+  end,
+})
+command("DiagnosticsDocument", function(opts)
+  local level = opts.args
+  if level == nil or level == "" then
+    vim.diagnostic.setloclist()
+  else
+    vim.diagnostic.setloclist { severity = level }
+  end
+end, {
+  desc = "Diagnostics Document",
+  nargs = "?",
+  complete = function(al, _, _)
+    return vim.tbl_filter(function(item)
+      return vim.startswith(item, al)
+    end, severity_key)
+  end,
+})

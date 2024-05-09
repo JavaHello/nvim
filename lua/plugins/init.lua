@@ -7,7 +7,7 @@ return {
     end,
   },
   {
-    "kyazdani42/nvim-tree.lua",
+    "nvim-tree/nvim-tree.lua",
     opts = function()
       local config = require "nvchad.configs.nvimtree"
       config.actions.open_file.quit_on_open = true
@@ -297,5 +297,56 @@ return {
 	     \ }
 			]]
     end,
+  },
+
+  -- 翻译插件
+  {
+    "uga-rosa/translate.nvim",
+    cmd = "Translate",
+    config = function()
+      require("translate").setup {
+        default = {
+          command = "translate_shell",
+        },
+        preset = {
+          output = {
+            split = {
+              append = true,
+            },
+          },
+        },
+      }
+    end,
+  },
+
+  -- databases
+  {
+    "tpope/vim-dadbod",
+  },
+  {
+    "kristijanhusak/vim-dadbod-ui",
+    dependencies = { "tpope/vim-dadbod" },
+    cmd = {
+      "DBUI",
+      "DBUIToggle",
+    },
+    init = function()
+      vim.g.db_ui_use_nerd_fonts = 1
+    end,
+  },
+  {
+    "kristijanhusak/vim-dadbod-completion",
+    dependencies = { "tpope/vim-dadbod" },
+    ft = { "sql", "mysql", "plsql" },
+    init = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("kide_vim_dadbod_completion", { clear = true }),
+        pattern = { "sql", "mysql", "plsql" },
+        callback = function(_)
+          require("cmp").setup.buffer { sources = { { name = "vim-dadbod-completion" } } }
+        end,
+      })
+    end,
+    config = function() end,
   },
 }
