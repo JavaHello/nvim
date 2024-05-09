@@ -39,3 +39,6 @@ vim.opt.autoread = true
 -- split window 从下边和右边出现
 vim.opt.splitbelow = false
 vim.opt.splitright = true
+
+vim.opt_global.grepprg = "rg --vimgrep --no-heading --smart-case"
+vim.opt_global.grepformat = "%f:%l:%c:%m,%f:%l:%m"
