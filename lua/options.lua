@@ -10,6 +10,7 @@ vim.opt_global.jumpoptions = "stack"
 
 -- 高亮所在行
 vim.opt.cursorline = true
+vim.o.cursorlineopt = "number,line"
 
 -- 菜单最多显示20行
 vim.opt.pumheight = 20
@@ -38,7 +39,20 @@ vim.opt.splitright = true
 vim.opt_global.grepprg = "rg --vimgrep --no-heading --smart-case"
 vim.opt_global.grepformat = "%f:%l:%c:%m,%f:%l:%m"
 
--- 默认不要折叠
--- https://stackoverflow.com/questions/8316139/how-to-set-the-default-to-unfolded-when-you-open-a-file
-vim.opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.opt.foldlevelstart = 99
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldnestmax = 10
+-- 默认不要折叠
+vim.opt.foldenable = false
+vim.opt.foldlevel = 1
+
+-- toggle invisible characters
+vim.opt.list = true
+-- vim.opt.listchars = {
+--   tab = "→ ",
+--   eol = "¬",
+--   trail = "⋅",
+--   extends = "❯",
+--   precedes = "❮",
+-- }

@@ -15,9 +15,9 @@ M.ui = {
     DiffChange = { fg = "NONE", bg = "#0d3138" },
     DiffText = { fg = "yellow", bg = "#282828" },
 
-    LspReferenceText = { fg = "orange", bg = "grey" },
-    LspReferenceRead = { fg = "orange", bg = "grey" },
-    LspReferenceWrite = { fg = "orange", bg = "grey" },
+    LspReferenceText = { fg = "orange", bg = "NONE" },
+    LspReferenceRead = { fg = "orange", bg = "NONE" },
+    LspReferenceWrite = { fg = "orange", bg = "NONE" },
   },
   statusline = {
     theme = "default",

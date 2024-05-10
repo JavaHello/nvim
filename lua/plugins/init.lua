@@ -136,7 +136,20 @@ return {
       "DiffviewRefresh",
       "DiffviewToggleFiles",
     },
-    opts = {},
+    opts = {
+      keymaps = {
+        view = {
+          ["q"] = function()
+            vim.cmd "tabclose"
+          end,
+        },
+        file_panel = {
+          ["q"] = function()
+            vim.cmd "tabclose"
+          end,
+        },
+      },
+    },
   },
 
   -- Note
@@ -275,7 +288,12 @@ return {
       vim.g.rustaceanvim = {
         server = {
           on_attach = function(client, buffer)
+            -- 配色方案错误, 禁用 semanticTokensProvider
+            client.server_capabilities.semanticTokensProvider = nil
             require("nvchad.configs.lspconfig").on_attach(client, buffer)
+            vim.keymap.set("n", "<leader>ca", function()
+              vim.cmd.RustLsp "codeAction"
+            end, { silent = true, buffer = buffer, desc = "Rust Code Action" })
           end,
         },
       }
@@ -349,4 +367,7 @@ return {
     end,
     config = function() end,
   },
+
+  -- bqf
+  { "kevinhwang91/nvim-bqf", ft = "qf" },
 }
