@@ -6,6 +6,7 @@ local options = {
     html = { "prettier" },
     json = { "prettier" },
     markdown = { "prettier" },
+    sql = { "sql_formatter" },
   },
 
   -- format_on_save = {

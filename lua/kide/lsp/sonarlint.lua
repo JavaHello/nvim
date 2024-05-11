@@ -13,8 +13,13 @@ M.setup = function()
 
     local analyzer_jar = vim.split(vim.fn.glob(analyzer_path .. "/*.jar"), "\n")
 
+    analyzer_jar = vim.tbl_filter(function(value)
+      return vim.endswith(value, "sonarjava.jar")
+    end, analyzer_jar)
+
     local cmd = {
       utils.java_bin(),
+      "-Dsonarlint.telemetry.disabled=true",
       "-jar",
       sonarlint_ls,
       "-stdio",

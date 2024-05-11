@@ -7,6 +7,16 @@ local command = vim.api.nvim_create_user_command
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
 
+-- <C-I> 按键映射问题
+vim.keymap.del("n", "<tab>")
+vim.keymap.del("n", "<S-tab>")
+-- map("n", "<leader>n", function()
+--   require("nvchad.tabufline").next()
+-- end, { desc = "buffer goto next" })
+--
+-- map("n", "<leader>p", function()
+--   require("nvchad.tabufline").prev()
+-- end, { desc = "buffer goto prev" })
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
 -- dap
@@ -138,3 +148,10 @@ end, {
     end, severity_key)
   end,
 })
+
+command("Bn", function()
+  require("nvchad.tabufline").next()
+end, { desc = "buffer goto next" })
+command("Bp", function()
+  require("nvchad.tabufline").prev()
+end, { desc = "buffer goto prev" })
