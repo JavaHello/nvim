@@ -29,6 +29,11 @@ M.setup = function()
     require("sonarlint").setup {
       server = {
         cmd = cmd,
+        settings = {
+          sonarlint = {
+            disableTelemetry = true,
+          },
+        },
       },
       filetypes = {
         "java",
