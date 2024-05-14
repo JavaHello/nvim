@@ -103,9 +103,9 @@ return {
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dap.repl.open()
       end
-      dap.listeners.after.event_terminated["dapui_config"] = function()
-        dap.repl.close()
-      end
+      -- dap.listeners.after.event_terminated["dapui_config"] = function()
+      -- dap.repl.close()
+      -- end
     end,
   },
   {

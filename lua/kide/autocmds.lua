@@ -29,6 +29,7 @@ autocmd("FileType", {
     "dbui",
     "dbout",
     "httpResult",
+    "dap-repl"
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
