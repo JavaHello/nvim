@@ -56,3 +56,7 @@ vim.opt.list = true
 --   extends = "❯",
 --   precedes = "❮",
 -- }
+
+-- jk移动时光标下上方保留8行
+vim.opt.scrolloff = 3
+vim.opt.sidescrolloff = 3

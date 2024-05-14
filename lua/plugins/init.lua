@@ -26,12 +26,15 @@ return {
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      { "rcarriga/cmp-dap" },
+      { "rcarriga/cmp-dap", "hrsh7th/cmp-cmdline" },
     },
     opts = {
       enabled = function()
         return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
       end,
+      completion = {
+        completeopt = "menu,menuone,noselect",
+      },
     },
     config = function(_, opts)
       local cmp = require "cmp"
@@ -40,6 +43,22 @@ return {
         sources = {
           { name = "dap" },
         },
+      })
+      cmp.setup.cmdline({ "/", "?" }, {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = "buffer" },
+        },
+      })
+
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = "path" },
+        }, {
+          { name = "cmdline" },
+        }),
+        matching = { disallow_symbol_nonprefix_matching = false },
       })
     end,
   },
@@ -67,6 +86,7 @@ return {
   },
   {
     "https://gitlab.com/schrieveslaach/sonarlint.nvim.git",
+    dir = "/Users/luokai/workspace/VimProjects/sonarlint.nvim",
   },
   {
     "aklt/plantuml-syntax",

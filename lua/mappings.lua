@@ -19,6 +19,15 @@ vim.keymap.del("n", "<S-tab>")
 -- end, { desc = "buffer goto prev" })
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
+map("n", "<up>", "<CMD>res +5<CR>", { desc = "Resize +5" })
+map("n", "<down>", "<CMD>res -5<CR>", { desc = "Resize -5" })
+map("n", "<S-up>", "<CMD>res -5<CR>", { desc = "Resize -5" })
+map("n", "<S-down>", "<CMD>res +5<CR>", { desc = "Resize +5" })
+map("n", "<left>", "<CMD>vertical resize+5<CR>", { desc = "Vertical Resize +5" })
+map("n", "<right>", "<CMD>vertical resize-5<CR>", { desc = "Vertical Resize -5" })
+map("n", "<S-left>", "<CMD>vertical resize-5<CR>", { desc = "Vertical Resize -5" })
+map("n", "<S-right>", "<CMD>vertical resize+5<CR>", { desc = "Vertical Resize +5" })
+
 -- dap
 map("n", "<leader>db", "<CMD>lua require'dap'.toggle_breakpoint()<CR>", { desc = "Dap toggle breakpoint" })
 map(

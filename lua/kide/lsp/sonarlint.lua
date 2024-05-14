@@ -29,6 +29,10 @@ M.setup = function()
     require("sonarlint").setup {
       server = {
         cmd = cmd,
+        root_dir = require("jdtls.setup").find_root { ".git", "mvnw", "gradlew" } or vim.loop.cwd(),
+        filetypes = {
+          "java",
+        },
         settings = {
           sonarlint = {
             disableTelemetry = true,
