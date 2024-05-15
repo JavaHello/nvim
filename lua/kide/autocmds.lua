@@ -29,7 +29,7 @@ autocmd("FileType", {
     "dbui",
     "dbout",
     "httpResult",
-    "dap-repl"
+    "dap-repl",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -126,3 +126,14 @@ autocmd("LspDetach", {
     end
   end,
 })
+
+-- jdtls
+autocmd({ "BufReadCmd" }, {
+  group = augroup "jdtls_open",
+  pattern = { "*.class" },
+  callback = function(event)
+    print "*.class"
+    require("jdtls").open_classfile(event.file)
+  end,
+})
+

@@ -164,3 +164,11 @@ end, { desc = "buffer goto next" })
 command("Bp", function()
   require("nvchad.tabufline").prev()
 end, { desc = "buffer goto prev" })
+
+-- jdtls
+command("JdtWipeDataAndRestart", function()
+  require("jdtls.setup").wipe_data_and_restart()
+end, { desc = "Jdt Wipe Data And Restart" })
+command("JdtShowLogs", function()
+  require("jdtls.setup").show_logs()
+end, { desc = "Jdt Show Logs" })
