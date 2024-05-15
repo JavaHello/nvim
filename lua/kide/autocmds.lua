@@ -132,8 +132,6 @@ autocmd({ "BufReadCmd" }, {
   group = augroup "jdtls_open",
   pattern = { "*.class" },
   callback = function(event)
-    print "*.class"
     require("jdtls").open_classfile(event.file)
   end,
 })
-
