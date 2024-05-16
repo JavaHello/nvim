@@ -10,10 +10,10 @@ M.ui = {
   hl_override = {
     Comment = { italic = true },
     ["@comment"] = { italic = true },
-    DiffDelete = { fg = "NONE", bg = "#3c1f1e" },
-    DiffAdd = { fg = "NONE", bg = "#32361a" },
-    DiffChange = { fg = "NONE", bg = "#0d3138" },
-    DiffText = { fg = "yellow", bg = "#282828" },
+    DiffAdd = { fg = "#282828", bg = "#b8bb26", ctermfg = 142, ctermbg = 235 },
+    DiffChange = { fg = "#282828", bg = "#8ec07c", ctermfg = 108, ctermbg = 235 },
+    DiffDelete = { fg = "#282828", bg = "#fb4934", ctermfg = 167, ctermbg = 235 },
+    DiffText = { fg = "#282828", bg = "#fabd2f", ctermfg = 214, ctermbg = 235 },
 
     LspReferenceText = { fg = "orange", bg = "NONE" },
     LspReferenceRead = { fg = "orange", bg = "NONE" },

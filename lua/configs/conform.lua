@@ -7,6 +7,7 @@ local options = {
     json = { "prettier" },
     markdown = { "prettier" },
     sql = { "sql_formatter" },
+    python = { "black" },
   },
 
   -- format_on_save = {
