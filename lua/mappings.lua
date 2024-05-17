@@ -95,6 +95,9 @@ end, { desc = "lsp prev diagnostic error" })
 map("n", "]e", function()
   vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }
 end, { desc = "lsp next diagnostic error" })
+command("InlayHint", function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, { desc = "LSP Inlay Hint" })
 
 map("v", "<leader>fs", function()
   vim.api.nvim_feedkeys("\027", "xt", false)

@@ -21,6 +21,11 @@ M.ui = {
   },
   statusline = {
     theme = "default",
+    modules = {
+      lsp_msg = function()
+        return ""
+      end,
+    },
   },
 }
 vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })

@@ -22,6 +22,14 @@ return {
       require "configs.lspconfig"
     end,
   },
+  -- LSP progress messages
+  {
+    "j-hui/fidget.nvim",
+    event = { "VeryLazy" },
+    opts = {
+      -- options
+    },
+  },
   -- cmp
   {
     "hrsh7th/nvim-cmp",
