@@ -252,7 +252,7 @@ local config = {
         },
       },
       inlayhints = {
-        parameterNames = { enabled = true },
+        parameterNames = { enabled = "ALL" },
       },
       referenceCodeLens = { enabled = true },
       implementationsCodeLens = { enabled = true },
