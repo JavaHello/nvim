@@ -32,6 +32,12 @@ lspconfig.tsserver.setup {
   capabilities = capabilities,
 }
 
+lspconfig.clangd.setup {
+  on_attach = on_attach,
+  on_init = on_init,
+  capabilities = capabilities,
+}
+
 require("kide.lsp.java").setup {
   on_attach = on_attach,
   on_init = on_init,
