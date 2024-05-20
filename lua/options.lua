@@ -63,6 +63,7 @@ vim.opt.list = true
 vim.opt.scrolloff = 3
 vim.opt.sidescrolloff = 3
 
+vim.opt.linespace = 0
 
 -- quickfix 美化
 function _G.qftf(info)
