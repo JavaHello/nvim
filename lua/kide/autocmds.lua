@@ -59,7 +59,7 @@ autocmd("FileType", {
     "OUTLINE",
   },
   callback = function(_)
-    vim.api.nvim_win_set_option(vim.api.nvim_get_current_win(), "signcolumn", "no")
+    vim.api.nvim_set_option_value("signcolumn", "no", { win = vim.api.nvim_get_current_win() })
   end,
 })
 

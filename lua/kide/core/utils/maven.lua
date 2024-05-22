@@ -63,7 +63,7 @@ local maven_args_complete = utils.command_args_complete
 
 M.maven_command = function(buf)
   -- 判断为 java 文件
-  if vim.api.nvim_buf_get_option(buf, "filetype") == "java" then
+  if vim.api.nvim_get_option_value("filetype", { buf = buf }) == "java" then
     create_command(buf, "MavenExecJava", function(_)
       local filename = vim.fn.expand "%:p"
       filename = string.gsub(filename, "^[%-/%w%s]*%/src%/main%/java%/", "")

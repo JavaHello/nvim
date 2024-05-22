@@ -417,7 +417,7 @@ config.flags = {
   debounce_text_changes = 150,
 }
 config.handlers = {}
-config.handlers["language/status"] = function(_, s)
+config.handlers["language/status"] = function(_, _)
   -- 使用 progress 查看状态
   -- print("jdtls " .. s.type .. ": " .. s.message)
   -- ServiceReady 不能用来判断是否完全启动
@@ -434,9 +434,10 @@ end
 M.setup = function(opts)
   local on_attach = opts.on_attach
   config.on_attach = function(client, buffer)
-    vim.api.nvim_buf_set_option(buffer, "shiftwidth", 4)
-    vim.api.nvim_buf_set_option(buffer, "tabstop", 4)
-    vim.api.nvim_buf_set_option(buffer, "softtabstop", 4)
+    local buf_opt = { buf = buffer }
+    vim.api.nvim_set_option_value("shiftwidth", 4, buf_opt)
+    vim.api.nvim_set_option_value("tabstop", 4, buf_opt)
+    vim.api.nvim_set_option_value("softtabstop", 4, buf_opt)
     local function desc_opts(desc)
       return { silent = true, buffer = buffer, desc = desc }
     end

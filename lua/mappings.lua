@@ -89,14 +89,27 @@ map("n", "[c", function()
 end, { expr = true, desc = "Git Prev Hunk" })
 
 -- LSP
+map("n", "]d", function()
+  vim.diagnostic.goto_next()
+  vim.diagnostic.open_float()
+end, { desc = "Jump to the next diagnostic" })
+map("n", "[d", function()
+  vim.diagnostic.goto_prev()
+  vim.diagnostic.open_float()
+end, { desc = "Jump to the previous diagnostic" })
+
 map("n", "[e", function()
   vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }
-end, { desc = "lsp prev diagnostic error" })
+  vim.diagnostic.open_float()
+end, { desc = "Jump to the previous diagnostic error" })
 map("n", "]e", function()
   vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }
-end, { desc = "lsp next diagnostic error" })
+  vim.diagnostic.open_float()
+end, { desc = "Jump to the next diagnostic error" })
+map("n", "gk", vim.lsp.buf.signature_help, { desc = "lsp signature help" })
+
 command("InlayHint", function()
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
 end, { desc = "LSP Inlay Hint" })
 
 map("v", "<leader>fs", function()
