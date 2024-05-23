@@ -77,6 +77,7 @@ function _G.qftf(info)
   local limit = 40
   local fnameFmt1, fnameFmt2 = "%-" .. limit .. "s", "…%." .. (limit - 1) .. "s"
   local validFmt = "%s │%5d:%-3d│%s %s"
+  local fmt = true
   for i = info.start_idx, info.end_idx do
     local e = items[i]
     local fname = ""
@@ -84,16 +85,24 @@ function _G.qftf(info)
     if e.valid == 1 then
       if e.bufnr > 0 then
         fname = fn.bufname(e.bufnr)
+        fmt = true
         if fname == "" then
           fname = "[No Name]"
         else
           fname = fname:gsub("^" .. vim.env.HOME, "~")
         end
+        if vim.startswith(fname, "jdt://") then
+          local jar, pkg, class = fname:match "^jdt://contents/([^/]+)/([^/]+)/(.+)?"
+          fname = "󰧮 " .. class .. "  " .. pkg .. "  " .. jar
+          fmt = false
+        end
         -- char in fname may occur more than 1 width, ignore this issue in order to keep performance
-        if #fname <= limit then
-          fname = fnameFmt1:format(fname)
-        else
-          fname = fnameFmt2:format(fname:sub(1 - limit))
+        if fmt then
+          if #fname <= limit then
+            fname = fnameFmt1:format(fname)
+          else
+            fname = fnameFmt2:format(fname:sub(1 - limit))
+          end
         end
       end
       local lnum = e.lnum > 99999 and -1 or e.lnum
