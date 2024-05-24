@@ -294,6 +294,7 @@ return {
   -- chatgpt You, 2023-02-11 01:14:46 - lazy-nvim
   {
     "robitx/gp.nvim",
+    enabled = vim.env["GP_CHAT_ENABLE"] == "Y",
     cmd = {
       "GpNew",
       "GpChatNew",
