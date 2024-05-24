@@ -344,6 +344,22 @@ return {
 			]]
     end,
   },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    cmd = {
+      "CopilotChat",
+      "CopilotChatOpen",
+      "CopilotChatClose",
+      "CopilotChatToggle",
+    },
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+    },
+    opts = {
+      debug = true,
+    },
+  },
 
   -- 翻译插件
   {
