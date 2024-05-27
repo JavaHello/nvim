@@ -359,6 +359,11 @@ return {
     },
     opts = {
       debug = true,
+      mappings = {
+        close = {
+          insert = "",
+        },
+      },
     },
   },
 
