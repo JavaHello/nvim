@@ -454,4 +454,52 @@ return {
       },
     },
   },
+  {
+    "huggingface/llm.nvim",
+    enabled = vim.env["LLM_NVIM_ENABLE"] == "Y",
+    event = "VeryLazy",
+    opts = {
+      api_token = vim.env["LLM_NVIM_TOKEN"], -- cf Install paragraph
+      model = vim.env["LLM_NVIM_MODEL"], -- the model ID, behavior depends on backend
+      backend = vim.env["LLM_NVIM_BACKEND"],
+      accept_keymap = "<C-c>",
+      dismiss_keymap = "<C-e>",
+      url = vim.env["LLM_NVIM_URL"],
+      disable_url_path_completion = true,
+      request_body = {
+        parameters = {
+          -- max_new_tokens = 60,
+          temperature = 1,
+          top_p = 1,
+        },
+      },
+      lsp = {
+        bin_path = vim.api.nvim_call_function("stdpath", { "data" }) .. "/mason/bin/llm-ls",
+      },
+    },
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+    build = ":TSUpdate",
+    opts = {
+      highlight = {
+        enable = true,
+        disable = function(lang, buf)
+          local max_filesize = 50 * 1024
+          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+          if ok and stats and stats.size > max_filesize then
+            return true
+          end
+          return false
+        end,
+      },
+    },
+    config = function(_, opts)
+      dofile(vim.g.base46_cache .. "syntax")
+      dofile(vim.g.base46_cache .. "treesitter")
+      require("nvim-treesitter.configs").setup(opts)
+    end,
+  },
 }
