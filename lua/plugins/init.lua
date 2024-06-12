@@ -480,30 +480,6 @@ return {
     },
   },
   {
-    "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-    build = ":TSUpdate",
-    opts = {
-      highlight = {
-        enable = true,
-        disable = function(lang, buf)
-          local max_filesize = 50 * 1024
-          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-          if ok and stats and stats.size > max_filesize then
-            return true
-          end
-          return false
-        end,
-      },
-    },
-    config = function(_, opts)
-      dofile(vim.g.base46_cache .. "syntax")
-      dofile(vim.g.base46_cache .. "treesitter")
-      require("nvim-treesitter.configs").setup(opts)
-    end,
-  },
-  {
     "ray-x/go.nvim",
     ft = { "go", "gomod" },
     config = function()
