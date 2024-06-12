@@ -36,6 +36,7 @@ return {
     dependencies = {
       { "rcarriga/cmp-dap", "hrsh7th/cmp-cmdline" },
     },
+    keys = { ":", "/", "?" },
     opts = {
       enabled = function()
         return vim.api.nvim_get_option_value("buftype", { buf = 0 }) ~= "prompt" or require("cmp_dap").is_dap_buffer()
@@ -500,6 +501,13 @@ return {
       dofile(vim.g.base46_cache .. "syntax")
       dofile(vim.g.base46_cache .. "treesitter")
       require("nvim-treesitter.configs").setup(opts)
+    end,
+  },
+  {
+    "ray-x/go.nvim",
+    ft = { "go", "gomod" },
+    config = function()
+      require("go").setup()
     end,
   },
 }
