@@ -65,6 +65,19 @@ map("v", "<leader>fw", function()
   tb.live_grep { default_text = text }
 end, { desc = "telescope live grep", silent = true, noremap = true })
 
+map("v", "<leader>fm", function()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+  local start_pos = vim.api.nvim_buf_get_mark(0, "<")
+  local end_pos = vim.api.nvim_buf_get_mark(0, ">")
+  require("conform").format {
+    range = {
+      start = start_pos,
+      ["end"] = end_pos,
+    },
+    lsp_fallback = true,
+  }
+end, { desc = "format range", silent = true, noremap = true })
+
 -- Git
 map("n", "]c", function()
   local gs = require "gitsigns"
