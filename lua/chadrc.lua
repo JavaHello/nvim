@@ -21,10 +21,12 @@ M.ui = {
   },
   statusline = {
     theme = "default",
+    order = { "mode", "file", "git", "diagnostics", "%=", "lsp_msg", "%=", "cursor", "lsp", "cwd" },
     modules = {
       lsp_msg = function()
         return ""
       end,
+      cursor = "%#St_pos_text# %l:%c ",
     },
   },
 }
