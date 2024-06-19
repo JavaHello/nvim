@@ -486,4 +486,17 @@ return {
       require("go").setup()
     end,
   },
+  {
+    "NStefan002/screenkey.nvim",
+    cmd = {
+      "Screenkey",
+    },
+    version = "*",
+  },
+  {
+    "scalameta/nvim-metals",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+  },
 }

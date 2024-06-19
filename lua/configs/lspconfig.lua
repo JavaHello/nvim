@@ -66,6 +66,13 @@ require("kide.lsp.pyright").setup {
   capabilities = capabilities,
 }
 
+-- metals
+require("kide.lsp.metals").setup {
+  on_attach = on_attach,
+  on_init = on_init,
+  capabilities = capabilities,
+}
+
 -- SQL
 -- lspconfig.sqls.setup {
 --   cmd = { "sqls", "-config", "~/.config/sqls/config.yml" },
