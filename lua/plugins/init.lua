@@ -177,6 +177,11 @@ return {
             vim.cmd "tabclose"
           end,
         },
+        file_history_panel = {
+          ["q"] = function()
+            vim.cmd "tabclose"
+          end,
+        },
       },
     },
   },
