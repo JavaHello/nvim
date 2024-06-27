@@ -111,19 +111,10 @@ autocmd("LspAttach", {
 autocmd("LspDetach", {
   callback = function(args)
     local bufnr = args.buf
-    -- local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if clientCache(args.data.client_id).CursorHold[bufnr] then
-      vim.api.nvim_del_autocmd(clientCache(args.data.client_id).CursorHold[bufnr])
-      clientCache(args.data.client_id).CursorHold[bufnr] = nil
-    end
-    if clientCache(args.data.client_id).CursorHoldI[bufnr] then
-      vim.api.nvim_del_autocmd(clientCache(args.data.client_id).CursorHoldI[bufnr])
-      clientCache(args.data.client_id).CursorHoldI[bufnr] = nil
-    end
-    if clientCache(args.data.client_id).CursorMoved[bufnr] then
-      vim.api.nvim_del_autocmd(clientCache(args.data.client_id).CursorMoved[bufnr])
-      clientCache(args.data.client_id).CursorMoved[bufnr] = nil
-    end
+    -- vim.api.nvim_del_autocmd(mid) 自动 del
+    clientCache(args.data.client_id).CursorHold[bufnr] = nil
+    clientCache(args.data.client_id).CursorHoldI[bufnr] = nil
+    clientCache(args.data.client_id).CursorMoved[bufnr] = nil
   end,
 })
 
