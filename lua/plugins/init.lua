@@ -504,4 +504,10 @@ return {
       "nvim-lua/plenary.nvim",
     },
   },
+  -- ASCII 图
+  {
+    "jbyuki/venn.nvim",
+    lazy = true,
+    cmd = { "VBox" },
+  },
 }
