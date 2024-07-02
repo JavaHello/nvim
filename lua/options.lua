@@ -94,6 +94,11 @@ function _G.qftf(info)
         if vim.startswith(fname, "jdt://") then
           local jar, pkg, class = fname:match "^jdt://contents/([^/]+)/([^/]+)/(.+)?"
           fname = "󰧮 " .. class .. "  " .. pkg .. "  " .. jar
+
+          -- 加载 jdt:// 文件
+          if vim.fn.bufloaded(e.bufnr) == 0 then
+            vim.fn.bufload(e.bufnr)
+          end
           fmt = false
         end
         -- char in fname may occur more than 1 width, ignore this issue in order to keep performance
@@ -121,4 +126,3 @@ vim.o.qftf = "{info -> v:lua._G.qftf(info)}"
 
 vim.opt.laststatus = 3
 vim.opt.splitkeep = "screen"
-
