@@ -128,22 +128,44 @@ command("CodeLensClear", function()
   vim.lsp.codelens.clear()
 end, { desc = "LSP CodeLens" })
 
-map("v", "<leader>fs", function()
-  vim.api.nvim_feedkeys("\027", "xt", false)
-  local text = require("kide.core.utils").get_visual_selection()
-  require("fzf-lua").lsp_live_workspace_symbols { default_text = text, query = text }
-end, { desc = "Lsp Workspace Symbols", silent = true, noremap = true })
+-- map("v", "<leader>fs", function()
+--   vim.api.nvim_feedkeys("\027", "xt", false)
+--   local text = require("kide.core.utils").get_visual_selection()
+--   require("fzf-lua").lsp_live_workspace_symbols { default_text = text, query = text }
+-- end, { desc = "Lsp Workspace Symbols", silent = true, noremap = true })
+--
+-- map("n", "<leader>fs", function()
+--   require("fzf-lua").lsp_live_workspace_symbols {}
+-- end, { desc = "Lsp Workspace Symbols" })
 
-map("n", "<leader>fs", function()
-  require("fzf-lua").lsp_live_workspace_symbols {}
-end, { desc = "Lsp Workspace Symbols" })
+local function _on_list()
+  local templist = {}
+  local tempctx = {}
+  return function(ctx)
+    vim.list_extend(templist, ctx.items)
+    tempctx = vim.tbl_extend("keep", tempctx, ctx)
+    tempctx.items = templist
+    vim.fn.setqflist({}, " ", tempctx)
+    vim.cmd "botright copen"
+  end
+end
+
+command("DocumentSymbols", function(_)
+  vim.lsp.buf.document_symbol {
+    on_list = _on_list(),
+  }
+end, {
+  desc = "Lsp Document Symbols",
+  nargs = 0,
+  range = true,
+})
 
 command("WorkspaceSymbols", function(opts)
   if opts.range > 0 then
     local text = require("kide.core.utils").get_visual_selection()
-    vim.lsp.buf.workspace_symbol(text)
+    vim.lsp.buf.workspace_symbol(text, { on_list = _on_list() })
   else
-    vim.lsp.buf.workspace_symbol(opts.args)
+    vim.lsp.buf.workspace_symbol(opts.args, { on_list = _on_list() })
   end
 end, {
   desc = "Lsp Workspace Symbols",
