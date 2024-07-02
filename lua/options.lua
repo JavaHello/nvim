@@ -118,3 +118,7 @@ function _G.qftf(info)
 end
 
 vim.o.qftf = "{info -> v:lua._G.qftf(info)}"
+
+vim.opt.laststatus = 3
+vim.opt.splitkeep = "screen"
+
