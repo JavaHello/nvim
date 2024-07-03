@@ -103,17 +103,19 @@ end, { expr = true, desc = "Git Prev Hunk" })
 
 -- LSP
 map("n", "]d", function()
-  vim.diagnostic.jump { count = 1 }
+  -- vim.diagnostic.jump { count = 1 }
+  vim.diagnostic.goto_next()
 end, { desc = "Jump to the next diagnostic" })
 map("n", "[d", function()
-  vim.diagnostic.jump { count = -1 }
+  -- vim.diagnostic.jump { count = -1 }
+  vim.diagnostic.goto_prev()
 end, { desc = "Jump to the previous diagnostic" })
 
 map("n", "[e", function()
-  vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR }
+  vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }
 end, { desc = "Jump to the previous diagnostic error" })
 map("n", "]e", function()
-  vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR }
+  vim.diagnostic.goto_next { count = 1, severity = vim.diagnostic.severity.ERROR }
 end, { desc = "Jump to the next diagnostic error" })
 map("n", "gk", vim.lsp.buf.signature_help, { desc = "lsp signature help" })
 map("n", "go", vim.diagnostic.open_float, { desc = "lsp signature help" })
