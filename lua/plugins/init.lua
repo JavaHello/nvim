@@ -95,7 +95,6 @@ return {
   },
   {
     "https://gitlab.com/schrieveslaach/sonarlint.nvim.git",
-    dir = "/Users/luokai/workspace/VimProjects/sonarlint.nvim",
   },
   {
     "aklt/plantuml-syntax",
