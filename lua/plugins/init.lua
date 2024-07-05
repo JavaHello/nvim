@@ -72,15 +72,6 @@ return {
     end,
   },
 
-  -- tools
-  {
-    "ibhagwan/fzf-lua",
-    event = { "VeryLazy" },
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("fzf-lua").setup {}
-    end,
-  },
   -- java
   {
     "mfussenegger/nvim-jdtls",
@@ -90,7 +81,6 @@ return {
     ft = "java",
     dependencies = {
       "mfussenegger/nvim-jdtls",
-      "ibhagwan/fzf-lua", -- 可选
     },
   },
   {
