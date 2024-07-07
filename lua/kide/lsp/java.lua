@@ -305,6 +305,12 @@ local config = {
           "jdk.*",
           "sun.*",
         },
+        importOrder = {
+          "java",
+          "javax",
+          "org",
+          "com",
+        },
       },
       sources = {
         organizeImports = {
