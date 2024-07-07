@@ -289,6 +289,12 @@ local config = {
       contentProvider = { preferred = "fernflower" },
       completion = {
         favoriteStaticMembers = {
+          "org.junit.Assert.*",
+          "org.junit.Assume.*",
+          "org.junit.jupiter.api.Assertions.*",
+          "org.junit.jupiter.api.Assumptions.*",
+          "org.junit.jupiter.api.DynamicContainer.*",
+          "org.junit.jupiter.api.DynamicTest.*",
           "org.assertj.core.api.Assertions.assertThat",
           "org.assertj.core.api.Assertions.assertThatThrownBy",
           "org.assertj.core.api.Assertions.assertThatExceptionOfType",
