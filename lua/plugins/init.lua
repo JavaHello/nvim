@@ -340,6 +340,11 @@ return {
             end, { silent = true, buffer = buffer, desc = "Rust Code Action" })
           end,
         },
+        tools = {
+          hover_actions = {
+            replace_builtin_hover = false,
+          },
+        },
       }
     end,
   },
