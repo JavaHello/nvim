@@ -42,7 +42,7 @@ return {
         return vim.api.nvim_get_option_value("buftype", { buf = 0 }) ~= "prompt" or require("cmp_dap").is_dap_buffer()
       end,
       completion = {
-        completeopt = "menu,menuone,noselect",
+        completeopt = "menu,menuone",
       },
     },
     config = function(_, opts)
