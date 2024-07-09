@@ -47,6 +47,10 @@ return {
     },
     config = function(_, opts)
       local cmp = require "cmp"
+      opts.mapping["<CR>"] = cmp.mapping.confirm {
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true,
+      }
       cmp.setup(opts)
       cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
         sources = {
@@ -54,6 +58,9 @@ return {
         },
       })
       cmp.setup.cmdline({ "/", "?" }, {
+        completion = {
+          completeopt = "menu,menuone,noselect",
+        },
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
           { name = "buffer" },
@@ -61,6 +68,9 @@ return {
       })
 
       cmp.setup.cmdline(":", {
+        completion = {
+          completeopt = "menu,menuone,noselect",
+        },
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
           { name = "path" },
