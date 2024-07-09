@@ -47,8 +47,11 @@ map("n", "<leader>dl", "<CMD>lua require'dap'.run_last()<CR>", {
 map("n", "<leader>o", "<CMD>SymbolsOutline<CR>", { desc = "Symbols Outline" })
 
 command("CloseOtherBuffer", function()
-  require("nvchad.tabufline").closeOtherBufs()
+  require("nvchad.tabufline").closeAllBufs(false)
 end, { desc = "Closes all bufs except current one" })
+-- command("CloseAllBuffer", function()
+--   require("nvchad.tabufline").closeAllBufs(true)
+-- end, { desc = "Closes all bufs" })
 
 -- Telescope
 map("v", "<leader>ff", function()
