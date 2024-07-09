@@ -120,7 +120,7 @@ end, { desc = "Jump to the previous diagnostic error" })
 map("n", "]e", function()
   vim.diagnostic.goto_next { count = 1, severity = vim.diagnostic.severity.ERROR }
 end, { desc = "Jump to the next diagnostic error" })
-map("n", "gk", vim.lsp.buf.signature_help, { desc = "lsp signature help" })
+map("n", "gs", vim.lsp.buf.signature_help, { desc = "lsp signature help" })
 map("n", "go", vim.diagnostic.open_float, { desc = "lsp signature help" })
 
 command("InlayHint", function()
