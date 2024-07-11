@@ -38,19 +38,30 @@ lspconfig.clangd.setup {
   capabilities = capabilities,
 }
 
-require("kide.lsp.java").setup {
-  on_attach = on_attach,
-  on_init = on_init,
-  capabilities = capabilities,
-}
-require("spring_boot").setup {
-  server = {
+local metals_enable = vim.env["METALS_ENABLE"]
+
+if metals_enable == "Y" then
+  -- metals
+  require("kide.lsp.metals").setup {
     on_attach = on_attach,
     on_init = on_init,
     capabilities = capabilities,
-  },
-}
-require("kide.lsp.sonarlint").setup()
+  }
+else
+  require("kide.lsp.java").setup {
+    on_attach = on_attach,
+    on_init = on_init,
+    capabilities = capabilities,
+  }
+  require("spring_boot").setup {
+    server = {
+      on_attach = on_attach,
+      on_init = on_init,
+      capabilities = capabilities,
+    },
+  }
+  require("kide.lsp.sonarlint").setup()
+end
 
 -- XML
 require("kide.lsp.lemminx").setup {
@@ -61,13 +72,6 @@ require("kide.lsp.lemminx").setup {
 
 -- python
 require("kide.lsp.pyright").setup {
-  on_attach = on_attach,
-  on_init = on_init,
-  capabilities = capabilities,
-}
-
--- metals
-require("kide.lsp.metals").setup {
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,
