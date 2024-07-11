@@ -1,7 +1,40 @@
 local M = {}
 
 M.setup = function(opt)
+  local dap = require "dap"
+  dap.configurations.scala = {
+    {
+      type = "scala",
+      request = "launch",
+      name = "Run or Test Target",
+      metals = {
+        runType = "runOrTestFile",
+      },
+    },
+    {
+      type = "scala",
+      request = "launch",
+      name = "Test Target",
+      metals = {
+        runType = "testTarget",
+      },
+    },
+  }
   local metals_config = vim.tbl_deep_extend("keep", require("metals").bare_config(), opt)
+  metals_config.settings = {
+    testUserInterface = "Test Explorer",
+    showImplicitArguments = true,
+    excludedPackages = {
+      "akka.actor.typed.javadsl",
+      "com.github.swagger.akka.javadsl",
+    },
+  }
+
+  local fidget_available, _ = pcall(require, "fidget")
+  if fidget_available then
+    metals_config.init_options.statusBarProvider = "off"
+  end
+
   local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
   local on_attach = metals_config.on_attach
   metals_config.on_attach = function(client, bufnr)
