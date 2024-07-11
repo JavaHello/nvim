@@ -306,9 +306,13 @@ return {
       "GpChatToggle",
     },
     opts = {
-      openai_api_key = vim.env["OPENAI_API_KEY"],
+      providers = {
+        openai = {
+          endpoint = vim.env["OPENAI_API_ENDPOINT"],
+          secret = vim.env["OPENAI_API_KEY"],
+        },
+      },
       cmd_prefix = "Gp",
-      openai_api_endpoint = vim.env["OPENAI_API_ENDPOINT"],
       chat_topic_gen_model = "deepseek-chat",
       agents = {
         {
