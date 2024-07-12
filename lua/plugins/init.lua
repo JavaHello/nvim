@@ -525,4 +525,12 @@ return {
       require("nvim-ts-autotag").setup {}
     end,
   },
+  -- 更好的生成注释
+  {
+    "danymat/neogen",
+    event = "VeryLazy",
+    config = function()
+      require("neogen").setup { snippet_engine = "luasnip" }
+    end,
+  },
 }
