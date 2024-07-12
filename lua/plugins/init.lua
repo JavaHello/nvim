@@ -517,4 +517,12 @@ return {
     lazy = true,
     cmd = { "VBox" },
   },
+  {
+    "windwp/nvim-ts-autotag",
+    -- event = { "BufReadPre", "BufNewFile" },
+    ft = { "html" },
+    config = function()
+      require("nvim-ts-autotag").setup {}
+    end,
+  },
 }
