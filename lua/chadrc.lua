@@ -22,15 +22,16 @@ M.ui = {
   },
   statusline = {
     theme = "default",
-    order = { "mode", "file", "git", "diagnostics", "%=", "lsp_msg", "%=", "cursor", "date", "lsp", "cwd" },
+    order = { "mode", "file", "git", "diagnostics", "%=", "lsp_msg", "%=", "cursor", "lsp", "cwd" },
     modules = {
       lsp_msg = function()
         return ""
       end,
       cursor = "%#St_pos_text# %l:%c ",
-      date = function()
-        return "%#St_Lsp# " .. os.date "%Y-%m-%d %H:%M:%S "
-      end,
+      -- 使用 tmux 状态栏查看时间
+      -- date = function()
+      --   return "%#St_Lsp# " .. os.date "%Y-%m-%d %H:%M:%S "
+      -- end,
     },
   },
 }
@@ -59,8 +60,8 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
   silent = true,
 })
 
-vim.fn.timer_start(1000, function()
-  vim.cmd.redrawstatus()
-end, { ["repeat"] = -1 })
+-- vim.fn.timer_start(1000, function()
+--   vim.cmd.redrawstatus()
+-- end, { ["repeat"] = -1 })
 
 return M
