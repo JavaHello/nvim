@@ -29,7 +29,7 @@ M.ui = {
       end,
       cursor = "%#St_pos_text# %l:%c ",
       date = function()
-        return "%#St_Lsp# " .. os.date "%Y-%m-%d %H:%M:%S"
+        return "%#St_Lsp# " .. os.date "%Y-%m-%d %H:%M:%S "
       end,
     },
   },
