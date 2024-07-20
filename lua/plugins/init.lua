@@ -567,4 +567,16 @@ return {
       },
     },
   },
+
+  {
+    "Civitasv/cmake-tools.nvim",
+    cmd = {
+      "CMakeRun",
+      "CMakeDebug",
+      "CMakeRunTest",
+    },
+    opts = {
+      cmake_build_directory = "build", -- this is used to specify generate directory for cmake, allows macro expansion
+    },
+  },
 }
