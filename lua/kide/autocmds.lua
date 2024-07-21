@@ -142,3 +142,12 @@ autocmd({ "BufReadCmd" }, {
     require("jdtls").open_classfile(event.file)
   end,
 })
+
+autocmd("TermOpen", {
+  group = augroup "terminal_config",
+  callback = function(_)
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.signcolumn = "no"
+  end,
+})
