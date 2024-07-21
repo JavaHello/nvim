@@ -145,9 +145,10 @@ autocmd({ "BufReadCmd" }, {
 
 autocmd("TermOpen", {
   group = augroup "terminal_config",
-  callback = function(_)
+  callback = function(event)
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
     vim.opt_local.signcolumn = "no"
+    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
   end,
 })
