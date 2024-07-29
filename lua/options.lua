@@ -126,3 +126,7 @@ vim.o.qftf = "{info -> v:lua._G.qftf(info)}"
 
 vim.opt.laststatus = 3
 vim.opt.splitkeep = "screen"
+
+-- lsp 时常出现 swapfile 冲突提示, 关闭 swapfile
+vim.opt.swapfile = false
+vim.opt.backup = false
