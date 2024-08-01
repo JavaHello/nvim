@@ -79,6 +79,12 @@ return {
         }),
         matching = { disallow_symbol_nonprefix_matching = false },
       })
+
+      opts.sources = opts.sources or {}
+      table.insert(opts.sources, {
+        name = "lazydev",
+        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      })
     end,
   },
 
@@ -578,5 +584,11 @@ return {
     opts = {
       cmake_build_directory = "build", -- this is used to specify generate directory for cmake, allows macro expansion
     },
+  },
+
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {},
   },
 }
