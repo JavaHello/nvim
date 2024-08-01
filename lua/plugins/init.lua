@@ -10,7 +10,15 @@ return {
     "nvim-tree/nvim-tree.lua",
     opts = function()
       local config = require "nvchad.configs.nvimtree"
-      config.actions.open_file.quit_on_open = true
+      if not config.actions then
+        config.actions = {
+          open_file = {
+            quit_on_open = true,
+          },
+        }
+      else
+        config.actions.open_file.quit_on_open = true
+      end
       return config
     end,
   },
