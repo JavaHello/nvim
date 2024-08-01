@@ -19,6 +19,9 @@ vim.keymap.del("n", "<S-tab>")
 -- end, { desc = "buffer goto prev" })
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
+vim.keymap.del("n", "<leader>x")
+map("n", "<leader>x", "<CMD>bd<CR>", { desc = "Close buffer" })
+
 map("n", "<up>", "<CMD>res +5<CR>", { desc = "Resize +5" })
 map("n", "<down>", "<CMD>res -5<CR>", { desc = "Resize -5" })
 map("n", "<S-up>", "<CMD>res -5<CR>", { desc = "Resize -5" })
@@ -45,6 +48,25 @@ map("n", "<leader>dl", "<CMD>lua require'dap'.run_last()<CR>", {
 
 -- outline
 map("n", "<leader>o", "<CMD>SymbolsOutline<CR>", { desc = "Symbols Outline" })
+
+-- task
+command("TaskToggle", function()
+  require("overseer").toggle {}
+end, { desc = "Task" })
+
+command("TaskRun", function()
+  require("overseer").run_template {}
+end, { desc = "Task Run" })
+
+command("TaskRunLast", function()
+  local overseer = require "overseer"
+  local tasks = overseer.list_tasks { recent_first = true }
+  if vim.tbl_isempty(tasks) then
+    vim.notify("No tasks found", vim.log.levels.WARN)
+  else
+    overseer.run_action(tasks[1], "restart")
+  end
+end, { desc = "Restart Last Task" })
 
 command("CloseOtherBuffer", function()
   require("nvchad.tabufline").closeAllBufs(false)

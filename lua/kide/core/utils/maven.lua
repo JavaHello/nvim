@@ -22,8 +22,12 @@ local function settings_opt(settings)
   return ""
 end
 
+M.is_pom_file = function(file)
+  return vim.endswith(file, "pom.xml")
+end
+
 local function pom_file(file)
-  if file and vim.endswith(file, "pom.xml") then
+  if M.is_pom_file(file) then
     return " -f " .. file
   end
   return ""
@@ -32,12 +36,20 @@ end
 local exec = function(cmd, pom, opt)
   opt = opt or {}
 
-  require("nvchad.term").runner {
-    pos = "sp",
-    cmd = cmd .. settings_opt(M.get_maven_settings()) .. pom_file(pom),
-    id = "maven",
-    clear_cmd = true,
-  }
+  local ok, overseer = pcall(require, "overseer")
+  if ok then
+    local task = overseer.new_task {
+      cmd = cmd,
+    }
+    task:start()
+  else
+    require("nvchad.term").runner {
+      pos = "sp",
+      cmd = cmd .. settings_opt(M.get_maven_settings()) .. pom_file(pom),
+      id = "maven",
+      clear_cmd = true,
+    }
+  end
 end
 local function create_command(buf, name, cmd, complete, opt)
   vim.api.nvim_buf_create_user_command(buf, name, function(opts)
