@@ -15,7 +15,7 @@ end
 
 local lspconfig = require "lspconfig"
 -- "ast_grep"
-local servers = { "html", "cssls", "gopls", "zls" }
+local servers = { "html", "cssls", "gopls", "zls", "jsonls" }
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do

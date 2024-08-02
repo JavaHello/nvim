@@ -232,78 +232,22 @@ return {
 
   -- 大纲插件
   {
-    "simrat39/symbols-outline.nvim",
+    "hedyhli/outline.nvim",
     cmd = {
-      "SymbolsOutline",
-      "SymbolsOutlineOpen",
-      "SymbolsOutlineClose",
+      "Outline",
     },
-    config = function()
-      local lspkind = require("kide.icons.lspkind").symbol_map
-      require("symbols-outline").setup {
-        highlight_hovered_item = false,
-        show_guides = true,
-        auto_preview = false,
-        position = "right",
-        relative_width = true,
-        width = 25,
-        auto_close = false,
-        show_numbers = false,
-        show_relative_numbers = false,
-        show_symbol_details = true,
-        preview_bg_highlight = "Normal,FloatBorder:Normal,CursorLine:Visual,Search:None",
-        autofold_depth = nil,
-        auto_unfold_hover = true,
-        fold_markers = { "", "" },
-        wrap = false,
-        keymaps = {
-          close = { "<Esc>", "q" },
-          goto_location = "<Cr>",
-          focus_location = "o",
-          hover_symbol = "<C-space>",
-          toggle_preview = "K",
-          rename_symbol = "r",
-          code_actions = "a",
-          fold = "h",
-          unfold = "l",
-          fold_all = "W",
-          unfold_all = "E",
-          fold_reset = "R",
+    opts = {
+      symbols = {
+        icon_fetcher = function(k)
+          return require("nvchad.icons.lspkind")[k]
+        end,
+      },
+      providers = {
+        lsp = {
+          blacklist_clients = { "spring-boot" },
         },
-        lsp_blacklist = {},
-        symbol_blacklist = {},
-        symbols = {
-          File = lspkind.File,
-          Module = lspkind.Module,
-          Namespace = lspkind.Namespace,
-          Package = lspkind.Package,
-          Class = lspkind.Class,
-          Method = lspkind.Method,
-          Property = lspkind.Property,
-          Field = lspkind.Field,
-          Constructor = lspkind.Constructor,
-          Enum = lspkind.Enum,
-          Interface = lspkind.Interface,
-          Function = lspkind.Function,
-          Variable = lspkind.Variable,
-          Constant = lspkind.Constant,
-          String = lspkind.String,
-          Number = lspkind.Number,
-          Boolean = lspkind.Boolean,
-          Array = lspkind.Array,
-          Object = lspkind.Object,
-          Key = lspkind.Keyword,
-          Null = lspkind.Null,
-          EnumMember = lspkind.EnumMember,
-          Struct = lspkind.Struct,
-          Event = lspkind.Event,
-          Operator = lspkind.Operator,
-          TypeParameter = lspkind.TypeParameter,
-          Component = lspkind.Component,
-          Fragment = lspkind.Fragment,
-        },
-      }
-    end,
+      },
+    },
   },
 
   -- mackdown 预览插件
@@ -631,6 +575,7 @@ return {
                   "compile",
                   "package",
                   "install",
+                  "test",
                   "verify",
                   "deploy",
                   "dependency:tree",

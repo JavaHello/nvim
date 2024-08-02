@@ -47,7 +47,7 @@ map("n", "<leader>dl", "<CMD>lua require'dap'.run_last()<CR>", {
 })
 
 -- outline
-map("n", "<leader>o", "<CMD>SymbolsOutline<CR>", { desc = "Symbols Outline" })
+map("n", "<leader>o", "<CMD>Outline<CR>", { desc = "Symbols Outline" })
 
 -- task
 command("TaskToggle", function()
