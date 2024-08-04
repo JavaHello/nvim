@@ -542,6 +542,9 @@ return {
     },
     opts = {
       cmake_build_directory = "build", -- this is used to specify generate directory for cmake, allows macro expansion
+      cmake_runner = {
+        name = "overseer",
+      },
     },
   },
 
