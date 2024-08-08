@@ -294,6 +294,24 @@ return {
             .. "- Don't elide any code from your output if the answer requires coding.\n"
             .. "- Take a deep breath; You've got this!\n",
         },
+        {
+          name = "DeepseekCoder",
+          chat = false,
+          command = true,
+          model = { model = "deepseek-coder", temperature = 0.0, top_p = 1 },
+          system_prompt = "You are an AI working as a code editor.\n\n"
+            .. "Please AVOID COMMENTARY OUTSIDE OF THE SNIPPET RESPONSE.\n"
+            .. "START AND END YOUR ANSWER WITH:\n\n```",
+        },
+      },
+      hooks = {
+        UnitTests = function(gp, params)
+          local template = "I have the following code from {{filename}}:\n\n"
+            .. "```{{filetype}}\n{{selection}}\n```\n\n"
+            .. "Please respond by writing table driven unit tests for the code above."
+          local agent = gp.get_command_agent "DeepseekCoder"
+          gp.Prompt(params, gp.Target.vnew, agent, template)
+        end,
       },
     },
     config = function(_, opts)
