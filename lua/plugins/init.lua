@@ -643,7 +643,7 @@ return {
     ft = "markdown",
     main = "render-markdown",
     opts = {
-      enabled = false,
+      enabled = true,
     },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
