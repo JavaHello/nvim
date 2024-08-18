@@ -19,8 +19,8 @@ vim.keymap.del("n", "<S-tab>")
 -- end, { desc = "buffer goto prev" })
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
-vim.keymap.del("n", "<leader>x")
-map("n", "<leader>x", "<CMD>bd<CR>", { desc = "Close buffer" })
+-- vim.keymap.del("n", "<leader>x")
+-- map("n", "<leader>x", "<CMD>bd<CR>", { desc = "Close buffer" })
 
 map("n", "<up>", "<CMD>res +5<CR>", { desc = "Resize +5" })
 map("n", "<down>", "<CMD>res -5<CR>", { desc = "Resize -5" })
