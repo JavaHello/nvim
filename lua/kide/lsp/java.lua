@@ -489,10 +489,9 @@ M.setup = function(opts)
       nargs = 0,
     })
 
-    -- require("java-deps").attach(client, buffer, root_dir)
-    -- create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
-    --   nargs = 0,
-    -- })
+    create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
+      nargs = 0,
+    })
 
     create_command(
       buffer,

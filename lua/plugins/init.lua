@@ -650,4 +650,11 @@ return {
       "nvim-tree/nvim-web-devicons",
     },
   },
+  {
+    "JavaHello/java-deps.nvim",
+    ft = "java",
+    config = function()
+      require("java-deps").setup {}
+    end,
+  },
 }
