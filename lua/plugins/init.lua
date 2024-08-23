@@ -639,7 +639,7 @@ return {
     end,
   },
   {
-    "MeanderingProgrammer/markdown.nvim",
+    "MeanderingProgrammer/render-markdown.nvim",
     ft = "markdown",
     main = "render-markdown",
     opts = {
@@ -655,6 +655,22 @@ return {
     ft = "java",
     config = function()
       require("java-deps").setup {}
+    end,
+  },
+  {
+    "rest-nvim/rest.nvim",
+    ft = "http",
+  },
+  {
+    "pwntester/octo.nvim",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "nvim-tree/nvim-web-devicons",
+    },
+    cmd = { "Octo" },
+    config = function()
+      require("octo").setup()
     end,
   },
 }
