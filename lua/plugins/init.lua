@@ -42,7 +42,11 @@ return {
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      { "rcarriga/cmp-dap", "hrsh7th/cmp-cmdline" },
+      {
+        "rcarriga/cmp-dap",
+        "hrsh7th/cmp-cmdline",
+        "hrsh7th/cmp-nvim-lsp-document-symbol",
+      },
     },
     keys = { ":", "/", "?" },
     opts = {
@@ -70,9 +74,11 @@ return {
           completeopt = "menu,menuone,noselect",
         },
         mapping = cmp.mapping.preset.cmdline(),
-        sources = {
+        sources = cmp.config.sources({
+          { name = "nvim_lsp_document_symbol" },
+        }, {
           { name = "buffer" },
-        },
+        }),
       })
 
       cmp.setup.cmdline(":", {
