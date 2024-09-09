@@ -278,7 +278,7 @@ return {
     opts = {
       providers = {
         openai = {
-          endpoint = vim.env["OPENAI_API_ENDPOINT"],
+          endpoint = vim.env["OPENAI_API_ENDPOINT"] .. "/chat/completions",
           secret = vim.env["OPENAI_API_KEY"],
         },
       },
@@ -367,27 +367,6 @@ return {
 			]]
     end,
   },
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "canary",
-    cmd = {
-      "CopilotChat",
-      "CopilotChatOpen",
-      "CopilotChatClose",
-      "CopilotChatToggle",
-    },
-    dependencies = {
-      { "nvim-lua/plenary.nvim" },
-    },
-    opts = {
-      debug = true,
-      mappings = {
-        close = {
-          insert = "",
-        },
-      },
-    },
-  },
 
   -- 翻译插件
   {
@@ -453,30 +432,6 @@ return {
         fzf = {
           extra_opts = { "--bind", "ctrl-o:toggle-all", "--delimiter", "│" },
         },
-      },
-    },
-  },
-  {
-    "huggingface/llm.nvim",
-    enabled = vim.env["LLM_NVIM_ENABLE"] == "Y",
-    event = "VeryLazy",
-    opts = {
-      api_token = vim.env["LLM_NVIM_TOKEN"], -- cf Install paragraph
-      model = vim.env["LLM_NVIM_MODEL"], -- the model ID, behavior depends on backend
-      backend = vim.env["LLM_NVIM_BACKEND"],
-      accept_keymap = "<C-c>",
-      dismiss_keymap = "<C-e>",
-      url = vim.env["LLM_NVIM_URL"],
-      disable_url_path_completion = true,
-      request_body = {
-        parameters = {
-          -- max_new_tokens = 60,
-          temperature = 1,
-          top_p = 1,
-        },
-      },
-      lsp = {
-        bin_path = vim.api.nvim_call_function("stdpath", { "data" }) .. "/mason/bin/llm-ls",
       },
     },
   },
@@ -646,10 +601,11 @@ return {
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    ft = "markdown",
+    ft = { "markdown", "Avante" },
     main = "render-markdown",
     opts = {
       enabled = true,
+      file_types = { "markdown", "Avante" },
     },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
@@ -678,5 +634,49 @@ return {
     config = function()
       require("octo").setup()
     end,
+  },
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    opts = {
+      provider = "deepseek",
+      vendors = {
+        ---@class AvanteProviderFunctor
+        deepseek = {
+          endpoint = "https://api.deepseek.com/chat/completions",
+          model = "deepseek-coder",
+          api_key_name = "DEEPSEEK_API_KEY",
+          parse_curl_args = function(opts, code_opts)
+            return {
+              url = opts.endpoint,
+              headers = {
+                ["Accept"] = "application/json",
+                ["Content-Type"] = "application/json",
+                ["Authorization"] = "Bearer " .. os.getenv(opts.api_key_name),
+              },
+              body = {
+                model = opts.model,
+                messages = {
+                  { role = "system", content = code_opts.system_prompt },
+                  { role = "user", content = table.concat(code_opts.user_prompts, "\n") },
+                },
+                temperature = 0,
+                max_tokens = 4096,
+                stream = true,
+              },
+            }
+          end,
+          parse_response_data = function(data_stream, event_state, opts)
+            require("avante.providers").copilot.parse_response(data_stream, event_state, opts)
+          end,
+        },
+      },
+    },
+    build = "make",
+    dependencies = {
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+    },
   },
 }
