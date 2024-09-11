@@ -18,7 +18,11 @@ M.ui = {
     LspReferenceText = { fg = "orange", bg = "NONE" },
     LspReferenceRead = { fg = "orange", bg = "NONE" },
     LspReferenceWrite = { fg = "orange", bg = "NONE" },
+    FloatBorder = { fg = "#4e4e4e", bg = "NONE" },
+    NormalFloat = { fg = "NONE", bg = "NONE" },
+    CmpBorder = { link = "FloatBorder" },
     CmpDocBorder = { link = "CmpBorder" },
+    CmpDoc = { bg = "NONE" },
   },
   statusline = {
     theme = "default",
@@ -36,32 +40,5 @@ M.ui = {
   },
 }
 vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })
-
-local function border(hl_name)
-  return {
-    { "╭", hl_name },
-    { "─", hl_name },
-    { "╮", hl_name },
-    { "│", hl_name },
-    { "╯", hl_name },
-    { "─", hl_name },
-    { "╰", hl_name },
-    { "│", hl_name },
-  }
-end
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = border "CmpBorder",
-})
-
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = border "CmpBorder",
-  focusable = false,
-  relative = "cursor",
-  silent = true,
-})
-
--- vim.fn.timer_start(1000, function()
---   vim.cmd.redrawstatus()
--- end, { ["repeat"] = -1 })
 
 return M
