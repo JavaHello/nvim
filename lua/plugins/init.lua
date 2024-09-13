@@ -678,4 +678,9 @@ return {
       "MunifTanjim/nui.nvim",
     },
   },
+  {
+    "HakonHarnes/img-clip.nvim",
+    cmd = { "PasteImage" },
+    opts = {},
+  },
 }

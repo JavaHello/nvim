@@ -182,7 +182,7 @@ local function _on_list()
   end
 end
 
-command("DocumentSymbols", function(_)
+command("LspDocumentSymbols", function(_)
   vim.lsp.buf.document_symbol {
     on_list = _on_list(),
   }
@@ -192,7 +192,7 @@ end, {
   range = true,
 })
 
-command("WorkspaceSymbols", function(opts)
+command("LspWorkspaceSymbols", function(opts)
   if opts.range > 0 then
     local text = require("kide.core.utils").get_visual_selection()
     vim.lsp.buf.workspace_symbol(text, { on_list = _on_list() })
@@ -203,6 +203,15 @@ end, {
   desc = "Lsp Workspace Symbols",
   nargs = "?",
   range = true,
+})
+
+command("LspIncomingCalls", vim.lsp.buf.incoming_calls, {
+  desc = "Lsp incoming calls",
+  nargs = 0,
+})
+command("LspOutgoingCalls", vim.lsp.buf.outgoing_calls, {
+  desc = "Lsp outgoing calls",
+  nargs = 0,
 })
 
 local severity_key = {
