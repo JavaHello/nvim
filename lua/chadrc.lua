@@ -26,16 +26,16 @@ M.ui = {
   },
   statusline = {
     theme = "default",
-    order = { "mode", "file", "git", "diagnostics", "%=", "lsp_msg", "%=", "cursor", "lsp", "cwd" },
+    order = { "mode", "file", "git", "diagnostics", "%=", "%=", "cursor", "filetype", "lsp", "cwd" },
     modules = {
-      lsp_msg = function()
-        return ""
-      end,
       cursor = "%#St_pos_text# %l:%c ",
       -- 使用 tmux 状态栏查看时间
       -- date = function()
       --   return "%#St_Lsp# " .. os.date "%Y-%m-%d %H:%M:%S "
       -- end,
+      filetype = function()
+        return "%#St_filetype# " .. vim.bo.filetype
+      end,
     },
   },
 }

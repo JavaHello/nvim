@@ -33,6 +33,7 @@ return {
   -- LSP progress messages
   {
     "j-hui/fidget.nvim",
+    enabled = false, -- see noice
     event = { "VeryLazy" },
     opts = {
       -- options
@@ -278,8 +279,8 @@ return {
     opts = {
       providers = {
         openai = {
-          endpoint = vim.env["OPENAI_API_ENDPOINT"] .. "/chat/completions",
-          secret = vim.env["OPENAI_API_KEY"],
+          endpoint = vim.env["DEEPSEEK_API_ENDPOINT"],
+          secret = vim.env["DEEPSEEK_API_KEY"],
         },
       },
       cmd_prefix = "Gp",
@@ -682,5 +683,23 @@ return {
     "HakonHarnes/img-clip.nvim",
     cmd = { "PasteImage" },
     opts = {},
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      lsp = {
+        signature = {
+          enabled = false,
+        },
+        hover = {
+          enabled = false,
+        },
+      },
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+    },
   },
 }
