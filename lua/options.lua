@@ -130,3 +130,6 @@ vim.opt.splitkeep = "screen"
 -- lsp 时常出现 swapfile 冲突提示, 关闭 swapfile
 vim.opt.swapfile = false
 vim.opt.backup = false
+
+-- see noice
+vim.opt.cmdheight=0
