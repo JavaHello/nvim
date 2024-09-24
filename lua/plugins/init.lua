@@ -33,7 +33,6 @@ return {
   -- LSP progress messages
   {
     "j-hui/fidget.nvim",
-    enabled = false, -- see noice
     event = { "VeryLazy" },
     opts = {
       -- options
@@ -686,6 +685,9 @@ return {
   },
   {
     "folke/noice.nvim",
+    -- vim.fn.inputlist 未适配,暂时禁用
+    -- https://github.com/neovim/neovim/issues/24632
+    enabled = false,
     event = "VeryLazy",
     opts = {
       lsp = {

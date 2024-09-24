@@ -132,4 +132,4 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 
 -- see noice
-vim.opt.cmdheight=0
+-- vim.opt.cmdheight=0
