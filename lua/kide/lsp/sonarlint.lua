@@ -47,6 +47,9 @@ M.setup = function()
           sonarlint = {
             disableTelemetry = true,
           },
+          -- https://github.com/SonarSource/sonarlint-language-server/blob/351c430da636462a39ddeecc5a40ae04c832d73c/src/main/java/org/sonarsource/sonarlint/ls/settings/SettingsManager.java#L322
+          -- 这里尝试获取 files.exclude 返回了 null 导致类型转换异常
+          files = { exclude = { test = false } },
         },
       },
       filetypes = {

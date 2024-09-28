@@ -51,7 +51,10 @@ else
   require("spring_boot").setup {
     server = {
       on_attach = on_attach,
-      on_init = on_init,
+      on_init = function(client, ctx)
+        on_init(client, ctx)
+        client.server_capabilities.documentHighlightProvider = false
+      end,
       capabilities = capabilities,
     },
   }

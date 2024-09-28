@@ -638,7 +638,7 @@ return {
     "yetone/avante.nvim",
     event = "VeryLazy",
     opts = {
-      provider = "deepseek",
+      provider = "copilot",
       vendors = {
         ---@class AvanteProviderFunctor
         deepseek = {
