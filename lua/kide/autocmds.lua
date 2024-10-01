@@ -62,6 +62,16 @@ autocmd({ "BufReadCmd" }, {
   end,
 })
 
+autocmd("FileType", {
+  group = augroup "close_with_q_bd",
+  pattern = {
+    "oil",
+  },
+  callback = function(event)
+    vim.keymap.set("n", "q", "<cmd>bd<cr>", { buffer = event.buf, silent = true })
+  end,
+})
+
 autocmd({ "BufRead", "BufNewFile" }, {
   group = augroup "spell",
   pattern = "*.md",

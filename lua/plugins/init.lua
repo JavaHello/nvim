@@ -1,3 +1,5 @@
+local HEIGHT_RATIO = 0.8
+local WIDTH_RATIO = 0.8
 return {
   {
     "stevearc/conform.nvim",
@@ -8,19 +10,40 @@ return {
   },
   {
     "nvim-tree/nvim-tree.lua",
-    opts = function()
-      local config = require "nvchad.configs.nvimtree"
-      if not config.actions then
-        config.actions = {
-          open_file = {
-            quit_on_open = true,
-          },
-        }
-      else
-        config.actions.open_file.quit_on_open = true
-      end
-      return config
-    end,
+    opts = {
+      actions = {
+        open_file = {
+          quit_on_open = true,
+        },
+      },
+      view = {
+        signcolumn = "no",
+        float = {
+          enable = true,
+          open_win_config = function()
+            local screen_w = vim.opt.columns:get()
+            local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
+            local window_w = screen_w * WIDTH_RATIO
+            local window_h = screen_h * HEIGHT_RATIO
+            local window_w_int = math.floor(window_w)
+            local window_h_int = math.floor(window_h)
+            local center_x = (screen_w - window_w) / 2
+            local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
+            return {
+              border = "rounded",
+              relative = "editor",
+              row = center_y,
+              col = center_x,
+              width = window_w_int,
+              height = window_h_int,
+            }
+          end,
+        },
+        width = function()
+          return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
+        end,
+      },
+    },
   },
 
   {
@@ -703,5 +726,49 @@ return {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
       "MunifTanjim/nui.nvim",
     },
+  },
+  {
+    "stevearc/oil.nvim",
+    enable = false,
+    event = "VeryLazy",
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {
+      columns = {
+        "icon",
+      },
+      buf_options = {
+        buflisted = false,
+        bufhidden = "hide",
+      },
+      win_options = {
+        winbar = "%!v:lua.get_oil_winbar()",
+      },
+      keymaps = {
+        ["gd"] = {
+          desc = "Toggle file detail view",
+          callback = function()
+            detail = not detail
+            if detail then
+              require("oil").set_columns { "icon", "permissions", "size", "mtime" }
+            else
+              require("oil").set_columns { "icon" }
+            end
+          end,
+        },
+      },
+    },
+    config = function(_, opts)
+      function _G.get_oil_winbar()
+        local dir = require("oil").get_current_dir()
+        if dir then
+          return vim.fn.fnamemodify(dir, ":~")
+        else
+          -- If there is no current directory (e.g. over ssh), just show the buffer name
+          return vim.api.nvim_buf_get_name(0)
+        end
+      end
+      require("oil").setup(opts)
+    end,
   },
 }

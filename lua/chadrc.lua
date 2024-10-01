@@ -39,6 +39,12 @@ M.ui = {
       -- end,
     },
   },
+  tabufline = {
+    enabled = true,
+    lazyload = false,
+    order = { "buffers", "tabs", "btns" },
+    modules = nil,
+  },
 }
 vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })
 
