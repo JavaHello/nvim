@@ -4,7 +4,7 @@
 ---@type ChadrcConfig
 local M = {}
 
-M.ui = {
+M.base46 = {
   theme = "gruvbox",
 
   hl_override = {
@@ -23,6 +23,7 @@ M.ui = {
     CmpBorder = { link = "FloatBorder" },
     CmpDocBorder = { link = "CmpBorder" },
     CmpDoc = { bg = "NONE" },
+    NvimTreeCursorLine = { link = "CursorLine" },
   },
   statusline = {
     theme = "default",
