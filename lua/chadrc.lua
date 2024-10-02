@@ -25,6 +25,8 @@ M.base46 = {
     CmpDoc = { bg = "NONE" },
     NvimTreeCursorLine = { link = "CursorLine" },
   },
+}
+M.ui = {
   statusline = {
     theme = "default",
     order = { "mode", "file", "git", "diagnostics", "%=", "%=", "cursor", "lsp", "cwd" },
