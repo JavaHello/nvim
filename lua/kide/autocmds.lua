@@ -158,6 +158,7 @@ autocmd("LspDetach", {
     clientCache(args.data.client_id).CursorHold[bufnr] = nil
     clientCache(args.data.client_id).CursorHoldI[bufnr] = nil
     clientCache(args.data.client_id).CursorMoved[bufnr] = nil
+    LSP_COMMAND_CACHE[bufnr] = false
   end,
 })
 
