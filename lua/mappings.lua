@@ -205,14 +205,6 @@ end, {
   range = true,
 })
 
-command("LspIncomingCalls", vim.lsp.buf.incoming_calls, {
-  desc = "Lsp incoming calls",
-  nargs = 0,
-})
-command("LspOutgoingCalls", vim.lsp.buf.outgoing_calls, {
-  desc = "Lsp outgoing calls",
-  nargs = 0,
-})
 
 local severity_key = {
   "ERROR",

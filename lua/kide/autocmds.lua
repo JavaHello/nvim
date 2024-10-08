@@ -101,9 +101,21 @@ local function clientCache(client_id)
   end
   return CLIENT_CACHE[client_id]
 end
+local function lsp_command(bufnr)
+  vim.api.nvim_buf_create_user_command(bufnr, "LspIncomingCalls", vim.lsp.buf.incoming_calls, {
+    desc = "Lsp incoming calls",
+    nargs = 0,
+  })
+  vim.api.nvim_buf_create_user_command(bufnr, "LspOutgoingCalls", vim.lsp.buf.outgoing_calls, {
+    desc = "Lsp outgoing calls",
+    nargs = 0,
+  })
+end
 autocmd("LspAttach", {
   callback = function(args)
     local bufnr = args.buf
+    lsp_command(bufnr)
+
     local client = vim.lsp.get_client_by_id(args.data.client_id)
 
     if client.server_capabilities.documentHighlightProvider then
