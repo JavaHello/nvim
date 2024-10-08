@@ -101,7 +101,12 @@ local function clientCache(client_id)
   end
   return CLIENT_CACHE[client_id]
 end
+local LSP_COMMAND_CACHE = {}
 local function lsp_command(bufnr)
+  if LSP_COMMAND_CACHE[bufnr] then
+    return
+  end
+  LSP_COMMAND_CACHE[bufnr] = true
   vim.api.nvim_buf_create_user_command(bufnr, "LspIncomingCalls", vim.lsp.buf.incoming_calls, {
     desc = "Lsp incoming calls",
     nargs = 0,
