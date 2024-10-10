@@ -22,10 +22,10 @@ vim.keymap.del("n", "<S-tab>")
 -- vim.keymap.del("n", "<leader>x")
 -- map("n", "<leader>x", "<CMD>bd<CR>", { desc = "Close buffer" })
 
--- vim.keymap.del("n", "<leader>n")
--- vim.keymap.del("n", "<leader>p")
-map("n", "<leader>n", "<CMD>bn<CR>", { desc = "buffer goto next" })
-map("n", "<leader>p", "<CMD>bp<CR>", { desc = "buffer goto prev" })
+vim.keymap.del("n", "<leader>n")
+vim.keymap.del("n", "<leader>pt")
+map("n", "<leader>n", require("nvchad.tabufline").next, { desc = "buffer goto next" })
+map("n", "<leader>p", require("nvchad.tabufline").prev, { desc = "buffer goto prev" })
 
 map("n", "<up>", "<CMD>res +5<CR>", { desc = "Resize +5" })
 map("n", "<down>", "<CMD>res -5<CR>", { desc = "Resize -5" })
@@ -133,22 +133,28 @@ end, { expr = true, desc = "Git Prev Hunk" })
 
 -- LSP
 map("n", "]d", function()
-  -- vim.diagnostic.jump { count = 1 }
-  vim.diagnostic.goto_next()
+  vim.diagnostic.jump { count = 1, float = true }
 end, { desc = "Jump to the next diagnostic" })
 map("n", "[d", function()
-  -- vim.diagnostic.jump { count = -1 }
-  vim.diagnostic.goto_prev()
+  vim.diagnostic.jump { count = -1, float = true }
 end, { desc = "Jump to the previous diagnostic" })
 
 map("n", "[e", function()
-  vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }
+  vim.diagnostic.jump { severity = vim.diagnostic.severity.ERROR, float = true }
 end, { desc = "Jump to the previous diagnostic error" })
 map("n", "]e", function()
-  vim.diagnostic.goto_next { count = 1, severity = vim.diagnostic.severity.ERROR }
+  vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR, float = true }
 end, { desc = "Jump to the next diagnostic error" })
 map("n", "gs", vim.lsp.buf.signature_help, { desc = "lsp signature help" })
-map("n", "go", vim.diagnostic.open_float, { desc = "lsp signature help" })
+map("n", "go", vim.diagnostic.open_float, { desc = "Open float Diagnostics" })
+
+-- quickfix next/prev
+map("n", "]q", "<CMD>cnext<CR>", { desc = "Quickfix Next" })
+map("n", "[q", "<CMD>cprev<CR>", { desc = "Quickfix Prev" })
+
+-- local list next/prev
+map("n", "]l", "<CMD>lnext<CR>", { desc = "Location List Next" })
+map("n", "[l", "<CMD>lprev<CR>", { desc = "Location List Prev" })
 
 command("InlayHint", function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
@@ -204,7 +210,6 @@ end, {
   nargs = "?",
   range = true,
 })
-
 
 local severity_key = {
   "ERROR",

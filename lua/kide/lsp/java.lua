@@ -445,7 +445,7 @@ end
 
 M.config = config
 M.start = function()
-  jdtls.start_or_attach(config, { dap = { hotcodereplace = "auto" } })
+  jdtls.start_or_attach(config, { dap = { config_overrides = {}, hotcodereplace = "auto" } })
 end
 
 M.setup = function(opts)
