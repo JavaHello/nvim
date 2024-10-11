@@ -22,7 +22,14 @@ end
 
 M.setup = function()
   vim.api.nvim_create_user_command("Curl", function(opt)
-    exec("curl " .. opt.args .. " '" .. vim.fn.input "URL: " .. "' " .. outfmt)
+    local ok, url = pcall(vim.fn.input, "URL: ")
+    if ok then
+      if url ~= "" then
+        exec("curl " .. opt.args .. " '" .. url .. "' " .. outfmt)
+      else
+        exec("curl " .. opt.args .. " " .. outfmt)
+      end
+    end
   end, {
     nargs = "*",
     complete = function()
