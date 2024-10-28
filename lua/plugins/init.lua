@@ -643,6 +643,7 @@ return {
   },
   {
     "rest-nvim/rest.nvim",
+    enabled = vim.env["REST_NVIM_ENABLE"] == "Y",
     ft = "http",
   },
   {
@@ -660,8 +661,9 @@ return {
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
+    enabled = vim.env["AVANTE_NVIM_ENABLE"] == "Y",
     opts = {
-      provider = "copilot",
+      provider = "deepseek",
       vendors = {
         ---@class AvanteProviderFunctor
         deepseek = {

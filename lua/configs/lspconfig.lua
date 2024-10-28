@@ -42,7 +42,9 @@ if metals_enable == "Y" then
     on_init = on_init,
     capabilities = capabilities,
   }
-else
+end
+
+if vim.env["JDTLS_NVIM_ENABLE"] == "Y" then
   require("kide.lsp.java").setup {
     on_attach = on_attach,
     on_init = on_init,
