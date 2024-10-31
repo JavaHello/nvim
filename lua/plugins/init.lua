@@ -136,6 +136,13 @@ return {
     },
   },
   {
+    "JavaHello/quarkus.nvim",
+    dependencies = {
+      "mfussenegger/nvim-jdtls",
+      "JavaHello/microprofile.nvim",
+    },
+  },
+  {
     "https://gitlab.com/schrieveslaach/sonarlint.nvim.git",
   },
   {

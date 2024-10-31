@@ -60,6 +60,22 @@ if vim.env["JDTLS_NVIM_ENABLE"] == "Y" then
       capabilities = capabilities,
     },
   }
+
+  require("quarkus.launch").setup {
+    on_attach = on_attach,
+    on_init = function(client, ctx)
+      on_init(client, ctx)
+    end,
+    capabilities = capabilities,
+  }
+  require("microprofile.launch").setup {
+    on_attach = on_attach,
+    on_init = function(client, ctx)
+      on_init(client, ctx)
+    end,
+    capabilities = capabilities,
+  }
+
   require("kide.lsp.sonarlint").setup()
 end
 

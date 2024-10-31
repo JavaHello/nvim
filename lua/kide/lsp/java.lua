@@ -223,6 +223,17 @@ if ok then
   vim.list_extend(bundles, spring_boot.java_extensions())
 end
 
+local ok_microprofile, microprofile = pcall(require, "microprofile")
+if ok_microprofile then
+  vim.list_extend(bundles, microprofile.java_extensions())
+end
+
+local ok_quarkus, quarkus = pcall(require, "quarkus")
+
+if ok_quarkus then
+  vim.list_extend(bundles, quarkus.java_extensions())
+end
+
 -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
 local config = {
