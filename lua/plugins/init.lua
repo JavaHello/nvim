@@ -662,46 +662,49 @@ return {
     "yetone/avante.nvim",
     event = "VeryLazy",
     enabled = vim.env["AVANTE_NVIM_ENABLE"] == "Y",
-    opts = {
-      provider = "deepseek",
-      vendors = {
-        ---@class AvanteProviderFunctor
-        deepseek = {
-          endpoint = "https://api.deepseek.com/chat/completions",
-          model = "deepseek-coder",
-          api_key_name = "DEEPSEEK_API_KEY",
-          parse_curl_args = function(opts, code_opts)
-            return {
-              url = opts.endpoint,
-              headers = {
-                ["Accept"] = "application/json",
-                ["Content-Type"] = "application/json",
-                ["Authorization"] = "Bearer " .. os.getenv(opts.api_key_name),
-              },
-              body = {
-                model = opts.model,
-                messages = {
-                  { role = "system", content = code_opts.system_prompt },
-                  { role = "user", content = table.concat(code_opts.user_prompts, "\n") },
-                },
-                temperature = 0,
-                max_tokens = 4096,
-                stream = true,
-              },
-            }
-          end,
-          parse_response_data = function(data_stream, event_state, opts)
-            require("avante.providers").copilot.parse_response(data_stream, event_state, opts)
-          end,
-        },
-      },
-    },
     build = "make",
     dependencies = {
       "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
     },
+    config = function()
+      local opts = {
+        provider = "deepseek",
+        vendors = {
+          ---@class AvanteProviderFunctor
+          deepseek = {
+            endpoint = "https://api.deepseek.com/chat/completions",
+            model = "deepseek-coder",
+            api_key_name = "DEEPSEEK_API_KEY",
+            parse_curl_args = function(opts, code_opts)
+              return {
+                url = opts.endpoint,
+                headers = {
+                  ["Accept"] = "application/json",
+                  ["Content-Type"] = "application/json",
+                  ["Authorization"] = "Bearer " .. os.getenv(opts.api_key_name),
+                },
+                body = {
+                  model = opts.model,
+                  messages = {
+                    { role = "system", content = code_opts.system_prompt },
+                    { role = "user", content = table.concat(code_opts.user_prompts, "\n") },
+                  },
+                  temperature = 0,
+                  max_tokens = 4096,
+                  stream = true,
+                },
+              }
+            end,
+            parse_response_data = function(data_stream, event_state, opts)
+              require("avante.providers").copilot.parse_response(data_stream, event_state, opts)
+            end,
+          },
+        },
+      }
+      require("avante").setup(opts)
+    end,
   },
   {
     "HakonHarnes/img-clip.nvim",
