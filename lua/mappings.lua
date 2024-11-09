@@ -20,7 +20,6 @@ vim.keymap.del("n", "<S-tab>")
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
 -- vim.keymap.del("n", "<leader>x")
--- map("n", "<leader>x", "<CMD>bd<CR>", { desc = "Close buffer" })
 
 vim.keymap.del("n", "<leader>n")
 vim.keymap.del("n", "<leader>pt")

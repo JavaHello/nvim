@@ -45,38 +45,64 @@ if metals_enable == "Y" then
 end
 
 if vim.env["JDTLS_NVIM_ENABLE"] == "Y" then
+  local spring_boot = vim.env["SPRING_BOOT_NVIM_ENABLE"] == "Y"
+  local quarkus = vim.env["QUARKUS_NVIM_ENABLE"] == "Y"
+  local sonarlint = vim.env["SONARLINT_NVIM_ENABLE"] == "Y"
   require("kide.lsp.java").setup {
+    add_bundles = function(bundles)
+      if spring_boot then
+        vim.list_extend(bundles, require("spring_boot").java_extensions())
+      end
+
+      if quarkus then
+        vim.list_extend(bundles, require("microprofile").java_extensions())
+        vim.list_extend(bundles, require("quarkus").java_extensions())
+      end
+    end,
     on_attach = on_attach,
-    on_init = on_init,
+    on_init = function(client, ctx)
+      on_init(client, ctx)
+      if quarkus then
+        require("quarkus.bind").try_bind_qute_all_request()
+        require("microprofile.bind").try_bind_microprofile_all_request()
+      end
+    end,
     capabilities = capabilities,
   }
-  require("spring_boot").setup {
-    server = {
+  if spring_boot then
+    require("spring_boot").setup {
+      server = {
+        on_attach = on_attach,
+        on_init = function(client, ctx)
+          on_init(client, ctx)
+          client.server_capabilities.documentHighlightProvider = false
+        end,
+        capabilities = capabilities,
+      },
+    }
+  end
+  if quarkus then
+    require("quarkus.launch").setup {
       on_attach = on_attach,
       on_init = function(client, ctx)
         on_init(client, ctx)
         client.server_capabilities.documentHighlightProvider = false
       end,
       capabilities = capabilities,
-    },
-  }
+    }
+    require("microprofile.launch").setup {
+      on_attach = on_attach,
+      on_init = function(client, ctx)
+        on_init(client, ctx)
+        client.server_capabilities.documentHighlightProvider = false
+      end,
+      capabilities = capabilities,
+    }
+  end
 
-  require("quarkus.launch").setup {
-    on_attach = on_attach,
-    on_init = function(client, ctx)
-      on_init(client, ctx)
-    end,
-    capabilities = capabilities,
-  }
-  require("microprofile.launch").setup {
-    on_attach = on_attach,
-    on_init = function(client, ctx)
-      on_init(client, ctx)
-    end,
-    capabilities = capabilities,
-  }
-
-  require("kide.lsp.sonarlint").setup()
+  if sonarlint then
+    require("kide.lsp.sonarlint").setup()
+  end
 end
 
 -- XML

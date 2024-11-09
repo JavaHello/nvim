@@ -217,23 +217,6 @@ if vscode_pde_path and "Y" == vim.env["VSCODE_PDE_ENABLE"] then
   vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
 end
 
-local ok, spring_boot = pcall(require, "spring_boot")
-
-if ok then
-  vim.list_extend(bundles, spring_boot.java_extensions())
-end
-
-local ok_microprofile, microprofile = pcall(require, "microprofile")
-if ok_microprofile then
-  vim.list_extend(bundles, microprofile.java_extensions())
-end
-
-local ok_quarkus, quarkus = pcall(require, "quarkus")
-
-if ok_quarkus then
-  vim.list_extend(bundles, quarkus.java_extensions())
-end
-
 -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
 local config = {
@@ -445,7 +428,7 @@ config.flags = {
   debounce_text_changes = 150,
 }
 config.handlers = {}
-config.handlers["language/status"] = function(_, _)
+config.handlers["language/status"] = function(err, msg)
   -- 使用 progress 查看状态
   -- print("jdtls " .. s.type .. ": " .. s.message)
   -- ServiceReady 不能用来判断是否完全启动
@@ -455,11 +438,21 @@ config.handlers["language/status"] = function(_, _)
 end
 
 M.config = config
-M.start = function()
-  jdtls.start_or_attach(config, { dap = { config_overrides = {}, hotcodereplace = "auto" } })
+M.start = function(buf)
+  jdtls.start_or_attach(config, { dap = { config_overrides = {}, hotcodereplace = "auto" } }, { bufnr = buf })
 end
 
+---@class kide.lsp.java.Options
+---@field on_attach fun(client: table, buffer: number)
+---@field capabilities table
+---@field on_init fun(client: table, context: table)
+---@field add_bundles? fun(bundles: table<string>)
+
+---@param opts kide.lsp.java.Options
 M.setup = function(opts)
+  if opts.add_bundles then
+    opts.add_bundles(bundles)
+  end
   local on_attach = opts.on_attach
   config.on_attach = function(client, buffer)
     local buf_opt = { buf = buffer }
@@ -518,6 +511,8 @@ M.setup = function(opts)
         nargs = 0,
       }
     )
+    create_command(buffer, "JdtTestGenerate", require("jdtls.tests").generate, { nargs = 0 })
+    create_command(buffer, "JdtTestGoto", require("jdtls.tests").goto_subjects, { nargs = 0 })
 
     on_attach(client, buffer)
   end
@@ -534,7 +529,7 @@ M.setup = function(opts)
       if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
         -- ignore
       else
-        M.start()
+        M.start(e.buf)
       end
     end,
   })
