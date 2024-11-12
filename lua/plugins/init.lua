@@ -45,7 +45,10 @@ return {
       },
     },
   },
-
+  {
+    "folke/which-key.nvim",
+    enabled = false,
+  },
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -493,53 +496,10 @@ return {
   },
   {
     "windwp/nvim-ts-autotag",
-    -- event = { "BufReadPre", "BufNewFile" },
     ft = { "html" },
     config = function()
       require("nvim-ts-autotag").setup {}
     end,
-  },
-  -- 更好的生成注释
-  {
-    "danymat/neogen",
-    event = "VeryLazy",
-    config = function()
-      require("neogen").setup { snippet_engine = "luasnip" }
-    end,
-  },
-
-  -- 快速选择
-  {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    opts = {
-      modes = {
-        search = {
-          enabled = false,
-        },
-        char = {
-          enabled = false,
-        },
-      },
-    },
-    keys = {
-      {
-        "s",
-        mode = { "n", "x", "o" },
-        function()
-          require("flash").jump()
-        end,
-        desc = "Flash",
-      },
-      {
-        "S",
-        mode = { "n", "x", "o" },
-        function()
-          require("flash").treesitter()
-        end,
-        desc = "Flash Treesitter",
-      },
-    },
   },
 
   {
@@ -654,18 +614,6 @@ return {
     ft = "http",
   },
   {
-    "pwntester/octo.nvim",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim",
-      "nvim-tree/nvim-web-devicons",
-    },
-    cmd = { "Octo" },
-    config = function()
-      require("octo").setup()
-    end,
-  },
-  {
     "yetone/avante.nvim",
     event = "VeryLazy",
     enabled = vim.env["AVANTE_NVIM_ENABLE"] == "Y",
@@ -717,70 +665,5 @@ return {
     "HakonHarnes/img-clip.nvim",
     cmd = { "PasteImage" },
     opts = {},
-  },
-  {
-    "folke/noice.nvim",
-    -- vim.fn.inputlist 未适配,暂时禁用
-    -- https://github.com/neovim/neovim/issues/24632
-    enabled = false,
-    event = "VeryLazy",
-    opts = {
-      lsp = {
-        signature = {
-          enabled = false,
-        },
-        hover = {
-          enabled = false,
-        },
-      },
-    },
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-    },
-  },
-  {
-    "stevearc/oil.nvim",
-    enable = false,
-    event = "VeryLazy",
-    ---@module 'oil'
-    ---@type oil.SetupOpts
-    opts = {
-      columns = {
-        "icon",
-      },
-      buf_options = {
-        buflisted = false,
-        bufhidden = "hide",
-      },
-      win_options = {
-        winbar = "%!v:lua.get_oil_winbar()",
-      },
-      keymaps = {
-        ["gd"] = {
-          desc = "Toggle file detail view",
-          callback = function()
-            detail = not detail
-            if detail then
-              require("oil").set_columns { "icon", "permissions", "size", "mtime" }
-            else
-              require("oil").set_columns { "icon" }
-            end
-          end,
-        },
-      },
-    },
-    config = function(_, opts)
-      function _G.get_oil_winbar()
-        local dir = require("oil").get_current_dir()
-        if dir then
-          return vim.fn.fnamemodify(dir, ":~")
-        else
-          -- If there is no current directory (e.g. over ssh), just show the buffer name
-          return vim.api.nvim_buf_get_name(0)
-        end
-      end
-      require("oil").setup(opts)
-    end,
   },
 }

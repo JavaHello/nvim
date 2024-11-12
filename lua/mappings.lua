@@ -26,6 +26,8 @@ vim.keymap.del("n", "<leader>pt")
 map("n", "<leader>n", require("nvchad.tabufline").next, { desc = "buffer goto next" })
 map("n", "<leader>p", require("nvchad.tabufline").prev, { desc = "buffer goto prev" })
 
+map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
+
 map("n", "<up>", "<CMD>res +5<CR>", { desc = "Resize +5" })
 map("n", "<down>", "<CMD>res -5<CR>", { desc = "Resize -5" })
 map("n", "<S-up>", "<CMD>res -5<CR>", { desc = "Resize -5" })
@@ -139,7 +141,7 @@ map("n", "[d", function()
 end, { desc = "Jump to the previous diagnostic" })
 
 map("n", "[e", function()
-  vim.diagnostic.jump { severity = vim.diagnostic.severity.ERROR, float = true }
+  vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR, float = true }
 end, { desc = "Jump to the previous diagnostic error" })
 map("n", "]e", function()
   vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR, float = true }
@@ -263,3 +265,23 @@ end, { desc = "Jdt Wipe Data And Restart" })
 command("JdtShowLogs", function()
   require("jdtls.setup").show_logs()
 end, { desc = "Jdt Show Logs" })
+
+-- find files
+if vim.fn.executable "fd" == 1 then
+  command("Fd", function(opt)
+    vim.fn.setqflist({}, " ", { lines = vim.fn.systemlist("fd " .. opt.args), efm = "%f" })
+    vim.cmd "botright copen"
+  end, {
+    desc = "find files",
+    nargs = "?",
+  })
+end
+if vim.fn.executable "find" == 1 then
+  command("Find", function(opt)
+    vim.fn.setqflist({}, " ", { lines = vim.fn.systemlist("find . -iname '" .. opt.args .. "'"), efm = "%f" })
+    vim.cmd "botright copen"
+  end, {
+    desc = "find files",
+    nargs = 1,
+  })
+end
