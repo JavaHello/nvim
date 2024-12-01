@@ -67,67 +67,75 @@ return {
   -- cmp
   {
     "hrsh7th/nvim-cmp",
-    dependencies = {
-      {
-        "rcarriga/cmp-dap",
-        "hrsh7th/cmp-cmdline",
-        "hrsh7th/cmp-nvim-lsp-document-symbol",
-      },
-    },
-    keys = { ":", "/", "?" },
+    enabled = false,
+  },
+  {
+    "saghen/blink.cmp",
+    lazy = false, -- lazy loading handled internally
+    dependencies = "rafamadriz/friendly-snippets",
+    version = "v0.*",
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
     opts = {
-      enabled = function()
-        return vim.api.nvim_get_option_value("buftype", { buf = 0 }) ~= "prompt" or require("cmp_dap").is_dap_buffer()
-      end,
-      completion = {
-        completeopt = "menu,menuone",
+      keymap = {
+        preset = "default",
+        ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+        ["<C-e>"] = { "hide", "fallback" },
+        ["<CR>"] = { "accept", "fallback" },
+
+        ["<Tab>"] = { "snippet_forward", "fallback" },
+        ["<S-Tab>"] = { "snippet_backward", "fallback" },
+
+        ["<Up>"] = { "select_prev", "fallback" },
+        ["<Down>"] = { "select_next", "fallback" },
+        ["<C-p>"] = { "select_prev", "fallback" },
+        ["<C-n>"] = { "select_next", "fallback" },
+
+        ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+      },
+      appearance = {
+        use_nvim_cmp_as_default = true,
+        nerd_font_variant = "mono",
+      },
+      sources = {
+        completion = {
+          enabled_providers = { "lsp", "path", "snippets", "buffer", "dadbod", "daprepl" },
+        },
+        providers = {
+          dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+          daprepl = { name = "DapRepl", module = "kide.cmp.dap" },
+        },
+      },
+      windows = {
+        autocomplete = {
+          border = "rounded",
+        },
+        documentation = {
+          border = "rounded",
+          auto_show = true,
+          auto_show_delay_ms = 100,
+          update_delay_ms = 50,
+        },
+        signature_help = {
+          border = "rounded",
+        },
       },
     },
+    opts_extend = { "sources.completion.enabled_providers" },
     config = function(_, opts)
-      local cmp = require "cmp"
-      opts.mapping["<CR>"] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true,
-      }
-      cmp.setup(opts)
-      cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-        sources = {
-          { name = "dap" },
-        },
-      })
-      cmp.setup.cmdline({ "/", "?" }, {
-        completion = {
-          completeopt = "menu,menuone,noselect",
-        },
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = "nvim_lsp_document_symbol" },
-        }, {
-          { name = "buffer" },
-        }),
-      })
+      require("blink.cmp").setup(opts)
 
-      cmp.setup.cmdline(":", {
-        completion = {
-          completeopt = "menu,menuone,noselect",
-        },
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = "path" },
-        }, {
-          { name = "cmdline" },
-        }),
-        matching = { disallow_symbol_nonprefix_matching = false },
-      })
-
-      opts.sources = opts.sources or {}
-      table.insert(opts.sources, {
-        name = "lazydev",
-        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
-      })
+      vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { link = "FloatBorder" })
+      vim.api.nvim_set_hl(0, "BlinkCmpMenu", { fg = "white", bg = nil })
+      vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { link = "FloatBorder" })
     end,
   },
-
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = true,
+  },
   -- java
   {
     "mfussenegger/nvim-jdtls",
@@ -427,7 +435,15 @@ return {
   },
   {
     "kristijanhusak/vim-dadbod-ui",
-    dependencies = { "tpope/vim-dadbod" },
+    dependencies = {
+      { "tpope/vim-dadbod", lazy = true },
+      {
+        "kristijanhusak/vim-dadbod-completion",
+        dependencies = { "tpope/vim-dadbod" },
+        ft = { "sql", "mysql", "plsql" },
+        lazy = true,
+      },
+    },
     cmd = {
       "DBUI",
       "DBUIToggle",
@@ -435,21 +451,6 @@ return {
     init = function()
       vim.g.db_ui_use_nerd_fonts = 1
     end,
-  },
-  {
-    "kristijanhusak/vim-dadbod-completion",
-    dependencies = { "tpope/vim-dadbod" },
-    ft = { "sql", "mysql", "plsql" },
-    init = function()
-      vim.api.nvim_create_autocmd("FileType", {
-        group = vim.api.nvim_create_augroup("kide_vim_dadbod_completion", { clear = true }),
-        pattern = { "sql", "mysql", "plsql" },
-        callback = function(_)
-          require("cmp").setup.buffer { sources = { { name = "vim-dadbod-completion" } } }
-        end,
-      })
-    end,
-    config = function() end,
   },
 
   -- bqf
@@ -517,11 +518,6 @@ return {
     },
   },
 
-  {
-    "folke/lazydev.nvim",
-    ft = "lua", -- only load on lua files
-    opts = {},
-  },
   {
     "stevearc/overseer.nvim",
     event = "VeryLazy",

@@ -13,6 +13,9 @@ else
   }
 end
 
+capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+
+
 local lspconfig = require "lspconfig"
 local util = require "lspconfig.util"
 -- "ast_grep"

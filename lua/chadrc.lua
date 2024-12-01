@@ -24,6 +24,8 @@ M.base46 = {
     CmpDocBorder = { link = "CmpBorder" },
     CmpDoc = { bg = "NONE" },
     NvimTreeCursorLine = { link = "CursorLine" },
+
+    Pmenu = { bg = "#282828", fg = "#d5c4a1" },
   },
 }
 M.ui = {
