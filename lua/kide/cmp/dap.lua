@@ -32,7 +32,6 @@ local dap_repl = require "dap.repl"
 local dap = require "dap"
 
 function M:get_trigger_characters()
-  print "get_trigger_characters"
   local session = require("dap").session()
   local trigger_characters = session.capabilities.completionTriggerCharacters or {}
   local contains_dot = vim.tbl_contains(trigger_characters, ".")
@@ -43,7 +42,6 @@ function M:get_trigger_characters()
 end
 
 function M:enabled()
-  print("enabled dap")
   local session = dap.session()
   if not session then
     return false
@@ -53,7 +51,6 @@ function M:enabled()
   if not supportsCompletionsRequest then
     return false
   end
-  print(vim.bo.filetype)
   return vim.startswith(vim.bo.filetype, "dap-repl")
 end
 
