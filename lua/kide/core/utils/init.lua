@@ -287,4 +287,34 @@ M.java_bin = function()
   return "java"
 end
 
+-- URL safe base64 --> standard base64
+M.base64_url_safe_to_std = function(msg)
+  if string.match(msg, "-") then
+    msg = string.gsub(msg, "-", "+")
+  end
+  if string.match(msg, "_") then
+    msg = string.gsub(msg, "_", "/")
+  end
+  if not vim.endswith(msg, "=") then
+    local padding = #msg % 4
+    if padding > 0 then
+      msg = msg .. string.rep("=", 4 - padding)
+    end
+  end
+  return msg
+end
+
+M.base64_std_to_url_safe = function(msg)
+  if string.match(msg, "+") then
+    msg = string.gsub(msg, "+", "-")
+  end
+  if string.match(msg, "/") then
+    msg = string.gsub(msg, "/", "_")
+  end
+  if string.match(msg, "=") then
+    msg = string.gsub(msg, "=", "")
+  end
+  return msg
+end
+
 return M

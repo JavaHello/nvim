@@ -285,3 +285,33 @@ if vim.fn.executable "find" == 1 then
     nargs = 1,
   })
 end
+
+if vim.base64 then
+  command("Base64Encode", function(opt)
+    local text
+    if opt.range > 0 then
+      text = require("kide.core.utils").get_visual_selection()
+    else
+      text = opt.args
+    end
+    vim.notify(vim.base64.encode(text), vim.log.levels.INFO)
+  end, {
+    desc = "base64 encode",
+    nargs = "?",
+    range = true,
+  })
+  command("Base64Decode", function(opt)
+    local text
+    if opt.range > 0 then
+      text = require("kide.core.utils").get_visual_selection()
+    else
+      text = opt.args
+    end
+    text = require("kide.core.utils").base64_url_safe_to_std(text)
+    vim.notify(vim.base64.decode(text), vim.log.levels.INFO)
+  end, {
+    desc = "base64 decode",
+    nargs = "?",
+    range = true,
+  })
+end
