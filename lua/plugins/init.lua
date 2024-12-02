@@ -124,6 +124,44 @@ return {
     },
     opts_extend = { "sources.completion.enabled_providers" },
     config = function(_, opts)
+      opts.kind_icons = {
+        Text = "󰉿",
+        Method = "󰊕",
+        Function = "󰊕",
+        Constructor = "󰒓",
+
+        Field = "󰜢",
+        Variable = "󰆦",
+        Property = "󰖷",
+
+        Class = "󱡠",
+        Interface = "󱡠",
+        Struct = "󱡠",
+        Module = "󰅩",
+
+        Unit = "󰪚",
+        Value = "󰦨",
+        Enum = "󰦨",
+        EnumMember = "󰦨",
+
+        Keyword = "󰻾",
+        Constant = "󰏿",
+
+        Snippet = "󱄽",
+        Color = "󰏘",
+        File = "󰈔",
+        Reference = "󰬲",
+        Folder = "󰉋",
+        Event = "󱐋",
+        Operator = "󰪚",
+        TypeParameter = "󰬛",
+      }
+      local kinds = require "nvchad.icons.lspkind"
+      for key, value in pairs(kinds) do
+        if opts.kind_icons[key] then
+          opts.kind_icons[key] = value
+        end
+      end
       require("blink.cmp").setup(opts)
 
       vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { link = "FloatBorder" })
