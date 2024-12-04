@@ -95,8 +95,9 @@ return {
         ["<C-f>"] = { "scroll_documentation_down", "fallback" },
       },
       appearance = {
-        use_nvim_cmp_as_default = true,
+        use_nvim_cmp_as_default = false,
         nerd_font_variant = "mono",
+        kind_icons = require "nvchad.icons.lspkind",
       },
       sources = {
         completion = {
@@ -107,65 +108,27 @@ return {
           daprepl = { name = "DapRepl", module = "kide.cmp.dap" },
         },
       },
-      windows = {
-        autocomplete = {
+      completion = {
+        menu = {
           border = "rounded",
         },
         documentation = {
-          border = "rounded",
           auto_show = true,
           auto_show_delay_ms = 100,
           update_delay_ms = 50,
-        },
-        signature_help = {
-          border = "rounded",
+          window = {
+            min_width = 10,
+            max_width = 60,
+            max_height = 20,
+            border = "rounded",
+          },
         },
       },
     },
     opts_extend = { "sources.completion.enabled_providers" },
     config = function(_, opts)
-      opts.kind_icons = {
-        Text = "󰉿",
-        Method = "󰊕",
-        Function = "󰊕",
-        Constructor = "󰒓",
-
-        Field = "󰜢",
-        Variable = "󰆦",
-        Property = "󰖷",
-
-        Class = "󱡠",
-        Interface = "󱡠",
-        Struct = "󱡠",
-        Module = "󰅩",
-
-        Unit = "󰪚",
-        Value = "󰦨",
-        Enum = "󰦨",
-        EnumMember = "󰦨",
-
-        Keyword = "󰻾",
-        Constant = "󰏿",
-
-        Snippet = "󱄽",
-        Color = "󰏘",
-        File = "󰈔",
-        Reference = "󰬲",
-        Folder = "󰉋",
-        Event = "󱐋",
-        Operator = "󰪚",
-        TypeParameter = "󰬛",
-      }
-      local kinds = require "nvchad.icons.lspkind"
-      for key, value in pairs(kinds) do
-        if opts.kind_icons[key] then
-          opts.kind_icons[key] = value
-        end
-      end
       require("blink.cmp").setup(opts)
-
       vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { link = "FloatBorder" })
-      vim.api.nvim_set_hl(0, "BlinkCmpMenu", { fg = "white", bg = nil })
       vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { link = "FloatBorder" })
     end,
   },
