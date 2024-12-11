@@ -19,7 +19,7 @@ capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 local lspconfig = require "lspconfig"
 local util = require "lspconfig.util"
 -- "ast_grep"
-local servers = { "html", "cssls", "gopls", "zls", "jsonls" }
+local servers = { "html", "cssls", "gopls", "zls", "jsonls", "taplo" }
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
