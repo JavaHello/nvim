@@ -122,6 +122,9 @@ autocmd("LspAttach", {
     lsp_command(bufnr)
 
     local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client == nil then
+      return
+    end
 
     if client.server_capabilities.documentHighlightProvider then
       if not clientCache(args.data.client_id).CursorHold[bufnr] then
@@ -147,6 +150,18 @@ autocmd("LspAttach", {
             vim.lsp.buf.clear_references()
           end,
         })
+      end
+    end
+
+    local root_dir = client.config.root_dir
+    if root_dir then
+      local buffile = vim.api.nvim_buf_get_name(bufnr)
+      -- 防止修改不在项目内的文件
+      if buffile then
+        if not vim.startswith(buffile, root_dir) and not vim.startswith(buffile, "jdt://") then
+          vim.bo[bufnr].readonly = true
+          vim.bo[bufnr].modifiable = false
+        end
       end
     end
   end,
