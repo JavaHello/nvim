@@ -142,7 +142,10 @@ M.translate_float = function(request)
     local l = vim.fn.strdisplaywidth(curlines[#curlines])
     if l > width and l < max_width then
       width = l
-      vim.api.nvim_win_set_width(win, width)
+      -- 判断 window 是否可用
+      if vim.api.nvim_win_is_valid(win) then
+        vim.api.nvim_win_set_width(win, width)
+      end
     end
 
     -- 判断 buffer 是否可用
