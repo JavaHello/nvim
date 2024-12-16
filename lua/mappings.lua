@@ -87,13 +87,13 @@ map("v", "<leader>ff", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.core.utils").get_visual_selection()
   local tb = require "telescope.builtin"
-  tb.find_files { default_text = text }
+  tb.find_files { default_text = text[1] }
 end, { desc = "telescope find files", silent = true, noremap = true })
 map("v", "<leader>fw", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.core.utils").get_visual_selection()
   local tb = require "telescope.builtin"
-  tb.live_grep { default_text = text }
+  tb.live_grep { default_text = text[1] }
 end, { desc = "telescope live grep", silent = true, noremap = true })
 
 map("v", "<leader>fm", function()
@@ -202,7 +202,7 @@ end, {
 command("LspWorkspaceSymbols", function(opts)
   if opts.range > 0 then
     local text = require("kide.core.utils").get_visual_selection()
-    vim.lsp.buf.workspace_symbol(text, { on_list = _on_list() })
+    vim.lsp.buf.workspace_symbol(text[1], { on_list = _on_list() })
   else
     vim.lsp.buf.workspace_symbol(opts.args, { on_list = _on_list() })
   end
@@ -291,6 +291,7 @@ if vim.base64 then
     local text
     if opt.range > 0 then
       text = require("kide.core.utils").get_visual_selection()
+      text = table.concat(text, "\n")
     else
       text = opt.args
     end
@@ -304,6 +305,7 @@ if vim.base64 then
     local text
     if opt.range > 0 then
       text = require("kide.core.utils").get_visual_selection()
+      text = table.concat(text, "\n")
     else
       text = opt.args
     end
@@ -315,3 +317,48 @@ if vim.base64 then
     range = true,
   })
 end
+
+command("TransZh", function(opt)
+  local text
+  if opt.range > 0 then
+    text = require("kide.core.utils").get_visual_selection()
+    text = table.concat(text, "\n")
+  else
+    text = opt.args
+  end
+  require("kide.tools.trans").translate_float { text = text, from = "en", to = "zh" }
+end, {
+  desc = "translate",
+  nargs = "?",
+  range = true,
+})
+
+command("TransEn", function(opt)
+  local text
+  if opt.range > 0 then
+    text = require("kide.core.utils").get_visual_selection()
+    text = table.concat(text, "\n")
+  else
+    text = opt.args
+  end
+  require("kide.tools.trans").translate_float { text = text, from = "zh", to = "en" }
+end, {
+  desc = "translate",
+  nargs = "?",
+  range = true,
+})
+
+command("TransAutoZh", function(opt)
+  local text
+  if opt.range > 0 then
+    text = require("kide.core.utils").get_visual_selection()
+    text = table.concat(text, "\n")
+  else
+    text = opt.args
+  end
+  require("kide.tools.trans").translate_float { text = text, from = "auto", to = "zh" }
+end, {
+  desc = "translate",
+  nargs = "?",
+  range = true,
+})
