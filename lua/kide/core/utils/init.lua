@@ -152,22 +152,24 @@ end
 -- see https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/utils.lua#L120
 ---@return string[]
 M.get_visual_selection = function()
-  -- 获取选中的起始和结束位置
-  local start_pos = vim.fn.getpos "'<"
-  local end_pos = vim.fn.getpos "'>"
+  local start_pos = vim.api.nvim_buf_get_mark(0, "<")
+  local end_pos = vim.api.nvim_buf_get_mark(0, ">")
 
-  -- 获取当前缓冲区
+  local start_row, start_col = start_pos[1], start_pos[2]
+  local end_row, end_col = end_pos[1], end_pos[2]
   local bufnr = vim.api.nvim_get_current_buf()
-
-  -- 获取选中的文本
-  local start_row = start_pos[2] - 1
-  local start_col = start_pos[3] - 1
-  local end_row = end_pos[2] - 1
-  local end_col = end_pos[3]
-
-  -- 获取选中的文本
-  local lines = vim.api.nvim_buf_get_text(bufnr, start_row, start_col, end_row, end_col, {})
-  return lines
+  local lines = vim.api.nvim_buf_get_text(bufnr, start_row - 1, start_col, end_row - 1, end_col + 1, {})
+  local lastchar = lines[#lines]:sub(-1)
+  if lastchar == "" then
+    return lines
+  end
+  local lastbyte = lastchar:byte()
+  local lastchar_size = M.char_size(lastbyte) or 0
+  if lastchar_size == 1 then
+    return lines
+  else
+    return vim.api.nvim_buf_get_text(bufnr, start_row - 1, start_col, end_row - 1, end_col + lastchar_size, {})
+  end
 end
 
 M.run_cmd = function(cmd)

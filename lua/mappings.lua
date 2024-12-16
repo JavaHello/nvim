@@ -327,7 +327,7 @@ local function creat_trans_command(name, from, to)
     else
       text = opt.args
     end
-    require("kide.tools.trans").translate_float { text = text, from = from, to = to }
+    require("kide.tools.ai").translate_float { text = text, from = from, to = to }
   end, {
     desc = "translate",
     nargs = "?",

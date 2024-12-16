@@ -8,6 +8,7 @@ local M = {}
 M.config = {
   API_URL = vim.env["DEEPSEEK_API_ENDPOINT"],
   API_KEY = vim.env["DEEPSEEK_API_KEY"],
+  show_usage = false,
 }
 
 local request_json = {
@@ -40,7 +41,7 @@ local request_json = {
 }
 
 ---@param request kai.tools.TranslateRequest
-local function system_prompt(request)
+local function trans_system_prompt(request)
   local from = request.from
   if request.from == "auto" then
     from = "(detect language)"
@@ -66,7 +67,21 @@ local function handle_sse_events(cmd, callback)
           local _, _, text = string.find(value, "data: (.+)")
           if text ~= "[DONE]" then
             local resp_json = vim.fn.json_decode(text)
-            callback(resp_json.choices[1].delta.content)
+            if resp_json.usage ~= nil and M.config.show_usage then
+              callback "\n"
+              callback(
+                "API[token usage]: "
+                  .. vim.inspect(resp_json.usage.prompt_cache_hit_tokens)
+                  .. "  "
+                  .. vim.inspect(resp_json.usage.prompt_tokens)
+                  .. " + "
+                  .. vim.inspect(resp_json.usage.completion_tokens)
+                  .. " = "
+                  .. vim.inspect(resp_json.usage.total_tokens)
+              )
+            else
+              callback(resp_json.choices[1].delta.content)
+            end
           end
         end
       end
@@ -80,8 +95,18 @@ end
 ---@param callback fun(data: string)
 function M.translate(request, callback)
   local json = request_json
-  json.messages[1].content = system_prompt(request)
+  json.messages[1].content = trans_system_prompt(request)
   json.messages[2].content = request.text
+  local text_len = request.text:len()
+  if text_len > 256 then
+    json.max_tokens = 512
+  elseif text_len > 512 then
+    json.max_tokens = 1024
+  elseif text_len > 1024 then
+    json.max_tokens = 2048
+  elseif text_len > 2048 then
+    json.max_tokens = 4096
+  end
   local body = vim.fn.json_encode(json)
   local cmd = {
     "curl",
@@ -129,28 +154,31 @@ M.translate_float = function(request)
   local win = vim.api.nvim_open_win(buf, true, opts)
   vim.wo[win].number = false -- 不显示行号
 
-  local curlines = { "" }
+  local curlines = ""
   local callback = function(data)
     -- 判断是否换行符
     if data == "\n" then
-      curlines[#curlines + 1] = ""
+      curlines = ""
     else
-      curlines[#curlines] = curlines[#curlines] .. data
+      curlines = curlines .. data
     end
 
-    -- 自动调整窗口宽度. 出现在中文翻译为英文时, 英文长度会超过中文
-    local l = vim.fn.strdisplaywidth(curlines[#curlines])
+    -- 自动调整窗口宽度
+    -- 出现在中文翻译为英文时, 英文长度会超过中文
+    local l = vim.fn.strdisplaywidth(curlines)
     if l > width and l < max_width then
       width = l
-      -- 判断 window 是否可用
       if vim.api.nvim_win_is_valid(win) then
         vim.api.nvim_win_set_width(win, width)
       end
     end
 
-    -- 判断 buffer 是否可用
     if vim.api.nvim_buf_is_valid(buf) then
-      vim.api.nvim_buf_set_lines(buf, 0, -1, false, curlines)
+      if data == "\n" then
+        vim.api.nvim_put({ "", "" }, "c", true, true)
+      else
+        vim.api.nvim_put({ data }, "c", true, true)
+      end
     end
   end
   M.translate(request, callback)
