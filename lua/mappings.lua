@@ -318,47 +318,24 @@ if vim.base64 then
   })
 end
 
-command("TransZh", function(opt)
-  local text
-  if opt.range > 0 then
-    text = require("kide.core.utils").get_visual_selection()
-    text = table.concat(text, "\n")
-  else
-    text = opt.args
-  end
-  require("kide.tools.trans").translate_float { text = text, from = "en", to = "zh" }
-end, {
-  desc = "translate",
-  nargs = "?",
-  range = true,
-})
+local function creat_trans_command(name, from, to)
+  command(name, function(opt)
+    local text
+    if opt.range > 0 then
+      text = require("kide.core.utils").get_visual_selection()
+      text = table.concat(text, "\n")
+    else
+      text = opt.args
+    end
+    require("kide.tools.trans").translate_float { text = text, from = from, to = to }
+  end, {
+    desc = "translate",
+    nargs = "?",
+    range = true,
+  })
+end
 
-command("TransEn", function(opt)
-  local text
-  if opt.range > 0 then
-    text = require("kide.core.utils").get_visual_selection()
-    text = table.concat(text, "\n")
-  else
-    text = opt.args
-  end
-  require("kide.tools.trans").translate_float { text = text, from = "zh", to = "en" }
-end, {
-  desc = "translate",
-  nargs = "?",
-  range = true,
-})
-
-command("TransAutoZh", function(opt)
-  local text
-  if opt.range > 0 then
-    text = require("kide.core.utils").get_visual_selection()
-    text = table.concat(text, "\n")
-  else
-    text = opt.args
-  end
-  require("kide.tools.trans").translate_float { text = text, from = "auto", to = "zh" }
-end, {
-  desc = "translate",
-  nargs = "?",
-  range = true,
-})
+creat_trans_command("TransAutoZh", "auto", "zh")
+creat_trans_command("TransEnZh", "en", "zh")
+creat_trans_command("TransZhEn", "zh", "en")
+creat_trans_command("TransIdZh", "id", "zh")

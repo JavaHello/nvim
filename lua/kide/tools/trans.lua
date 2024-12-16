@@ -102,6 +102,7 @@ function M.translate(request, callback)
 end
 
 local max_width = 120
+local max_height = 40
 
 M.translate_float = function(request)
   local ctext = vim.fn.split(request.text, "\n")
@@ -112,13 +113,14 @@ M.translate_float = function(request)
       width = l
     end
   end
+  local height = math.min(max_height, #ctext)
 
   local opts = {
     relative = "cursor",
     row = 1, -- 相对于光标位置的行偏移
     col = 0, -- 相对于光标位置的列偏移
     width = width, -- 窗口的宽度
-    height = #ctext, -- 窗口的高度
+    height = height, -- 窗口的高度
     style = "minimal", -- 最小化样式
     border = "rounded", -- 窗口边框样式
   }
