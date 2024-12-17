@@ -154,20 +154,19 @@ M.translate_float = function(request)
   local win = vim.api.nvim_open_win(buf, true, opts)
   vim.wo[win].number = false -- 不显示行号
 
-  local curlines = ""
+  local curlines = 0
   local callback = function(data)
     -- 判断是否换行符
     if data == "\n" then
-      curlines = ""
+      curlines = 0
     else
-      curlines = curlines .. data
+      curlines = curlines + vim.fn.strdisplaywidth(data)
     end
 
     -- 自动调整窗口宽度
     -- 出现在中文翻译为英文时, 英文长度会超过中文
-    local l = vim.fn.strdisplaywidth(curlines)
-    if l > width and l < max_width then
-      width = l
+    if curlines > width and curlines < max_width then
+      width = curlines
       if vim.api.nvim_win_is_valid(win) then
         vim.api.nvim_win_set_width(win, width)
       end
