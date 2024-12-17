@@ -149,7 +149,7 @@ M.translate_float = function(request)
     style = "minimal", -- 最小化样式
     border = "rounded", -- 窗口边框样式
   }
-  local buf = vim.api.nvim_create_buf(false, false)
+  local buf = vim.api.nvim_create_buf(false, true)
   local win = vim.api.nvim_open_win(buf, true, opts)
   vim.wo[win].number = false -- 不显示行号
 
