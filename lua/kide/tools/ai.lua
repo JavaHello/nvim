@@ -149,13 +149,21 @@ M.translate_float = function(request)
     style = "minimal", -- 最小化样式
     border = "rounded", -- 窗口边框样式
   }
-  local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>q<CR>", { noremap = true, silent = true })
+  local buf = vim.api.nvim_create_buf(false, false)
   local win = vim.api.nvim_open_win(buf, true, opts)
   vim.wo[win].number = false -- 不显示行号
 
+  local closed = false
+  vim.keymap.set("n", "q", function()
+    closed = true
+    vim.api.nvim_win_close(win, true)
+  end, { noremap = true, silent = true, buffer = buf })
+
   local curlines = 0
   local callback = function(data)
+    if closed then
+      return
+    end
     -- 判断是否换行符
     if data == "\n" then
       curlines = 0
