@@ -331,7 +331,7 @@ return {
           name = "DeepseekChat",
           chat = true,
           command = false,
-          model = { model = "deepseek-chat", temperature = 1.0, top_p = 1 },
+          model = { model = "deepseek-chat", temperature = 1.3, top_p = 1 },
           system_prompt = "You are a general AI assistant.\n\n"
             .. "The user provided the additional info about how they would like you to respond:\n\n"
             .. "- If you're unsure don't guess and say you don't know instead.\n"
