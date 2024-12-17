@@ -151,25 +151,11 @@ end
 
 -- see https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/utils.lua#L120
 ---@return string[]
-M.get_visual_selection = function()
-  local start_pos = vim.api.nvim_buf_get_mark(0, "<")
-  local end_pos = vim.api.nvim_buf_get_mark(0, ">")
-
-  local start_row, start_col = start_pos[1], start_pos[2]
-  local end_row, end_col = end_pos[1], end_pos[2]
-  local bufnr = vim.api.nvim_get_current_buf()
-  local lines = vim.api.nvim_buf_get_text(bufnr, start_row - 1, start_col, end_row - 1, end_col + 1, {})
-  local lastchar = lines[#lines]:sub(-1)
-  if lastchar == "" then
-    return lines
-  end
-  local lastbyte = lastchar:byte()
-  local lastchar_size = M.char_size(lastbyte) or 0
-  if lastchar_size == 1 then
-    return lines
-  else
-    return vim.api.nvim_buf_get_text(bufnr, start_row - 1, start_col, end_row - 1, end_col + lastchar_size, {})
-  end
+M.get_visual_selection = function(mode)
+  mode = mode or vim.fn.visualmode()
+  --参考 @phanium  @linrongbin  @skywind3000 提供的方法。
+  -- https://github.com/skywind3000/vim/blob/master/autoload/asclib/compat.vim
+  return vim.fn.getregion(vim.fn.getpos "'<", vim.fn.getpos "'>", { type = mode })
 end
 
 M.run_cmd = function(cmd)
