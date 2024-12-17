@@ -413,6 +413,8 @@ return {
   -- 翻译插件
   {
     "uga-rosa/translate.nvim",
+    -- see ai.translate
+    enabled =false,
     cmd = "Translate",
     config = function()
       require("translate").setup {
