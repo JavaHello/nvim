@@ -414,7 +414,7 @@ return {
   {
     "uga-rosa/translate.nvim",
     -- see ai.translate
-    enabled =false,
+    enabled = false,
     cmd = "Translate",
     config = function()
       require("translate").setup {
