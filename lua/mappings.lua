@@ -269,7 +269,7 @@ end, { desc = "Jdt Show Logs" })
 -- find files
 if vim.fn.executable "fd" == 1 then
   command("Fd", function(opt)
-    vim.fn.setqflist({}, " ", { lines = vim.fn.systemlist("fd " .. opt.args), efm = "%f" })
+    vim.fn.setqflist({}, " ", { lines = vim.fn.systemlist("fd --type file " .. opt.args), efm = "%f" })
     vim.cmd "botright copen"
   end, {
     desc = "find files",
@@ -278,7 +278,7 @@ if vim.fn.executable "fd" == 1 then
 end
 if vim.fn.executable "find" == 1 then
   command("Find", function(opt)
-    vim.fn.setqflist({}, " ", { lines = vim.fn.systemlist("find . -iname '" .. opt.args .. "'"), efm = "%f" })
+    vim.fn.setqflist({}, " ", { lines = vim.fn.systemlist("find . -type f -iname '" .. opt.args .. "'"), efm = "%f" })
     vim.cmd "botright copen"
   end, {
     desc = "find files",
