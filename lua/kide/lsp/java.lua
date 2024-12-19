@@ -232,7 +232,7 @@ local config = {
   settings = {
     java = {
       autobuild = { enabled = true },
-      maxConcurrentBuilds = utils.get_cpu_thread_count(),
+      maxConcurrentBuilds = 1,
       home = env.JAVA_HOME,
       project = {
         encoding = "UTF-8",

@@ -287,23 +287,10 @@ if vim.fn.executable "find" == 1 then
 end
 
 if vim.fn.executable "fzy" == 1 then
-  command("Fzy", function(opt)
+  command("FzyFiles", function(opt)
     local fzy = require "fzy"
-    local args = {}
-    if opt.args ~= "" then
-      args = vim.split(opt.args, " ")
-    end
-    local param = args[2] or ""
-    param = vim.fn.shellescape(param)
-
-    if "fd" == args[1] then
-      fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "  ")
-    elseif "rg" == args[1] then
-      if param == "" then
-        param = "."
-      end
-      fzy.execute("rg --column --no-heading " .. param, fzy.sinks.edit_live_grep, "  ")
-    end
+    local param = vim.fn.shellescape(opt.args)
+    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "  ")
   end, {
     desc = "find files",
     nargs = "?",
