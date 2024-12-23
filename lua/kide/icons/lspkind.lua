@@ -1,12 +1,12 @@
 local lspkind = require "nvchad.icons.lspkind"
 local M = {}
 M.symbol_map = {
-  Text = { icon = lspkind.Text },
+  Text = { icon = lspkind.Text, hl = "@text" },
   Method = { icon = lspkind.Method, hl = "@function.method" },
   Function = { icon = lspkind.Function, hl = "@function" },
   Constructor = { icon = lspkind.Constructor, hl = "@constructor" },
   Field = { icon = lspkind.Field, hl = "@property" },
-  Variable = { icon = lspkind.Variable, hl = "@constant" },
+  Variable = { icon = lspkind.Variable, hl = "@variable" },
   Class = { icon = lspkind.Class, hl = "@type" },
   Interface = { icon = lspkind.Interface, hl = "@type" },
   Module = { icon = lspkind.Module, hl = "@namespace" },

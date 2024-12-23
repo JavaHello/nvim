@@ -33,6 +33,9 @@ local dap = require "dap"
 
 function M:get_trigger_characters()
   local session = require("dap").session()
+  if session == nil then
+    return nil
+  end
   local trigger_characters = session.capabilities.completionTriggerCharacters or {}
   local contains_dot = vim.tbl_contains(trigger_characters, ".")
   if not contains_dot then

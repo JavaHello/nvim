@@ -73,7 +73,7 @@ return {
     "saghen/blink.cmp",
     lazy = false, -- lazy loading handled internally
     dependencies = "rafamadriz/friendly-snippets",
-    version = "v0.*",
+    version = "*",
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
@@ -100,17 +100,36 @@ return {
         kind_icons = require "nvchad.icons.lspkind",
       },
       sources = {
-        completion = {
-          enabled_providers = { "lsp", "path", "snippets", "buffer", "dadbod", "daprepl" },
+        default = {
+          "lsp",
+          "path",
+          "snippets",
+          "buffer",
+          "dadbod",
+          "daprepl",
         },
         providers = {
           dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
           daprepl = { name = "DapRepl", module = "kide.cmp.dap" },
         },
+        cmdline = {},
       },
       completion = {
         menu = {
           border = "rounded",
+          draw = {
+            components = {
+              kind_icon = {
+                ellipsis = false,
+                text = function(ctx)
+                  return require("kide.icons.lspkind").symbol_map[ctx.kind].icon
+                end,
+                highlight = function(ctx)
+                  return require("kide.icons.lspkind").symbol_map[ctx.kind].hl
+                end,
+              },
+            },
+          },
         },
         documentation = {
           auto_show = true,
