@@ -150,12 +150,12 @@ map("n", "gs", vim.lsp.buf.signature_help, { desc = "lsp signature help" })
 map("n", "go", vim.diagnostic.open_float, { desc = "Open float Diagnostics" })
 
 -- quickfix next/prev
-map("n", "]q", "<CMD>cnext<CR>", { desc = "Quickfix Next" })
-map("n", "[q", "<CMD>cprev<CR>", { desc = "Quickfix Prev" })
+-- map("n", "]q", "<CMD>cnext<CR>", { desc = "Quickfix Next" })
+-- map("n", "[q", "<CMD>cprev<CR>", { desc = "Quickfix Prev" })
 
 -- local list next/prev
-map("n", "]l", "<CMD>lnext<CR>", { desc = "Location List Next" })
-map("n", "[l", "<CMD>lprev<CR>", { desc = "Location List Prev" })
+-- map("n", "]l", "<CMD>lnext<CR>", { desc = "Location List Next" })
+-- map("n", "[l", "<CMD>lprev<CR>", { desc = "Location List Prev" })
 
 command("InlayHint", function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
