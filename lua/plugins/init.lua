@@ -191,6 +191,7 @@ return {
     dependencies = {
       "mfussenegger/nvim-jdtls",
     },
+    config = false,
   },
   {
     "JavaHello/quarkus.nvim",
