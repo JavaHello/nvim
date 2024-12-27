@@ -346,7 +346,7 @@ local function creat_trans_command(name, from, to)
   })
 end
 
-creat_trans_command("TransAutoZh", "auto", "zh")
-creat_trans_command("TransEnZh", "en", "zh")
-creat_trans_command("TransZhEn", "zh", "en")
-creat_trans_command("TransIdZh", "id", "zh")
+creat_trans_command("TransAutoZh", "auto", "中文")
+creat_trans_command("TransEnZh", "英语", "中文")
+creat_trans_command("TransZhEn", "中文", "英语")
+creat_trans_command("TransIdZh", "印尼语", "中文")
