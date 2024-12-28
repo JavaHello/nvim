@@ -7,7 +7,7 @@ function M.statusline()
   }
   local num_errors = counts[vim.diagnostic.severity.ERROR] or 0
   local num_warnings = counts[vim.diagnostic.severity.WARN] or 0
-  table.insert(parts, "%r%#DiagnosticWarn#%m")
+  table.insert(parts, "%#DiagnosticWarn#%r%m")
   if num_errors > 0 then
     vim.list_extend(parts, { "%#DiagnosticError#", " 󰅙 ", tostring(num_errors), " " })
   elseif num_warnings > 0 then

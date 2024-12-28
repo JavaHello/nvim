@@ -219,9 +219,25 @@ if vim.fn.executable("find") == 1 then
 end
 
 if vim.fn.executable("fzy") == 1 then
+  map("n", "<leader>fb", function()
+    local fzy = require("kide.fzy")
+    local bufs = vim.api.nvim_list_bufs()
+    local cats = {}
+    for _, v in ipairs(bufs) do
+      local buf_name = vim.api.nvim_buf_get_name(v)
+      table.insert(cats, tostring(v) .. ": " .. buf_name)
+    end
+    local param = vim.fn.shellescape(table.concat(cats, "\n"))
+    fzy.execute("echo -e " .. param, function(choice)
+      if choice and vim.trim(choice) ~= "" then
+        local cbuf = vim.split(choice, ":")
+        vim.cmd("b " .. cbuf[1])
+      end
+    end, "Buffers >")
+  end, { desc = "Find buffer" })
   map("n", "<leader>ff", function()
     local fzy = require("kide.fzy")
-    fzy.execute("fd --type file", fzy.sinks.edit_file, "  ")
+    fzy.execute("fd --type file", fzy.sinks.edit_file, "Files  ")
   end, { desc = "Find files" })
 
   map("v", "<leader>ff", function()
@@ -229,7 +245,7 @@ if vim.fn.executable("fzy") == 1 then
     local text = require("kide.tools").get_visual_selection()
     local fzy = require("kide.fzy")
     local param = vim.fn.shellescape(text[1])
-    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "  ")
+    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "Files  ")
   end, { desc = "fzy find files", silent = true, noremap = true })
 
   map("v", "<leader>fw", function()
@@ -237,7 +253,7 @@ if vim.fn.executable("fzy") == 1 then
     local text = require("kide.tools").get_visual_selection()
     local fzy = require("kide.fzy")
     local param = vim.fn.shellescape(text[1])
-    fzy.execute("rg --vimgrep --no-heading --smart-case " .. param, fzy.sinks.edit_live_grep, "  ")
+    fzy.execute("rg --no-heading --trim -nH --smart-case " .. param, fzy.sinks.edit_live_grep, "Grep  ")
   end, { desc = "fzy live grep", silent = true, noremap = true })
 
   command("FzyFiles", function(opt)
