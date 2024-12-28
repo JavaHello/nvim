@@ -217,6 +217,22 @@ if vim.fn.executable("find") == 1 then
     nargs = 1,
   })
 end
+command("CloseOtherBufs", function(opt)
+  local bufs = vim.api.nvim_list_bufs()
+  local cur = vim.api.nvim_get_current_buf()
+  for _, v in ipairs(bufs) do
+    if vim.bo[v].buflisted and cur ~= v then
+      local ok = pcall(vim.api.nvim_buf_delete, v, { force = false, unload = false })
+      if not ok then
+        vim.cmd("b " .. v)
+        return
+      end
+    end
+  end
+end, {
+  desc = "find files",
+  nargs = "?",
+})
 
 if vim.fn.executable("fzy") == 1 then
   command("Rg", function(opt)
@@ -226,6 +242,16 @@ if vim.fn.executable("fzy") == 1 then
     desc = "Grep",
     nargs = 1,
   })
+
+  map("n", "<leader>fo", function()
+    local fzy = require("kide.fzy")
+    fzy.execute("fd", function(choice)
+      if choice and vim.trim(choice) ~= "" then
+        require("kide.tools").open_fn(choice)
+      end
+    end, "SystemOpen > ")
+  end, { desc = "System Open" })
+
   map("n", "<leader>fb", function()
     local fzy = require("kide.fzy")
     local bufs = vim.api.nvim_list_bufs()
