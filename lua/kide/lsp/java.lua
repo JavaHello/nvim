@@ -455,10 +455,6 @@ M.setup = function(opts)
   end
   local on_attach = opts.on_attach
   config.on_attach = function(client, buffer)
-    local buf_opt = { buf = buffer }
-    vim.api.nvim_set_option_value("shiftwidth", 4, buf_opt)
-    vim.api.nvim_set_option_value("tabstop", 4, buf_opt)
-    vim.api.nvim_set_option_value("softtabstop", 4, buf_opt)
     local function desc_opts(desc)
       return { silent = true, buffer = buffer, desc = desc }
     end
