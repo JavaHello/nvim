@@ -233,7 +233,7 @@ if vim.fn.executable("fzy") == 1 then
         local cbuf = vim.split(choice, ":")
         vim.cmd("b " .. cbuf[1])
       end
-    end, "Buffers >")
+    end, "Buffers > ")
   end, { desc = "Find buffer" })
   map("n", "<leader>ff", function()
     local fzy = require("kide.fzy")
