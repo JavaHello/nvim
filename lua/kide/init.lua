@@ -2,8 +2,10 @@ local M = {}
 -- 参考 https://github.com/mfussenegger/dotfiles
 function M.statusline()
   local counts = vim.diagnostic.count(0, { severity = { min = vim.diagnostic.severity.WARN } })
+  local fstatus = M.file_or_lsp_status()
   local parts = {
-    [[%<» %{luaeval("require'kide'.file_or_lsp_status()")} ]],
+    "%< ",
+    fstatus,
   }
   local num_errors = counts[vim.diagnostic.severity.ERROR] or 0
   local num_warnings = counts[vim.diagnostic.severity.WARN] or 0
@@ -25,7 +27,15 @@ function M.file_or_lsp_status()
   local mode = vim.api.nvim_get_mode().mode
   local lsp_status = vim.lsp.status()
   if mode ~= "n" or lsp_status == "" then
-    return M.format_uri(vim.uri_from_bufnr(vim.api.nvim_get_current_buf()))
+    local buf = vim.api.nvim_get_current_buf()
+    local filename = vim.uri_from_bufnr(buf)
+    local devicons = require("nvim-web-devicons")
+    local icon, name = devicons.get_icon_by_filetype(vim.bo[buf].filetype, { default = true })
+    if name then
+      return string.format("%%#%s#%s %%#StatusLine#%s", name, icon, M.format_uri(filename))
+    else
+      return string.format("%s %s", icon, M.format_uri(filename))
+    end
   end
   return lsp_status
 end

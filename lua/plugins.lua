@@ -49,7 +49,7 @@ return {
     },
   },
   { "nvim-lua/plenary.nvim" },
-  { "nvim-tree/nvim-web-devicons", lazy = true },
+  { "nvim-tree/nvim-web-devicons" },
 
   {
     "stevearc/conform.nvim",
