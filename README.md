@@ -1,7 +1,6 @@
 # NVIM IDE
 
-使用 [NvChad](https://github.com/NvChad/NvChad) 做为基础配置, `NvChad` 基础配置和快捷建未做修改, 建议先阅读 `NvChad` 相关的文档。
-主要添加了 `Java`, `Python`, `Rust` 语言的 `LSP`, `DAP` 配置
+支持 `Java`, `Python`, `Rust` 语言的 `LSP`, `DAP` 配置
 
 ## 安装
 

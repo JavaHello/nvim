@@ -1,0 +1,1 @@
+vim.bo.formatprg = "jq ."

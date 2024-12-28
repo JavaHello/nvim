@@ -1,7 +1,7 @@
 local M = {}
 
 M.setup = function(opt)
-  local dap = require "dap"
+  local dap = require("dap")
   dap.configurations.scala = {
     {
       type = "scala",

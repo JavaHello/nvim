@@ -1,0 +1,43 @@
+local icons = require("kide.icons")
+local M = {}
+M.symbol_map = {
+  Text = { icon = icons.Text, hl = "@text" },
+  Method = { icon = icons.Method, hl = "@function.method" },
+  Function = { icon = icons.Function, hl = "@function" },
+  Constructor = { icon = icons.Constructor, hl = "@constructor" },
+  Field = { icon = icons.Field, hl = "@property" },
+  Variable = { icon = icons.Variable, hl = "@variable" },
+  Class = { icon = icons.Class, hl = "@type" },
+  Interface = { icon = icons.Interface, hl = "@type" },
+  Module = { icon = icons.Module, hl = "@namespace" },
+  Property = { icon = icons.Property, hl = "@property" },
+  Unit = { icon = icons.Unit },
+  Value = { icon = icons.Value },
+  Enum = { icon = icons.Enum, hl = "@lsp.type.enum" },
+  Keyword = { icon = icons.Keyword, hl = "@keyword" },
+  Snippet = { icon = icons.Snippet },
+  Color = { icon = icons.Color },
+  File = { icon = icons.File },
+  Reference = { icon = icons.Reference, hl = "@reference" },
+  Folder = { icon = icons.Folder },
+  EnumMember = { icon = icons.EnumMember, hl = "@lsp.type.enumMember" },
+  Constant = { icon = icons.Constant, hl = "@constant" },
+  Struct = { icon = icons.Struct, hl = "@type" },
+  Event = { icon = icons.Event, hl = "@type" },
+  Operator = { icon = icons.Operator, hl = "@operator" },
+  TypeParameter = { icon = "", hl = "@lsp.type.parameter" },
+  Key = { icon = icons.Keyword, hl = "@type" },
+  Null = { icon = icons.Null, hl = "@type" },
+  Namespace = { icon = icons.Namespace, hl = "@namespace" },
+  Package = { icon = icons.Package, hl = "@namespace" },
+  String = { icon = icons.String, hl = "@string" },
+  Number = { icon = icons.Number, hl = "@number" },
+  Boolean = { icon = icons.Boolean, hl = "@boolean" },
+  Array = { icon = icons.Array, hl = "@constant" },
+  Object = { icon = icons.Object, hl = "@type" },
+  ---------------------------------------------------------
+  Component = { icon = "󰡀", hl = "@function" },
+  Fragment = { icon = "", hl = "@constant" },
+}
+
+return M

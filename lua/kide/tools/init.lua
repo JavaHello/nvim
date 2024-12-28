@@ -4,22 +4,22 @@ local M = {}
 --  78  h   "init.lua"                     第 1 行
 M.close_other_buf = function()
   -- local cur_winnr = vim.fn.winnr()
-  local cur_buf = vim.fn.bufnr "%"
+  local cur_buf = vim.fn.bufnr("%")
   if cur_buf == -1 then
     return
   end
   -- local bf_no = vim.fn.winbufnr(cur_winnr)
-  vim.fn.execute "bn"
-  local next_buf = vim.fn.bufnr "%"
+  vim.fn.execute("bn")
+  local next_buf = vim.fn.bufnr("%")
   -- print('cur_buf ' .. cur_buf)
 
   local count = 999
   while next_buf ~= -1 and cur_buf ~= next_buf and count > 0 do
     -- print('next_buf ' .. next_buf)
     local bdel = "bdel " .. next_buf
-    vim.fn.execute "bn"
+    vim.fn.execute("bn")
     vim.fn.execute(bdel)
-    next_buf = vim.fn.bufnr "%"
+    next_buf = vim.fn.bufnr("%")
     count = count - 1
   end
 end
@@ -49,7 +49,7 @@ M.camel_case = function(word)
   if word == "" or word == nil then
     return
   end
-  if word:find "_" then
+  if word:find("_") then
     return M.camel_case_c(word)
   else
     return M.camel_case_u(word)
@@ -115,15 +115,15 @@ end
 M.camel_case_start = function(r, l1, l2)
   local word
   if r == 0 then
-    word = vim.fn.expand "<cword>"
+    word = vim.fn.expand("<cword>")
     local cw = M.camel_case(word)
     if cw then
       vim.fn.setreg('"', M.camel_case(word))
     end
   elseif l1 == l2 then
-    word = vim.fn.getline "."
-    local ln1 = vim.fn.getpos "'<"
-    local ln2 = vim.fn.getpos "'>"
+    word = vim.fn.getline(".")
+    local ln1 = vim.fn.getpos("'<")
+    local ln2 = vim.fn.getpos("'>")
     local cs = ln1[3]
     local ce = ln2[3]
     local ecs = M.char_size(word:byte(ce))
@@ -131,9 +131,9 @@ M.camel_case_start = function(r, l1, l2)
       ce = ce + ecs - 1
     end
     word = word:sub(cs, ce)
-    local reg_tmp = vim.fn.getreg "a"
+    local reg_tmp = vim.fn.getreg("a")
     vim.fn.setreg("a", M.camel_case(word))
-    vim.cmd 'normal! gv"ap'
+    vim.cmd('normal! gv"ap')
     vim.fn.setreg("a", reg_tmp)
   else
     vim.notify("请选择单行字符", vim.log.levels.WARN)
@@ -155,7 +155,7 @@ M.get_visual_selection = function(mode)
   mode = mode or vim.fn.visualmode()
   --参考 @phanium  @linrongbin  @skywind3000 提供的方法。
   -- https://github.com/skywind3000/vim/blob/master/autoload/asclib/compat.vim
-  return vim.fn.getregion(vim.fn.getpos "'<", vim.fn.getpos "'>", { type = mode })
+  return vim.fn.getregion(vim.fn.getpos("'<"), vim.fn.getpos("'>"), { type = mode })
 end
 
 M.run_cmd = function(cmd)
@@ -169,9 +169,9 @@ M.Mac = "Mac"
 M.os_type = function()
   local has = vim.fn.has
   local t = M.Linux
-  if has "win32" == 1 or has "win64" == 1 then
+  if has("win32") == 1 or has("win64") == 1 then
     t = M.Windows
-  elseif has "mac" == 1 then
+  elseif has("mac") == 1 then
     t = M.Mac
   end
   return t
@@ -210,12 +210,12 @@ end
 M.open_fn = function(file)
   local ok, system_open = pcall(require, "nvim-tree.actions.node.system-open")
   if ok then
-    system_open.fn { absolute_path = file }
+    system_open.fn({ absolute_path = file })
   end
 end
 
 M.get_filename = function(path)
-  local idx = path:match ".+()%.%w+$"
+  local idx = path:match(".+()%.%w+$")
   if idx then
     return path:sub(1, idx - 1)
   else
@@ -224,12 +224,12 @@ M.get_filename = function(path)
 end
 
 M.get_extension = function(str)
-  return str:match ".+%.(%w+)$"
+  return str:match(".+%.(%w+)$")
 end
 
 M.tmpdir = function()
   if M.is_win then
-    return os.getenv "TEMP"
+    return os.getenv("TEMP")
   else
     return "/tmp"
   end
@@ -257,7 +257,7 @@ M.get_cpu_thread_count = function()
     M.cpu_thread_count = 8
     return M.cpu_thread_count
   end
-  local result = handle:read "*a"
+  local result = handle:read("*a")
   handle:close()
   local c = tonumber(result)
   if c then
@@ -291,6 +291,10 @@ M.base64_url_safe_to_std = function(msg)
     end
   end
   return msg
+end
+
+M.base64_url_safe = function(msg)
+  return M.base64_std_to_url_safe(vim.base64.encode(msg))
 end
 
 M.base64_std_to_url_safe = function(msg)

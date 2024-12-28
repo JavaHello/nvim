@@ -4,7 +4,7 @@ local function augroup(name)
 end
 -- Highlight on yank
 autocmd({ "TextYankPost" }, {
-  group = augroup "highlight_yank",
+  group = augroup("highlight_yank"),
   callback = function()
     vim.highlight.on_yank()
   end,
@@ -14,21 +14,21 @@ autocmd({ "TextYankPost" }, {
 autocmd("BufReadPost", {
   pattern = "*",
   callback = function()
-    local line = vim.fn.line "'\""
+    local line = vim.fn.line("'\"")
     if
       line > 1
-      and line <= vim.fn.line "$"
+      and line <= vim.fn.line("$")
       and vim.bo.filetype ~= "commit"
       and vim.fn.index({ "xxd", "gitrebase" }, vim.bo.filetype) == -1
     then
-      vim.cmd 'normal! g`"'
+      vim.cmd('normal! g`"')
     end
   end,
 })
 
 -- close some filetypes with <q>
 autocmd("FileType", {
-  group = augroup "close_with_q",
+  group = augroup("close_with_q"),
   pattern = {
     "PlenaryTestPopup",
     "help",
@@ -54,7 +54,7 @@ autocmd("FileType", {
 })
 
 autocmd({ "BufReadCmd" }, {
-  group = augroup "git_close_with_q",
+  group = augroup("git_close_with_q"),
   pattern = "fugitive://*",
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -63,9 +63,10 @@ autocmd({ "BufReadCmd" }, {
 })
 
 autocmd("FileType", {
-  group = augroup "close_with_q_bd",
+  group = augroup("close_with_q_bd"),
   pattern = {
     "oil",
+    "DressingSelect"
   },
   callback = function(event)
     vim.keymap.set("n", "q", "<cmd>bd<cr>", { buffer = event.buf, silent = true })
@@ -73,14 +74,14 @@ autocmd("FileType", {
 })
 
 autocmd({ "BufRead", "BufNewFile" }, {
-  group = augroup "spell",
+  group = augroup("spell"),
   pattern = "*.md",
   command = "setlocal spell spelllang=en_us,cjk",
 })
 
 -- outline
 autocmd("FileType", {
-  group = augroup "OUTLINE",
+  group = augroup("OUTLINE"),
   pattern = {
     "OUTLINE",
   },
@@ -117,6 +118,7 @@ local function lsp_command(bufnr)
   })
 end
 autocmd("LspAttach", {
+  group = augroup("lsp_a"),
   callback = function(args)
     local bufnr = args.buf
     lsp_command(bufnr)
@@ -166,7 +168,9 @@ autocmd("LspAttach", {
     end
   end,
 })
+
 autocmd("LspDetach", {
+  group = augroup("lsp_d"),
   callback = function(args)
     local bufnr = args.buf
     -- vim.api.nvim_del_autocmd(mid) 自动 del
@@ -179,19 +183,12 @@ autocmd("LspDetach", {
 
 -- jdtls
 autocmd({ "BufReadCmd" }, {
-  group = augroup "jdtls_open",
+  group = augroup("jdtls_open"),
   pattern = { "*.class" },
   callback = function(event)
     require("jdtls").open_classfile(event.file)
   end,
 })
 
-autocmd("TermOpen", {
-  group = augroup "terminal_config",
-  callback = function(event)
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-    vim.opt_local.signcolumn = "no"
-    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-  end,
-})
+require("kide.tools.maven").setup()
+require("kide.tools.plantuml").setup()

@@ -1,5 +1,4 @@
-local uv = vim.loop
-local utils = require "kide.core.utils"
+local utils = require("kide.tools")
 local plantuml_args_complete = utils.command_args_complete
 local M = {}
 M.config = {}
@@ -7,8 +6,7 @@ M.config = {}
 local function plantuml_jar(default_jar)
   return vim.env["PLANTUML_JAR"] or default_jar
 end
-M.config.jar_path = plantuml_jar "/opt/software/puml/plantuml.jar"
-M.config.cmd = "java"
+M.config.jar_path = plantuml_jar("/opt/software/puml/plantuml.jar")
 M.config.defaultTo = "svg"
 M.types = {}
 M.types["-tpng"] = "png"
@@ -36,16 +34,12 @@ local function to_type()
   return "-t" .. M.config.defaultTo
 end
 
-local function out_file(ot, file)
-  return utils.get_filename(file) .. "." .. ot
-end
-
 local function exec(opt)
   if not vim.fn.filereadable(M.config.jar_path) then
     vim.notify("Plantuml: 没有文件 " .. M.config.jar_path, vim.log.levels.ERROR)
     return
   end
-  if not vim.fn.executable "java" then
+  if not vim.fn.executable("java") then
     vim.notify("Plantuml: 没有 java 环境", vim.log.levels.ERROR)
     return
   end
@@ -65,46 +59,24 @@ local function exec(opt)
     vim.notify("Plantuml: 不支持的格式 " .. out_type[1], vim.log.levels.ERROR)
     return
   end
-  local ofile = out_file(ot, opt.file)
 
-  local p = vim.fn.expand "%:p:h"
+  local p = vim.fn.expand("%:p:h")
   table.insert(opt.args, 1, "-jar")
   table.insert(opt.args, 2, M.config.jar_path)
   table.insert(opt.args, opt.file)
-  table.insert(opt.args, "-o" .. p)
-  local process = {
-    cmd = M.config.cmd,
-    args = opt.args,
-    errors = "\n",
-    stderr = uv.new_pipe(false),
-  }
-  process.handle, process.pid = uv.spawn(
-    process.cmd,
-    { args = process.args, stdio = { nil, nil, process.stderr }, detached = true },
-    function(code)
-      process.handle:close()
-      if code ~= 0 then
-        uv.read_start(process.stderr, function(_, data)
-          process.stderr:read_stop()
-          process.stderr:close()
-          if data then
-            vim.schedule(function()
-              vim.notify("Plantuml: " .. data, vim.log.levels.WARN)
-            end)
-          else
-            vim.schedule(function()
-              vim.notify("Plantuml: export error " .. code, vim.log.levels.WARN)
-            end)
-          end
-        end)
+  table.insert(opt.args, "-o")
+  table.insert(opt.args, p)
+  local cmd = opt.args
+  table.insert(cmd, 1, "java")
+  vim.fn.jobstart(cmd, {
+    on_exit = function(_, code)
+      if code == 0 then
+        vim.notify("Plantuml: export success", vim.log.levels.INFO)
       else
-        vim.schedule(function()
-          vim.notify("Plantuml: export success", vim.log.levels.INFO)
-        end)
-        utils.open_fn(ofile)
+        vim.notify("Plantuml: export error", vim.log.levels.ERROR)
       end
-    end
-  )
+    end,
+  })
 end
 
 local function init()
@@ -115,10 +87,10 @@ local function init()
     desc = "Export Plantuml file",
     callback = function(o)
       vim.api.nvim_buf_create_user_command(o.buf, "Plantuml", function(opts)
-        exec {
+        exec({
           args = opts.fargs,
           file = o.file,
-        }
+        })
       end, {
         nargs = "*",
         complete = plantuml_args_complete(complete_list, { single = true }),

@@ -2,15 +2,73 @@ local HEIGHT_RATIO = 0.8
 local WIDTH_RATIO = 0.8
 return {
   {
-    "stevearc/conform.nvim",
-    -- event = 'BufWritePre', -- uncomment for format on save
+    "nvim-treesitter/nvim-treesitter",
+    lazy = false,
     config = function()
-      require "configs.conform"
+      require("nvim-treesitter.configs").setup({
+
+        ensure_installed = { "lua", "luadoc", "printf", "vim", "vimdoc" },
+        highlight = {
+          enable = true,
+          disable = function(_, buf)
+            local max_filesize = 100 * 1024 -- 100 KB
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            if ok and stats and stats.size > max_filesize then
+              return true
+            end
+          end,
+          additional_vim_regex_highlighting = false,
+        },
+
+        indent = { enable = true },
+      })
     end,
+  },
+
+  {
+    "williamboman/mason.nvim",
+    lazy = false,
+    opts = {
+      ui = {
+        icons = {
+          package_pending = " ",
+          package_installed = " ",
+          package_uninstalled = " ",
+        },
+      },
+
+      max_concurrent_installers = 10,
+    },
+  },
+  { "nvim-lua/plenary.nvim" },
+  { "nvim-tree/nvim-web-devicons", lazy = true },
+
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        lua = { "stylua" },
+        css = { "prettier" },
+        html = { "prettier" },
+        json = { "prettier" },
+        markdown = { "prettier" },
+        sql = { "sql_formatter" },
+        python = { "black" },
+      },
+    },
   },
   {
     "nvim-tree/nvim-tree.lua",
     opts = {
+
+      filters = { dotfiles = false },
+      disable_netrw = true,
+      hijack_cursor = true,
+      sync_root_with_cwd = true,
+      update_focused_file = {
+        enable = true,
+        update_root = false,
+      },
       actions = {
         open_file = {
           quit_on_open = true,
@@ -43,17 +101,41 @@ return {
           return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
         end,
       },
+
+      renderer = {
+        root_folder_label = false,
+        highlight_git = true,
+        indent_markers = { enable = true },
+        icons = {
+          glyphs = {
+            default = "󰈚",
+            folder = {
+              default = "",
+              empty = "",
+              empty_open = "",
+              open = "",
+              symlink = "",
+            },
+            git = { unmerged = "" },
+          },
+        },
+      },
     },
   },
   {
-    "folke/which-key.nvim",
-    enabled = false,
+    "lewis6991/gitsigns.nvim",
+    event = "VeryLazy",
+    opts = {
+      signs = {
+        delete = { text = "󰍵" },
+        changedelete = { text = "󱕖" },
+      },
+    },
   },
   {
     "neovim/nvim-lspconfig",
     config = function()
-      require("nvchad.configs.lspconfig").defaults()
-      require "configs.lspconfig"
+      require("kide.lspconfig").init_lsp_clients()
     end,
   },
   -- LSP progress messages
@@ -63,11 +145,6 @@ return {
     opts = {
       -- options
     },
-  },
-  -- cmp
-  {
-    "hrsh7th/nvim-cmp",
-    enabled = false,
   },
   {
     "saghen/blink.cmp",
@@ -97,7 +174,6 @@ return {
       appearance = {
         use_nvim_cmp_as_default = false,
         nerd_font_variant = "mono",
-        kind_icons = require "nvchad.icons.lspkind",
       },
       sources = {
         default = {
@@ -106,11 +182,11 @@ return {
           "snippets",
           "buffer",
           "dadbod",
-          "daprepl",
+          -- "daprepl",
         },
         providers = {
           dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
-          daprepl = { name = "DapRepl", module = "kide.cmp.dap" },
+          -- daprepl = { name = "DapRepl", module = "kide.cmp.dap" },
         },
         cmdline = {},
       },
@@ -122,10 +198,10 @@ return {
               kind_icon = {
                 ellipsis = false,
                 text = function(ctx)
-                  return require("kide.icons.lspkind").symbol_map[ctx.kind].icon
+                  return require("kide.lspkind").symbol_map[ctx.kind].icon
                 end,
                 highlight = function(ctx)
-                  return require("kide.icons.lspkind").symbol_map[ctx.kind].hl
+                  return require("kide.lspkind").symbol_map[ctx.kind].hl
                 end,
               },
             },
@@ -147,8 +223,6 @@ return {
     opts_extend = { "sources.completion.enabled_providers" },
     config = function(_, opts)
       require("blink.cmp").setup(opts)
-      vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { link = "FloatBorder" })
-      vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { link = "FloatBorder" })
     end,
   },
   {
@@ -159,7 +233,7 @@ return {
   {
     "mfussenegger/nvim-fzy",
     config = function()
-      local fzy = require "fzy"
+      local fzy = require("fzy")
       fzy.new_popup = function()
         local buf = vim.api.nvim_create_buf(false, true)
         vim.api.nvim_buf_set_keymap(buf, "t", "<ESC>", "<C-\\><C-c>", {})
@@ -212,8 +286,8 @@ return {
   {
     "mfussenegger/nvim-dap",
     config = function()
-      local dap = require "dap"
-      require "nvim-dap-virtual-text"
+      local dap = require("dap")
+      require("nvim-dap-virtual-text")
 
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dap.repl.open()
@@ -227,7 +301,7 @@ return {
     "theHamsta/nvim-dap-virtual-text",
     dependencies = { "mfussenegger/nvim-dap" },
     config = function()
-      require("nvim-dap-virtual-text").setup {}
+      require("nvim-dap-virtual-text").setup({})
     end,
   },
 
@@ -238,7 +312,7 @@ return {
     config = function()
       local function get_python_path()
         if vim.env.VIRTUAL_ENV then
-          if vim.fn.has "nvim-0.10" == 1 then
+          if vim.fn.has("nvim-0.10") == 1 then
             return vim.fs.joinpath(vim.env.VIRTUAL_ENV, "bin", "python")
           end
           return vim.env.VIRTUAL_ENV .. "/bin" .. "/python"
@@ -246,9 +320,9 @@ return {
         if vim.env.PY_BIN then
           return vim.env.PY_BIN
         end
-        local python = vim.fn.exepath "python3"
+        local python = vim.fn.exepath("python3")
         if python == nil or python == "" then
-          python = vim.fn.exepath "python"
+          python = vim.fn.exepath("python")
         end
         return python
       end
@@ -275,38 +349,21 @@ return {
       keymaps = {
         view = {
           ["q"] = function()
-            vim.cmd "tabclose"
+            vim.cmd("tabclose")
           end,
         },
         file_panel = {
           ["q"] = function()
-            vim.cmd "tabclose"
+            vim.cmd("tabclose")
           end,
         },
         file_history_panel = {
           ["q"] = function()
-            vim.cmd "tabclose"
+            vim.cmd("tabclose")
           end,
         },
       },
     },
-  },
-  {
-    "nvim-telescope/telescope-ui-select.nvim",
-    dependencies = {
-      "mfussenegger/nvim-fzy",
-    },
-    event = "VeryLazy",
-    config = function()
-      require("telescope").load_extension "ui-select"
-    end,
-  },
-  {
-    "nvim-telescope/telescope-fzy-native.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("telescope").load_extension "fzy_native"
-    end,
   },
 
   -- Note
@@ -318,7 +375,7 @@ return {
       "ZkNotes",
     },
     config = function()
-      require("zk").setup {
+      require("zk").setup({
         picker = "telescope",
         lsp = {
           config = {
@@ -330,7 +387,7 @@ return {
             filetypes = { "markdown" },
           },
         },
-      }
+      })
     end,
   },
 
@@ -343,7 +400,7 @@ return {
     opts = {
       symbols = {
         icon_fetcher = function(k)
-          return require("nvchad.icons.lspkind")[k]
+          return require("kide.icons")[k]
         end,
       },
       providers = {
@@ -359,9 +416,10 @@ return {
     "iamcco/markdown-preview.nvim",
     ft = "markdown",
     build = "cd app && yarn install",
-    config = function()
+    init = function()
       vim.g.mkdp_page_title = "${name}"
     end,
+    config = function() end,
   },
 
   -- chatgpt You, 2023-02-11 01:14:46 - lazy-nvim
@@ -413,7 +471,7 @@ return {
           local template = "I have the following code from {{filename}}:\n\n"
             .. "```{{filetype}}\n{{selection}}\n```\n\n"
             .. "Please respond by writing table driven unit tests for the code above."
-          local agent = gp.get_command_agent "DeepseekCoder"
+          local agent = gp.get_command_agent("DeepseekCoder")
           gp.Prompt(params, gp.Target.vnew, agent, template)
         end,
       },
@@ -434,9 +492,9 @@ return {
           on_attach = function(client, buffer)
             -- 配色方案错误, 禁用 semanticTokensProvider
             client.server_capabilities.semanticTokensProvider = nil
-            require("nvchad.configs.lspconfig").on_attach(client, buffer)
+            require("kide.lspconfig").on_attach(client, buffer)
             vim.keymap.set("n", "<leader>ca", function()
-              vim.cmd.RustLsp "codeAction"
+              vim.cmd.RustLsp("codeAction")
             end, { silent = true, buffer = buffer, desc = "Rust Code Action" })
           end,
         },
@@ -457,34 +515,12 @@ return {
     config = function()
       vim.g.copilot_enabled = true
       vim.g.copilot_no_tab_map = true
-      vim.cmd 'imap <silent><script><expr> <C-C> copilot#Accept("")'
-      vim.cmd [[
+      vim.cmd('imap <silent><script><expr> <C-C> copilot#Accept("")')
+      vim.cmd([[
 			let g:copilot_filetypes = {
 	       \ 'TelescopePrompt': v:false,
 	     \ }
-			]]
-    end,
-  },
-
-  -- 翻译插件
-  {
-    "uga-rosa/translate.nvim",
-    -- see ai.translate
-    enabled = false,
-    cmd = "Translate",
-    config = function()
-      require("translate").setup {
-        default = {
-          command = "translate_shell",
-        },
-        preset = {
-          output = {
-            split = {
-              append = true,
-            },
-          },
-        },
-      }
+			]])
     end,
   },
 
@@ -558,7 +594,7 @@ return {
     "windwp/nvim-ts-autotag",
     ft = { "html" },
     config = function()
-      require("nvim-ts-autotag").setup {}
+      require("nvim-ts-autotag").setup({})
     end,
   },
 
@@ -587,7 +623,7 @@ return {
     },
     config = function(_, opts)
       require("overseer").setup(opts)
-      require("overseer").register_template {
+      require("overseer").register_template({
         name = "Maven",
         params = function()
           return {
@@ -614,9 +650,9 @@ return {
           }
         end,
         builder = function(params)
-          local maven = require "kide.core.utils.maven"
+          local maven = require("kide.core.utils.maven")
           local settings = maven.get_maven_settings()
-          local file = vim.fn.expand "%"
+          local file = vim.fn.expand("%")
           local cmd = { "mvn" }
           vim.list_extend(cmd, params.subcommand)
           if settings then
@@ -635,13 +671,13 @@ return {
           filetype = { "java", "xml" },
           callback = function(param)
             if param.filetype == "xml" then
-              local maven = require "kide.core.utils.maven"
-              return maven.is_pom_file(vim.fn.expand "%")
+              local maven = require("kide.core.utils.maven")
+              return maven.is_pom_file(vim.fn.expand("%"))
             end
             return true
           end,
         },
-      }
+      })
     end,
   },
   {
@@ -658,9 +694,8 @@ return {
   },
   {
     "JavaHello/java-deps.nvim",
-    ft = "java",
     config = function()
-      require("java-deps").setup {}
+      require("java-deps").setup({})
     end,
   },
   {

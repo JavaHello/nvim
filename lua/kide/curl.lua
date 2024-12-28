@@ -6,17 +6,17 @@ local M = {}
 local exec = function(cmd)
   local ok, overseer = pcall(require, "overseer")
   if ok then
-    local task = overseer.new_task {
+    local task = overseer.new_task({
       cmd = cmd,
-    }
+    })
     task:start()
   else
-    require("nvchad.term").runner {
+    require("nvchad.term").runner({
       pos = "sp",
       cmd = cmd,
       id = "curl",
       clear_cmd = true,
-    }
+    })
   end
 end
 

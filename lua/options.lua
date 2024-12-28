@@ -1,18 +1,47 @@
-require "nvchad.options"
-
 local fn = vim.fn
+local opt = vim.opt
+local o = vim.o
 
-vim.g.mapleader = " "
+opt.fillchars = { eob = " " }
+
+-- disable nvim intro
+opt.shortmess:append("sI")
+
+o.undofile = true
+
+-- go to previous/next line with h,l,left arrow and right arrow
+-- when cursor reaches end/beginning of line
+-- opt.whichwrap:append "<>[]hl"
+
+vim.opt.termguicolors = true
+
 vim.opt.title = true
 vim.opt.exrc = true
 vim.opt.secure = false
 vim.opt.ttyfast = true
+vim.opt.number = true
+vim.opt.numberwidth = 2
+vim.opt.signcolumn = "yes"
+vim.opt.scrollback = 100000
 
 vim.opt_global.jumpoptions = "stack"
 
 -- 高亮所在行
 vim.opt.cursorline = true
-vim.o.cursorlineopt = "number,line"
+
+vim.opt.clipboard = "unnamedplus"
+vim.opt.cursorlineopt = "number,line"
+-- Indenting
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
+vim.opt.smartindent = true
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+vim.opt.showmode = true
 
 -- 菜单最多显示20行
 vim.opt.pumheight = 20
@@ -23,23 +52,12 @@ vim.opt.timeoutlen = 450
 
 vim.opt.confirm = true
 
--- 禁用 netrw
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
-vim.opt_global.encoding = "UTF-8"
-
-vim.opt.fileencoding = "UTF-8"
-
 -- 当文件被外部程序修改时，自动加载
 vim.opt.autoread = true
 
 -- split window 从下边和右边出现
 vim.opt.splitbelow = false
 vim.opt.splitright = true
-
-vim.opt_global.grepprg = "rg --vimgrep --no-heading --smart-case"
-vim.opt_global.grepformat = "%f:%l:%c:%m,%f:%l:%m"
 
 vim.opt.foldlevelstart = 99
 vim.opt.foldmethod = "expr"
@@ -92,7 +110,7 @@ function _G.qftf(info)
           fname = fname:gsub("^" .. vim.env.HOME, "~")
         end
         if vim.startswith(fname, "jdt://") then
-          local jar, pkg, class = fname:match "^jdt://contents/([^/]+)/([^/]+)/(.+)?"
+          local jar, pkg, class = fname:match("^jdt://contents/([^/]+)/([^/]+)/(.+)?")
           fname = "󰧮 " .. class .. "  " .. pkg .. "  " .. jar
 
           -- 加载 jdt:// 文件

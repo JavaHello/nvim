@@ -14,7 +14,7 @@ M.config = {
 local request_json = {
   messages = {
     {
-      content = "You will be provided with a sentence in {{from}}, and your task is to translate it into {{to}}.",
+      content = "",
       role = "system",
     },
     {
@@ -44,13 +44,9 @@ local request_json = {
 local function trans_system_prompt(request)
   local from = request.from
   if request.from == "auto" then
-    from = "(detect language)"
+    return "你会得到一个需要你检测语言的文本， 将他翻译为" .. request.to .. "。"
   end
-  return "You will be provided with a sentence in "
-    .. from
-    .. ", and your task is to translate it into "
-    .. request.to
-    .. "."
+  return "你会得到一个" .. from .. "文本， 将他翻译为" .. request.to .. "。"
 end
 
 local function token()
@@ -58,29 +54,36 @@ local function token()
 end
 
 ---@param cmd string[]
----@param callback fun(data: string)
+---@param callback fun(data: string, done: boolean)
 local function handle_sse_events(cmd, callback)
   local _ = vim.fn.jobstart(cmd, {
     on_stdout = function(_, data, _)
       for _, value in ipairs(data) do
         if vim.startswith(value, "data:") then
           local _, _, text = string.find(value, "data: (.+)")
-          if text ~= "[DONE]" then
-            local resp_json = vim.fn.json_decode(text)
-            if resp_json.usage ~= nil and M.config.show_usage then
-              callback "\n"
-              callback(
-                "API[token usage]: "
-                  .. vim.inspect(resp_json.usage.prompt_cache_hit_tokens)
-                  .. "  "
-                  .. vim.inspect(resp_json.usage.prompt_tokens)
-                  .. " + "
-                  .. vim.inspect(resp_json.usage.completion_tokens)
-                  .. " = "
-                  .. vim.inspect(resp_json.usage.total_tokens)
-              )
+          if text == "[DONE]" then
+            callback(text, true)
+          else
+            local ok, resp_json = pcall(vim.fn.json_decode, text)
+            if ok then
+              if resp_json.usage ~= nil and M.config.show_usage then
+                callback("\n", false)
+                callback(
+                  "API[token usage]: "
+                    .. vim.inspect(resp_json.usage.prompt_cache_hit_tokens)
+                    .. "  "
+                    .. vim.inspect(resp_json.usage.prompt_tokens)
+                    .. " + "
+                    .. vim.inspect(resp_json.usage.completion_tokens)
+                    .. " = "
+                    .. vim.inspect(resp_json.usage.total_tokens),
+                  false
+                )
+              else
+                callback(resp_json.choices[1].delta.content, false)
+              end
             else
-              callback(resp_json.choices[1].delta.content)
+              callback("Error: " .. text, false)
             end
           end
         end
@@ -160,12 +163,17 @@ M.translate_float = function(request)
   end, { noremap = true, silent = true, buffer = buf })
 
   local curlines = 0
-  local callback = function(data)
+  local callback = function(data, done)
     if closed then
       return
     end
+    if done then
+      vim.bo[buf].readonly = true
+      vim.bo[buf].modifiable = false
+      return
+    end
     -- 判断是否换行符
-    if data == "\n" then
+    if data:match("\n") then
       curlines = 0
     else
       curlines = curlines + vim.fn.strdisplaywidth(data)
@@ -181,8 +189,9 @@ M.translate_float = function(request)
     end
 
     if vim.api.nvim_buf_is_valid(buf) then
-      if data == "\n" then
-        vim.api.nvim_put({ "", "" }, "c", true, true)
+      if data:match("\n") then
+        local ln = vim.split(data, "\n")
+        vim.api.nvim_put(ln, "c", true, true)
       else
         vim.api.nvim_put({ data }, "c", true, true)
       end
