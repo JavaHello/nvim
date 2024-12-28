@@ -151,3 +151,5 @@ vim.opt.backup = false
 
 -- see noice
 -- vim.opt.cmdheight=0
+-- set statusline=%!v:lua.require'me'.statusline()
+vim.opt.statusline = "%!v:lua.require('kide').statusline()"

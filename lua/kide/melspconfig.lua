@@ -20,6 +20,29 @@ M.capabilities.textDocument.completion.completionItem = {
     },
   },
 }
+local function progress()
+  local lsp_group = vim.api.nvim_create_augroup("klsp", {})
+  local timer = vim.loop.new_timer()
+  vim.api.nvim_create_autocmd("LspProgress", {
+    group = lsp_group,
+    callback = function()
+      if vim.api.nvim_get_mode().mode == "n" then
+        vim.cmd.redrawstatus()
+      end
+      if timer then
+        timer:stop()
+        timer:start(
+          500,
+          0,
+          vim.schedule_wrap(function()
+            timer:stop()
+            vim.cmd.redrawstatus()
+          end)
+        )
+      end
+    end,
+  })
+end
 
 M.on_attach = function(client, bufnr)
   local kopts = { noremap = true, silent = true, desc = "Code Action", buffer = bufnr }
@@ -42,6 +65,7 @@ M.on_init = function(client, _)
 end
 
 M.init_lsp_clients = function()
+  progress()
   local capabilities = require("blink.cmp").get_lsp_capabilities(M.capabilities)
 
   if capabilities.textDocument.foldingRange then

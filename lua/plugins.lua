@@ -147,13 +147,13 @@ return {
     end,
   },
   -- LSP progress messages
-  {
-    "j-hui/fidget.nvim",
-    event = { "VeryLazy" },
-    opts = {
-      -- options
-    },
-  },
+  -- {
+  --   "j-hui/fidget.nvim",
+  --   event = { "VeryLazy" },
+  --   opts = {
+  --     -- options
+  --   },
+  -- },
   {
     "saghen/blink.cmp",
     lazy = false, -- lazy loading handled internally
