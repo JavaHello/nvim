@@ -231,7 +231,7 @@ command("CloseOtherBufs", function(opt)
   end
 end, {
   desc = "find files",
-  nargs = "?",
+  nargs = 0,
 })
 
 if vim.fn.executable("fzy") == 1 then
