@@ -47,7 +47,6 @@ command("TaskRunLast", function()
   require("kide.term").input_run(true)
 end, { desc = "Restart Last Task" })
 
-
 map("v", "<leader>fm", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local start_pos = vim.api.nvim_buf_get_mark(0, "<")
@@ -229,14 +228,16 @@ if vim.fn.executable("fzy") == 1 then
     vim.api.nvim_feedkeys("\027", "xt", false)
     local text = require("kide.tools").get_visual_selection()
     local fzy = require("kide.fzy")
-    fzy.execute("fd --type file " .. text[1], fzy.sinks.edit_file, "  ")
+    local param = vim.fn.shellescape(text[1])
+    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "  ")
   end, { desc = "fzy find files", silent = true, noremap = true })
 
   map("v", "<leader>fw", function()
     vim.api.nvim_feedkeys("\027", "xt", false)
     local text = require("kide.tools").get_visual_selection()
     local fzy = require("kide.fzy")
-    fzy.execute("rg --vimgrep --no-heading --smart-case " .. text[1], fzy.sinks.edit_live_grep, "  ")
+    local param = vim.fn.shellescape(text[1])
+    fzy.execute("rg --vimgrep --no-heading --smart-case " .. param, fzy.sinks.edit_live_grep, "  ")
   end, { desc = "fzy live grep", silent = true, noremap = true })
 
   command("FzyFiles", function(opt)

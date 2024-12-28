@@ -24,7 +24,15 @@ return {
       })
     end,
   },
-
+  {
+    "nvimdev/indentmini.nvim",
+    event = "BufRead",
+    config = function()
+      require("indentmini").setup()
+      vim.api.nvim_set_hl(0, "IndentLine", { fg = "#3e3e3e" })
+      vim.api.nvim_set_hl(0, "IndentLineCurrent", { fg = "#fb4934" })
+    end,
+  },
   {
     "williamboman/mason.nvim",
     lazy = false,
@@ -135,7 +143,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      require("kide.lspconfig").init_lsp_clients()
+      require("kide.melspconfig").init_lsp_clients()
     end,
   },
   -- LSP progress messages
@@ -492,7 +500,7 @@ return {
           on_attach = function(client, buffer)
             -- 配色方案错误, 禁用 semanticTokensProvider
             client.server_capabilities.semanticTokensProvider = nil
-            require("kide.lspconfig").on_attach(client, buffer)
+            require("kide.melspconfig").on_attach(client, buffer)
             vim.keymap.set("n", "<leader>ca", function()
               vim.cmd.RustLsp("codeAction")
             end, { silent = true, buffer = buffer, desc = "Rust Code Action" })

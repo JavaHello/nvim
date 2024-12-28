@@ -198,6 +198,8 @@ M.init_lsp_clients = function()
       global_path = "/opt/homebrew/lib/node_modules"
     elseif util.path.exists("/usr/local/lib/node_modules") then
       global_path = "/usr/local/lib/node_modules"
+    elseif util.path.exists("/usr/lib64/node_modules") then
+      global_path = "/usr/lib64/node_modules"
     else
       global_path = util.path.join(os.getenv("HOME"), ".npm", "lib", "node_modules")
     end
