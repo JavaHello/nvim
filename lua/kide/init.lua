@@ -31,9 +31,8 @@ function M.file_or_lsp_status()
 end
 function M.format_uri(uri)
   if vim.startswith(uri, "jdt://") then
-    local package = uri:match("contents/[%a%d._-]+/([%a%d._-]+)") or ""
-    local class = uri:match("contents/[%a%d._-]+/[%a%d._-]+/([%a%d$]+).class") or ""
-    return string.format("%s::%s", package, class)
+    local jar, pkg, class = uri:match("^jdt://contents/([^/]+)/([^/]+)/(.+)?")
+    return string.format("%s::%s (%s)", pkg, class, jar)
   else
     local fname = vim.fn.fnamemodify(vim.uri_to_fname(uri), ":.")
     fname = fname:gsub("src/main/java/", "s/m/j/")

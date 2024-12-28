@@ -219,13 +219,22 @@ if vim.fn.executable("find") == 1 then
 end
 
 if vim.fn.executable("fzy") == 1 then
+  command("Rg", function(opt)
+    local fzy = require("kide.fzy")
+    fzy.execute("rg --no-heading --trim -nH --smart-case " .. opt.args, fzy.sinks.edit_live_grep, "Grep  ")
+  end, {
+    desc = "Grep",
+    nargs = 1,
+  })
   map("n", "<leader>fb", function()
     local fzy = require("kide.fzy")
     local bufs = vim.api.nvim_list_bufs()
     local cats = {}
     for _, v in ipairs(bufs) do
-      local buf_name = vim.api.nvim_buf_get_name(v)
-      table.insert(cats, tostring(v) .. ": " .. buf_name)
+      if vim.bo[v].buflisted then
+        local buf_name = vim.api.nvim_buf_get_name(v)
+        table.insert(cats, tostring(v) .. ": " .. buf_name)
+      end
     end
     local param = vim.fn.shellescape(table.concat(cats, "\n"))
     fzy.execute("echo -e " .. param, function(choice)
