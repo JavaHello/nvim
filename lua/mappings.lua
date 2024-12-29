@@ -277,10 +277,11 @@ if vim.fn.executable("fzy") == 1 then
     local fzy = require("kide.fzy")
     local bufs = vim.api.nvim_list_bufs()
     local cats = {}
+    local tools = require("kide")
     for _, v in ipairs(bufs) do
       if vim.bo[v].buflisted then
-        local buf_name = vim.api.nvim_buf_get_name(v)
-        table.insert(cats, tostring(v) .. ": " .. buf_name)
+        local filename = vim.uri_from_bufnr(v)
+        table.insert(cats, tostring(v) .. ": " .. tools.format_uri(filename))
       end
     end
     local param = vim.fn.shellescape(table.concat(cats, "\n"))
