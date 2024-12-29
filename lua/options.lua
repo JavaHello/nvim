@@ -20,6 +20,7 @@ vim.opt.exrc = true
 vim.opt.secure = false
 vim.opt.ttyfast = true
 vim.opt.number = true
+vim.opt.relativenumber = true
 vim.opt.numberwidth = 2
 vim.opt.signcolumn = "yes"
 vim.opt.scrollback = 100000

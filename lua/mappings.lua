@@ -27,6 +27,13 @@ map("n", "<right>", "<CMD>vertical resize-5<CR>", { desc = "Vertical Resize -5" 
 map("n", "<S-left>", "<CMD>vertical resize-5<CR>", { desc = "Vertical Resize -5" })
 map("n", "<S-right>", "<CMD>vertical resize+5<CR>", { desc = "Vertical Resize +5" })
 
+map("n", "<C-h>", "<C-w>h", { desc = "switch window left" })
+map("n", "<C-l>", "<C-w>l", { desc = "switch window right" })
+map("n", "<C-j>", "<C-w>j", { desc = "switch window down" })
+map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
+-- terminal
+map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
+
 map("n", "==", function()
   require("conform").format({ lsp_fallback = true })
 end, { desc = "format file" })
