@@ -396,3 +396,11 @@ creat_trans_command("TransAutoZh", "auto", "中文")
 creat_trans_command("TransEnZh", "英语", "中文")
 creat_trans_command("TransZhEn", "中文", "英语")
 creat_trans_command("TransIdZh", "印尼语", "中文")
+
+command("Gpt", function(opt)
+  require("kide.tools.ai").toggle_gpt()
+end, {
+  desc = "Gpt",
+  nargs = 0,
+  range = false,
+})

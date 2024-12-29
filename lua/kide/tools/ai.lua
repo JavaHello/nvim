@@ -110,10 +110,13 @@ function M.translate(request, callback)
   elseif text_len > 2048 then
     json.max_tokens = 4096
   end
+  M.request(json, callback)
+end
+
+function M.request(json, callback)
   local body = vim.fn.json_encode(json)
   local cmd = {
     "curl",
-    "-N",
     "--no-buffer",
     "-s",
     "-X",
@@ -198,6 +201,153 @@ M.translate_float = function(request)
     end
   end
   M.translate(request, callback)
+end
+
+------------------ chat ------------------
+local charwin = nil
+local charbuf = nil
+local chatclosed = false
+local chat_request_json = {
+  messages = {
+    {
+      content = "",
+      role = "system",
+    },
+  },
+  model = "deepseek-chat",
+  frequency_penalty = 0,
+  max_tokens = 4096,
+  presence_penalty = 0,
+  response_format = {
+    type = "text",
+  },
+  stop = nil,
+  stream = true,
+  stream_options = nil,
+  temperature = 1.3,
+  top_p = 1,
+  tools = nil,
+  tool_choice = "none",
+  logprobs = false,
+  top_logprobs = nil,
+}
+
+M.chat_config = {
+  user_title = "User:",
+  system_title = "DeepseekChat:",
+  system_prompt = "You are a general AI assistant.\n\n"
+    .. "The user provided the additional info about how they would like you to respond:\n\n"
+    .. "- If you're unsure don't guess and say you don't know instead.\n"
+    .. "- Ask question if you need clarification to provide better answer.\n"
+    .. "- Think deeply and carefully from first principles step by step.\n"
+    .. "- Zoom out first to see the big picture and then zoom in to details.\n"
+    .. "- Use Socratic method to improve your thinking and coding skills.\n"
+    .. "- Don't elide any code from your output if the answer requires coding.\n"
+    .. "- Take a deep breath; You've got this!\n",
+}
+local close_gpt_win = function()
+  if charwin then
+    pcall(vim.api.nvim_win_close, charwin, true)
+    charwin = nil
+    charbuf = nil
+    chat_request_json.messages = {
+      {
+        content = "",
+        role = "system",
+      },
+    }
+  end
+end
+
+local function create_gpt_win()
+  vim.cmd("belowright new")
+  charwin = vim.api.nvim_get_current_win()
+  charbuf = vim.api.nvim_get_current_buf()
+  vim.bo[charbuf].buftype = "nofile"
+  vim.bo[charbuf].bufhidden = "wipe"
+  vim.bo[charbuf].buflisted = false
+  vim.bo[charbuf].swapfile = false
+  vim.bo[charbuf].filetype = "markdown"
+  vim.api.nvim_put({ M.chat_config.user_title, "" }, "c", true, true)
+  chatclosed = false
+
+  vim.keymap.set("n", "q", function()
+    chatclosed = true
+    close_gpt_win()
+  end, { noremap = true, silent = true, buffer = charbuf })
+  vim.keymap.set("n", "<A-k>", function()
+    M.gpt_chat()
+  end, { noremap = true, silent = true, buffer = charbuf })
+  vim.keymap.set("i", "<A-k>", function()
+    vim.cmd("stopinsert")
+    M.gpt_chat()
+  end, { noremap = true, silent = true, buffer = charbuf })
+
+  vim.api.nvim_create_autocmd("WinClosed", {
+    buffer = charbuf,
+    callback = close_gpt_win,
+  })
+end
+
+M.toggle_gpt = function()
+  if charwin then
+    close_gpt_win()
+  else
+    create_gpt_win()
+  end
+end
+
+M.gpt_chat = function()
+  if charwin == nil then
+    create_gpt_win()
+  end
+  local list = vim.api.nvim_buf_get_lines(charbuf, 0, -1, false)
+  local json = chat_request_json
+  json.messages[1].content = M.chat_config.system_prompt
+  -- 1 user, 2 assistant
+  local flag = 0
+  local chat_msg = ""
+  local chat_count = 1
+  for _, v in ipairs(list) do
+    if vim.startswith(v, M.chat_config.system_title) then
+      flag = 2
+      chat_msg = ""
+      chat_count = chat_count + 1
+    elseif vim.startswith(v, M.chat_config.user_title) then
+      chat_msg = ""
+      flag = 1
+      chat_count = chat_count + 1
+    else
+      chat_msg = chat_msg .. "\n" .. v
+      json.messages[chat_count] = {
+        content = chat_msg,
+        role = flag == 1 and "user" or "assistant",
+      }
+    end
+  end
+  -- 跳转到最后一行
+  vim.cmd("normal! G")
+  vim.api.nvim_put({ "", M.chat_config.system_title, "" }, "l", true, true)
+
+  local callback = function(data, done)
+    if chatclosed then
+      return
+    end
+    if done then
+      vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
+      return
+    end
+    if charbuf and vim.api.nvim_buf_is_valid(charbuf) then
+      if data:match("\n") then
+        local ln = vim.split(data, "\n")
+        vim.api.nvim_put(ln, "c", true, true)
+      else
+        vim.api.nvim_put({ data }, "c", true, true)
+      end
+    end
+  end
+
+  M.request(json, callback)
 end
 
 return M
