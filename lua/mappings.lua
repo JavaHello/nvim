@@ -3,6 +3,18 @@
 local map = vim.keymap.set
 local command = vim.api.nvim_create_user_command
 
+map("n", "<A-i>", require("kide.term").toggle, { desc = "toggle term" })
+map("t", "<A-i>", require("kide.term").toggle, { desc = "toggle term" })
+map("i", "<A-i>", function()
+  vim.cmd("stopinsert")
+  require("kide.term").toggle()
+end, { desc = "toggle term" })
+map("v", "<A-i>", function()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+  local text = require("kide.tools").get_visual_selection()
+  require("kide.term").toggle()
+  require("kide.term").send_line(text[1])
+end, { desc = "toggle term" })
 map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
 map("n", "<ESC>", "<CMD>noh<CR>", { desc = "Clear Highlight" })
 
