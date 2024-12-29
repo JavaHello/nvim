@@ -4,6 +4,7 @@ local map = vim.keymap.set
 local command = vim.api.nvim_create_user_command
 
 map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
+map("n", "<ESC>", "<CMD>noh<CR>", { desc = "Clear Highlight" })
 
 map("n", "<up>", "<CMD>res +5<CR>", { desc = "Resize +5" })
 map("n", "<down>", "<CMD>res -5<CR>", { desc = "Resize -5" })
@@ -237,7 +238,7 @@ end, {
 if vim.fn.executable("fzy") == 1 then
   command("Rg", function(opt)
     local fzy = require("kide.fzy")
-    fzy.execute("rg --no-heading --trim -nH --smart-case " .. opt.args, fzy.sinks.edit_live_grep, "Grep  ")
+    fzy.execute("rg --no-heading --trim -nH --smart-case " .. opt.args, fzy.sinks.edit_live_grep, "Grep  ", opt.args)
   end, {
     desc = "Grep",
     nargs = 1,
@@ -302,7 +303,7 @@ if vim.fn.executable("fzy") == 1 then
     local text = require("kide.tools").get_visual_selection()
     local fzy = require("kide.fzy")
     local param = vim.fn.shellescape(text[1])
-    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "Files  ")
+    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "Files  ", text)
   end, { desc = "fzy find files", silent = true, noremap = true })
 
   map("v", "<leader>fw", function()
@@ -310,7 +311,7 @@ if vim.fn.executable("fzy") == 1 then
     local text = require("kide.tools").get_visual_selection()
     local fzy = require("kide.fzy")
     local param = vim.fn.shellescape(text[1])
-    fzy.execute("rg --no-heading --trim -nH --smart-case " .. param, fzy.sinks.edit_live_grep, "Grep  ")
+    fzy.execute("rg --no-heading --trim -nH --smart-case " .. param, fzy.sinks.edit_live_grep, "Grep  ", text)
   end, { desc = "fzy live grep", silent = true, noremap = true })
 
   command("FzyFiles", function(opt)

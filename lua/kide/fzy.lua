@@ -142,7 +142,7 @@ end
 ---@param choices_cmd string command that generates the choices
 ---@param on_choice fun(choice?: string) called when the user selected an entry
 ---@param prompt? string
-function M.execute(choices_cmd, on_choice, prompt)
+function M.execute(choices_cmd, on_choice, prompt, selection)
   if api.nvim_get_mode().mode == "i" then
     vim.cmd("stopinsert")
   end
@@ -166,8 +166,9 @@ function M.execute(choices_cmd, on_choice, prompt)
     command = "startinsert!",
     once = true,
   })
+
   local args = { vim.o.shell, vim.o.shellcmdflag, fzy }
-  vfn.jobstart(args, {
+  local job = vfn.jobstart(args, {
     term = true,
     on_exit = function()
       -- popup could already be gone if user closes it manually; Ignore that case
@@ -197,6 +198,9 @@ function M.execute(choices_cmd, on_choice, prompt)
       end
     end,
   })
+  if selection then
+    vfn.chansend(job, selection)
+  end
 end
 
 return M

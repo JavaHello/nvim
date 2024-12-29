@@ -238,32 +238,6 @@ return {
     event = "InsertEnter",
     config = true,
   },
-  {
-    "mfussenegger/nvim-fzy",
-    config = function()
-      local fzy = require("fzy")
-      fzy.new_popup = function()
-        local buf = vim.api.nvim_create_buf(false, true)
-        vim.api.nvim_buf_set_keymap(buf, "t", "<ESC>", "<C-\\><C-c>", {})
-        vim.bo[buf].bufhidden = "wipe"
-        local columns = vim.o.columns
-        local lines = vim.o.lines
-        local width = math.floor(columns * 0.8)
-        local height = math.floor(lines * 0.8)
-        local opts = {
-          relative = "editor",
-          style = "minimal",
-          row = math.floor((lines - height) * 0.5),
-          col = math.floor((columns - width) * 0.5),
-          width = width,
-          height = height,
-          border = "rounded",
-        }
-        local win = vim.api.nvim_open_win(buf, true, opts)
-        return win, buf
-      end
-    end,
-  },
   -- java
   {
     "mfussenegger/nvim-jdtls",
