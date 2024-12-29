@@ -25,6 +25,7 @@ vim.diagnostic.config({
     border = "rounded",
   },
 })
+vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })
 
 vim.g.nvim_jdtls = 1
 if vim.g.neovide then

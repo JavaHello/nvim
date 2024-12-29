@@ -84,6 +84,7 @@ hl({
   Title = { fg = bright_blue, bold = true },
   Question = { fg = bright_blue },
   Search = { fg = dark1, bg = bright_yellow },
+  Todo = { fg = bright_green },
 
   MoreMsg = { fg = bright_green },
   ModeMsg = { fg = bright_green },
@@ -118,10 +119,7 @@ hl({
   DiagnosticWarn = { fg = neutral_yellow },
 
   ColorColumn = { bg = dark_ext1 },
-})
-
--- LSP
-hl({
+  Debug = { fg = neutral_yellow },
   ["@variable"] = { fg = light2 },
   ["@variable.member"] = { fg = bright_red },
   ["@punctuation.delimiter"] = { fg = neutral_orange },
@@ -144,16 +142,11 @@ hl({
 
   LspReferenceWrite = { fg = "#e78a4e" },
   LspReferenceText = { fg = "#e78a4e" },
-})
 
-hl({
   NvimTreeGitNew = { fg = neutral_yellow },
   NvimTreeFolderIcon = { fg = "#749689" },
   NvimTreeSpecialFile = { fg = neutral_yellow, bold = true },
   NvimTreeIndentMarker = { fg = "#313334" },
-})
-
-hl({
 
   Added = { fg = bright_green },
   Removed = { fg = bright_red },
@@ -161,9 +154,7 @@ hl({
 
   diffChanged = { fg = neutral_yellow },
   diffAdded = { fg = bright_green },
-})
 
-hl({
   BlinkCmpMenuBorder = { link = "FloatBorder" },
   BlinkCmpDocBorder = { link = "FloatBorder" },
 })

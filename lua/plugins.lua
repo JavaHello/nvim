@@ -567,16 +567,26 @@ return {
     "kevinhwang91/nvim-bqf",
     enabled = true,
     ft = "qf",
-    opts = {
-      preview = {
-        auto_preview = true,
-      },
-      filter = {
-        fzf = {
-          extra_opts = { "--bind", "ctrl-o:toggle-all", "--delimiter", "│" },
+    config = function()
+      require("bqf").setup({
+        preview = {
+          auto_preview = true,
+          should_preview_cb = function(pbufnr, win)
+            local fname = vim.fn.bufname(pbufnr)
+            if vim.startswith(fname, "jdt://") then
+              -- 未加载时不预览
+              return vim.fn.bufloaded(pbufnr) == 1
+            end
+            return true
+          end,
         },
-      },
-    },
+        filter = {
+          fzf = {
+            extra_opts = { "--bind", "ctrl-o:toggle-all", "--delimiter", "│" },
+          },
+        },
+      })
+    end,
   },
   {
     "ray-x/go.nvim",

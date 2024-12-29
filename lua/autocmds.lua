@@ -66,7 +66,7 @@ autocmd("FileType", {
   group = augroup("close_with_q_bd"),
   pattern = {
     "oil",
-    "DressingSelect"
+    "DressingSelect",
   },
   callback = function(event)
     vim.keymap.set("n", "q", "<cmd>bd<cr>", { buffer = event.buf, silent = true })

@@ -114,10 +114,12 @@ function _G.qftf(info)
           fname = "󰧮 " .. class .. "  " .. pkg .. "  " .. jar
 
           -- 加载 jdt:// 文件
-          if vim.fn.bufloaded(e.bufnr) == 0 then
-            vim.fn.bufload(e.bufnr)
-          end
+          -- if vim.fn.bufloaded(e.bufnr) == 0 then
+          --   vim.fn.bufload(e.bufnr)
+          -- end
           fmt = false
+        else
+          fname = vim.fn.fnamemodify(fname, ":.")
         end
         -- char in fname may occur more than 1 width, ignore this issue in order to keep performance
         if fmt then

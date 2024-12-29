@@ -45,7 +45,7 @@ local function progress()
 end
 
 M.on_attach = function(client, bufnr)
-  local kopts = { noremap = true, silent = true, desc = "Code Action", buffer = bufnr }
+  local kopts = { noremap = true, silent = true, buffer = bufnr }
   keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, kopts)
   keymap.set("n", "K", function()
     lsp.buf.hover({ border = "rounded" })
@@ -54,8 +54,10 @@ M.on_attach = function(client, bufnr)
     lsp.buf.signature_help({ border = "rounded" })
   end, kopts)
   keymap.set("n", "gd", lsp.buf.definition, kopts)
+  keymap.set("n", "gD", lsp.buf.type_definition, kopts)
   keymap.set("n", "gr", lsp.buf.references, kopts)
   keymap.set("n", "gi", lsp.buf.implementation, kopts)
+  keymap.set("n", "<leader>rn", lsp.buf.rename, kopts)
 end
 
 M.on_init = function(client, _)

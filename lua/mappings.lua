@@ -3,7 +3,7 @@
 local map = vim.keymap.set
 local command = vim.api.nvim_create_user_command
 
--- map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
+map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
 
 map("n", "<up>", "<CMD>res +5<CR>", { desc = "Resize +5" })
 map("n", "<down>", "<CMD>res -5<CR>", { desc = "Resize -5" })
@@ -242,6 +242,27 @@ if vim.fn.executable("fzy") == 1 then
     desc = "Grep",
     nargs = 1,
   })
+
+  map("n", "<leader>fq", function()
+    local fzy = require("kide.fzy")
+    local qfl = vim.fn.getqflist()
+    local cats = {}
+    local tools = require("kide")
+    for i, v in ipairs(qfl) do
+      local filename = vim.uri_from_bufnr(v.bufnr)
+      table.insert(cats, tostring(i) .. ": " .. tools.format_uri(filename) .. ": " .. v.text)
+    end
+    local param = vim.fn.shellescape(table.concat(cats, "\n"))
+
+    fzy.execute("echo -e " .. param, function(choice)
+      if choice and vim.trim(choice) ~= "" then
+        local idx = vim.split(choice, ":")[1]
+        local qf = qfl[tonumber(idx)]
+        vim.cmd("b " .. qf.bufnr)
+        vim.api.nvim_win_set_cursor(0, { qf.lnum, qf.col })
+      end
+    end, "Quickfix > ")
+  end, { desc = "Quickfix" })
 
   map("n", "<leader>fo", function()
     local fzy = require("kide.fzy")
