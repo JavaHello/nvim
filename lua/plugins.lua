@@ -28,7 +28,9 @@ return {
     "nvimdev/indentmini.nvim",
     event = "BufRead",
     config = function()
-      require("indentmini").setup()
+      require("indentmini").setup({
+        exclude = { "markdown", "" },
+      })
       vim.api.nvim_set_hl(0, "IndentLine", { fg = "#3e3e3e" })
       vim.api.nvim_set_hl(0, "IndentLineCurrent", { fg = "#fb4934" })
     end,

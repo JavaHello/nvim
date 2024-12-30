@@ -306,6 +306,10 @@ local function create_gpt_win()
     M.gpt_chat()
   end, { noremap = true, silent = true, buffer = charbuf })
 
+  vim.api.nvim_buf_create_user_command(charbuf, "GptSend", function()
+    M.gpt_chat()
+  end, { desc = "Gpt Send" })
+
   vim.api.nvim_create_autocmd("WinClosed", {
     buffer = charbuf,
     callback = close_gpt_win,

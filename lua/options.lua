@@ -25,7 +25,6 @@ vim.opt.numberwidth = 2
 vim.opt.signcolumn = "yes"
 vim.opt.scrollback = 100000
 
-
 -- 高亮所在行
 vim.opt.cursorline = true
 

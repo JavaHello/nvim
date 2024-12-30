@@ -76,11 +76,17 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
+  defaults = {
+    lazy = false,
+  },
   spec = {
     { import = "plugins" },
   },
-  install = { colorscheme = { "gruvbox" } },
+  install = { colorscheme = { "gruvboxl" } },
   checker = { enabled = false },
+  rocks = {
+    enabled = false,
+  },
 })
 
 vim.cmd.colorscheme("gruvboxl")

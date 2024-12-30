@@ -116,13 +116,22 @@ hl({
   Delimiter = { fg = neutral_orange },
   Identifier = { fg = bright_red },
 
+  Error = { fg = dark0, bg = bright_red },
+
   Visual = { bg = "#423e3c" },
   Folded = { fg = gray_ext0, bg = dark_ext1 },
 
   DiagnosticError = { fg = bright_red },
-  DiagnosticInfo = { fg = bright_green },
-  DiagnosticHint = { fg = "#b4bbc8" },
+  DiagnosticInfo = { fg = bright_aqua },
+  DiagnosticHint = { fg = bright_blue },
   DiagnosticWarn = { fg = neutral_yellow },
+  DiagnosticOk = { fg = bright_green },
+
+  DiagnosticUnderlineError = { underline = true, sp = bright_blue },
+  DiagnosticUnderlineWarn = { underline = true, sp = bright_yellow },
+  DiagnosticUnderlineInfo = { underline = true, sp = bright_aqua },
+  DiagnosticUnderlineHint = { underline = true, sp = bright_blue },
+  DiagnosticUnderlineOk = { underline = true, sp = bright_green },
 
   ColorColumn = { bg = dark_ext1 },
   Debug = { fg = neutral_yellow },
