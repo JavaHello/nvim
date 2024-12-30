@@ -144,7 +144,7 @@ M.test = function(a)
 end
 M.camel_case_init = function()
   vim.api.nvim_create_user_command("CamelCase", function(o)
-    require("kide.core.utils").camel_case_start(o.range, o.line1, o.line2)
+    require("kide.tools").camel_case_start(o.range, o.line1, o.line2)
   end, { range = 0, nargs = 0 })
 end
 -- print(M.camel_case("helloWorldAaAaAxC"))

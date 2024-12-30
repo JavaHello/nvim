@@ -1,4 +1,4 @@
-local utils = require("kide.core.utils")
+local utils = require("kide.tools")
 local M = {}
 local cjk_mainfont = function()
   if utils.is_win then
