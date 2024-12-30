@@ -9,11 +9,13 @@ local dark3 = "#665c54"
 local dark4 = "#7c6f64"
 local dark4_256 = "#7c6f64"
 
-local dark_ext0 = "#4e4e4e"
 local dark_ext1 = "#2e2e2e"
 local dark_ext2 = "#2c2c2c"
-local dark_ext3 = "#4b4b4b"
-local gray_ext0 = "#656565"
+
+local gray_ext1 = "#423e3c"
+local gray_ext2 = "#4b4b4b"
+local gray_ext3 = "#4e4e4e"
+local gray_ext5 = "#656565"
 
 local gray_245 = "#928374"
 local gray_244 = "#928374"
@@ -65,7 +67,7 @@ hl({
   CursorLine = { bg = dark_ext1 },
   WildMenu = { fg = bright_red, bg = bright_yellow },
 
-  WinSeparator = { fg = dark_ext3 },
+  WinSeparator = { fg = gray_ext2 },
   Pmenu = { fg = light2, bg = dark0 },
   PmenuSel = { fg = dark0, bg = bright_blue },
   PmenuMatch = { bold = true },
@@ -75,20 +77,22 @@ hl({
   PmenuExtra = { link = "Pmenu" },
   PmenuExtraSel = { link = "PmenuSel" },
   PmenuSbar = { bg = "#353535" },
-  PmenuThumb = { bg = dark_ext3 },
+  PmenuThumb = { bg = gray_ext2 },
   QuickFixLine = { bg = dark1 },
 
   NormalFloat = {},
-  FloatBorder = { fg = dark_ext0 },
+  FloatBorder = { fg = gray_ext3 },
   StatusLine = { bg = dark_ext2, fg = light1 },
   StatusLineNC = { bg = dark_ext2 },
 
-  TabLine = { bg = dark_ext2, fg = gray_ext0 },
+  TabLine = { bg = dark_ext2, fg = gray_ext5 },
   TabLineSel = { fg = light1, bg = dark0 },
   Directory = { fg = bright_blue },
   Title = { fg = bright_blue, bold = true },
   Question = { fg = bright_blue },
-  Search = { fg = dark1, bg = bright_yellow },
+  Search = { fg = dark0, bg = bright_yellow },
+  IncSearch = { fg = dark0, bg = bright_orange },
+  CurSearch = { link = "IncSearch" },
   Todo = { fg = bright_green },
 
   MoreMsg = { fg = bright_green },
@@ -101,13 +105,15 @@ hl({
   DiffDelete = { fg = dark0, bg = bright_red },
   DiffText = { fg = dark0, bg = bright_yellow },
 
-  LineNr = { fg = dark_ext3 },
+  LineNr = { fg = gray_ext2 },
+  Cursor = { reverse = true },
+  lCursor = { link = "Cursor" },
 
   Type = { fg = bright_yellow },
   PreProc = { fg = bright_yellow },
   Include = { fg = bright_blue },
   Function = { fg = bright_blue },
-  Comment = { fg = gray_ext0, italic = true },
+  Comment = { fg = gray_ext5, italic = true },
   String = { fg = bright_green },
   Statement = { fg = bright_red },
   Constant = { fg = bright_red },
@@ -118,8 +124,9 @@ hl({
 
   Error = { fg = dark0, bg = bright_red },
 
-  Visual = { bg = "#423e3c" },
-  Folded = { fg = gray_ext0, bg = dark_ext1 },
+  Visual = { bg = gray_ext1 },
+  VisualNOS = { link = "Visual" },
+  Folded = { fg = gray_ext5, bg = dark_ext1 },
 
   DiagnosticError = { fg = bright_red },
   DiagnosticInfo = { fg = bright_aqua },
