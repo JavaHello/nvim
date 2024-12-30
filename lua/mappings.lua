@@ -404,9 +404,13 @@ creat_trans_command("TransZhEn", "中文", "英语")
 creat_trans_command("TransIdZh", "印尼语", "中文")
 
 command("Gpt", function(opt)
-  require("kide.tools.ai").toggle_gpt()
+  local text = nil
+  if opt.range > 0 then
+    text = require("kide.tools").get_visual_selection()
+  end
+  require("kide.tools.ai").toggle_gpt(text)
 end, {
   desc = "Gpt",
   nargs = 0,
-  range = false,
+  range = true,
 })

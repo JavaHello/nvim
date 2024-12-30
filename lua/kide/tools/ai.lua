@@ -224,6 +224,7 @@ end
 ------------------ chat ------------------
 local charwin = nil
 local charbuf = nil
+local codebuf = nil
 local chatclosed = false
 local chatruning = false
 local chat_request_json = {
@@ -270,6 +271,7 @@ local close_gpt_win = function()
     pcall(vim.api.nvim_win_close, charwin, true)
     charwin = nil
     charbuf = nil
+    codebuf = nil
     chat_request_json.messages = {
       {
         content = "",
@@ -280,6 +282,7 @@ local close_gpt_win = function()
 end
 
 local function create_gpt_win()
+  codebuf = vim.api.nvim_get_current_buf()
   vim.cmd("belowright new")
   charwin = vim.api.nvim_get_current_win()
   charbuf = vim.api.nvim_get_current_buf()
@@ -309,11 +312,30 @@ local function create_gpt_win()
   })
 end
 
-M.toggle_gpt = function()
+local function code_question(selection)
+  if not selection then
+    return
+  end
+
+  local filetype = vim.bo[codebuf].filetype or "txt"
+  local filename = vim.fn.fnamemodify(vim.fn.bufname(codebuf), ":.")
+  local qs = {
+    "请解释`" .. filename .. "`文件中的这段代码",
+    "```" .. filetype,
+  }
+  vim.list_extend(qs, selection)
+  table.insert(qs, "```")
+  table.insert(qs, "")
+  vim.cmd("normal! G")
+  vim.api.nvim_put(qs, "c", true, true)
+end
+
+M.toggle_gpt = function(selection)
   if charwin then
     close_gpt_win()
   else
     create_gpt_win()
+    code_question(selection)
   end
 end
 
