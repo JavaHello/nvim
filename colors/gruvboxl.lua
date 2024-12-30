@@ -15,6 +15,7 @@ local dark_ext2 = "#2c2c2c"
 local gray_ext1 = "#423e3c"
 local gray_ext2 = "#4b4b4b"
 local gray_ext3 = "#4e4e4e"
+local gray_ext4 = "#484442"
 local gray_ext5 = "#656565"
 
 local gray_245 = "#928374"
@@ -93,7 +94,10 @@ hl({
   Search = { fg = dark0, bg = bright_yellow },
   IncSearch = { fg = dark0, bg = bright_orange },
   CurSearch = { link = "IncSearch" },
+
+  Comment = { fg = gray_ext5, italic = true },
   Todo = { fg = bright_green },
+  Error = { fg = dark0, bg = bright_red },
 
   MoreMsg = { fg = bright_green },
   ModeMsg = { fg = bright_green },
@@ -106,6 +110,8 @@ hl({
   DiffText = { fg = dark0, bg = bright_yellow },
 
   LineNr = { fg = gray_ext2 },
+  SignColumn = { fg = gray_ext4 },
+
   Cursor = { reverse = true },
   lCursor = { link = "Cursor" },
 
@@ -113,7 +119,6 @@ hl({
   PreProc = { fg = bright_yellow },
   Include = { fg = bright_blue },
   Function = { fg = bright_blue },
-  Comment = { fg = gray_ext5, italic = true },
   String = { fg = bright_green },
   Statement = { fg = bright_red },
   Constant = { fg = bright_red },
@@ -122,11 +127,10 @@ hl({
   Delimiter = { fg = neutral_orange },
   Identifier = { fg = bright_red },
 
-  Error = { fg = dark0, bg = bright_red },
-
   Visual = { bg = gray_ext1 },
   VisualNOS = { link = "Visual" },
   Folded = { fg = gray_ext5, bg = dark_ext1 },
+  FoldColumn = { fg = gray_ext5, bg = dark_ext1 },
 
   DiagnosticError = { fg = bright_red },
   DiagnosticInfo = { fg = bright_aqua },
