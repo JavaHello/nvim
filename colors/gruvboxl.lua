@@ -117,6 +117,7 @@ hl({
   Identifier = { fg = bright_red },
 
   Visual = { bg = "#423e3c" },
+  Folded = { fg = gray_ext0, bg = dark_ext1 },
 
   DiagnosticError = { fg = bright_red },
   DiagnosticInfo = { fg = bright_green },
