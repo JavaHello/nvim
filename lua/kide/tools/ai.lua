@@ -54,22 +54,30 @@ local function token()
 end
 
 ---@param cmd string[]
----@param callback fun(data: string, done: boolean)
+---@param callback fun(opt)
 local function handle_sse_events(cmd, callback)
-  local _ = vim.fn.jobstart(cmd, {
+  local job
+  job = vim.fn.jobstart(cmd, {
     on_stdout = function(_, data, _)
       for _, value in ipairs(data) do
         if vim.startswith(value, "data:") then
           local _, _, text = string.find(value, "data: (.+)")
           if text == "[DONE]" then
-            callback(text, true)
+            callback({
+              data = text,
+              done = true,
+              job = job,
+            })
           else
             local ok, resp_json = pcall(vim.fn.json_decode, text)
             if ok then
               if resp_json.usage ~= nil and M.config.show_usage then
-                callback("\n", false)
-                callback(
-                  "API[token usage]: "
+                callback({
+                  data = "\n",
+                  job = job,
+                })
+                callback({
+                  data = "API[token usage]: "
                     .. vim.inspect(resp_json.usage.prompt_cache_hit_tokens)
                     .. "  "
                     .. vim.inspect(resp_json.usage.prompt_tokens)
@@ -77,13 +85,20 @@ local function handle_sse_events(cmd, callback)
                     .. vim.inspect(resp_json.usage.completion_tokens)
                     .. " = "
                     .. vim.inspect(resp_json.usage.total_tokens),
-                  false
-                )
+                  job = job,
+                })
               else
-                callback(resp_json.choices[1].delta.content, false)
+                callback({
+                  data = resp_json.choices[1].delta.content,
+                  job = job,
+                })
               end
             else
-              callback("Error: " .. text, false)
+              callback({
+                err = 1,
+                data = text,
+                job = job,
+              })
             end
           end
         end
@@ -166,8 +181,11 @@ M.translate_float = function(request)
   end, { noremap = true, silent = true, buffer = buf })
 
   local curlines = 0
-  local callback = function(data, done)
+  local callback = function(opt)
+    local data = opt.data
+    local done = opt.done
     if closed then
+      vim.fn.jobstop(opt.job)
       return
     end
     if done then
@@ -304,6 +322,8 @@ M.gpt_chat = function()
     create_gpt_win()
   end
   if chatruning then
+    vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
+    chatruning = false
     return
   end
   chatruning = true
@@ -335,8 +355,11 @@ M.gpt_chat = function()
   vim.cmd("normal! G")
   vim.api.nvim_put({ "", M.chat_config.system_title, "" }, "l", true, true)
 
-  local callback = function(data, done)
-    if chatclosed then
+  local callback = function(opt)
+    local data = opt.data
+    local done = opt.done
+    if chatclosed or chatruning == false then
+      vim.fn.jobstop(opt.job)
       return
     end
     if done then
