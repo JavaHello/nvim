@@ -25,7 +25,6 @@ vim.opt.numberwidth = 2
 vim.opt.signcolumn = "yes"
 vim.opt.scrollback = 100000
 
-vim.opt_global.jumpoptions = "stack"
 
 -- 高亮所在行
 vim.opt.cursorline = true
@@ -156,3 +155,7 @@ vim.opt.backup = false
 -- vim.opt.cmdheight=0
 -- set statusline=%!v:lua.require'me'.statusline()
 vim.opt.statusline = "%!v:lua.require('kide').statusline()"
+-- 1 只有多个 tab 时显示
+-- 2 一直显示（99% 情况下不需要)
+vim.opt.showtabline = 1
+vim.opt.tabline = "%!v:lua.require('kide').tabline()"

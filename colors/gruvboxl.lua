@@ -76,10 +76,15 @@ hl({
   PmenuExtraSel = { link = "PmenuSel" },
   PmenuSbar = { bg = "#353535" },
   PmenuThumb = { bg = dark_ext3 },
+  QuickFixLine = { bg = dark1 },
 
   NormalFloat = {},
   FloatBorder = { fg = dark_ext0 },
-  StatusLine = { bg = dark_ext2 },
+  StatusLine = { bg = dark_ext2, fg = light1 },
+  StatusLineNC = { bg = dark_ext2 },
+
+  TabLine = { bg = dark_ext2, fg = gray_ext0 },
+  TabLineSel = { fg = light1, bg = dark0 },
   Directory = { fg = bright_blue },
   Title = { fg = bright_blue, bold = true },
   Question = { fg = bright_blue },

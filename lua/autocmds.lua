@@ -181,14 +181,6 @@ autocmd("LspDetach", {
   end,
 })
 
--- jdtls
-autocmd({ "BufReadCmd" }, {
-  group = augroup("jdtls_open"),
-  pattern = { "*.class" },
-  callback = function(event)
-    require("jdtls").open_classfile(event.file)
-  end,
-})
 
 require("kide.tools.maven").setup()
 require("kide.tools.plantuml").setup()

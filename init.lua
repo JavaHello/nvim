@@ -1,3 +1,11 @@
+-- 清理 jumps 列表，防止跳转整到其他项目
+vim.cmd([[
+  augroup kide_clearjumps
+    autocmd!
+    autocmd VimEnter * :clearjumps
+  augroup END
+]])
+vim.opt_global.jumpoptions = "stack"
 vim.opt_global.encoding = "UTF-8"
 vim.opt.fileencoding = "UTF-8"
 vim.g.mapleader = " "
@@ -27,7 +35,6 @@ vim.diagnostic.config({
 })
 vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })
 
-vim.g.nvim_jdtls = 1
 if vim.g.neovide then
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.opt_global.guifont = "CaskaydiaCove Nerd Font Mono:h15"

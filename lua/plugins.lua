@@ -136,7 +136,7 @@ return {
     opts = {
       signs = {
         delete = { text = "󰍵" },
-        changedelete = { text = "󱕖" },
+        changedelete = { text = "" },
       },
     },
   },
@@ -146,14 +146,6 @@ return {
       require("kide.melspconfig").init_lsp_clients()
     end,
   },
-  -- LSP progress messages
-  -- {
-  --   "j-hui/fidget.nvim",
-  --   event = { "VeryLazy" },
-  --   opts = {
-  --     -- options
-  --   },
-  -- },
   {
     "saghen/blink.cmp",
     lazy = false, -- lazy loading handled internally
@@ -436,23 +428,6 @@ return {
     end,
   },
 
-  -- copilot
-  {
-    "github/copilot.vim",
-    enabled = vim.env["COPILOT_ENABLE"] == "Y",
-    lazy = false,
-    config = function()
-      vim.g.copilot_enabled = true
-      vim.g.copilot_no_tab_map = true
-      vim.cmd('imap <silent><script><expr> <C-C> copilot#Accept("")')
-      vim.cmd([[
-			let g:copilot_filetypes = {
-	       \ 'TelescopePrompt': v:false,
-	     \ }
-			]])
-    end,
-  },
-
   -- databases
   {
     "tpope/vim-dadbod",
@@ -560,59 +535,6 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons",
     },
-  },
-  {
-    "rest-nvim/rest.nvim",
-    enabled = vim.env["REST_NVIM_ENABLE"] == "Y",
-    ft = "http",
-  },
-  {
-    "yetone/avante.nvim",
-    event = "VeryLazy",
-    enabled = vim.env["AVANTE_NVIM_ENABLE"] == "Y",
-    build = "make",
-    dependencies = {
-      "stevearc/dressing.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-    },
-    config = function()
-      local opts = {
-        provider = "deepseek",
-        vendors = {
-          ---@class AvanteProviderFunctor
-          deepseek = {
-            endpoint = "https://api.deepseek.com/chat/completions",
-            model = "deepseek-coder",
-            api_key_name = "DEEPSEEK_API_KEY",
-            parse_curl_args = function(opts, code_opts)
-              return {
-                url = opts.endpoint,
-                headers = {
-                  ["Accept"] = "application/json",
-                  ["Content-Type"] = "application/json",
-                  ["Authorization"] = "Bearer " .. os.getenv(opts.api_key_name),
-                },
-                body = {
-                  model = opts.model,
-                  messages = {
-                    { role = "system", content = code_opts.system_prompt },
-                    { role = "user", content = table.concat(code_opts.user_prompts, "\n") },
-                  },
-                  temperature = 0,
-                  max_tokens = 4096,
-                  stream = true,
-                },
-              }
-            end,
-            parse_response_data = function(data_stream, event_state, opts)
-              require("avante.providers").copilot.parse_response(data_stream, event_state, opts)
-            end,
-          },
-        },
-      }
-      require("avante").setup(opts)
-    end,
   },
   {
     "HakonHarnes/img-clip.nvim",

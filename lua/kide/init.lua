@@ -1,15 +1,31 @@
 local M = {}
+local uv = vim.uv or vim.loop
+local git_repo = true
 -- 参考 https://github.com/mfussenegger/dotfiles
 function M.statusline()
-  local counts = vim.diagnostic.count(0, { severity = { min = vim.diagnostic.severity.WARN } })
-  local fstatus = M.file_or_lsp_status()
   local parts = {
-    "%< ",
-    fstatus,
+    "%<",
   }
+  local git = M.git_status()
+  if git then
+    table.insert(parts, " %#DiagnosticError# %#StatusLine#" .. git.head)
+    if git.added and git.added > 0 then
+      vim.list_extend(parts, { " %#Added# ", tostring(git.added) })
+    end
+    if git.removed and git.removed > 0 then
+      vim.list_extend(parts, { " %#Removed#󰍵 ", tostring(git.removed) })
+    end
+    if git.changed and git.changed > 0 then
+      vim.list_extend(parts, { " %#Changed# ", tostring(git.changed) })
+    end
+  end
+  local fstatus = M.file_or_lsp_status()
+  vim.list_extend(parts, fstatus)
+
+  local counts = vim.diagnostic.count(0, { severity = { min = vim.diagnostic.severity.WARN } })
   local num_errors = counts[vim.diagnostic.severity.ERROR] or 0
   local num_warnings = counts[vim.diagnostic.severity.WARN] or 0
-  table.insert(parts, "%#DiagnosticWarn#%r%m")
+  table.insert(parts, " %#DiagnosticWarn#%r%m")
   if num_errors > 0 then
     vim.list_extend(parts, { "%#DiagnosticError#", " 󰅙 ", tostring(num_errors), " " })
   elseif num_warnings > 0 then
@@ -17,10 +33,21 @@ function M.statusline()
   end
   table.insert(parts, "%=")
   vim.list_extend(parts, { "%#StatusLine#", "%l:%c", " " })
-  vim.list_extend(parts, { "%#StatusLine#", "%y", " " })
+  local ft = vim.bo.filetype
+  if ft and ft ~= "" then
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    if clients and #clients > 0 then
+      vim.list_extend(parts, { "%#DiagnosticInfo#", "[ ", clients[1].name, "] " })
+    end
+    vim.list_extend(parts, { "%#StatusLine#", ft, " " })
+  end
   vim.list_extend(parts, { "%#StatusLine#", "%{&ff}", " " })
   vim.list_extend(parts, { "%#StatusLine#", "%{&fenc}", " " })
   return table.concat(parts, "")
+end
+
+function M.git_status()
+  return vim.b[0].gitsigns_status_dict
 end
 
 function M.file_or_lsp_status()
@@ -32,12 +59,12 @@ function M.file_or_lsp_status()
     local devicons = require("nvim-web-devicons")
     local icon, name = devicons.get_icon_by_filetype(vim.bo[buf].filetype, { default = true })
     if name then
-      return string.format("%%#%s#%s %%#StatusLine#%s", name, icon, M.format_uri(filename))
+      return { " ", "%#" .. name .. "#", icon, " %#StatusLine#", M.format_uri(filename) }
     else
-      return string.format("%s %s", icon, M.format_uri(filename))
+      return { " ", icon, " ", M.format_uri(filename) }
     end
   end
-  return lsp_status
+  return { " ", "%#StatusLine#", lsp_status }
 end
 function M.format_uri(uri)
   if vim.startswith(uri, "jdt://") then
@@ -62,4 +89,30 @@ function M.dap_status()
   return ""
 end
 
+function M.tabline()
+  local parts = {}
+  local devicons = require("nvim-web-devicons")
+  for i = 1, vim.fn.tabpagenr("$") do
+    local tabpage = vim.fn.gettabinfo(i)[1]
+    local winnr = tabpage.windows[1]
+    local bufnr = vim.fn.winbufnr(winnr)
+    local bufname = vim.fn.bufname(bufnr)
+    local filename = vim.fn.fnamemodify(bufname, ":t")
+
+    local icon, name = devicons.get_icon_by_filetype(vim.bo[bufnr].filetype, { default = true })
+    table.insert(parts, "    %#" .. name .. "#")
+    table.insert(parts, icon)
+    table.insert(parts, " ")
+    if i == vim.fn.tabpagenr() then
+      table.insert(parts, "%#TabLineSel#")
+    else
+      table.insert(parts, "%#TabLine#")
+    end
+    if not filename or filename == "" then
+      filename = "[No Name]"
+    end
+    table.insert(parts, filename)
+  end
+  return table.concat(parts, "")
+end
 return M

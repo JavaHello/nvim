@@ -15,6 +15,13 @@ map("v", "<A-i>", function()
   require("kide.term").toggle()
   require("kide.term").send_line(text[1])
 end, { desc = "toggle term" })
+
+map("n", "<leader>w", function()
+  vim.print("---close--")
+  vim.print(vim.bo.bufhidden)
+  vim.print(vim.bo.buflisted)
+end, { desc = "close buf" })
+
 map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
 map("n", "<ESC>", "<CMD>noh<CR>", { desc = "Clear Highlight" })
 
@@ -33,10 +40,6 @@ map("n", "<C-j>", "<C-w>j", { desc = "switch window down" })
 map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
 -- terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
-
-map("n", "==", function()
-  require("conform").format({ lsp_fallback = true })
-end, { desc = "format file" })
 
 -- dap
 map("n", "<leader>db", "<CMD>lua require'dap'.toggle_breakpoint()<CR>", { desc = "Dap toggle breakpoint" })
@@ -67,7 +70,10 @@ command("TaskRunLast", function()
   require("kide.term").input_run(true)
 end, { desc = "Restart Last Task" })
 
-map("v", "<leader>fm", function()
+map("n", "<C-l>", function()
+  require("conform").format({ lsp_fallback = true })
+end, { desc = "format file" })
+map("v", "<C-l>", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local start_pos = vim.api.nvim_buf_get_mark(0, "<")
   local end_pos = vim.api.nvim_buf_get_mark(0, ">")
@@ -210,14 +216,6 @@ command("Bp", function()
   require("nvchad.tabufline").prev()
 end, { desc = "buffer goto prev" })
 
--- jdtls
-command("JdtWipeDataAndRestart", function()
-  require("jdtls.setup").wipe_data_and_restart()
-end, { desc = "Jdt Wipe Data And Restart" })
-command("JdtShowLogs", function()
-  require("jdtls.setup").show_logs()
-end, { desc = "Jdt Show Logs" })
-
 -- find files
 if vim.fn.executable("fd") == 1 then
   command("Fd", function(opt)
@@ -322,7 +320,7 @@ if vim.fn.executable("fzy") == 1 then
     local text = require("kide.tools").get_visual_selection()
     local fzy = require("kide.fzy")
     local param = vim.fn.shellescape(text[1])
-    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "Files  ", text)
+    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "Files  ", text[1])
   end, { desc = "fzy find files", silent = true, noremap = true })
 
   map("v", "<leader>fw", function()
@@ -330,7 +328,15 @@ if vim.fn.executable("fzy") == 1 then
     local text = require("kide.tools").get_visual_selection()
     local fzy = require("kide.fzy")
     local param = vim.fn.shellescape(text[1])
-    fzy.execute("rg --no-heading --trim -nH --smart-case " .. param, fzy.sinks.edit_live_grep, "Grep  ", text)
+    fzy.execute("rg --no-heading --trim -nH --smart-case " .. param, fzy.sinks.edit_live_grep, "Grep  ", text[1])
+  end, { desc = "fzy live grep", silent = true, noremap = true })
+  map("n", "<leader>fw", function()
+    local ok, text = pcall(vim.fn.input, "rg: ")
+    if ok and text and text ~= "" then
+      local fzy = require("kide.fzy")
+      local param = vim.fn.shellescape(text)
+      fzy.execute("rg --no-heading --trim -nH --smart-case " .. param, fzy.sinks.edit_live_grep, "Grep  ", text)
+    end
   end, { desc = "fzy live grep", silent = true, noremap = true })
 
   command("FzyFiles", function(opt)

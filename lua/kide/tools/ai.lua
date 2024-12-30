@@ -207,6 +207,7 @@ end
 local charwin = nil
 local charbuf = nil
 local chatclosed = false
+local chatruning = false
 local chat_request_json = {
   messages = {
     {
@@ -233,8 +234,8 @@ local chat_request_json = {
 }
 
 M.chat_config = {
-  user_title = "User:",
-  system_title = "DeepseekChat:",
+  user_title = " :",
+  system_title = " :",
   system_prompt = "You are a general AI assistant.\n\n"
     .. "The user provided the additional info about how they would like you to respond:\n\n"
     .. "- If you're unsure don't guess and say you don't know instead.\n"
@@ -246,6 +247,7 @@ M.chat_config = {
     .. "- Take a deep breath; You've got this!\n",
 }
 local close_gpt_win = function()
+  chatruning = false
   if charwin then
     pcall(vim.api.nvim_win_close, charwin, true)
     charwin = nil
@@ -301,6 +303,10 @@ M.gpt_chat = function()
   if charwin == nil then
     create_gpt_win()
   end
+  if chatruning then
+    return
+  end
+  chatruning = true
   local list = vim.api.nvim_buf_get_lines(charbuf, 0, -1, false)
   local json = chat_request_json
   json.messages[1].content = M.chat_config.system_prompt
@@ -335,6 +341,7 @@ M.gpt_chat = function()
     end
     if done then
       vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
+      chatruning = false
       return
     end
     if charbuf and vim.api.nvim_buf_is_valid(charbuf) then
