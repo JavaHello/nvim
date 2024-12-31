@@ -11,13 +11,6 @@ cd ~/.config
 git clone  https://github.com/JavaHello/nvim.git
 ```
 
-### Windows
-
-```sh
-cd $env:LOCALAPPDATA
-git clone  https://github.com/JavaHello/nvim.git
-```
-
 ## 依赖
 
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
@@ -29,7 +22,7 @@ git clone  https://github.com/JavaHello/nvim.git
 
 其他依赖可选安装,使用 [mason.nvim](https://github.com/williamboman/mason.nvim)
 
-> 此配置在 Linux, Mac 系统上长期使用, Windows 下推荐使用 [scoop](https://scoop.sh/) 安装依赖
+> 此配置在 Linux, Mac 系统上长期使用
 
 ## 快捷键
 
