@@ -2,27 +2,29 @@ local fn = vim.fn
 local opt = vim.opt
 local o = vim.o
 
-opt.fillchars = { eob = " " }
+vim.opt.statusline = "%!v:lua.require('kide').statusline()"
+
 
 -- disable nvim intro
 opt.shortmess:append("sI")
+vim.opt.termguicolors = true
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.numberwidth = 2
+vim.opt.signcolumn = "yes"
 
 o.undofile = true
+opt.fillchars = { eob = " " }
 
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append "<>[]hl"
 
-vim.opt.termguicolors = true
 
 vim.opt.title = true
 vim.opt.exrc = true
 vim.opt.secure = false
 vim.opt.ttyfast = true
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.numberwidth = 2
-vim.opt.signcolumn = "yes"
 vim.opt.scrollback = 100000
 
 -- 高亮所在行
@@ -152,8 +154,6 @@ vim.opt.backup = false
 
 -- see noice
 -- vim.opt.cmdheight=0
--- set statusline=%!v:lua.require'me'.statusline()
-vim.opt.statusline = "%!v:lua.require('kide').statusline()"
 -- 1 只有多个 tab 时显示
 -- 2 一直显示（99% 情况下不需要)
 vim.opt.showtabline = 1

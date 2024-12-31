@@ -184,18 +184,18 @@ function M.execute(choices_cmd, on_choice, prompt, selection)
       -- After on_exit there will be a terminal related cmdline update that would
       -- override any messages printed by the `on_choice` callback.
       -- The timer+schedule combo ensures users see messages printed within the callback
-      local timer = uv.new_timer()
-      if timer then
-        timer:start(0, 0, function()
-          timer:stop()
-          timer:close()
-          vim.schedule(function()
-            on_choice(choice)
-          end)
-        end)
-      else
-        on_choice(choice)
-      end
+      -- local timer = uv.new_timer()
+      -- if timer then
+      --   timer:start(0, 0, function()
+      --     timer:stop()
+      --     timer:close()
+      --     vim.schedule(function()
+      --       on_choice(choice)
+      --     end)
+      --   end)
+      -- else
+      on_choice(choice)
+      -- end
     end,
   })
   if selection then

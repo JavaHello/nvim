@@ -219,7 +219,7 @@ end
 
 -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
-local config = {
+M.config = {
   -- The command that starts the language server
   -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
   cmd = jdtls_launcher(),
@@ -344,8 +344,8 @@ local config = {
   --   workspace = workspace_dir
   -- },
 }
-config.commands = {}
-config.commands["_java.reloadBundles.command"] = function()
+M.config.commands = {}
+M.config.commands["_java.reloadBundles.command"] = function()
   return {}
 end
 
@@ -356,7 +356,7 @@ local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 extendedClientCapabilities.progressReportProvider = false
 
-config["init_options"] = {
+M.config["init_options"] = {
   bundles = bundles,
   extendedClientCapabilities = extendedClientCapabilities,
 }
@@ -424,11 +424,11 @@ local function test_with_profile(test_fn)
   end
 end
 
-config.flags = {
+M.config.flags = {
   debounce_text_changes = 150,
 }
-config.handlers = {}
-config.handlers["language/status"] = function(err, msg)
+M.config.handlers = {}
+M.config.handlers["language/status"] = function(err, msg)
   -- 使用 progress 查看状态
   -- print("jdtls " .. s.type .. ": " .. s.message)
   -- ServiceReady 不能用来判断是否完全启动
@@ -437,98 +437,71 @@ config.handlers["language/status"] = function(err, msg)
   -- end
 end
 
-M.config = config
-M.start = function(buf)
-  jdtls.start_or_attach(config, { dap = { config_overrides = {}, hotcodereplace = "auto" } }, { bufnr = buf })
+local me = require("kide.melspconfig")
+M.config.capabilities = me.capabilities()
+M.config.on_init = me.on_init
+local spring_boot = vim.env["SPRING_BOOT_NVIM_ENABLE"] == "Y"
+if spring_boot then
+  vim.list_extend(bundles, require("spring_boot").java_extensions())
 end
 
----@class kide.lsp.java.Options
----@field on_attach fun(client: table, buffer: number)
----@field capabilities table
----@field on_init fun(client: table, context: table)
----@field add_bundles? fun(bundles: table<string>)
-
----@param opts kide.lsp.java.Options
-M.setup = function(opts)
-  if opts.add_bundles then
-    opts.add_bundles(bundles)
+M.config.on_attach = function(client, buffer)
+  local function desc_opts(desc)
+    return { silent = true, buffer = buffer, desc = desc }
   end
-  local on_attach = opts.on_attach
-  config.on_attach = function(client, buffer)
-    local function desc_opts(desc)
-      return { silent = true, buffer = buffer, desc = desc }
-    end
 
-    local function with_compile(fn)
-      return function()
-        if vim.bo.modified then
-          vim.cmd("w")
-        end
-        client.request_sync("java/buildWorkspace", false, 5000, buffer)
-        fn()
+  local function with_compile(fn)
+    return function()
+      if vim.bo.modified then
+        vim.cmd("w")
       end
+      client.request_sync("java/buildWorkspace", false, 5000, buffer)
+      fn()
     end
-    vim.keymap.set("n", "<leader>dc", with_compile(jdtls.test_class), desc_opts("Test class"))
-    vim.keymap.set("n", "<leader>dm", with_compile(jdtls.test_nearest_method), desc_opts("Test method"))
-    vim.keymap.set("n", "<leader>ds", with_compile(jdtls.pick_test), desc_opts("Select test"))
-    vim.keymap.set("n", "crv", jdtls.extract_variable, desc_opts("Extract variable"))
-    vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], desc_opts("Extract method"))
-    vim.keymap.set("n", "crc", jdtls.extract_constant, desc_opts("Extract constant"))
+  end
+  vim.keymap.set("n", "<leader>dc", with_compile(jdtls.test_class), desc_opts("Test class"))
+  vim.keymap.set("n", "<leader>dm", with_compile(jdtls.test_nearest_method), desc_opts("Test method"))
+  vim.keymap.set("n", "<leader>ds", with_compile(jdtls.pick_test), desc_opts("Select test"))
+  vim.keymap.set("n", "crv", jdtls.extract_variable, desc_opts("Extract variable"))
+  vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], desc_opts("Extract method"))
+  vim.keymap.set("n", "crc", jdtls.extract_constant, desc_opts("Extract constant"))
 
-    if M.async_profiler_home then
-      vim.keymap.set(
-        "n",
-        "<leader>dM",
-        with_compile(test_with_profile(jdtls.test_nearest_method)),
-        desc_opts("Test method with profiling")
-      )
-    end
-
-    local create_command = vim.api.nvim_buf_create_user_command
-    create_command(buffer, "OR", require("jdtls").organize_imports, {
-      nargs = 0,
-    })
-
-    create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
-      nargs = 0,
-    })
-
-    create_command(
-      buffer,
-      "JdtRun",
-      with_compile(function()
-        local main_config_opts = {
-          verbose = false,
-          on_ready = require("dap")["continue"],
-        }
-        require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
-      end),
-      {
-        nargs = 0,
-      }
+  if M.async_profiler_home then
+    vim.keymap.set(
+      "n",
+      "<leader>dM",
+      with_compile(test_with_profile(jdtls.test_nearest_method)),
+      desc_opts("Test method with profiling")
     )
-    create_command(buffer, "JdtTestGenerate", require("jdtls.tests").generate, { nargs = 0 })
-    create_command(buffer, "JdtTestGoto", require("jdtls.tests").goto_subjects, { nargs = 0 })
-
-    on_attach(client, buffer)
   end
 
-  config.capabilities = opts.capabilities
-  config.on_init = opts.on_init
-  -- require("kide.lsp.utils.jdtls").customize_jdtls()
-  local group = vim.api.nvim_create_augroup("kide_jdtls_java", { clear = true })
-  vim.api.nvim_create_autocmd({ "FileType" }, {
-    group = group,
-    pattern = { "java" },
-    desc = "jdtls",
-    callback = function(e)
-      if e.file == "java" and vim.bo[e.buf].buftype == "nofile" then
-        -- ignore
-      else
-        M.start(e.buf)
-      end
-    end,
+  local create_command = vim.api.nvim_buf_create_user_command
+  create_command(buffer, "OR", require("jdtls").organize_imports, {
+    nargs = 0,
   })
+
+  create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
+    nargs = 0,
+  })
+
+  create_command(
+    buffer,
+    "JdtRun",
+    with_compile(function()
+      local main_config_opts = {
+        verbose = false,
+        on_ready = require("dap")["continue"],
+      }
+      require("jdtls.dap").setup_dap_main_class_configs(main_config_opts)
+    end),
+    {
+      nargs = 0,
+    }
+  )
+  create_command(buffer, "JdtTestGenerate", require("jdtls.tests").generate, { nargs = 0 })
+  create_command(buffer, "JdtTestGoto", require("jdtls.tests").goto_subjects, { nargs = 0 })
+
+  me.on_attach(client, buffer)
 end
 
 return M

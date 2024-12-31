@@ -264,22 +264,15 @@ if vim.fn.executable("fzy") == 1 then
   map("n", "<leader>fq", function()
     local fzy = require("kide.fzy")
     local qfl = vim.fn.getqflist()
-    local cats = {}
     local tools = require("kide")
-    for i, v in ipairs(qfl) do
-      local filename = vim.uri_from_bufnr(v.bufnr)
-      table.insert(cats, tostring(i) .. ": " .. tools.format_uri(filename) .. ": " .. v.text)
-    end
-    local param = vim.fn.shellescape(table.concat(cats, "\n"))
 
-    fzy.execute("echo -e " .. param, function(choice)
-      if choice and vim.trim(choice) ~= "" then
-        local idx = vim.split(choice, ":")[1]
-        local qf = qfl[tonumber(idx)]
-        vim.cmd("b " .. qf.bufnr)
-        vim.api.nvim_win_set_cursor(0, { qf.lnum, qf.col })
-      end
-    end, "Quickfix > ")
+    fzy.pick_one(qfl, "Quickfix > ", function(item)
+      local filename = vim.uri_from_bufnr(item.bufnr)
+      return tools.format_uri(filename) .. ": " .. item.text
+    end, function(qf, _)
+      vim.cmd("b " .. qf.bufnr)
+      vim.api.nvim_win_set_cursor(0, { qf.lnum, qf.col })
+    end)
   end, { desc = "Quickfix" })
 
   map("n", "<leader>fo", function()
@@ -293,22 +286,16 @@ if vim.fn.executable("fzy") == 1 then
 
   map("n", "<leader>fb", function()
     local fzy = require("kide.fzy")
-    local bufs = vim.api.nvim_list_bufs()
-    local cats = {}
+    local bufs = vim.tbl_filter(function(b)
+      return vim.bo[b].buflisted
+    end, vim.api.nvim_list_bufs())
     local tools = require("kide")
-    for _, v in ipairs(bufs) do
-      if vim.bo[v].buflisted then
-        local filename = vim.uri_from_bufnr(v)
-        table.insert(cats, tostring(v) .. ": " .. tools.format_uri(filename))
-      end
-    end
-    local param = vim.fn.shellescape(table.concat(cats, "\n"))
-    fzy.execute("echo -e " .. param, function(choice)
-      if choice and vim.trim(choice) ~= "" then
-        local cbuf = vim.split(choice, ":")
-        vim.cmd("b " .. cbuf[1])
-      end
-    end, "Buffers > ")
+    fzy.pick_one(bufs, "Buffers > ", function(item)
+      local filename = vim.uri_from_bufnr(item)
+      return tools.format_uri(filename)
+    end, function(b, _)
+      vim.cmd("b " .. b)
+    end)
   end, { desc = "Find buffer" })
   map("n", "<leader>ff", function()
     local fzy = require("kide.fzy")

@@ -154,18 +154,6 @@ autocmd("LspAttach", {
         })
       end
     end
-
-    local root_dir = client.config.root_dir
-    if root_dir then
-      local buffile = vim.api.nvim_buf_get_name(bufnr)
-      -- 防止修改不在项目内的文件
-      if buffile then
-        if not vim.startswith(buffile, root_dir) and not vim.startswith(buffile, "jdt://") then
-          vim.bo[bufnr].readonly = true
-          vim.bo[bufnr].modifiable = false
-        end
-      end
-    end
   end,
 })
 
@@ -183,3 +171,5 @@ autocmd("LspDetach", {
 
 require("kide.tools.maven").setup()
 require("kide.tools.plantuml").setup()
+
+require("kide.melspconfig").init_lsp_progress()

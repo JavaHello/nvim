@@ -33,7 +33,12 @@ vim.diagnostic.config({
     border = "rounded",
   },
 })
+
 vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })
+vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "Debug", linehl = "", numhl = "" })
+vim.fn.sign_define("DapLogPoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })
+vim.fn.sign_define("DapStopped", { text = "", texthl = "Debug", linehl = "", numhl = "" })
+vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "Debug", linehl = "", numhl = "" })
 
 if vim.g.neovide then
   vim.g.neovide_cursor_vfx_mode = "railgun"
@@ -59,6 +64,7 @@ if vim.g.neovide then
   vim.g.neovide_padding_left = 0
 end
 
+require("options")
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -90,6 +96,5 @@ require("lazy").setup({
 })
 
 vim.cmd.colorscheme("gruvboxl")
-require("options")
 require("mappings")
 require("autocmds")

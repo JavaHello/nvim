@@ -66,6 +66,7 @@ hl({
 
   Normal = { fg = light2, bg = dark0 },
   CursorLine = { bg = dark_ext1 },
+  CursorLineNr = {},
   WildMenu = { fg = bright_red, bg = bright_yellow },
 
   WinSeparator = { fg = gray_ext2 },

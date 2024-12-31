@@ -6,12 +6,11 @@ return {
     lazy = false,
     config = function()
       require("nvim-treesitter.configs").setup({
-
         ensure_installed = { "lua", "luadoc", "printf", "vim", "vimdoc" },
         highlight = {
           enable = true,
           disable = function(_, buf)
-            local max_filesize = 100 * 1024 -- 100 KB
+            local max_filesize = 1024 * 1024 -- 1MB
             local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
             if ok and stats and stats.size > max_filesize then
               return true
@@ -19,7 +18,6 @@ return {
           end,
           additional_vim_regex_highlighting = false,
         },
-
         indent = { enable = true },
       })
     end,
@@ -50,11 +48,18 @@ return {
       max_concurrent_installers = 10,
     },
   },
-  { "nvim-lua/plenary.nvim" },
-  { "nvim-tree/nvim-web-devicons" },
+  {
+    "nvim-lua/plenary.nvim",
+    lazy = true,
+  },
+  {
+    "nvim-tree/nvim-web-devicons",
+    lazy = true,
+  },
 
   {
     "stevearc/conform.nvim",
+    lazy = false,
     opts = {
       formatters_by_ft = {
         lua = { "stylua" },
@@ -69,6 +74,9 @@ return {
   },
   {
     "nvim-tree/nvim-tree.lua",
+    cmd = {
+      "NvimTreeFocus",
+    },
     opts = {
 
       filters = { dotfiles = false },
@@ -134,19 +142,13 @@ return {
   },
   {
     "lewis6991/gitsigns.nvim",
-    event = "VeryLazy",
+    lazy = false,
     opts = {
       signs = {
         delete = { text = "󰍵" },
         changedelete = { text = "" },
       },
     },
-  },
-  {
-    "neovim/nvim-lspconfig",
-    config = function()
-      require("kide.melspconfig").init_lsp_clients()
-    end,
   },
   {
     "saghen/blink.cmp",
@@ -235,29 +237,36 @@ return {
   -- java
   {
     "mfussenegger/nvim-jdtls",
+    lazy = true,
   },
   {
     "JavaHello/spring-boot.nvim",
+    dir = "/Users/luokai/workspace/VimProjects/spring-boot.nvim",
+    lazy = true,
+    init = function()
+      vim.g.spring_boot = {
+        autocmd = false,
+      }
+    end,
     dependencies = {
       "mfussenegger/nvim-jdtls",
     },
     config = false,
   },
   {
-    "JavaHello/quarkus.nvim",
-    dependencies = {
-      "mfussenegger/nvim-jdtls",
-      "JavaHello/microprofile.nvim",
-    },
-  },
-  {
     "JavaHello/java-deps.nvim",
+    lazy = true,
     config = function()
       require("java-deps").setup({})
     end,
   },
   {
     "https://gitlab.com/schrieveslaach/sonarlint.nvim.git",
+    lazy = false,
+    enabled = vim.env["SONARLINT_ENABLE"] == "Y",
+    config = function()
+      require("kide.lsp.sonarlint").setup()
+    end,
   },
   {
     "aklt/plantuml-syntax",
@@ -267,49 +276,28 @@ return {
   -- dap
   {
     "mfussenegger/nvim-dap",
+    lazy = true,
+    dependencies = { "theHamsta/nvim-dap-virtual-text" },
     config = function()
       local dap = require("dap")
-      require("nvim-dap-virtual-text")
-
+      require("nvim-dap-virtual-text").setup({})
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dap.repl.open()
       end
-      -- dap.listeners.after.event_terminated["dapui_config"] = function()
-      -- dap.repl.close()
-      -- end
     end,
   },
   {
     "theHamsta/nvim-dap-virtual-text",
-    dependencies = { "mfussenegger/nvim-dap" },
-    config = function()
-      require("nvim-dap-virtual-text").setup({})
-    end,
+    lazy = true,
+    config = false,
   },
 
   -- python
   {
     "mfussenegger/nvim-dap-python",
+    lazy = true,
     dependencies = { "mfussenegger/nvim-dap" },
-    config = function()
-      local function get_python_path()
-        if vim.env.VIRTUAL_ENV then
-          if vim.fn.has("nvim-0.10") == 1 then
-            return vim.fs.joinpath(vim.env.VIRTUAL_ENV, "bin", "python")
-          end
-          return vim.env.VIRTUAL_ENV .. "/bin" .. "/python"
-        end
-        if vim.env.PY_BIN then
-          return vim.env.PY_BIN
-        end
-        local python = vim.fn.exepath("python3")
-        if python == nil or python == "" then
-          python = vim.fn.exepath("python")
-        end
-        return python
-      end
-      require("dap-python").setup(get_python_path())
-    end,
+    config = false,
   },
   -- Git
   {
@@ -409,7 +397,7 @@ return {
     "mrcjkb/rustaceanvim",
     version = "^5", -- Recommended
     lazy = false, -- This plugin is already lazy
-    config = function()
+    init = function()
       vim.g.rustaceanvim = {
         server = {
           on_attach = function(client, buffer)
@@ -433,6 +421,7 @@ return {
   -- databases
   {
     "tpope/vim-dadbod",
+    lazy = true,
   },
   {
     "kristijanhusak/vim-dadbod-ui",
@@ -463,7 +452,7 @@ return {
       require("bqf").setup({
         preview = {
           auto_preview = true,
-          should_preview_cb = function(pbufnr, win)
+          should_preview_cb = function(pbufnr, _)
             local fname = vim.fn.bufname(pbufnr)
             if vim.startswith(fname, "jdt://") then
               -- 未加载时不预览
@@ -496,6 +485,7 @@ return {
   },
   {
     "scalameta/nvim-metals",
+    lazy = true,
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
