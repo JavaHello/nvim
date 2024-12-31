@@ -241,7 +241,6 @@ return {
   },
   {
     "JavaHello/spring-boot.nvim",
-    dir = "/Users/luokai/workspace/VimProjects/spring-boot.nvim",
     lazy = true,
     init = function()
       vim.g.spring_boot = {
