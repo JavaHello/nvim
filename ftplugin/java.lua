@@ -3,7 +3,7 @@ vim.bo.tabstop = 4
 vim.bo.softtabstop = 4
 
 if vim.env["JDTLS_NVIM_ENABLE"] == "Y" then
-  local jc = require("kide.lsp.java")
+  local jc = require("kide.lsp.jdtls")
   local config
   -- 防止 start_or_attach 重复修复 config
   if jc.init then
