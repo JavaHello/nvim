@@ -208,23 +208,15 @@ M.command_args_complete = function(complete, opt)
 end
 
 M.open_fn = function(file)
-  local ok, system_open = pcall(require, "nvim-tree.actions.node.system-open")
-  if ok then
-    system_open.fn({ absolute_path = file })
+  local cmd
+  if M.is_linux then
+    cmd = "xdg-open"
+  elseif M.is_mac then
+    cmd = "open"
+  elseif M.is_win then
+    cmd = "start"
   end
-end
-
-M.get_filename = function(path)
-  local idx = path:match(".+()%.%w+$")
-  if idx then
-    return path:sub(1, idx - 1)
-  else
-    return path
-  end
-end
-
-M.get_extension = function(str)
-  return str:match(".+%.(%w+)$")
+  vim.fn.system(string.format("%s %s", cmd, file))
 end
 
 M.tmpdir = function()
@@ -237,35 +229,6 @@ end
 
 M.tmpdir_file = function(file)
   return M.tmpdir() .. "/" .. file
-end
-M.cpu_thread_count = 0
-
-M.get_cpu_thread_count = function()
-  if M.cpu_thread_count > 0 then
-    return M.cpu_thread_count
-  end
-  local cmd
-  if M.is_mac then
-    cmd = "sysctl -n hw.logicalcpu"
-  elseif M.is_linux then
-    cmd = "nproc"
-  else
-    cmd = "echo %NUMBER_OF_PROCESSORS%"
-  end
-  local handle = io.popen(cmd)
-  if handle == nil then
-    M.cpu_thread_count = 8
-    return M.cpu_thread_count
-  end
-  local result = handle:read("*a")
-  handle:close()
-  local c = tonumber(result)
-  if c then
-    M.cpu_thread_count = c
-  else
-    M.cpu_thread_count = 8
-  end
-  return M.cpu_thread_count
 end
 
 M.java_bin = function()

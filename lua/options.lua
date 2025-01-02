@@ -4,7 +4,6 @@ local o = vim.o
 
 vim.opt.statusline = "%!v:lua.require('kide').statusline()"
 
-
 -- disable nvim intro
 opt.shortmess:append("sI")
 vim.opt.termguicolors = true
@@ -19,7 +18,6 @@ opt.fillchars = { eob = " " }
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
 -- opt.whichwrap:append "<>[]hl"
-
 
 vim.opt.title = true
 vim.opt.exrc = true
@@ -158,3 +156,7 @@ vim.opt.backup = false
 -- 2 一直显示（99% 情况下不需要)
 vim.opt.showtabline = 1
 vim.opt.tabline = "%!v:lua.require('kide').tabline()"
+
+function vim.ui.select(items, opts, on_choice) -- luacheck: ignore 122
+  return require("kide.fzy").pick_one(items, opts.prompt .. "  ", opts.format_item, on_choice)
+end

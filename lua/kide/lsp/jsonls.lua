@@ -8,13 +8,11 @@ M.config = {
   init_options = {
     provideFormatter = true,
   },
-  root_dir = vim.fs.root(0, { ".git" }) or vim.uv.cwd(),
+  root_dir = vim.fs.root(0, { ".git" }),
   single_file_support = true,
   on_attach = me.on_attach,
   on_init = me.on_init,
   capabilities = me.capabilities(),
-  settings = {
-    jsonls = {},
-  },
+  settings = {},
 }
 return M

@@ -270,8 +270,10 @@ if vim.fn.executable("fzy") == 1 then
       local filename = vim.uri_from_bufnr(item.bufnr)
       return tools.format_uri(filename) .. ": " .. item.text
     end, function(qf, _)
-      vim.cmd("b " .. qf.bufnr)
-      vim.api.nvim_win_set_cursor(0, { qf.lnum, qf.col })
+      if qf then
+        vim.cmd("b " .. qf.bufnr)
+        vim.api.nvim_win_set_cursor(0, { qf.lnum, qf.col })
+      end
     end)
   end, { desc = "Quickfix" })
 
@@ -279,6 +281,7 @@ if vim.fn.executable("fzy") == 1 then
     local fzy = require("kide.fzy")
     fzy.execute("fd", function(choice)
       if choice and vim.trim(choice) ~= "" then
+        vim.print(choice)
         require("kide.tools").open_fn(choice)
       end
     end, "SystemOpen > ")
@@ -291,8 +294,10 @@ if vim.fn.executable("fzy") == 1 then
     end, vim.api.nvim_list_bufs())
     local tools = require("kide")
     fzy.pick_one(bufs, "Buffers > ", function(item)
-      local filename = vim.uri_from_bufnr(item)
-      return tools.format_uri(filename)
+      if item then
+        local filename = vim.uri_from_bufnr(item)
+        return tools.format_uri(filename)
+      end
     end, function(b, _)
       vim.cmd("b " .. b)
     end)

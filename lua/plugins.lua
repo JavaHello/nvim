@@ -34,21 +34,6 @@ return {
     end,
   },
   {
-    "williamboman/mason.nvim",
-    lazy = false,
-    opts = {
-      ui = {
-        icons = {
-          package_pending = " ",
-          package_installed = " ",
-          package_uninstalled = " ",
-        },
-      },
-
-      max_concurrent_installers = 10,
-    },
-  },
-  {
     "nvim-lua/plenary.nvim",
     lazy = true,
   },
@@ -65,10 +50,12 @@ return {
         lua = { "stylua" },
         css = { "prettier" },
         html = { "prettier" },
-        json = { "prettier" },
+        json = { "jq" },
         markdown = { "prettier" },
         sql = { "sql_formatter" },
         python = { "black" },
+        bash = { "shfmt" },
+        sh = { "shfmt" },
       },
     },
   },
@@ -345,7 +332,7 @@ return {
     },
     config = function()
       require("zk").setup({
-        picker = "telescope",
+        picker = "select",
         lsp = {
           config = {
             cmd = { "zk", "lsp" },
@@ -531,5 +518,36 @@ return {
     "HakonHarnes/img-clip.nvim",
     cmd = { "PasteImage" },
     opts = {},
+  },
+  {
+    "brenoprata10/nvim-highlight-colors",
+    cmd = {
+      "HighlightColors",
+    },
+    config = function()
+      require("nvim-highlight-colors").setup({
+        ---@usage 'background'|'foreground'|'virtual'
+        render = "virtual",
+        virtual_symbol = "󱓻",
+      })
+      local last_status
+      vim.api.nvim_create_autocmd("InsertEnter", {
+        group = vim.api.nvim_create_augroup("hl_colors_i", { clear = true }),
+        pattern = "*",
+        callback = function()
+          last_status = require("nvim-highlight-colors").is_active()
+          require("nvim-highlight-colors").turnOff()
+        end,
+      })
+      vim.api.nvim_create_autocmd("InsertLeave", {
+        group = vim.api.nvim_create_augroup("hl_colors_n", { clear = true }),
+        pattern = "*",
+        callback = function()
+          if last_status then
+            require("nvim-highlight-colors").turnOn()
+          end
+        end,
+      })
+    end,
   },
 }

@@ -50,38 +50,11 @@ M.on_init = function(client, _)
 end
 M.capabilities = function(opt)
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.completion.completionItem = {
-    documentationFormat = { "markdown", "plaintext" },
-    snippetSupport = true,
-    preselectSupport = true,
-    insertReplaceSupport = true,
-    labelDetailsSupport = true,
-    deprecatedSupport = true,
-    commitCharactersSupport = true,
-    tagSupport = { valueSet = { 1 } },
-    resolveSupport = {
-      properties = {
-        "documentation",
-        "detail",
-        "additionalTextEdits",
-      },
-    },
-  }
   if opt then
     capabilities = vim.tbl_deep_extend("force", capabilities, opt)
   end
 
-  capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
-  if capabilities.textDocument.foldingRange then
-    capabilities.textDocument.foldingRange.dynamicRegistration = false
-    capabilities.textDocument.foldingRange.lineFoldingOnly = true
-  else
-    capabilities.textDocument.foldingRange = {
-      dynamicRegistration = false,
-      lineFoldingOnly = true,
-    }
-  end
-  return capabilities
+  return require("blink.cmp").get_lsp_capabilities(capabilities)
 end
 
 M.init_lsp_progress = function()
@@ -90,7 +63,7 @@ end
 
 function M.global_node_modules()
   local global_path = ""
-  if vfn.isdirectory("/opt/homebrew/") == 1 then
+  if vfn.isdirectory("/opt/homebrew/lib/node_modules") == 1 then
     global_path = "/opt/homebrew/lib/node_modules"
   elseif vfn.isdirectory("/usr/local/lib/node_modules") == 1 then
     global_path = "/usr/local/lib/node_modules"
