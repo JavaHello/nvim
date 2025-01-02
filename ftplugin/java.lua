@@ -15,6 +15,5 @@ if vim.env["JDTLS_NVIM_ENABLE"] == "Y" then
     jc.init = true
   end
   require("jdtls").start_or_attach(config, { dap = { config_overrides = {}, hotcodereplace = "auto" } })
+  require("spring_boot.launch").start(require("kide.lsp.spring-boot").config)
 end
-
-require("spring_boot.launch").start(require("kide.lsp.spring-boot").config)
