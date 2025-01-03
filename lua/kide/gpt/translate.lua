@@ -1,4 +1,8 @@
 local M = {}
+---@class kai.tools.TranslateRequest
+---@field text string
+---@field from string
+---@field to string
 
 local request_json = {
   messages = {
