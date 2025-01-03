@@ -299,7 +299,9 @@ if vim.fn.executable("fzy") == 1 then
         return tools.format_uri(filename)
       end
     end, function(b, _)
-      vim.cmd("b " .. b)
+      if b then
+        vim.cmd("b " .. b)
+      end
     end)
   end, { desc = "Find buffer" })
   map("n", "<leader>ff", function()
@@ -406,3 +408,10 @@ end, {
   nargs = 0,
   range = true,
 })
+map("n", "<A-k>", require("kide.tools.ai").toggle_gpt, { desc = "Gpt" })
+map("i", "<A-k>", require("kide.tools.ai").toggle_gpt, { desc = "Gpt" })
+map("v", "<A-k>", function()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+  local text = require("kide.tools").get_visual_selection()
+  require("kide.tools.ai").toggle_gpt(text)
+end, { desc = "Gpt" })

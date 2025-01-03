@@ -54,6 +54,25 @@ local faded_purple = "#8f3f71"
 local faded_aqua = "#427b58"
 local faded_orange = "#af3a03"
 
+-- term
+
+vim.g.terminal_color_0 = dark0 -- 黑色
+vim.g.terminal_color_1 = neutral_red -- 红色
+vim.g.terminal_color_2 = neutral_green -- 绿色
+vim.g.terminal_color_3 = neutral_yellow -- 黄色
+vim.g.terminal_color_4 = neutral_blue -- 蓝色
+vim.g.terminal_color_5 = neutral_purple -- 洋红色
+vim.g.terminal_color_6 = neutral_aqua -- 青色
+vim.g.terminal_color_7 = light4 -- 白色
+vim.g.terminal_color_8 = gray_245 -- 亮黑色
+vim.g.terminal_color_9 = bright_red -- 亮红色
+vim.g.terminal_color_10 = bright_green -- 亮绿色
+vim.g.terminal_color_11 = bright_yellow -- 亮黄色
+vim.g.terminal_color_12 = bright_blue -- 亮蓝色
+vim.g.terminal_color_13 = bright_purple -- 亮洋红色
+vim.g.terminal_color_14 = bright_aqua -- 亮青色
+vim.g.terminal_color_15 = light1 -- 亮白色
+
 -- 设置高亮
 local function hl(theme)
   for k, v in pairs(theme) do

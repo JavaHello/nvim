@@ -57,12 +57,14 @@ end
 ---@param callback fun(opt)
 local function handle_sse_events(cmd, callback)
   local job
+  local tmp = ""
   job = vim.fn.jobstart(cmd, {
     on_stdout = function(_, data, _)
       for _, value in ipairs(data) do
-        if vim.startswith(value, "data:") then
-          local _, _, text = string.find(value, "data: (.+)")
+        if vim.startswith(value, "data: ") then
+          local text = string.sub(value, 7, -1)
           if text == "[DONE]" then
+            tmp = ""
             callback({
               data = text,
               done = true,
@@ -71,6 +73,7 @@ local function handle_sse_events(cmd, callback)
           else
             local ok, resp_json = pcall(vim.fn.json_decode, text)
             if ok then
+              tmp = ""
               if resp_json.usage ~= nil and M.config.show_usage then
                 callback({
                   data = "\n",
@@ -94,9 +97,16 @@ local function handle_sse_events(cmd, callback)
                 })
               end
             else
+              tmp = text
+            end
+          end
+        else
+          if tmp ~= "" then
+            tmp = tmp .. value
+            local ok, resp_json = pcall(vim.fn.json_decode, tmp)
+            if ok then
               callback({
-                err = 1,
-                data = text,
+                data = resp_json.choices[1].delta.content,
                 job = job,
               })
             end
@@ -222,11 +232,13 @@ M.translate_float = function(request)
 end
 
 ------------------ chat ------------------
-local charwin = nil
-local charbuf = nil
+local chatwin = nil
+local chatbuf = nil
 local codebuf = nil
 local chatclosed = false
+local cursormoved = false
 local chatruning = false
+local winleave = false
 local chat_request_json = {
   messages = {
     {
@@ -267,10 +279,10 @@ M.chat_config = {
 }
 local close_gpt_win = function()
   chatruning = false
-  if charwin then
-    pcall(vim.api.nvim_win_close, charwin, true)
-    charwin = nil
-    charbuf = nil
+  if chatwin then
+    pcall(vim.api.nvim_win_close, chatwin, true)
+    chatwin = nil
+    chatbuf = nil
     codebuf = nil
     chat_request_json.messages = {
       {
@@ -284,35 +296,53 @@ end
 local function create_gpt_win()
   codebuf = vim.api.nvim_get_current_buf()
   vim.cmd("belowright new")
-  charwin = vim.api.nvim_get_current_win()
-  charbuf = vim.api.nvim_get_current_buf()
-  vim.bo[charbuf].buftype = "nofile"
-  vim.bo[charbuf].bufhidden = "wipe"
-  vim.bo[charbuf].buflisted = false
-  vim.bo[charbuf].swapfile = false
-  vim.bo[charbuf].filetype = "markdown"
+  chatwin = vim.api.nvim_get_current_win()
+  chatbuf = vim.api.nvim_get_current_buf()
+  vim.bo[chatbuf].buftype = "nofile"
+  vim.bo[chatbuf].bufhidden = "wipe"
+  vim.bo[chatbuf].buflisted = false
+  vim.bo[chatbuf].swapfile = false
+  vim.bo[chatbuf].filetype = "markdown"
   vim.api.nvim_put({ M.chat_config.user_title, "" }, "c", true, true)
   chatclosed = false
 
   vim.keymap.set("n", "q", function()
     chatclosed = true
     close_gpt_win()
-  end, { noremap = true, silent = true, buffer = charbuf })
+  end, { noremap = true, silent = true, buffer = chatbuf })
   vim.keymap.set("n", "<A-k>", function()
     M.gpt_chat()
-  end, { noremap = true, silent = true, buffer = charbuf })
+  end, { noremap = true, silent = true, buffer = chatbuf })
   vim.keymap.set("i", "<A-k>", function()
     vim.cmd("stopinsert")
     M.gpt_chat()
-  end, { noremap = true, silent = true, buffer = charbuf })
+  end, { noremap = true, silent = true, buffer = chatbuf })
 
-  vim.api.nvim_buf_create_user_command(charbuf, "GptSend", function()
+  vim.api.nvim_buf_create_user_command(chatbuf, "GptSend", function()
     M.gpt_chat()
   end, { desc = "Gpt Send" })
 
-  vim.api.nvim_create_autocmd("WinClosed", {
-    buffer = charbuf,
+  vim.api.nvim_create_autocmd("BufWipeout", {
+    buffer = chatbuf,
     callback = close_gpt_win,
+  })
+
+  vim.api.nvim_create_autocmd("WinClosed", {
+    buffer = chatbuf,
+    callback = close_gpt_win,
+  })
+  vim.api.nvim_create_autocmd("WinLeave", {
+    buffer = chatbuf,
+    callback = function()
+      winleave = true
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("CursorMoved", {
+    buffer = chatbuf,
+    callback = function()
+      cursormoved = true
+    end,
   })
 end
 
@@ -320,22 +350,28 @@ local function code_question(selection)
   if not selection then
     return
   end
-
-  local filetype = vim.bo[codebuf].filetype or "txt"
-  local filename = vim.fn.fnamemodify(vim.fn.bufname(codebuf), ":.")
-  local qs = {
-    "请解释`" .. filename .. "`文件中的这段代码",
-    "```" .. filetype,
-  }
+  local qs
+  ---@diagnostic disable-next-line: param-type-mismatch
+  if vim.api.nvim_buf_is_valid(codebuf) then
+    local filetype = vim.bo[codebuf].filetype or "text"
+    local filename = vim.fn.fnamemodify(vim.fn.bufname(codebuf), ":.")
+    qs = {
+      "请解释`" .. filename .. "`文件中的这段代码",
+      "```" .. filetype,
+    }
+  else
+    qs = {
+      "请解释这段代码",
+      "```",
+    }
+  end
   vim.list_extend(qs, selection)
   table.insert(qs, "```")
-  table.insert(qs, "")
-  vim.cmd("normal! G")
   vim.api.nvim_put(qs, "c", true, true)
 end
 
 M.toggle_gpt = function(selection)
-  if charwin then
+  if chatwin then
     close_gpt_win()
   else
     create_gpt_win()
@@ -344,7 +380,7 @@ M.toggle_gpt = function(selection)
 end
 
 M.gpt_chat = function()
-  if charwin == nil then
+  if chatwin == nil then
     create_gpt_win()
   end
   if chatruning then
@@ -353,7 +389,8 @@ M.gpt_chat = function()
     return
   end
   chatruning = true
-  local list = vim.api.nvim_buf_get_lines(charbuf, 0, -1, false)
+  ---@diagnostic disable-next-line: param-type-mismatch
+  local list = vim.api.nvim_buf_get_lines(chatbuf, 0, -1, false)
   local json = chat_request_json
   json.messages[1].content = M.chat_config.system_prompt
   -- 1 user, 2 assistant
@@ -378,7 +415,7 @@ M.gpt_chat = function()
     end
   end
   -- 跳转到最后一行
-  vim.cmd("normal! G")
+  vim.cmd("normal! G$")
   vim.api.nvim_put({ "", M.chat_config.system_title, "" }, "l", true, true)
 
   local callback = function(opt)
@@ -388,12 +425,26 @@ M.gpt_chat = function()
       vim.fn.jobstop(opt.job)
       return
     end
+    if opt.err == 1 then
+      vim.notify("AI respond Error: " .. opt.data, vim.log.levels.WARN)
+      return
+    end
+    if winleave then
+      -- 防止回答问题时光标已经移动走了
+      vim.api.nvim_set_current_win(chatwin)
+      winleave = false
+    end
+    if cursormoved then
+      -- 防止光标移动打乱回答顺序, 总是移动到最后一行
+      vim.cmd("normal! G$")
+      cursormoved = false
+    end
     if done then
       vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
       chatruning = false
       return
     end
-    if charbuf and vim.api.nvim_buf_is_valid(charbuf) then
+    if chatbuf and vim.api.nvim_buf_is_valid(chatbuf) then
       if data:match("\n") then
         local ln = vim.split(data, "\n")
         vim.api.nvim_put(ln, "c", true, true)

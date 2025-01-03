@@ -440,10 +440,6 @@ end
 local me = require("kide.melspconfig")
 M.config.capabilities = me.capabilities()
 M.config.on_init = me.on_init
-local spring_boot = vim.env["SPRING_BOOT_NVIM_ENABLE"] == "Y"
-if spring_boot then
-  vim.list_extend(bundles, require("spring_boot").java_extensions())
-end
 
 M.config.on_attach = function(client, buffer)
   local function desc_opts(desc)
