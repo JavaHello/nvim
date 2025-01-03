@@ -169,7 +169,5 @@ autocmd("LspDetach", {
   end,
 })
 
-require("kide.tools.maven").setup()
-require("kide.tools.plantuml").setup()
 
 require("kide.melspconfig").init_lsp_progress()

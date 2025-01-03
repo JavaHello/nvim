@@ -429,3 +429,7 @@ end, {
   nargs = 0,
   range = false,
 })
+
+require("kide.tools.maven").setup()
+require("kide.tools.plantuml").setup()
+require("kide.tools.curl").setup()
