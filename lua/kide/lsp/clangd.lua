@@ -23,7 +23,13 @@ M.config = {
     },
     offsetEncoding = { "utf-8", "utf-16" },
   }),
-  on_attach = me.on_attach,
+  on_attach = function(client, bufnr)
+    local create_command = vim.api.nvim_buf_create_user_command
+    create_command(bufnr, "DapConfigGdb", me.dap_gdb, {
+      nargs = 0,
+    })
+    me.on_attach(client, bufnr)
+  end,
   on_init = me.on_init,
 }
 

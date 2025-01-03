@@ -415,3 +415,19 @@ map("v", "<A-k>", function()
   local text = require("kide.tools").get_visual_selection()
   require("kide.tools.ai").toggle_gpt(text)
 end, { desc = "Gpt" })
+
+command("LspInfo", function(_)
+  require("kide.lspui").open_info()
+end, {
+  desc = "Gpt",
+  nargs = 0,
+  range = false,
+})
+command("LspLog", function(_)
+  vim.cmd("tabedit " .. vim.lsp.log.get_filename())
+  vim.cmd("normal! G")
+end, {
+  desc = "Gpt",
+  nargs = 0,
+  range = false,
+})

@@ -378,32 +378,6 @@ return {
     config = function() end,
   },
 
-  -- rust
-  {
-    "mrcjkb/rustaceanvim",
-    version = "^5", -- Recommended
-    lazy = false, -- This plugin is already lazy
-    init = function()
-      vim.g.rustaceanvim = {
-        server = {
-          on_attach = function(client, buffer)
-            -- 配色方案错误, 禁用 semanticTokensProvider
-            client.server_capabilities.semanticTokensProvider = nil
-            require("kide.melspconfig").on_attach(client, buffer)
-            vim.keymap.set("n", "<leader>ca", function()
-              vim.cmd.RustLsp("codeAction")
-            end, { silent = true, buffer = buffer, desc = "Rust Code Action" })
-          end,
-        },
-        tools = {
-          hover_actions = {
-            replace_builtin_hover = false,
-          },
-        },
-      }
-    end,
-  },
-
   -- databases
   {
     "tpope/vim-dadbod",
