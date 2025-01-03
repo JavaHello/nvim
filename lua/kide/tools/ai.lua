@@ -61,6 +61,10 @@ local function handle_sse_events(cmd, callback)
   job = vim.fn.jobstart(cmd, {
     on_stdout = function(_, data, _)
       for _, value in ipairs(data) do
+        -- 忽略 SSE 换行输出
+        if value == "" then
+          goto continue
+        end
         if vim.startswith(value, "data: ") then
           local text = string.sub(value, 7, -1)
           if text == "[DONE]" then
@@ -110,8 +114,11 @@ local function handle_sse_events(cmd, callback)
                 job = job,
               })
             end
+          else
+            vim.notify("SSE parse error: " .. value, vim.log.levels.WARN)
           end
         end
+          ::continue::
       end
     end,
     on_stderr = function(_, _, _) end,
