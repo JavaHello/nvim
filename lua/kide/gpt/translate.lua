@@ -65,6 +65,7 @@ local max_width = 120
 local max_height = 40
 
 M.translate_float = function(request)
+  local codebuf = vim.api.nvim_get_current_buf()
   local ctext = vim.fn.split(request.text, "\n")
   local width = math.min(max_width, vim.fn.strdisplaywidth(ctext[1]))
   for _, line in ipairs(ctext) do
@@ -85,9 +86,19 @@ M.translate_float = function(request)
     border = "rounded", -- 窗口边框样式
   }
   local buf = vim.api.nvim_create_buf(false, true)
+  vim.bo[buf].buftype = "nofile"
+  vim.bo[buf].bufhidden = "wipe"
+  vim.bo[buf].buflisted = false
+  vim.bo[buf].swapfile = false
   local win = vim.api.nvim_open_win(buf, true, opts)
   vim.wo[win].number = false -- 不显示行号
   vim.wo[win].wrap = true
+  if vim.api.nvim_buf_is_valid(codebuf) then
+    local filetype = vim.bo[codebuf].filetype
+    if filetype == "markdown" then
+      vim.bo[buf].filetype = "markdown"
+    end
+  end
 
   local closed = false
   vim.keymap.set("n", "q", function()
