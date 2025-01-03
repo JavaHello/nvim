@@ -87,6 +87,7 @@ M.translate_float = function(request)
   local buf = vim.api.nvim_create_buf(false, true)
   local win = vim.api.nvim_open_win(buf, true, opts)
   vim.wo[win].number = false -- 不显示行号
+  vim.wo[win].wrap = true
 
   local closed = false
   vim.keymap.set("n", "q", function()
@@ -107,29 +108,35 @@ M.translate_float = function(request)
       vim.bo[buf].modifiable = false
       return
     end
-    -- 判断是否换行符
-    if data:match("\n") then
-      curlines = 0
-    else
-      curlines = curlines + vim.fn.strdisplaywidth(data)
-    end
 
-    -- 自动调整窗口宽度
-    -- 出现在中文翻译为英文时, 英文长度会超过中文
-    if curlines > width and curlines < max_width then
-      width = curlines
-      if vim.api.nvim_win_is_valid(win) then
-        vim.api.nvim_win_set_width(win, width)
-      end
-    end
-
+    local put_data = {}
     if vim.api.nvim_buf_is_valid(buf) then
       if data:match("\n") then
-        local ln = vim.split(data, "\n")
-        vim.api.nvim_put(ln, "c", true, true)
+        put_data = vim.split(data, "\n")
       else
-        vim.api.nvim_put({ data }, "c", true, true)
+        put_data = { data }
       end
+      for i, v in pairs(put_data) do
+        if i > 1 then
+          curlines = 0
+        end
+        curlines = curlines + vim.fn.strdisplaywidth(v)
+        if curlines > width then
+          if curlines < max_width then
+            width = curlines
+            if vim.api.nvim_win_is_valid(win) then
+              vim.api.nvim_win_set_width(win, width)
+            end
+          else
+            curlines = 0
+            height = height + 1
+            if vim.api.nvim_win_is_valid(win) then
+              vim.api.nvim_win_set_height(win, height)
+            end
+          end
+        end
+      end
+      vim.api.nvim_put(put_data, "c", true, true)
     end
   end
   M.translate(request, callback)
