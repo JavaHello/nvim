@@ -384,7 +384,7 @@ local function creat_trans_command(name, from, to)
     else
       text = opt.args
     end
-    require("kide.tools.ai").translate_float({ text = text, from = from, to = to })
+    require("kide.gpt.translate").translate_float({ text = text, from = from, to = to })
   end, {
     desc = "translate",
     nargs = "?",
@@ -408,12 +408,12 @@ end, {
   nargs = 0,
   range = true,
 })
-map("n", "<A-k>", require("kide.tools.ai").toggle_gpt, { desc = "Gpt" })
-map("i", "<A-k>", require("kide.tools.ai").toggle_gpt, { desc = "Gpt" })
+map("n", "<A-k>", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
+map("i", "<A-k>", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
 map("v", "<A-k>", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
-  require("kide.tools.ai").toggle_gpt(text)
+  require("kide.gpt.chat").toggle_gpt(text)
 end, { desc = "Gpt" })
 
 command("LspInfo", function(_)
