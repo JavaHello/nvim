@@ -235,7 +235,7 @@ if vim.fn.executable("find") == 1 then
     nargs = 1,
   })
 end
-command("CloseOtherBufs", function(opt)
+command("CloseOtherBufs", function(_)
   local bufs = vim.api.nvim_list_bufs()
   local cur = vim.api.nvim_get_current_buf()
   for _, v in ipairs(bufs) do
@@ -294,10 +294,8 @@ if vim.fn.executable("fzy") == 1 then
     end, vim.api.nvim_list_bufs())
     local tools = require("kide")
     fzy.pick_one(bufs, "Buffers > ", function(item)
-      if item then
-        local filename = vim.uri_from_bufnr(item)
-        return tools.format_uri(filename)
-      end
+      local filename = vim.uri_from_bufnr(item)
+      return tools.format_uri(filename)
     end, function(b, _)
       if b then
         vim.cmd("b " .. b)
@@ -402,7 +400,7 @@ command("Gpt", function(opt)
   if opt.range > 0 then
     text = require("kide.tools").get_visual_selection()
   end
-  require("kide.tools.ai").toggle_gpt(text)
+  require("kide.gpt.chat").toggle_gpt(text)
 end, {
   desc = "Gpt",
   nargs = 0,
