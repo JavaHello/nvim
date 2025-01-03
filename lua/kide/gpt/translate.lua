@@ -95,7 +95,29 @@ M.translate_float = function(request)
     vim.api.nvim_win_close(win, true)
   end, { noremap = true, silent = true, buffer = buf })
 
-  local curlines = 0
+  vim.api.nvim_create_autocmd("BufWipeout", {
+    buffer = buf,
+    callback = function()
+      closed = true
+      pcall(vim.api.nvim_win_close, win, true)
+    end,
+  })
+  vim.api.nvim_create_autocmd("WinClosed", {
+    buffer = buf,
+    callback = function()
+      closed = true
+    end,
+  })
+  vim.api.nvim_create_autocmd("WinLeave", {
+    buffer = buf,
+    callback = function()
+      closed = true
+      pcall(vim.api.nvim_win_close, win, true)
+    end,
+  })
+
+  local curlinelen = 0
+  local count_line = 1
   local callback = function(opt)
     local data = opt.data
     local done = opt.done
@@ -118,21 +140,25 @@ M.translate_float = function(request)
       end
       for i, v in pairs(put_data) do
         if i > 1 then
-          curlines = 0
+          curlinelen = 0
+          count_line = count_line + 1
         end
-        curlines = curlines + vim.fn.strdisplaywidth(v)
-        if curlines > width then
-          if curlines < max_width then
-            width = curlines
+        curlinelen = curlinelen + vim.fn.strdisplaywidth(v)
+        if curlinelen > width then
+          if curlinelen < max_width or width ~= max_width then
+            width = math.min(curlinelen, max_width)
             if vim.api.nvim_win_is_valid(win) then
               vim.api.nvim_win_set_width(win, width)
             end
           else
-            curlines = 0
-            height = height + 1
-            if vim.api.nvim_win_is_valid(win) then
-              vim.api.nvim_win_set_height(win, height)
-            end
+            curlinelen = 0
+            count_line = count_line + 1
+          end
+        end
+        if count_line > height and count_line <= max_height then
+          height = count_line
+          if vim.api.nvim_win_is_valid(win) then
+            vim.api.nvim_win_set_height(win, height)
           end
         end
       end
