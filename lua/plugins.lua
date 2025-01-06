@@ -266,10 +266,11 @@ return {
     dependencies = { "theHamsta/nvim-dap-virtual-text" },
     config = function()
       local dap = require("dap")
+      dap.defaults.fallback.focus_terminal = true
       require("nvim-dap-virtual-text").setup({})
-      dap.listeners.after.event_initialized["dapui_config"] = function()
-        dap.repl.open()
-      end
+      -- dap.listeners.after.event_initialized["dapui_config"] = function()
+      --   dap.repl.open()
+      -- end
     end,
   },
   {

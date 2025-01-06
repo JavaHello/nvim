@@ -37,6 +37,7 @@ function M.open_info()
       "  filetype: " .. vim.inspect(client.config.filetypes),
       "  root_dir: " .. vim.inspect(client.config.root_dir),
       "  cmd: " .. vim.inspect(client.config.cmd),
+      "",
     })
   end
   vim.api.nvim_put(client_info, "c", true, true)

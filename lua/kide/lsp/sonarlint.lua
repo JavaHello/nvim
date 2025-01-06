@@ -1,7 +1,7 @@
 local M = {}
 
 M.setup = function()
-  local vscode = require("kide.vscode")
+  local vscode = require("kide.tools.vscode")
   local utils = require("kide.tools")
   local sonarlint_ls = vscode.find_one("/sonarsource.sonarlint-vscode*/server/sonarlint-ls.jar")
   if not sonarlint_ls then

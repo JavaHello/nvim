@@ -67,6 +67,7 @@ autocmd("FileType", {
   pattern = {
     "oil",
     "DressingSelect",
+    "dap-*"
   },
   callback = function(event)
     vim.keymap.set("n", "q", "<cmd>bd<cr>", { buffer = event.buf, silent = true })
@@ -169,5 +170,14 @@ autocmd("LspDetach", {
   end,
 })
 
+autocmd("TermOpen", {
+  group = augroup("close_with_q_term"),
+  pattern = "*",
+  callback = function(event)
+    -- mac 下 t 模式执行 bd! dap 终端会导致 nvim 退出
+    -- 这里使用 n 模式下执行
+    vim.keymap.set("n", "q", "<cmd>bd!<cr>", { buffer = event.buf, silent = true })
+  end,
+})
 
 require("kide.melspconfig").init_lsp_progress()

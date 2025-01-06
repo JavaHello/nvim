@@ -26,17 +26,18 @@ M.setup = function()
         })
       end
     else
-      exec({
+      local cmd = {
         "curl",
         "-w",
         outfmt,
-        opt.args,
-      })
+      }
+      vim.list_extend(cmd, vim.split(opt.args, " "))
+      exec(cmd)
     end
   end, {
     nargs = "*",
     complete = function()
-      return { "-vvv" }
+      return { "-vvv", "--no-sessionid" }
     end,
   })
 end

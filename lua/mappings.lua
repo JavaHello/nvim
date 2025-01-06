@@ -42,18 +42,68 @@ map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
 -- dap
-map("n", "<leader>db", "<CMD>lua require'dap'.toggle_breakpoint()<CR>", { desc = "Dap toggle breakpoint" })
-map(
-  "n",
-  "<leader>dB",
-  "<CMD>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>",
-  { desc = "Dap breakpoint condition" }
-)
-map("n", "<leader>dp", "<CMD>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>", {
-  desc = "Dap Log point message",
+map("n", "<F5>", function()
+  require("dap").continue()
+end, {
+  desc = "Dap continue",
 })
-map("n", "<leader>dl", "<CMD>lua require'dap'.run_last()<CR>", {
+map("n", "<F10>", function()
+  require("dap").step_over()
+end, {
+  desc = "Dap step_over",
+})
+map("n", "<F11>", function()
+  require("dap").step_into()
+end, {
+  desc = "Dap step_into",
+})
+map("n", "<F12>", function()
+  require("dap").step_out()
+end, {
+  desc = "Dap step_out",
+})
+map("n", "<leader>db", function()
+  require("dap").toggle_breakpoint()
+end, { desc = "Dap toggle breakpoint" })
+map("n", "<leader>dB", function()
+  require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
+end, { desc = "Dap breakpoint condition" })
+map("n", "<leader>dl", function()
+  require("dap").run_last()
+end, {
   desc = "Dap run last",
+})
+map("n", "<Leader>lp", function()
+  require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
+end, {
+  desc = "Dap set_breakpoint",
+})
+map("n", "<Leader>dr", function()
+  require("dap").repl.open()
+end, {
+  desc = "Dap repl open",
+})
+map({ "n", "v" }, "<Leader>dh", function()
+  require("dap.ui.widgets").hover()
+end, {
+  desc = "Dap hover",
+})
+map({ "n", "v" }, "<Leader>dp", function()
+  require("dap.ui.widgets").preview()
+end, {
+  desc = "Dap preview",
+})
+map("n", "<Leader>df", function()
+  local widgets = require("dap.ui.widgets")
+  widgets.centered_float(widgets.frames)
+end, {
+  desc = "Dap centered_float frames",
+})
+map("n", "<Leader>dv", function()
+  local widgets = require("dap.ui.widgets")
+  widgets.centered_float(widgets.scopes)
+end, {
+  desc = "Dap centered_float scopes",
 })
 
 map("n", "<leader>e", "<cmd>NvimTreeFocus<CR>", { desc = "files", silent = true, noremap = true })
@@ -70,10 +120,10 @@ command("TaskRunLast", function()
   require("kide.term").input_run(true)
 end, { desc = "Restart Last Task" })
 
-map("n", "<C-l>", function()
+map("n", "<A-l>", function()
   require("conform").format({ lsp_fallback = true })
 end, { desc = "format file" })
-map("v", "<C-l>", function()
+map("v", "<A-l>", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local start_pos = vim.api.nvim_buf_get_mark(0, "<")
   local end_pos = vim.api.nvim_buf_get_mark(0, ">")
