@@ -446,14 +446,21 @@ creat_trans_command("TransZhEn", "中文", "英语")
 creat_trans_command("TransIdZh", "印尼语", "中文")
 
 command("Gpt", function(opt)
-  local text = nil
+  local q
+  local code
   if opt.range > 0 then
-    text = require("kide.tools").get_visual_selection()
+    code = require("kide.tools").get_visual_selection()
   end
-  require("kide.gpt.chat").toggle_gpt(text)
+  if opt.args and opt.args ~= "" then
+    q = opt.args
+  end
+  require("kide.gpt.chat").toggle_gpt({
+    code = code,
+    question = q,
+  })
 end, {
   desc = "Gpt",
-  nargs = 0,
+  nargs = "*",
   range = true,
 })
 map("n", "<A-k>", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
@@ -461,13 +468,15 @@ map("i", "<A-k>", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
 map("v", "<A-k>", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
-  require("kide.gpt.chat").toggle_gpt(text)
+  require("kide.gpt.chat").toggle_gpt({
+    code = text,
+  })
 end, { desc = "Gpt" })
 
 command("LspInfo", function(_)
   require("kide.lspui").open_info()
 end, {
-  desc = "Gpt",
+  desc = "Lsp info",
   nargs = 0,
   range = false,
 })
@@ -475,7 +484,7 @@ command("LspLog", function(_)
   vim.cmd("tabedit " .. vim.lsp.log.get_filename())
   vim.cmd("normal! G")
 end, {
-  desc = "Gpt",
+  desc = "Lsp log",
   nargs = 0,
   range = false,
 })

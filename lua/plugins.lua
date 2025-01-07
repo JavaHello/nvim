@@ -106,12 +106,15 @@ return {
           return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
         end,
       },
-
       renderer = {
         root_folder_label = false,
-        highlight_git = true,
+        highlight_git = false,
+        highlight_diagnostics = false,
         indent_markers = { enable = true },
         icons = {
+          show = {
+            git = false,
+          },
           glyphs = {
             default = "󰈚",
             folder = {
@@ -428,13 +431,6 @@ return {
           },
         },
       })
-    end,
-  },
-  {
-    "ray-x/go.nvim",
-    ft = { "go", "gomod" },
-    config = function()
-      require("go").setup()
     end,
   },
   {

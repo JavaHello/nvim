@@ -140,15 +140,27 @@ local function code_question(selection)
   end
   vim.list_extend(qs, selection)
   table.insert(qs, "```")
+  table.insert(qs, "")
   vim.api.nvim_put(qs, "c", true, true)
 end
 
-M.toggle_gpt = function(selection)
+---@class kai.ai.GptChatParam
+---@field code? string[]
+---@field question? string
+
+---@param param kai.ai.GptChatParam
+M.toggle_gpt = function(param)
+  param = param or {}
   if state.chatwin then
     close_gpt_win()
   else
     create_gpt_win()
-    code_question(selection)
+    if param.code then
+      code_question(param.code)
+    end
+    if param.question then
+      vim.api.nvim_put({ param.question, "" }, "c", true, true)
+    end
   end
 end
 
@@ -157,7 +169,7 @@ M.gpt_chat = function()
     create_gpt_win()
   end
   if state.chatruning then
-    vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
+    vim.api.nvim_put({ "", M.chat_config.user_title, "" }, "c", true, true)
     state.chatruning = false
     return
   end
