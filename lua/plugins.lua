@@ -56,6 +56,7 @@ return {
         python = { "black" },
         bash = { "shfmt" },
         sh = { "shfmt" },
+        toml = { "taplo" },
       },
     },
   },

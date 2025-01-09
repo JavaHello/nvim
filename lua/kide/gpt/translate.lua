@@ -37,9 +37,15 @@ local request_json = {
 local function trans_system_prompt(request)
   local from = request.from
   if request.from == "auto" then
-    return "你会得到一个需要你检测语言的文本， 将他翻译为" .. request.to .. "。"
+    return "你会得到一个需要你检测语言的文本， 将他翻译为"
+      .. request.to
+      .. "。我只需要你翻译不要解释或回答我提供的文本"
   end
-  return "你会得到一个" .. from .. "文本， 将他翻译为" .. request.to .. "。"
+  return "你会得到一个"
+    .. from
+    .. "文本， 将他翻译为"
+    .. request.to
+    .. "。我只需要你翻译不要解释或回答我提供的文本"
 end
 
 ---@param request kai.tools.TranslateRequest
