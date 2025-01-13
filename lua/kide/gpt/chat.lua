@@ -8,6 +8,7 @@ local state = {
   chatruning = false,
   winleave = false,
 }
+local chat_last = {}
 
 local chat_request_json = {
   messages = {
@@ -147,6 +148,7 @@ end
 ---@class kai.ai.GptChatParam
 ---@field code? string[]
 ---@field question? string
+---@field last? boolean
 
 ---@param param kai.ai.GptChatParam
 M.toggle_gpt = function(param)
@@ -155,6 +157,10 @@ M.toggle_gpt = function(param)
     close_gpt_win()
   else
     create_gpt_win()
+    if param.last then
+      M.gpt_last()
+      return
+    end
     if param.code then
       code_question(param.code)
     end
@@ -227,6 +233,7 @@ M.gpt_chat = function()
     if done then
       vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
       state.chatruning = false
+      chat_last = vim.api.nvim_buf_get_lines(state.chatbuf, 0, -1, true)
       return
     end
     if state.chatbuf and vim.api.nvim_buf_is_valid(state.chatbuf) then
@@ -240,6 +247,13 @@ M.gpt_chat = function()
   end
 
   require("kide.gpt.sse").request(json, callback)
+end
+
+M.gpt_last = function(buf)
+  if chat_last and #chat_last > 0 then
+    vim.api.nvim_buf_set_lines(buf or state.chatbuf, 0, -1, true, chat_last)
+    vim.cmd("normal! G$")
+  end
 end
 
 return M

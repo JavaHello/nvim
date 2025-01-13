@@ -233,11 +233,6 @@ return {
   {
     "JavaHello/spring-boot.nvim",
     lazy = true,
-    init = function()
-      vim.g.spring_boot = {
-        autocmd = false,
-      }
-    end,
     dependencies = {
       "mfussenegger/nvim-jdtls",
     },

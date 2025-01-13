@@ -1,6 +1,7 @@
 local M = {}
 local me = require("kide.melspconfig")
-require("spring_boot.launch").update_config({
+
+M.config = require("spring_boot.launch").update_ls_config(require("spring_boot").setup({
   server = {
     on_attach = me.on_attach,
     on_init = function(client, ctx)
@@ -9,7 +10,7 @@ require("spring_boot.launch").update_config({
     end,
     capabilities = me.capabilities(),
   },
-})
-M.config = require("spring_boot.launch").ls_config
+  autocmd = false,
+}))
 
 return M

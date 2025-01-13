@@ -472,6 +472,15 @@ map("v", "<A-k>", function()
     code = text,
   })
 end, { desc = "Gpt" })
+command("GptLast", function(opt)
+  require("kide.gpt.chat").toggle_gpt({
+    last = true,
+  })
+end, {
+  desc = "Gpt",
+  nargs = "*",
+  range = true,
+})
 
 command("LspInfo", function(_)
   require("kide.lspui").open_info()
