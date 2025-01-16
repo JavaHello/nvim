@@ -88,6 +88,9 @@ hl({
   CursorLineNr = {},
   WildMenu = { fg = bright_red, bg = bright_yellow },
 
+  WinBar = {},
+  WinBarNC = {},
+
   WinSeparator = { fg = gray_ext2 },
   Pmenu = { fg = light2, bg = dark0 },
   PmenuSel = { fg = dark0, bg = bright_blue },

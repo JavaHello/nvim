@@ -36,7 +36,7 @@ end
 local vscode = require("kide.tools.vscode")
 
 local function get_jol_jar()
-  return env.JOL_JAR or "/opt/software/java/jol-cli-0.16-full.jar"
+  return env.JOL_JAR or "/opt/software/java/jol-cli-0.17-full.jar"
 end
 
 -- see https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
@@ -59,6 +59,7 @@ local ExecutionEnvironment = {
   JAVASE_20 = "JavaSE-20",
   JAVASE_21 = "JavaSE-21",
   JAVASE_22 = "JavaSE-22",
+  JAVASE_23 = "JavaSE-23",
 }
 
 local function fglob(path)
