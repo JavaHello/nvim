@@ -6,7 +6,7 @@ if vim.env["JDTLS_NVIM_ENABLE"] == "Y" then
   local spring_boot = vim.env["SPRING_BOOT_NVIM_ENABLE"] == "Y"
   local jc = require("kide.lsp.jdtls")
   local config
-  -- 防止 start_or_attach 重复修复 config
+  -- 防止 start_or_attach 重复修改 config
   if jc.init then
     config = {
       cmd = {},
