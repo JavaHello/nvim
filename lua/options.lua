@@ -156,7 +156,3 @@ vim.opt.backup = false
 -- 2 一直显示（99% 情况下不需要)
 vim.opt.showtabline = 1
 vim.opt.tabline = "%!v:lua.require('kide').tabline()"
-
-function vim.ui.select(items, opts, on_choice) -- luacheck: ignore 122
-  return require("kide.fzy").pick_one(items, opts.prompt .. "  ", opts.format_item, on_choice)
-end

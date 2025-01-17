@@ -302,94 +302,44 @@ end, {
   nargs = 0,
 })
 
-if vim.fn.executable("fzy") == 1 then
-  command("Rg", function(opt)
-    local fzy = require("kide.fzy")
-    fzy.execute("rg --no-heading --trim -nH --smart-case " .. opt.args, fzy.sinks.edit_live_grep, "Grep  ", opt.args)
-  end, {
-    desc = "Grep",
-    nargs = 1,
-  })
+map("n", "<leader>fq", function()
+  local builtin = require("telescope.builtin")
+  builtin.quickfix()
+end, { desc = "Quickfix" })
 
-  map("n", "<leader>fq", function()
-    local fzy = require("kide.fzy")
-    local qfl = vim.fn.getqflist()
-    local tools = require("kide")
+map("n", "<leader>fb", function()
+  local builtin = require("telescope.builtin")
+  builtin.buffers()
+end, { desc = "Find buffer" })
+map("n", "<leader>ff", function()
+  local builtin = require("telescope.builtin")
+  builtin.find_files()
+end, { desc = "Find files" })
 
-    fzy.pick_one(qfl, "Quickfix > ", function(item)
-      local filename = vim.uri_from_bufnr(item.bufnr)
-      return tools.format_uri(filename) .. ": " .. item.text
-    end, function(qf, _)
-      if qf then
-        vim.cmd("b " .. qf.bufnr)
-        vim.api.nvim_win_set_cursor(0, { qf.lnum, qf.col })
-      end
-    end)
-  end, { desc = "Quickfix" })
+map("n", "<leader>fd", function()
+  local builtin = require("telescope.builtin")
+  builtin.diagnostics()
+end, { desc = "Find diagnostics" })
 
-  map("n", "<leader>fo", function()
-    local fzy = require("kide.fzy")
-    fzy.execute("fd", function(choice)
-      if choice and vim.trim(choice) ~= "" then
-        vim.print(choice)
-        require("kide.tools").open_fn(choice)
-      end
-    end, "SystemOpen > ")
-  end, { desc = "System Open" })
+map("v", "<leader>ff", function()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+  local text = require("kide.tools").get_visual_selection()
+  local param = text[1]
+  local builtin = require("telescope.builtin")
+  builtin.find_files({ default_text = param })
+end, { desc = "find files", silent = true, noremap = true })
 
-  map("n", "<leader>fb", function()
-    local fzy = require("kide.fzy")
-    local bufs = vim.tbl_filter(function(b)
-      return vim.bo[b].buflisted
-    end, vim.api.nvim_list_bufs())
-    local tools = require("kide")
-    fzy.pick_one(bufs, "Buffers > ", function(item)
-      local filename = vim.uri_from_bufnr(item)
-      return tools.format_uri(filename)
-    end, function(b, _)
-      if b then
-        vim.cmd("b " .. b)
-      end
-    end)
-  end, { desc = "Find buffer" })
-  map("n", "<leader>ff", function()
-    local fzy = require("kide.fzy")
-    fzy.execute("fd --type file", fzy.sinks.edit_file, "Files  ")
-  end, { desc = "Find files" })
-
-  map("v", "<leader>ff", function()
-    vim.api.nvim_feedkeys("\027", "xt", false)
-    local text = require("kide.tools").get_visual_selection()
-    local fzy = require("kide.fzy")
-    local param = vim.fn.shellescape(text[1])
-    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "Files  ", text[1])
-  end, { desc = "fzy find files", silent = true, noremap = true })
-
-  map("v", "<leader>fw", function()
-    vim.api.nvim_feedkeys("\027", "xt", false)
-    local text = require("kide.tools").get_visual_selection()
-    local fzy = require("kide.fzy")
-    local param = vim.fn.shellescape(text[1])
-    fzy.execute("rg --no-heading --trim -nH --smart-case " .. param, fzy.sinks.edit_live_grep, "Grep  ", text[1])
-  end, { desc = "fzy live grep", silent = true, noremap = true })
-  map("n", "<leader>fw", function()
-    local ok, text = pcall(vim.fn.input, "rg: ")
-    if ok and text and text ~= "" then
-      local fzy = require("kide.fzy")
-      local param = vim.fn.shellescape(text)
-      fzy.execute("rg --no-heading --trim -nH --smart-case " .. param, fzy.sinks.edit_live_grep, "Grep  ", text)
-    end
-  end, { desc = "fzy live grep", silent = true, noremap = true })
-
-  command("FzyFiles", function(opt)
-    local fzy = require("kide.fzy")
-    local param = vim.fn.shellescape(opt.args)
-    fzy.execute("fd --type file " .. param, fzy.sinks.edit_file, "  ")
-  end, {
-    desc = "find files",
-    nargs = "?",
-  })
-end
+map("v", "<leader>fw", function()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+  local text = require("kide.tools").get_visual_selection()
+  local param = text[1]
+  local builtin = require("telescope.builtin")
+  builtin.live_grep({ default_text = param })
+end, { desc = "live grep", silent = true, noremap = true })
+map("n", "<leader>fw", function()
+  local builtin = require("telescope.builtin")
+  builtin.live_grep()
+end, { desc = "live grep", silent = true, noremap = true })
 
 if vim.base64 then
   command("Base64Encode", function(opt)

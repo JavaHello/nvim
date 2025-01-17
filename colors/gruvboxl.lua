@@ -206,4 +206,6 @@ hl({
 
   BlinkCmpMenuBorder = { link = "FloatBorder" },
   BlinkCmpDocBorder = { link = "FloatBorder" },
+
+  TelescopeBorder = { fg = gray_245 },
 })

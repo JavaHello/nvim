@@ -517,4 +517,53 @@ return {
       })
     end,
   },
+
+  {
+    "nvim-telescope/telescope.nvim",
+    branch = "0.1.x",
+    lazy = true,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope-fzy-native.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+    },
+    config = function()
+      require("telescope").setup({
+        defaults = {
+          results_title = false,
+          sorting_strategy = "ascending",
+          layout_strategy = "center",
+          layout_config = {
+            center = {
+              preview_cutoff = 1,
+              anchor = "S",
+              height = 0.45,
+              width = 999999999,
+            },
+          },
+          border = true,
+          borderchars = {
+            prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
+            results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
+            preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+          },
+        },
+        extensions = {
+          fzy_native = {
+            override_generic_sorter = true,
+            override_file_sorter = true,
+          },
+          ["ui-select"] = {
+            require("telescope.themes").get_dropdown({
+              layout_config = {
+                anchor = "",
+              },
+            }),
+          },
+        },
+      })
+      require("telescope").load_extension("fzy_native")
+      require("telescope").load_extension("ui-select")
+    end,
+  },
 }
