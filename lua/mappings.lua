@@ -106,7 +106,9 @@ end, {
   desc = "Dap centered_float scopes",
 })
 
-map("n", "<leader>e", "<cmd>NvimTreeFocus<CR>", { desc = "files", silent = true, noremap = true })
+map("n", "<leader>e", function()
+  require("kide.yazi").yazi("edit")
+end, { desc = "files", silent = true, noremap = true })
 
 -- outline
 map("n", "<leader>o", "<CMD>Outline<CR>", { desc = "Symbols Outline" })

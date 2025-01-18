@@ -61,77 +61,6 @@ return {
     },
   },
   {
-    "nvim-tree/nvim-tree.lua",
-    cmd = {
-      "NvimTreeFocus",
-    },
-    opts = {
-
-      filters = { dotfiles = false },
-      disable_netrw = true,
-      hijack_cursor = true,
-      sync_root_with_cwd = true,
-      update_focused_file = {
-        enable = true,
-        update_root = false,
-      },
-      actions = {
-        open_file = {
-          quit_on_open = true,
-        },
-      },
-      view = {
-        signcolumn = "no",
-        float = {
-          enable = true,
-          open_win_config = function()
-            local screen_w = vim.opt.columns:get()
-            local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
-            local window_w = screen_w * WIDTH_RATIO
-            local window_h = screen_h * HEIGHT_RATIO
-            local window_w_int = math.floor(window_w)
-            local window_h_int = math.floor(window_h)
-            local center_x = (screen_w - window_w) / 2
-            local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
-            return {
-              border = "rounded",
-              relative = "editor",
-              row = center_y,
-              col = center_x,
-              width = window_w_int,
-              height = window_h_int,
-            }
-          end,
-        },
-        width = function()
-          return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
-        end,
-      },
-      renderer = {
-        root_folder_label = false,
-        highlight_git = false,
-        highlight_diagnostics = false,
-        indent_markers = { enable = true },
-        icons = {
-          show = {
-            git = false,
-          },
-          glyphs = {
-            default = "󰈚",
-            folder = {
-              default = "",
-              empty = "",
-              empty_open = "",
-              open = "",
-              symlink = "",
-            },
-            git = { unmerged = "" },
-          },
-        },
-      },
-    },
-  },
-  {
     "lewis6991/gitsigns.nvim",
     lazy = false,
     opts = {
@@ -436,13 +365,6 @@ return {
     },
     version = "*",
   },
-  {
-    "scalameta/nvim-metals",
-    lazy = true,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-  },
   -- ASCII 图
   {
     "jbyuki/venn.nvim",
@@ -455,18 +377,6 @@ return {
     config = function()
       require("nvim-ts-autotag").setup({})
     end,
-  },
-
-  {
-    "Civitasv/cmake-tools.nvim",
-    cmd = {
-      "CMakeRun",
-      "CMakeDebug",
-      "CMakeRunTest",
-    },
-    opts = {
-      cmake_build_directory = "build", -- this is used to specify generate directory for cmake, allows macro expansion
-    },
   },
 
   {
