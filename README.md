@@ -15,6 +15,7 @@ git clone  https://github.com/JavaHello/nvim.git
 
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
 - [fd](https://github.com/sharkdp/fd)
+- [yazi](https://github.com/sxyazi/yazi)
 - [JDK](https://openjdk.org/) 8/17+
 - [maven](https://maven.apache.org/)
 - [nodejs](https://nodejs.org/en)
@@ -31,18 +32,17 @@ git clone  https://github.com/JavaHello/nvim.git
 |            文件管理             |       `Normal`       |        `<leader>e`        |
 |            文件搜索             |       `Normal`       |       `<leader>ff`        |
 |            全局搜索             | `Normal` or `Visual` |       `<leader>fw`        |
-|          全局搜索替换           | `Normal` or `Visual` |       `<leader>fr`        |
 |            Git 操作             |      `Command`       |          `:Git`           |
 |             Outline             |       `Normal`       |        `<leader>o`        |
 |            查看实现             |       `Normal`       |           `gi`            |
 |            查看引用             |       `Normal`       |           `gr`            |
 |            查看声明             |       `Normal`       |           `gd`            |
-|      格式化(LSP 提供支持)       | `Normal` or `Visual` |       `<leader>fm`        |
-|             重命名              |       `Normal`       |       `<leader>ra`        |
+|      格式化(LSP 提供支持)       | `Normal` or `Visual` |          `<A-l>`          |
+|             重命名              |       `Normal`       |       `<leader>rn`        |
 |           Code Action           |       `Normal`       |       `<leader>ca`        |
 |              Debug              |       `Normal`       |      `:DapContinue`       |
 |              断点               |       `Normal`       |       `<leader>db`        |
-|            内置终端             |      `Command`       |     `<A-h> or <A-v>`      |
+|            内置终端             |      `Command`       |          `<A-i>`          |
 |     Java: Junit Test Method     |       `Normal`       |       `<leader>dm`        |
 |     Java: Junit Test Class      |       `Normal`       |       `<leader>dc`        |
 |            Run Last             |       `Normal`       |       `<leader>dl`        |
@@ -63,3 +63,11 @@ git clone  https://github.com/JavaHello/nvim.git
 - 依赖 vscode 插件 [VScode Spring Boot](https://marketplace.visualstudio.com/items?itemName=vmware.vscode-spring-boot)
 - [x] 查找`symbols`,`bean`定义，`bean`引用，`bean`实现等。
 - [x] `application.properties`, `application.yml` 文件提示
+
+## GPT 功能
+
+依赖 `DeepSeek` API
+
+- 命令 `:Gpt` 开启对话窗, `<A-k>` 发送请求
+- 命令 `:TransXXX` 翻译文本
+- 在 `git` 提交窗口，快捷键 `<leader>cm` 生成 `git` 提交消息
