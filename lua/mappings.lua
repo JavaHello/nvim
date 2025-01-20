@@ -439,6 +439,14 @@ end, {
   range = true,
 })
 
+command("GptReasoner", function()
+  require("kide.gpt.reasoner").toggle_gpt()
+end, {
+  desc = "GptReasoner",
+  nargs = "*",
+  range = true,
+})
+
 command("LspInfo", function(_)
   require("kide.lspui").open_info()
 end, {

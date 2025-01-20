@@ -11,10 +11,14 @@ local function token()
 end
 
 local function callback_data(job, resp_json, callback)
-  callback({
-    data = resp_json.choices[1].delta.content,
-    job = job,
-  })
+  for _, message in ipairs(resp_json.choices) do
+    callback({
+      role = message.delta.role,
+      reasoning = message.delta.reasoning_content,
+      data = message.delta.content,
+      job = job,
+    })
+  end
   if M.config.show_usage and resp_json.usage ~= nil then
     callback({
       data = "\n",
