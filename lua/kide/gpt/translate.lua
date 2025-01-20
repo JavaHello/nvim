@@ -17,7 +17,7 @@ local request_json = {
   },
   model = "deepseek-chat",
   frequency_penalty = 0,
-  max_tokens = 256,
+  max_tokens = 4096 * 2,
   presence_penalty = 0,
   response_format = {
     type = "text",
@@ -54,16 +54,6 @@ function M.translate(request, callback)
   local json = request_json
   json.messages[1].content = trans_system_prompt(request)
   json.messages[2].content = request.text
-  local text_len = request.text:len()
-  if text_len > 256 then
-    json.max_tokens = 512
-  elseif text_len > 512 then
-    json.max_tokens = 1024
-  elseif text_len > 1024 then
-    json.max_tokens = 2048
-  elseif text_len > 2048 then
-    json.max_tokens = 4096
-  end
   require("kide.gpt.sse").request(json, callback)
 end
 

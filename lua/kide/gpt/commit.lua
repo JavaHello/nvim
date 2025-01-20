@@ -12,7 +12,7 @@ local request_json = {
   },
   model = "deepseek-chat",
   frequency_penalty = 0,
-  max_tokens = 256,
+  max_tokens = 4096 * 2,
   presence_penalty = 0,
   response_format = {
     type = "text",
