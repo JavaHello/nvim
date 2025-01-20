@@ -183,6 +183,13 @@ M.gpt_chat = function()
   ---@diagnostic disable-next-line: param-type-mismatch
   local list = vim.api.nvim_buf_get_lines(state.chatbuf, 0, -1, false)
   local json = chat_request_json
+  json.messages = {
+    {
+      content = "",
+      role = "system",
+    },
+  }
+
   json.messages[1].content = M.chat_config.system_prompt
   -- 1 user, 2 assistant
   local flag = 0

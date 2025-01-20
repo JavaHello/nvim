@@ -37,8 +37,8 @@ function M.commit_message(diff, callback)
 end
 
 M.commit_diff_msg = function()
-  local diff = vim.fn.system({ "git", "diff", "--cached" })
-  if vim.startswith(diff, "error:") then
+  local diff = vim.system({ "git", "diff", "--cached" }):wait()
+  if diff.code ~= 0 then
     return
   end
   local codebuf = vim.api.nvim_get_current_buf()
@@ -75,7 +75,7 @@ M.commit_diff_msg = function()
       vim.api.nvim_put(put_data, "c", true, true)
     end
   end
-  M.commit_message(diff, callback)
+  M.commit_message(diff.stdout, callback)
 end
 
 M.setup = function()
@@ -88,7 +88,7 @@ M.setup = function()
     group = augroup("gpt_commit_msg"),
     callback = function(event)
       command(event.buf, "GptCommitMsg", function(_)
-        require("kide.gpt.commit").commit_diff_msg()
+        M.commit_diff_msg()
       end, {
         desc = "Gpt Commit Message",
         nargs = 0,

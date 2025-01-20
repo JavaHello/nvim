@@ -3,7 +3,10 @@
 local map = vim.keymap.set
 local command = vim.api.nvim_create_user_command
 
-map("n", "<A-i>", require("kide.term").toggle, { desc = "toggle term" })
+map("n", "<A-i>", function()
+  require("kide.term").toggle()
+  vim.cmd("startinsert")
+end, { desc = "toggle term" })
 map("t", "<A-i>", require("kide.term").toggle, { desc = "toggle term" })
 map("i", "<A-i>", function()
   vim.cmd("stopinsert")
@@ -13,7 +16,9 @@ map("v", "<A-i>", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
   require("kide.term").toggle()
-  require("kide.term").send_line(text[1])
+  vim.defer_fn(function()
+    require("kide.term").send_line(text[1])
+  end, 500)
 end, { desc = "toggle term" })
 
 map("n", "<leader>w", function()
@@ -450,6 +455,7 @@ end, {
   range = false,
 })
 
+require("kide.tools").setup()
 require("kide.tools.maven").setup()
 require("kide.tools.plantuml").setup()
 require("kide.tools.curl").setup()

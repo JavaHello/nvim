@@ -410,15 +410,19 @@ local function test_with_profile(test_fn)
           noDebug = true,
         },
         after_test = function()
-          vim.fn.system(
-            "java -jar "
-              .. get_async_profiler_cov()
-              .. " jfr2flame "
-              .. utils.tmpdir_file("profile.jfr")
-              .. " "
-              .. utils.tmpdir_file("profile.html")
-          )
-          utils.open_fn(utils.tmpdir_file("profile.html"))
+          local result = vim
+            .system({
+              "java",
+              "-jar",
+              get_async_profiler_cov(),
+              "jfr2flame",
+              utils.tmpdir_file("profile.jfr"),
+              utils.tmpdir_file("profile.html"),
+            })
+            :wait()
+          if result.code == 0 then
+            utils.open_fn(utils.tmpdir_file("profile.html"))
+          end
         end,
       })
     end)

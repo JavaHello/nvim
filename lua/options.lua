@@ -2,7 +2,7 @@ local fn = vim.fn
 local opt = vim.opt
 local o = vim.o
 
-vim.opt.statusline = "%!v:lua.require('kide').statusline()"
+vim.opt.statusline = "%!v:lua.require('kide.stl').statusline()"
 
 -- disable nvim intro
 opt.shortmess:append("sI")
@@ -155,4 +155,4 @@ vim.opt.backup = false
 -- 1 只有多个 tab 时显示
 -- 2 一直显示（99% 情况下不需要)
 vim.opt.showtabline = 1
-vim.opt.tabline = "%!v:lua.require('kide').tabline()"
+vim.opt.tabline = "%!v:lua.require('kide.stl').tabline()"

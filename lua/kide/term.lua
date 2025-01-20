@@ -24,8 +24,9 @@ local function launch_term(cmd, opts)
   vim.bo.buflisted = false
   vim.bo.swapfile = false
   opts = vim.tbl_extend("error", opts, {
-    on_exit = function()
+    on_exit = function(_, code, _)
       job = nil
+      require("kide").clean_stl_status(code)
     end,
   })
   job = vim.fn.jobstart(cmd, opts)
@@ -36,6 +37,7 @@ local function close_term()
     return
   end
   vim.fn.jobstop(job)
+  job = nil
   if termwin and api.nvim_win_is_valid(termwin) then
     -- avoid cannot close last window error
     pcall(api.nvim_win_close, termwin, true)
@@ -50,6 +52,9 @@ function M.repl()
 end
 
 function M.toggle(cmd)
+  if cmd then
+    require("kide").timer_stl_status("")
+  end
   if job then
     close_term()
   else

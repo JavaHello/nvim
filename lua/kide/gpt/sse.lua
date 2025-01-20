@@ -74,11 +74,14 @@ local function handle_sse_events(cmd, callback)
       end
     end,
     on_stderr = function(_, _, _) end,
-    on_exit = function(_, _, _) end,
+    on_exit = function(_, code, _)
+      require("kide").clean_stl_status(code)
+    end,
   })
 end
 
 function M.request(json, callback)
+  require("kide").timer_stl_status("")
   local body = vim.fn.json_encode(json)
   local cmd = {
     "curl",

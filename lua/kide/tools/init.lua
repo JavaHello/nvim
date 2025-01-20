@@ -45,14 +45,26 @@ M.char_size = function(c)
   return nil
 end
 
-M.camel_case = function(word)
-  if word == "" or word == nil then
-    return
-  end
+local function camel_case_t(word)
   if word:find("_") then
     return M.camel_case_c(word)
   else
     return M.camel_case_u(word)
+  end
+end
+
+M.camel_case = function(word)
+  if word == "" or word == nil then
+    return
+  end
+  if word:find(" ") then
+    local ws = {}
+    for _, value in ipairs(vim.split(word, " ")) do
+      table.insert(ws, camel_case_t(value))
+    end
+    return table.concat(ws, " ")
+  else
+    return camel_case_t(word)
   end
 end
 M.camel_case_u = function(word)
@@ -116,38 +128,22 @@ M.camel_case_start = function(r, l1, l2)
   local word
   if r == 0 then
     word = vim.fn.expand("<cword>")
-    local cw = M.camel_case(word)
-    if cw then
-      vim.fn.setreg('"', M.camel_case(word))
-    end
   elseif l1 == l2 then
-    word = vim.fn.getline(".")
-    local ln1 = vim.fn.getpos("'<")
-    local ln2 = vim.fn.getpos("'>")
-    local cs = ln1[3]
-    local ce = ln2[3]
-    local ecs = M.char_size(word:byte(ce))
-    if ecs ~= 1 then
-      ce = ce + ecs - 1
-    end
-    word = word:sub(cs, ce)
-    local reg_tmp = vim.fn.getreg("a")
-    vim.fn.setreg("a", M.camel_case(word))
-    vim.cmd('normal! gv"ap')
-    vim.fn.setreg("a", reg_tmp)
+    word = M.get_visual_selection()[1]
   else
     vim.notify("请选择单行字符", vim.log.levels.WARN)
   end
+  if word and word ~= "" then
+    local reg_tmp = vim.fn.getreg("a")
+    vim.fn.setreg("a", M.camel_case(word))
+    if r == 0 then
+      vim.cmd('normal! viw"ap')
+    else
+      vim.cmd('normal! gv"ap')
+    end
+    vim.fn.setreg("a", reg_tmp)
+  end
 end
-M.test = function(a)
-  print(a)
-end
-M.camel_case_init = function()
-  vim.api.nvim_create_user_command("CamelCase", function(o)
-    require("kide.tools").camel_case_start(o.range, o.line1, o.line2)
-  end, { range = 0, nargs = 0 })
-end
--- print(M.camel_case("helloWorldAaAaAxC"))
 
 -- see https://github.com/nvim-pack/nvim-spectre/blob/master/lua/spectre/utils.lua#L120
 ---@return string[]
@@ -156,10 +152,6 @@ M.get_visual_selection = function(mode)
   --参考 @phanium  @linrongbin  @skywind3000 提供的方法。
   -- https://github.com/skywind3000/vim/blob/master/autoload/asclib/compat.vim
   return vim.fn.getregion(vim.fn.getpos("'<"), vim.fn.getpos("'>"), { type = mode })
-end
-
-M.run_cmd = function(cmd)
-  return vim.fn.system(cmd)
 end
 
 M.Windows = "Windows"
@@ -216,15 +208,19 @@ M.open_fn = function(file)
   elseif M.is_win then
     cmd = "start"
   end
-  vim.fn.system(string.format("%s %s", cmd, file))
+  vim.system({ cmd, file })
 end
 
 M.tmpdir = function()
-  if M.is_win then
-    return os.getenv("TEMP")
-  else
-    return "/tmp"
+  local tmpdir = vim.env["TMPDIR"] or vim.env["TEMP"]
+  if not tmpdir then
+    if M.is_win then
+      tmpdir = "C:\\Windows\\Temp"
+    else
+      tmpdir = "/tmp"
+    end
   end
+  return tmpdir
 end
 
 M.tmpdir_file = function(file)
@@ -271,6 +267,12 @@ M.base64_std_to_url_safe = function(msg)
     msg = string.gsub(msg, "=", "")
   end
   return msg
+end
+
+M.setup = function()
+  vim.api.nvim_create_user_command("CamelCase", function(o)
+    M.camel_case_start(o.range, o.line1, o.line2)
+  end, { range = 0, nargs = 0 })
 end
 
 return M

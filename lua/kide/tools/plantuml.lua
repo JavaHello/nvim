@@ -68,15 +68,14 @@ local function exec(opt)
   table.insert(opt.args, p)
   local cmd = opt.args
   table.insert(cmd, 1, "java")
-  vim.fn.jobstart(cmd, {
-    on_exit = function(_, code)
-      if code == 0 then
-        vim.notify("Plantuml: export success", vim.log.levels.INFO)
-      else
-        vim.notify("Plantuml: export error", vim.log.levels.ERROR)
-      end
-    end,
-  })
+  require("kide").timer_stl_status("")
+  local result = vim.system(cmd):wait()
+  require("kide").clean_stl_status(result.code)
+  if result.code == 0 then
+    vim.notify("Plantuml: export success", vim.log.levels.INFO)
+  else
+    vim.notify("Plantuml: export error", vim.log.levels.ERROR)
+  end
 end
 
 local function init()
