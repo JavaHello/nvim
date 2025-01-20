@@ -248,11 +248,11 @@ M.gpt_chat = function()
     if state.chatbuf and vim.api.nvim_buf_is_valid(state.chatbuf) then
       if reasoning == 1 then
         reasoning = 2
-        vim.api.nvim_put({ "", "---", "> 推理输出开始", "" }, "c", true, true)
+        vim.api.nvim_put({ "<!-- 推理输出 --> ", "```text", "" }, "c", true, true)
       end
       if reasoning == 3 then
         reasoning = 4
-        vim.api.nvim_put({ "", "> 推理输出结束", "---", "" }, "c", true, true)
+        vim.api.nvim_put({ "", "```", "---", "" }, "c", true, true)
       end
       if data:match("\n") then
         local ln = vim.split(data, "\n")
