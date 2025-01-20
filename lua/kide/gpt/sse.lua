@@ -15,7 +15,7 @@ local function callback_data(job, resp_json, callback)
     data = resp_json.choices[1].delta.content,
     job = job,
   })
-  if resp_json.usage ~= nil and M.config.show_usage then
+  if M.config.show_usage and resp_json.usage ~= nil then
     callback({
       data = "\n",
       job = job,
