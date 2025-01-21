@@ -72,6 +72,7 @@ local function create_gpt_win()
   vim.cmd("belowright new")
   state.chatwin = vim.api.nvim_get_current_win()
   state.chatbuf = vim.api.nvim_get_current_buf()
+  require("kide").gpt_stl(state.chatbuf, "󰭻", "GptChat")
   vim.bo[state.chatbuf].buftype = "nofile"
   vim.bo[state.chatbuf].bufhidden = "wipe"
   vim.bo[state.chatbuf].buflisted = false
@@ -174,6 +175,7 @@ M.gpt_chat = function()
   if state.chatwin == nil then
     create_gpt_win()
   end
+  require("kide").gpt_stl(state.chatbuf, "󰭻", "GptChat")
   if state.chatruning then
     vim.api.nvim_put({ "", M.chat_config.user_title, "" }, "c", true, true)
     state.chatruning = false
@@ -219,6 +221,9 @@ M.gpt_chat = function()
   local callback = function(opt)
     local data = opt.data
     local done = opt.done
+    if opt.usage then
+      require("kide").gpt_stl(state.chatbuf, "󰭻", "GptChat", require("kide.gpt.toole").usage_str(opt.usage))
+    end
     if state.chatclosed or state.chatruning == false then
       vim.fn.jobstop(opt.job)
       return

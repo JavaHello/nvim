@@ -66,6 +66,7 @@ local function create_gpt_win()
   vim.cmd("belowright new")
   state.chatwin = vim.api.nvim_get_current_win()
   state.chatbuf = vim.api.nvim_get_current_buf()
+  require("kide").gpt_stl(state.chatbuf, "󰍦", "GptReasoner")
   vim.bo[state.chatbuf].buftype = "nofile"
   vim.bo[state.chatbuf].bufhidden = "wipe"
   vim.bo[state.chatbuf].buflisted = false
@@ -163,6 +164,7 @@ M.gpt_chat = function()
   if state.chatwin == nil then
     create_gpt_win()
   end
+  require("kide").gpt_stl(state.chatbuf, "󰍦", "GptReasoner")
   if state.chatruning then
     vim.api.nvim_put({ "", M.chat_config.user_title, "" }, "c", true, true)
     state.chatruning = false
@@ -207,6 +209,9 @@ M.gpt_chat = function()
 
   local reasoning = 0
   local callback = function(opt)
+    if opt.usage then
+      require("kide").gpt_stl(state.chatbuf, "󰍦", "GptReasoner", require("kide.gpt.toole").usage_str(opt.usage))
+    end
     local data
     if opt.reasoning and opt.reasoning ~= vim.NIL then
       data = opt.reasoning

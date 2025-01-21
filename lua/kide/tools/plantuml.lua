@@ -68,9 +68,9 @@ local function exec(opt)
   table.insert(opt.args, p)
   local cmd = opt.args
   table.insert(cmd, 1, "java")
-  require("kide").timer_stl_status("")
+  local sid = require("kide").timer_stl_status("")
   local result = vim.system(cmd):wait()
-  require("kide").clean_stl_status(result.code)
+  require("kide").clean_stl_status(sid, result.code)
   if result.code == 0 then
     vim.notify("Plantuml: export success", vim.log.levels.INFO)
   else

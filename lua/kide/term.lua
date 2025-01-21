@@ -9,6 +9,7 @@ local repls = {
   python = "py",
   lua = "lua",
 }
+local sid
 
 local function launch_term(cmd, opts)
   opts = opts or {}
@@ -18,6 +19,7 @@ local function launch_term(cmd, opts)
   vim.cmd("belowright new")
 
   termwin = api.nvim_get_current_win()
+  require("kide").term_stl(vim.api.nvim_get_current_buf(), cmd)
   vim.bo.path = path
   vim.bo.buftype = "nofile"
   vim.bo.bufhidden = "wipe"
@@ -26,7 +28,9 @@ local function launch_term(cmd, opts)
   opts = vim.tbl_extend("error", opts, {
     on_exit = function(_, code, _)
       job = nil
-      require("kide").clean_stl_status(code)
+      if sid then
+        require("kide").clean_stl_status(sid, code)
+      end
     end,
   })
   job = vim.fn.jobstart(cmd, opts)
@@ -53,7 +57,7 @@ end
 
 function M.toggle(cmd)
   if cmd then
-    require("kide").timer_stl_status("")
+    sid = require("kide").timer_stl_status("")
   end
   if job then
     close_term()

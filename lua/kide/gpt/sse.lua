@@ -3,7 +3,6 @@ local M = {}
 M.config = {
   API_URL = vim.env["DEEPSEEK_API_ENDPOINT"],
   API_KEY = vim.env["DEEPSEEK_API_KEY"],
-  show_usage = false,
 }
 
 local function token()
@@ -17,20 +16,7 @@ local function callback_data(job, resp_json, callback)
       reasoning = message.delta.reasoning_content,
       data = message.delta.content,
       job = job,
-    })
-  end
-  if M.config.show_usage and resp_json.usage ~= nil then
-    callback({
-      data = "\n",
-      job = job,
-    })
-    callback({
-      data = "API[token usage]: " .. vim.inspect(resp_json.usage.prompt_cache_hit_tokens) .. "  " .. vim.inspect(
-        resp_json.usage.prompt_tokens
-      ) .. " + " .. vim.inspect(resp_json.usage.completion_tokens) .. " = " .. vim.inspect(
-        resp_json.usage.total_tokens
-      ),
-      job = job,
+      usage = resp_json.usage,
     })
   end
 end
@@ -38,6 +24,7 @@ end
 ---@param cmd string[]
 ---@param callback fun(opt)
 local function handle_sse_events(cmd, callback)
+  local sid = require("kide").timer_stl_status("")
   local job
   local tmp = ""
   job = vim.fn.jobstart(cmd, {
@@ -79,13 +66,12 @@ local function handle_sse_events(cmd, callback)
     end,
     on_stderr = function(_, _, _) end,
     on_exit = function(_, code, _)
-      require("kide").clean_stl_status(code)
+      require("kide").clean_stl_status(sid, code)
     end,
   })
 end
 
 function M.request(json, callback)
-  require("kide").timer_stl_status("")
   local body = vim.fn.json_encode(json)
   local cmd = {
     "curl",

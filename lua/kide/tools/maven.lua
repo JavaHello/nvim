@@ -21,7 +21,8 @@ M.is_pom_file = function(file)
   return vim.endswith(file, "pom.xml")
 end
 
-local exec = function(opt, args)
+local exec = function(cmd, args)
+  local opt = vim.tbl_deep_extend("force", cmd, {})
   local s = M.get_maven_settings()
   if s then
     table.insert(opt, "-s")
