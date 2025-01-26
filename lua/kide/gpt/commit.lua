@@ -86,6 +86,7 @@ M.setup = function()
   end
   autocmd("FileType", {
     group = augroup("gpt_commit_msg"),
+    pattern = "gitcommit",
     callback = function(event)
       command(event.buf, "GptCommitMsg", function(_)
         M.commit_diff_msg()
