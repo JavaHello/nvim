@@ -23,7 +23,9 @@ end
 
 ---@param cmd string[]
 ---@param callback fun(opt)
-local function handle_sse_events(cmd, callback)
+local function handle_sse_events(cmd, callback, opts)
+  opts = opts or {}
+  local title = opts.title or "Gpt"
   local sid = require("kide").timer_stl_status("")
   local job
   local tmp = ""
@@ -52,7 +54,7 @@ local function handle_sse_events(cmd, callback)
             end
           elseif vim.startswith(value, ": keep-alive") then
             -- 这里可能是心跳检测报文, 输出提示
-            vim.notify("[SSE] " .. value, vim.log.levels.INFO)
+            vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = title })
           else
             if tmp ~= "" then
               tmp = tmp .. value
@@ -80,7 +82,11 @@ local function handle_sse_events(cmd, callback)
   return job
 end
 
-function M.request(json, callback)
+---@param json table
+---@param callback function
+---@param opts? table
+---@return integer
+function M.request(json, callback, opts)
   local body = vim.fn.json_encode(json)
   local cmd = {
     "curl",
@@ -96,7 +102,7 @@ function M.request(json, callback)
     body,
     M.config.API_URL,
   }
-  return handle_sse_events(cmd, callback)
+  return handle_sse_events(cmd, callback, opts)
 end
 
 return M

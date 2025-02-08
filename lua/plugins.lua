@@ -438,6 +438,7 @@ return {
             or ft == "snacks_picker_list"
             or ft == "snacks_picker_input"
             or ft == "Outline"
+            or ft == "JavaProjects"
             or ft == "text"
             or ft == ""
           then

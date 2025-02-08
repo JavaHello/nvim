@@ -5,6 +5,7 @@ local M = {
 
 function M.set_buf_stl(buf, stl)
   vim.b[buf].stl = stl
+  vim.cmd.redrawstatus()
 end
 
 function M.gpt_stl(buf, icon, title, usage)

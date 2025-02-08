@@ -426,10 +426,22 @@ end, {
   range = true,
 })
 
-command("GptReasoner", function()
-  require("kide.gpt.reasoner").toggle_gpt()
+command("GptReasoner", function(opt)
+  local q
+  local code
+  if opt.range > 0 then
+    code = require("kide.tools").get_visual_selection()
+  end
+  if opt.args and opt.args ~= "" then
+    q = opt.args
+  end
+  require("kide.gpt.chat").toggle_gpt({
+    reasoner = true,
+    code = code,
+    question = q,
+  })
 end, {
-  desc = "GptReasoner",
+  desc = "Gpt",
   nargs = "*",
   range = true,
 })

@@ -59,9 +59,9 @@ end
 
 local max_width = 120
 local max_height = 40
-local job = nil
 
 M.translate_float = function(request)
+  local job = nil
   local codebuf = vim.api.nvim_get_current_buf()
   local ctext = vim.fn.split(request.text, "\n")
   local width = math.min(max_width, vim.fn.strdisplaywidth(ctext[1]))
@@ -108,6 +108,10 @@ M.translate_float = function(request)
     callback = function()
       closed = true
       pcall(vim.api.nvim_win_close, win, true)
+      if job then
+        pcall(vim.fn.jobstop, job)
+        job = nil
+      end
     end,
   })
   vim.api.nvim_create_autocmd("WinClosed", {
@@ -125,6 +129,10 @@ M.translate_float = function(request)
     callback = function()
       closed = true
       pcall(vim.api.nvim_win_close, win, true)
+      if job then
+        pcall(vim.fn.jobstop, job)
+        job = nil
+      end
     end,
   })
 
