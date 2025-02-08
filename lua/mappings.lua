@@ -21,7 +21,6 @@ map("v", "<A-i>", function()
   end, 500)
 end, { desc = "toggle term" })
 
-
 map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
 map("n", "<ESC>", "<CMD>noh<CR>", { desc = "Clear Highlight" })
 

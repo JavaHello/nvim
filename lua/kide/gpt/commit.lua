@@ -1,4 +1,5 @@
 local M = {}
+local job = nil
 local request_json = {
   messages = {
     {
@@ -33,7 +34,7 @@ function M.commit_message(diff, callback)
   json.messages[1].content =
     "I want you to act as a commit message generator. I will provide you with information about the task and the prefix for the task code, and I would like you to generate an appropriate commit message using the conventional commit format. Do not write any explanations or other words, just reply with the commit message."
   json.messages[2].content = diff
-  require("kide.gpt.sse").request(json, callback)
+  job = require("kide.gpt.sse").request(json, callback)
 end
 
 M.commit_diff_msg = function()
@@ -52,6 +53,10 @@ M.commit_diff_msg = function()
     buffer = codebuf,
     callback = function()
       closed = true
+      if job then
+        pcall(vim.fn.jobstop, job)
+        job = nil
+      end
     end,
   })
 

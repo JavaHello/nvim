@@ -77,6 +77,7 @@ local function handle_sse_events(cmd, callback)
       })
     end,
   })
+  return job
 end
 
 function M.request(json, callback)
@@ -95,7 +96,7 @@ function M.request(json, callback)
     body,
     M.config.API_URL,
   }
-  handle_sse_events(cmd, callback)
+  return handle_sse_events(cmd, callback)
 end
 
 return M

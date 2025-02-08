@@ -7,6 +7,7 @@ local state = {
   cursormoved = false,
   chatruning = false,
   winleave = false,
+  job = nil,
 }
 local chat_last = {}
 
@@ -58,6 +59,10 @@ local close_gpt_win = function()
     state.cursormoved = false
     state.chatruning = false
     state.winleave = false
+    if state.job then
+      pcall(vim.fn.jobstop, state.job)
+      state.job = nil
+    end
   end
 end
 
@@ -268,7 +273,7 @@ M.gpt_chat = function()
     end
   end
 
-  require("kide.gpt.sse").request(json, callback)
+  state.job = require("kide.gpt.sse").request(json, callback)
 end
 
 M.gpt_last = function(buf)

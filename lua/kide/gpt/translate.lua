@@ -54,11 +54,12 @@ function M.translate(request, callback)
   local json = request_json
   json.messages[1].content = trans_system_prompt(request)
   json.messages[2].content = request.text
-  require("kide.gpt.sse").request(json, callback)
+  return require("kide.gpt.sse").request(json, callback)
 end
 
 local max_width = 120
 local max_height = 40
+local job = nil
 
 M.translate_float = function(request)
   local codebuf = vim.api.nvim_get_current_buf()
@@ -113,6 +114,10 @@ M.translate_float = function(request)
     buffer = buf,
     callback = function()
       closed = true
+      if job then
+        pcall(vim.fn.jobstop, job)
+        job = nil
+      end
     end,
   })
   vim.api.nvim_create_autocmd("WinLeave", {
@@ -172,7 +177,7 @@ M.translate_float = function(request)
       vim.api.nvim_put(put_data, "c", true, true)
     end
   end
-  M.translate(request, callback)
+  job = M.translate(request, callback)
 end
 
 return M
