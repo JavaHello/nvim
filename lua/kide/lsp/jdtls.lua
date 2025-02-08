@@ -232,7 +232,7 @@ M.config = {
   -- for a list of options
   settings = {
     java = {
-      autobuild = { enabled = true },
+      autobuild = { enabled = false },
       maxConcurrentBuilds = 1,
       home = env.JAVA_HOME,
       project = {

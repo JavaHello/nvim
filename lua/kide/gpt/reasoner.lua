@@ -224,7 +224,6 @@ M.gpt_chat = function()
       end
       data = opt.data
     end
-    data = data or ""
     local done = opt.done
     if state.chatclosed or state.chatruning == false then
       vim.fn.jobstop(opt.job)
@@ -251,6 +250,7 @@ M.gpt_chat = function()
       return
     end
     if state.chatbuf and vim.api.nvim_buf_is_valid(state.chatbuf) then
+      data = data or ""
       if reasoning == 1 then
         reasoning = 2
         vim.api.nvim_put({ "<!-- 推理输出 --> ", "```text", "" }, "c", true, true)

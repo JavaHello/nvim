@@ -107,7 +107,7 @@ function M.statusline()
       end
     end
 
-    local fstatus = M.file_or_lsp_status()
+    local fstatus = M.file()
     vim.list_extend(parts, fstatus)
 
     local counts = vim.diagnostic.count(0, { severity = { min = vim.diagnostic.severity.WARN } })
@@ -145,21 +145,16 @@ function M.git_status()
   return vim.b[0].gitsigns_status_dict
 end
 
-function M.file_or_lsp_status()
-  local mode = vim.api.nvim_get_mode().mode
-  local lsp_status = vim.lsp.status()
-  if mode ~= "n" or lsp_status == "" then
-    local buf = vim.api.nvim_get_current_buf()
-    local filename = vim.uri_from_bufnr(buf)
-    local devicons = require("nvim-web-devicons")
-    local icon, name = devicons.get_icon_by_filetype(vim.bo[buf].filetype, { default = true })
-    if name then
-      return { " ", "%#" .. name .. "#", icon, " %#StatusLine#", M.format_uri(filename) }
-    else
-      return { " ", icon, " ", M.format_uri(filename) }
-    end
+function M.file()
+  local buf = vim.api.nvim_get_current_buf()
+  local filename = vim.uri_from_bufnr(buf)
+  local devicons = require("nvim-web-devicons")
+  local icon, name = devicons.get_icon_by_filetype(vim.bo[buf].filetype, { default = true })
+  if name then
+    return { " ", "%#" .. name .. "#", icon, " %#StatusLine#", M.format_uri(filename) }
+  else
+    return { " ", icon, " ", M.format_uri(filename) }
   end
-  return { " ", "%#StatusLine#", lsp_status }
 end
 function M.format_uri(uri)
   if vim.startswith(uri, "jdt://") then

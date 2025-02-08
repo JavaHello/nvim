@@ -50,6 +50,9 @@ local function handle_sse_events(cmd, callback)
                 tmp = text
               end
             end
+          elseif vim.startswith(value, ": keep-alive") then
+            -- 这里可能是心跳检测报文, 输出提示
+            vim.notify("[SSE] " .. value, vim.log.levels.INFO)
           else
             if tmp ~= "" then
               tmp = tmp .. value
@@ -58,7 +61,7 @@ local function handle_sse_events(cmd, callback)
                 callback_data(job, resp_json, callback)
               end
             else
-              vim.notify("SSE parse error: " .. value, vim.log.levels.WARN)
+              vim.notify("[SSE] parse error: " .. value, vim.log.levels.WARN)
             end
           end
         end
@@ -67,6 +70,11 @@ local function handle_sse_events(cmd, callback)
     on_stderr = function(_, _, _) end,
     on_exit = function(_, code, _)
       require("kide").clean_stl_status(sid, code)
+      callback({
+        data = nil,
+        done = true,
+        job = job,
+      })
     end,
   })
 end

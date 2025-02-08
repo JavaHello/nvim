@@ -23,17 +23,6 @@ return {
     end,
   },
   {
-    "nvimdev/indentmini.nvim",
-    event = "BufRead",
-    config = function()
-      require("indentmini").setup({
-        exclude = { "markdown", "text" },
-      })
-      vim.api.nvim_set_hl(0, "IndentLine", { fg = "#3e3e3e" })
-      vim.api.nvim_set_hl(0, "IndentLineCurrent", { fg = "#fb4934" })
-    end,
-  },
-  {
     "nvim-lua/plenary.nvim",
     lazy = true,
   },
@@ -429,51 +418,84 @@ return {
   },
 
   {
-    "nvim-telescope/telescope.nvim",
-    branch = "0.1.x",
-    lazy = true,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope-fzy-native.nvim",
-      "nvim-telescope/telescope-ui-select.nvim",
-    },
-    config = function()
-      require("telescope").setup({
-        defaults = {
-          results_title = false,
-          sorting_strategy = "ascending",
-          layout_strategy = "center",
-          layout_config = {
-            center = {
-              preview_cutoff = 1,
-              anchor = "S",
-              height = 0.45,
-              width = 999999999,
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    opts = {
+      bigfile = { enabled = true },
+      -- dashboard = { enabled = true },
+      explorer = { enabled = true },
+      indent = {
+        enabled = true,
+        filter = function(buf)
+          -- return not vim.g.snacks_indent
+          --   and not vim.b[buf].snacks_indent
+          --   and vim.bo[buf].buftype == ""
+          local ft = vim.bo[buf].filetype
+          if
+            ft == "snacks_picker_preview"
+            or ft == "snacks_picker_list"
+            or ft == "snacks_picker_input"
+            or ft == "Outline"
+            or ft == "text"
+            or ft == ""
+          then
+            return false
+          end
+          return true
+        end,
+      },
+      input = { enabled = true },
+      picker = {
+        enabled = true,
+        layout = {
+          cycle = true,
+          preset = "dropdown",
+        },
+        layouts = {
+          dropdown = {
+            layout = {
+              backdrop = false,
+              width = 0.8,
+              min_width = 80,
+              height = 0.8,
+              min_height = 30,
+              box = "vertical",
+              border = "rounded",
+              title = "{title} {live} {flags}",
+              title_pos = "center",
+              { win = "input", height = 1, border = "bottom" },
+              { win = "list", border = "none" },
+              { win = "preview", title = "{preview}", height = 0.6, border = "top" },
             },
           },
-          border = true,
-          borderchars = {
-            prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
-            results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
-            preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+        },
+        formatters = {
+          file = {
+            truncate = 80,
           },
         },
-        extensions = {
-          fzy_native = {
-            override_generic_sorter = true,
-            override_file_sorter = true,
-          },
-          ["ui-select"] = {
-            require("telescope.themes").get_dropdown({
-              layout_config = {
-                anchor = "",
+        sources = {
+          explorer = {
+            auto_close = true,
+            win = {
+              list = {
+                keys = {
+                  ["s"] = "explorer_open", -- open with system application
+                  ["o"] = "confirm",
+                },
               },
-            }),
+            },
           },
         },
-      })
-      require("telescope").load_extension("fzy_native")
-      require("telescope").load_extension("ui-select")
-    end,
+      },
+      notifier = { enabled = true },
+      quickfile = { enabled = true },
+      scope = { enabled = true },
+      -- scroll = { enabled = true },
+      -- statuscolumn = { enabled = true },
+      words = { enabled = true },
+    },
   },
 }

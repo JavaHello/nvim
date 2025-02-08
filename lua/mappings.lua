@@ -112,7 +112,7 @@ end, {
 })
 
 map("n", "<leader>e", function()
-  require("kide.yazi").yazi("edit")
+  Snacks.explorer.open({})
 end, { desc = "files", silent = true, noremap = true })
 
 -- outline
@@ -310,42 +310,35 @@ end, {
 })
 
 map("n", "<leader>fq", function()
-  local builtin = require("telescope.builtin")
-  builtin.quickfix()
+  Snacks.picker.qflist()
 end, { desc = "Quickfix" })
 
 map("n", "<leader>fb", function()
-  local builtin = require("telescope.builtin")
-  builtin.buffers()
+  Snacks.picker.buffers()
 end, { desc = "Find buffer" })
 map("n", "<leader>ff", function()
-  local builtin = require("telescope.builtin")
-  builtin.find_files()
+  Snacks.picker.files()
 end, { desc = "Find files" })
 
 map("n", "<leader>fd", function()
-  local builtin = require("telescope.builtin")
-  builtin.diagnostics()
+  Snacks.picker.diagnostics()
 end, { desc = "Find diagnostics" })
 
 map("v", "<leader>ff", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
   local param = text[1]
-  local builtin = require("telescope.builtin")
-  builtin.find_files({ default_text = param })
+  Snacks.picker.files({ args = { param } })
 end, { desc = "find files", silent = true, noremap = true })
 
 map("v", "<leader>fw", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
   local param = text[1]
-  local builtin = require("telescope.builtin")
-  builtin.live_grep({ default_text = param })
+  Snacks.picker.grep({ search = param })
 end, { desc = "live grep", silent = true, noremap = true })
 map("n", "<leader>fw", function()
-  local builtin = require("telescope.builtin")
-  builtin.live_grep()
+  Snacks.picker.grep()
 end, { desc = "live grep", silent = true, noremap = true })
 
 if vim.base64 then
