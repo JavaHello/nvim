@@ -21,11 +21,6 @@ map("v", "<A-i>", function()
   end, 500)
 end, { desc = "toggle term" })
 
-map("n", "<leader>w", function()
-  vim.print("---close--")
-  vim.print(vim.bo.bufhidden)
-  vim.print(vim.bo.buflisted)
-end, { desc = "close buf" })
 
 map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
 map("n", "<ESC>", "<CMD>noh<CR>", { desc = "Clear Highlight" })
