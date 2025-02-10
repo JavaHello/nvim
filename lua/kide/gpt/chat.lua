@@ -189,11 +189,11 @@ local gpt_reasoner_callback = function(state)
       data = data or ""
       if reasoning == 1 then
         reasoning = 2
-        vim.api.nvim_put({ "<!-- 推理输出 --> ", "```text", "" }, "c", true, true)
+        vim.api.nvim_put({ "<think>", "```text", "" }, "c", true, true)
       end
       if reasoning == 3 then
         reasoning = 4
-        vim.api.nvim_put({ "", "```", "---", "" }, "c", true, true)
+        vim.api.nvim_put({ "", "```", "</think>", "---", "" }, "c", true, true)
       end
       if data:match("\n") then
         local ln = vim.split(data, "\n")
