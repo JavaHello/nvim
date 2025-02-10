@@ -441,6 +441,7 @@ return {
             or ft == "JavaProjects"
             or ft == "text"
             or ft == ""
+            or ft == "lazy"
           then
             return false
           end
