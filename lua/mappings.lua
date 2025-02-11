@@ -453,6 +453,15 @@ end, {
   nargs = 0,
   range = false,
 })
+
+command("NotificationHistory", function(_)
+  Snacks.notifier.show_history()
+end, {
+  desc = "Notification History",
+  nargs = 0,
+  range = false,
+})
+
 command("LspLog", function(_)
   vim.cmd("tabedit " .. vim.lsp.log.get_filename())
   vim.cmd("normal! G")
