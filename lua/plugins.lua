@@ -452,7 +452,7 @@ return {
       picker = {
         enabled = true,
         layout = {
-          cycle = true,
+          cycle = false,
           preset = "dropdown",
         },
         layouts = {
@@ -481,6 +481,22 @@ return {
         sources = {
           explorer = {
             auto_close = true,
+            layout = {
+              layout = {
+                backdrop = false,
+                width = 0.8,
+                min_width = 120,
+                height = 0.8,
+                border = "rounded",
+                box = "vertical",
+                { win = "list", border = "none" },
+                {
+                  win = "input",
+                  height = 1,
+                  border = "none",
+                },
+              },
+            },
             win = {
               list = {
                 keys = {
