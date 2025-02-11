@@ -471,6 +471,19 @@ end, {
   range = false,
 })
 
+command("Go", function(opt)
+  local cmd = { "go" }
+  if opt.args and opt.args ~= "" then
+    vim.list_extend(cmd, vim.split(opt.args, " "))
+  end
+  require("kide.term").toggle(cmd)
+end, {
+  desc = "Go cmd",
+  nargs = "*",
+  range = false,
+  complete = "file",
+})
+
 require("kide.tools").setup()
 require("kide.tools.maven").setup()
 require("kide.tools.plantuml").setup()
