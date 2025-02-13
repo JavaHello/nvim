@@ -423,6 +423,16 @@ return {
     lazy = false,
     ---@type snacks.Config
     opts = {
+      styles = {
+        input = {
+          relative = "cursor",
+          row = 1,
+          col = 0,
+          keys = {
+            i_esc = { "<esc>", { "cmp_close", "cancel" }, mode = "i", expr = true },
+          },
+        },
+      },
       bigfile = { enabled = true },
       -- dashboard = { enabled = true },
       explorer = { enabled = true },
