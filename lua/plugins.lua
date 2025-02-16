@@ -101,7 +101,6 @@ return {
           dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
           -- daprepl = { name = "DapRepl", module = "kide.cmp.dap" },
         },
-        cmdline = {},
       },
       completion = {
         menu = {
