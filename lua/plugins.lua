@@ -1,5 +1,3 @@
-local HEIGHT_RATIO = 0.8
-local WIDTH_RATIO = 0.8
 return {
   {
     "nvim-treesitter/nvim-treesitter",
