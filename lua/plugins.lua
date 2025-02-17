@@ -100,8 +100,33 @@ return {
           -- daprepl = { name = "DapRepl", module = "kide.cmp.dap" },
         },
       },
+      cmdline = {
+        keymap = {
+          preset = "enter",
+          ["<Tab>"] = {
+            "show",
+            "select_next",
+            "fallback",
+          },
+        },
+        sources = function()
+          local type = vim.fn.getcmdtype()
+          -- Search forward and backward
+          if type == "/" or type == "?" then
+            return { "buffer" }
+          end
+          -- Commands
+          if type == ":" or type == "@" then
+            return { "cmdline" }
+          end
+          return {}
+        end,
+      },
       completion = {
         menu = {
+          auto_show = function(ctx)
+            return ctx.mode ~= "cmdline"
+          end,
           border = "rounded",
           draw = {
             components = {
@@ -130,7 +155,7 @@ return {
         },
       },
     },
-    opts_extend = { "sources.completion.enabled_providers" },
+    opts_extend = { "sources.default" },
     config = function(_, opts)
       require("blink.cmp").setup(opts)
     end,
