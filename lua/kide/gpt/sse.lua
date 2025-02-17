@@ -24,7 +24,6 @@ end
 ---@param cmd string[]
 ---@param callback fun(opt)
 local function handle_sse_events(cmd, callback, opts)
-  opts = opts or {}
   local title = opts.title or "Gpt"
   local sid = require("kide").timer_stl_status("")
   local job
@@ -88,6 +87,7 @@ end
 ---@return integer
 function M.request(json, callback, opts)
   local body = vim.fn.json_encode(json)
+  opts = opts or {}
   local cmd = {
     "curl",
     "--no-buffer",
@@ -100,7 +100,7 @@ function M.request(json, callback, opts)
     "Authorization:" .. token(),
     "-d",
     body,
-    M.config.API_URL,
+    opts.url or M.config.API_URL,
   }
   return handle_sse_events(cmd, callback, opts)
 end

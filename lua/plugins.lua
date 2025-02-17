@@ -108,6 +108,7 @@ return {
             "select_next",
             "fallback",
           },
+          ["<S-Tab>"] = { "select_prev", "fallback" },
         },
         sources = function()
           local type = vim.fn.getcmdtype()

@@ -3,52 +3,41 @@ local job = nil
 local request_json = {
   messages = {
     {
-      content = "",
-      role = "system",
+      content = "帮我生成一个快速排序",
+      role = "user",
     },
     {
-      content = "Hi",
-      role = "user",
+      content = "```python\n",
+      prefix = true,
+      role = "assistant",
     },
   },
   model = "deepseek-chat",
-  frequency_penalty = 0,
   max_tokens = 4096 * 2,
-  presence_penalty = 0,
-  response_format = {
-    type = "text",
-  },
-  stop = nil,
+  stop = "```",
   stream = true,
-  stream_options = nil,
-  temperature = 1.3,
-  top_p = 1,
-  tools = nil,
-  tool_choice = "none",
-  logprobs = false,
-  top_logprobs = nil,
+  temperature = 0.0,
 }
 
-function M.commit_message(diff, callback)
+function M.completions(param, callback)
   local json = request_json
-  json.messages[1].content =
-    "I want you to act as a commit message generator. I will provide you with information about the task and the prefix for the task code, and I would like you to generate an appropriate commit message using the conventional commit format. Do not write any explanations or other words, just reply with the commit message."
-  json.messages[2].content = diff
-  job = require("kide.gpt.sse").request(json, callback)
+  json.messages[1].content = param.message
+  json.messages[2].content = "```" .. param.filetype .. "\n"
+  job = require("kide.gpt.sse").request(json, callback, { url = "https://api.deepseek.com/beta/v1/chat/completions" })
 end
 
-M.commit_diff_msg = function()
-  local diff = vim.system({ "git", "diff", "--cached" }):wait()
-  if diff.code ~= 0 then
-    return
-  end
+M.code_completions = function(opts)
   local codebuf = vim.api.nvim_get_current_buf()
-  if "gitcommit" ~= vim.bo[codebuf].filetype then
-    return
-  end
+  local codewin = vim.api.nvim_get_current_win()
+  local filetype = vim.bo[codebuf].filetype
   local closed = false
-  vim.cmd("normal! gg0")
-
+  local message
+  if opts.inputcode then
+    message = "```" .. filetype .. "\n" .. table.concat(opts.inputcode, "\n") .. "```\n" .. opts.message
+    vim.api.nvim_win_set_cursor(codewin, { vim.fn.getpos("'>")[2] + 1, 0 })
+  else
+    message = opts.message
+  end
   vim.api.nvim_create_autocmd("BufWipeout", {
     buffer = codebuf,
     callback = function()
@@ -59,6 +48,7 @@ M.commit_diff_msg = function()
       end
     end,
   })
+
   vim.keymap.set("n", "<C-c>", function()
     closed = true
     if job then
@@ -88,7 +78,10 @@ M.commit_diff_msg = function()
       vim.api.nvim_put(put_data, "c", true, true)
     end
   end
-  M.commit_message(diff.stdout, callback)
+  M.completions({
+    filetype = filetype,
+    message = message,
+  }, callback)
 end
 
 M.setup = function()
@@ -98,20 +91,23 @@ M.setup = function()
     return vim.api.nvim_create_augroup("kide" .. name, { clear = true })
   end
   autocmd("FileType", {
-    group = augroup("gpt_commit_msg"),
-    pattern = "gitcommit",
+    group = augroup("gpt_code_gen"),
+    pattern = "*",
     callback = function(event)
-      command(event.buf, "GptCommitMsg", function(_)
-        M.commit_diff_msg()
+      command(event.buf, "GptCode", function(opts)
+        local code
+        if opts.range > 0 then
+          code = require("kide.tools").get_visual_selection()
+        end
+        M.code_completions({
+          inputcode = code,
+          message = opts.args,
+        })
       end, {
-        desc = "Gpt Commit Message",
-        nargs = 0,
-        range = false,
+        desc = "Gpt Code",
+        nargs = "+",
+        range = true,
       })
-
-      vim.keymap.set("n", "<leader>cm", function()
-        M.commit_diff_msg()
-      end, { buffer = event.buf, noremap = true, silent = true })
     end,
   })
 end
