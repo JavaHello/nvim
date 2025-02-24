@@ -267,9 +267,34 @@ M.base64_std_to_url_safe = function(msg)
   return msg
 end
 
+-- 创建一个新的缓冲区并显示 qflist 的内容
+local function qflist_to_buf()
+  -- 获取当前的 qflist
+  local qflist = vim.fn.getqflist()
+
+  -- 创建一个新的缓冲区
+  local buf = vim.api.nvim_create_buf(true, false)
+
+  -- 将 qflist 的内容写入缓冲区
+  local lines = {}
+  for _, item in ipairs(qflist) do
+    local text = item.text or ""
+    table.insert(lines, text)
+  end
+
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+  -- 打开新窗口并显示缓冲区
+  vim.api.nvim_command("sbuffer " .. buf)
+end
+
 M.setup = function()
   vim.api.nvim_create_user_command("CamelCase", function(o)
     M.camel_case_start(o.range, o.line1, o.line2)
+  end, { range = 0, nargs = 0 })
+
+  vim.api.nvim_create_user_command("QFlistToBuf", function(_)
+    qflist_to_buf()
   end, { range = 0, nargs = 0 })
 end
 
