@@ -502,7 +502,7 @@ return {
               title_pos = "center",
               { win = "input", height = 1, border = "bottom" },
               { win = "list", border = "none" },
-              { win = "preview", title = "{preview}", height = 0.6, border = "top" },
+              { win = "preview", height = 0.6, border = "top" },
             },
           },
         },
