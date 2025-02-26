@@ -396,7 +396,7 @@ return {
     ft = { "markdown", "Avante" },
     opts = {
       enabled = true,
-      file_types = { "markdown", "Avante" },
+      file_types = { "markdown", "Avante", "copilot-chat" },
     },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
@@ -558,5 +558,29 @@ return {
         },
       },
     },
+  },
+
+  -- copilot
+  {
+    "github/copilot.vim",
+    enabled = vim.env["COPILOT_ENABLE"] == "Y",
+    lazy = false,
+    config = function()
+      vim.g.copilot_no_tab_map = true
+
+      vim.keymap.set("i", "<C-J>", 'copilot#Accept("\\<CR>")', {
+        expr = true,
+        replace_keycodes = false,
+      })
+    end,
+  },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    enabled = vim.env["COPILOT_ENABLE"] == "Y",
+    dependencies = {
+      { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+    },
+    build = "make tiktoken", -- Only on MacOS or Linux
+    opts = {},
   },
 }
