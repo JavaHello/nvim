@@ -132,7 +132,7 @@ function M.statusline()
   if ft and ft ~= "" then
     local clients = vim.lsp.get_clients({ bufnr = 0 })
     if clients and #clients > 0 then
-      vim.list_extend(parts, { "%#DiagnosticInfo#", "[ ", clients[1].name, "] " })
+      vim.list_extend(parts, { "%#DiagnosticInfo#", "[ ", clients[#clients].name, "] " })
     end
     vim.list_extend(parts, { "%#StatusLine#", ft, " " })
   end
