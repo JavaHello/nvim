@@ -294,7 +294,7 @@ function Chat:code_question(selection)
   ---@diagnostic disable-next-line: param-type-mismatch
   if vim.api.nvim_buf_is_valid(self.codebuf) then
     local filetype = vim.bo[self.codebuf].filetype or "text"
-    local filename = vim.fn.fnamemodify(vim.fn.bufname(self.codebuf), ":.")
+    local filename = require("kide.stl").format_uri(vim.uri_from_bufnr(self.codebuf))
     qs = {
       "请解释`" .. filename .. "`文件中的这段代码",
       "```" .. filetype,
