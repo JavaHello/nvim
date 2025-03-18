@@ -484,6 +484,10 @@ end, {
   complete = "file",
 })
 
+if vim.fn.executable("cargo-owlsp") == 1 then
+  map("n", "<A-o>", require("kide.lsp.rustowl").rustowl_cursor, { noremap = true, silent = true })
+end
+
 require("kide.tools").setup()
 require("kide.tools.maven").setup()
 require("kide.tools.plantuml").setup()
