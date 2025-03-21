@@ -60,6 +60,7 @@ local ExecutionEnvironment = {
   JAVASE_21 = "JavaSE-21",
   JAVASE_22 = "JavaSE-22",
   JAVASE_23 = "JavaSE-23",
+  JAVASE_24 = "JavaSE-24",
 }
 
 local function fglob(path)
