@@ -483,6 +483,13 @@ end, {
   range = false,
   complete = "file",
 })
+command("ImageHover", function()
+  Snacks.image.hover()
+end, {
+  desc = "Image Hover",
+  nargs = 0,
+  range = false,
+})
 
 if vim.fn.executable("cargo-owlsp") == 1 then
   map("n", "<A-o>", require("kide.lsp.rustowl").rustowl_cursor, { noremap = true, silent = true })
