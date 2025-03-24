@@ -491,6 +491,7 @@ end
 require("kide.tools").setup()
 require("kide.tools.maven").setup()
 require("kide.tools.plantuml").setup()
+require("kide.tools.mermaid").setup()
 require("kide.tools.curl").setup()
 require("kide.gpt.commit").setup()
 require("kide.gpt.code").setup()
