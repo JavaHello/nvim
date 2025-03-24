@@ -20,7 +20,6 @@ local function exec(opt)
     cmd = args
   end
   table.insert(cmd, 1, "mmdc")
-  print(vim.inspect(cmd))
   local sid = require("kide").timer_stl_status("")
   local result = vim.system(cmd):wait()
   require("kide").clean_stl_status(sid, result.code)
