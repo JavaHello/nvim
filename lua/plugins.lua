@@ -396,11 +396,19 @@ return {
     ft = { "markdown", "Avante" },
     opts = {
       enabled = true,
-      file_types = { "markdown", "Avante", "copilot-chat" },
+      file_types = { "markdown", "Avante", "copilot-chat", "codecompanion" },
     },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons",
+    },
+  },
+  {
+    "tigion/nvim-asciidoc-preview",
+    ft = { "asciidoc" },
+    build = "cd server && npm install --omit=dev",
+    opts = {
+      -- Add user configuration here
     },
   },
   {
@@ -575,5 +583,83 @@ return {
     },
     build = "make tiktoken", -- Only on MacOS or Linux
     opts = {},
+  },
+  {
+    "ravitemer/mcphub.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    build = "bun install -g mcp-hub@latest",
+    config = function()
+      require("mcphub").setup({
+        port = 3000,
+        config = vim.fn.expand("~/.config/mcp-servers.json"),
+        on_ready = function(hub)
+          -- Called when hub is ready
+        end,
+        on_error = function(err)
+          -- Called on errors
+        end,
+        log = {
+          level = vim.log.levels.WARN,
+          to_file = false,
+          file_path = nil,
+          prefix = "MCPHub",
+        },
+      })
+    end,
+  },
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("codecompanion").setup({
+        opts = {
+          language = "Chinese",
+        },
+        adapters = {
+          deepseek = function()
+            return require("codecompanion.adapters").extend("deepseek", {
+              name = "deepseek",
+              schema = {
+                model = {
+                  default = "deepseek-chat",
+                },
+                temperature = {
+                  default = 1.3,
+                },
+                top_p = {
+                  default = 1,
+                },
+              },
+            })
+          end,
+        },
+        strategies = {
+          chat = {
+            adapter = "deepseek",
+            tools = {
+              ["mcp"] = {
+                -- calling it in a function would prevent mcphub from being loaded before it's needed
+                callback = function()
+                  return require("mcphub.extensions.codecompanion")
+                end,
+                description = "Call tools and resources from the MCP Servers",
+                opts = {
+                  requires_approval = true,
+                },
+              },
+            },
+          },
+
+          inline = {
+            adapter = "deepseek",
+          },
+        },
+      })
+    end,
   },
 }

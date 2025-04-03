@@ -74,7 +74,7 @@ M.maven_command = function(buf)
   )
   create_command(
     buf,
-    "MavenInstll",
+    "MavenInstall",
     { "mvn", "clean", "install" },
     maven_args_complete({ "-DskipTests", "-Dmaven.test.skip=true" }, { model = "single" })
   )
