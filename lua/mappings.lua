@@ -385,6 +385,11 @@ local function creat_trans_command(name, from, to)
 end
 
 creat_trans_command("TransAutoZh", "auto", "中文")
+map("v", "<leader>tc", function()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+  local text = require("kide.tools").get_visual_selection()
+  require("kide.gpt.translate").translate_float({ text = table.concat(text, "\n"), from = "auto", to = "中文" })
+end, {})
 creat_trans_command("TransEnZh", "英语", "中文")
 creat_trans_command("TransZhEn", "中文", "英语")
 creat_trans_command("TransIdZh", "印尼语", "中文")
@@ -494,6 +499,15 @@ end, {
 if vim.fn.executable("cargo-owlsp") == 1 then
   map("n", "<A-o>", require("kide.lsp.rustowl").rustowl_cursor, { noremap = true, silent = true })
 end
+map({ "n", "i" }, "<A-h>", function()
+  local codecompanion = require("codecompanion")
+  codecompanion.chat({ fargs = { "toggle" } })
+end, { desc = "CodeCompanion chat" })
+map({ "n", "i" }, "<A-r>", function()
+  local codecompanion = require("codecompanion")
+  codecompanion.chat()
+end, { desc = "CodeCompanion chat" })
+map({ "v" }, "<A-e>", "<CMD>CodeCompanion /explain<CR>", { desc = "CodeCompanion explain" })
 
 require("kide.tools").setup()
 require("kide.tools.maven").setup()
