@@ -61,6 +61,14 @@ local function buf_status()
   return vim.b[0].stl
 end
 
+local _lsp_status = nil
+function M.set_lsp_status(message)
+  _lsp_status = message
+end
+local function lsp_status()
+  return _lsp_status
+end
+
 function M.exit_status(id, code)
   local cstl = glob_stl[id]
   if not cstl then
@@ -86,12 +94,15 @@ function M.statusline()
     "%<",
   }
   local bstl = buf_status()
+  local lspstatus = lsp_status()
   if bstl then
     if type(bstl) == "table" then
       vim.list_extend(parts, bstl)
     else
       table.insert(parts, bstl)
     end
+  elseif lspstatus then
+    vim.list_extend(parts, { "%#DiagnosticInfo#", lspstatus })
   else
     local git = M.git_status()
     if git then

@@ -15,7 +15,7 @@ function notify_progress()
       if not client or type(value) ~= "table" then
         return
       end
-      kide.lsp_stl(0, "[" .. client.name .. "] " .. (value.message or ""))
+      kide.lsp_stl("[" .. client.name .. "] " .. (value.message or ""))
     end,
   })
 end

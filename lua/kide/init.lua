@@ -24,29 +24,26 @@ function M.term_stl(buf, cmd)
   end
 end
 
-function M.lsp_stl(buf, message)
-  M.set_buf_stl(buf, { " %#DiagnosticInfo#", message })
-  if M.stl_timer ~= nil then
-    M.stl_timer:stop()
-    M.stl_timer:start(
-      500,
-      0,
-      vim.schedule_wrap(function()
-        M.set_buf_stl(buf, nil)
-        vim.cmd.redrawstatus()
-      end)
-    )
-  end
+function M.lsp_stl(message)
+  require("kide.stl").set_lsp_status(message)
+  vim.cmd.redrawstatus()
+  M.stl_timer:stop()
+  M.stl_timer:start(
+    500,
+    0,
+    vim.schedule_wrap(function()
+      require("kide.stl").set_lsp_status(nil)
+      vim.cmd.redrawstatus()
+    end)
+  )
 end
 
 ---清理全局状态
 ---@param id number stl id
 ---@param code number exit code
 function M.clean_stl_status(id, code)
-  if M.stl_timer then
-    M.stl_stop = true
-    M.stl_timer:stop()
-  end
+  M.stl_stop = true
+  M.stl_timer:stop()
   require("kide.stl").exit_status(id, code)
 end
 
@@ -54,19 +51,17 @@ end
 ---@param buf? number
 function M.timer_stl_status(title, buf)
   local id = require("kide.stl").new_status(title)
-  if M.stl_timer ~= nil then
-    M.stl_stop = false
-    M.stl_timer:stop()
-    M.stl_timer:start(
-      0,
-      200,
-      vim.schedule_wrap(function()
-        if not M.stl_stop then
-          vim.cmd.redrawstatus()
-        end
-      end)
-    )
-  end
+  M.stl_stop = false
+  M.stl_timer:stop()
+  M.stl_timer:start(
+    0,
+    200,
+    vim.schedule_wrap(function()
+      if not M.stl_stop then
+        vim.cmd.redrawstatus()
+      end
+    end)
+  )
   return id
 end
 
