@@ -461,6 +461,7 @@ M.config.on_attach = function(client, buffer)
       fn()
     end
   end
+  vim.keymap.set("n", "<leader>dl", with_compile(require("dap").run_last), desc_opts("Run last"))
   vim.keymap.set("n", "<leader>dc", with_compile(jdtls.test_class), desc_opts("Test class"))
   vim.keymap.set("n", "<leader>dm", with_compile(jdtls.test_nearest_method), desc_opts("Test method"))
   vim.keymap.set("n", "<leader>ds", with_compile(jdtls.pick_test), desc_opts("Select test"))
