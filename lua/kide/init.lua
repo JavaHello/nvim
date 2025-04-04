@@ -24,6 +24,21 @@ function M.term_stl(buf, cmd)
   end
 end
 
+function M.lsp_stl(buf, message)
+  M.set_buf_stl(buf, { " %#DiagnosticInfo#", message })
+  if M.stl_timer ~= nil then
+    M.stl_timer:stop()
+    M.stl_timer:start(
+      500,
+      0,
+      vim.schedule_wrap(function()
+        M.set_buf_stl(buf, nil)
+        vim.cmd.redrawstatus()
+      end)
+    )
+  end
+end
+
 ---清理全局状态
 ---@param id number stl id
 ---@param code number exit code

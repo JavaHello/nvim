@@ -541,7 +541,7 @@ return {
           },
         },
       },
-      notifier = { enabled = true },
+      notifier = { enabled = false },
       quickfile = { enabled = true },
       scope = { enabled = true },
       -- scroll = { enabled = true },
