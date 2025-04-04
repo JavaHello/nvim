@@ -166,6 +166,10 @@ return {
     event = "InsertEnter",
     config = true,
   },
+  {
+    "mfussenegger/nvim-lint",
+    lazy = true,
+  },
   -- java
   {
     "mfussenegger/nvim-jdtls",
