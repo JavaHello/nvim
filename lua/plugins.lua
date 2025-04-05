@@ -625,10 +625,28 @@ return {
               },
             })
           end,
+          -- https://openrouter.ai/api/v1/completions
+          openrouter = require("codecompanion.adapters").extend("openai_compatible", {
+            name = "openrouter",
+            formatted_name = "OpenRouter",
+            env = {
+              url = "https://openrouter.ai/api",
+              api_key = "OPENROUTER_API_KEY",
+              chat_url = "/v1/chat/completions",
+            },
+            schema = {
+              model = {
+                default = "anthropic/claude-3.7-sonnet",
+              },
+              choices = {
+                ["anthropic/claude-3.7-sonnet"] = { opts = { stream = true } },
+              },
+            },
+          }),
         },
         strategies = {
           chat = {
-            adapter = "deepseek",
+            adapter = "openrouter",
             tools = {
               ["mcp"] = {
                 -- calling it in a function would prevent mcphub from being loaded before it's needed
@@ -644,7 +662,7 @@ return {
           },
 
           inline = {
-            adapter = "deepseek",
+            adapter = "openrouter",
           },
         },
       })
