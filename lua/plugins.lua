@@ -572,16 +572,8 @@ return {
     end,
   },
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    enabled = vim.env["COPILOT_ENABLE"] == "Y",
-    dependencies = {
-      { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
-    },
-    build = "make tiktoken", -- Only on MacOS or Linux
-    opts = {},
-  },
-  {
     "ravitemer/mcphub.nvim",
+    enabled = vim.env["MCP_ENABLE"] == "Y",
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
