@@ -219,6 +219,13 @@ if vscode_pde_path and "Y" == vim.env["VSCODE_PDE_ENABLE"] then
   vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
 end
 
+local function format_xml_url()
+  local fmt_config = vim.uv.cwd() .. "/eclipse-formatter.xml"
+  local has_fmt = vim.uv.fs_stat(fmt_config)
+  return has_fmt and fmt_config
+    or "https://raw.githubusercontent.com/redhat-developer/vscode-java/refs/heads/main/formatters/eclipse-formatter.xml"
+end
+
 -- vim.notify("SETUP: " .. vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), vim.log.levels.INFO)
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
 M.config = {
@@ -233,6 +240,12 @@ M.config = {
   -- for a list of options
   settings = {
     java = {
+      format = {
+        settings = {
+          url = format_xml_url(),
+          profile = "Eclipse",
+        },
+      },
       autobuild = { enabled = false },
       maxConcurrentBuilds = 1,
       home = env.JAVA_HOME,
@@ -258,12 +271,6 @@ M.config = {
       referenceCodeLens = { enabled = true },
       implementationsCodeLens = { enabled = true },
       templates = {
-        fileHeader = {
-          "/**",
-          " * ${type_name}",
-          " * @author ${user}",
-          " */",
-        },
         typeComment = {
           "/**",
           " * ${type_name}",
