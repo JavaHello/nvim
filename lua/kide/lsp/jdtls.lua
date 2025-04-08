@@ -273,7 +273,8 @@ M.config = {
       templates = {
         typeComment = {
           "/**",
-          " * ${type_name}",
+          " * ${type_name}.",
+          " *",
           " * @author ${user}",
           " */",
         },
