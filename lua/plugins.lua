@@ -38,6 +38,7 @@ return {
         css = { "prettier" },
         html = { "prettier" },
         json = { "jq" },
+        json5 = { "prettier" },
         markdown = { "prettier" },
         sql = { "sql_formatter" },
         python = { "black" },
