@@ -141,6 +141,7 @@ local function jdtls_launcher()
     "-Dlog.level=ALL",
     "-Xmx4g",
     "-XX:+UseZGC",
+    "--enable-native-access=ALL-UNNAMED",
     "--add-modules=ALL-SYSTEM",
     "--add-opens",
     "java.base/java.util=ALL-UNNAMED",
