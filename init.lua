@@ -88,13 +88,13 @@ require("lazy").setup({
   spec = {
     { import = "plugins" },
   },
-  install = { colorscheme = { "gruvboxl" } },
   checker = { enabled = false },
   rocks = {
     enabled = false,
   },
 })
 
-vim.cmd.colorscheme("gruvboxl")
+vim.o.background = "light"
+vim.cmd.colorscheme("everforest")
 require("mappings")
 require("autocmds")
