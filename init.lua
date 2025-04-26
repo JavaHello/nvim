@@ -94,7 +94,7 @@ require("lazy").setup({
   },
 })
 
-vim.o.background = "light"
-vim.cmd.colorscheme("everforest")
+vim.o.background = "dark"
+vim.cmd.colorscheme("gruvboxl")
 require("mappings")
 require("autocmds")
