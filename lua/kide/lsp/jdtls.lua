@@ -110,10 +110,12 @@ local function get_jdtls_path()
   return env.JDTLS_HOME or vscode.find_one("/redhat.java-*/server")
 end
 
+local mason, _ = pcall(require, "mason-registry")
+
 local function jdtls_launcher()
   local jdtls_path = get_jdtls_path()
   if jdtls_path then
-  elseif require("mason-registry").has_package("jdtls") then
+  elseif mason and require("mason-registry").has_package("jdtls") then
     jdtls_path = require("mason-registry").get_package("jdtls"):get_install_path()
   end
   local jdtls_config = nil
@@ -163,14 +165,16 @@ end
 local bundles = {}
 -- This bundles definition is the same as in the previous section (java-debug installation)
 
+
 local vscode_java_debug_path = (function()
   local p = vscode.find_one("/vscjava.vscode-java-debug-*/server")
   if p then
     return p
   end
-  if require("mason-registry").has_package("java-debug-adapter") then
+  if mason and require("mason-registry").has_package("java-debug-adapter") then
     return require("mason-registry").get_package("java-debug-adapter"):get_install_path() .. "/extension/server"
   end
+  return vim.env["JDTLS_JAVA_DEBUG_PATH"]
 end)()
 if vscode_java_debug_path then
   vim.list_extend(
@@ -186,15 +190,16 @@ local vscode_java_test_path = (function()
   if p then
     return p
   end
-  if require("mason-registry").has_package("java-test") then
+  if mason and require("mason-registry").has_package("java-test") then
     return require("mason-registry").get_package("java-test"):get_install_path() .. "/extension/server"
   end
+  return vim.env["JDTLS_JAVA_TEST_PATH"]
 end)()
 if vscode_java_test_path then
   for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
     if
-      not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar")
-      and not vim.endswith(bundle, "jacocoagent.jar")
+        not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar")
+        and not vim.endswith(bundle, "jacocoagent.jar")
     then
       table.insert(bundles, bundle)
     end
@@ -202,7 +207,13 @@ if vscode_java_test_path then
 end
 
 -- /opt/software/lsp/java/vscode-java-decompiler/server/
-local java_decoompiler_path = vscode.find_one("/dgileadi.java-decompiler-*/server")
+local java_decoompiler_path = (function()
+  local p = vscode.find_one("/dgileadi.java-decompiler-*/server")
+  if p then
+    return p
+  end
+  return vim.env["JDTLS_JAVA_DECOMPILER_PATH"]
+end)()
 if java_decoompiler_path then
   vim.list_extend(bundles, vim.split(vim.fn.glob(java_decoompiler_path .. "/*.jar"), "\n"))
 end
@@ -210,7 +221,13 @@ end
 -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
 -- /opt/software/lsp/java/vscode-java-dependency/server/
-local java_dependency_path = vscode.find_one("/vscjava.vscode-java-dependency-*/server")
+local java_dependency_path = (function()
+  local p = vscode.find_one("/vscjava.vscode-java-dependency-*/server")
+  if p then
+    return p
+  end
+  return vim.env["JDTLS_JAVA_DEPENDENCY_PATH"]
+end)()
 if java_dependency_path then
   vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
 end
@@ -424,15 +441,15 @@ local function test_with_profile(test_fn)
         },
         after_test = function()
           local result = vim
-            .system({
-              "java",
-              "-jar",
-              get_async_profiler_cov(),
-              "jfr2flame",
-              utils.tmpdir_file("profile.jfr"),
-              utils.tmpdir_file("profile.html"),
-            })
-            :wait()
+              .system({
+                "java",
+                "-jar",
+                get_async_profiler_cov(),
+                "jfr2flame",
+                utils.tmpdir_file("profile.jfr"),
+                utils.tmpdir_file("profile.html"),
+              })
+              :wait()
           if result.code == 0 then
             utils.open_fn(utils.tmpdir_file("profile.html"))
           end
