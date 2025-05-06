@@ -33,10 +33,14 @@ map("n", "<right>", "<CMD>vertical resize-5<CR>", { desc = "Vertical Resize -5" 
 map("n", "<S-left>", "<CMD>vertical resize-5<CR>", { desc = "Vertical Resize -5" })
 map("n", "<S-right>", "<CMD>vertical resize+5<CR>", { desc = "Vertical Resize +5" })
 
-map("n", "<C-h>", "<C-w>h", { desc = "switch window left" })
-map("n", "<C-l>", "<C-w>l", { desc = "switch window right" })
-map("n", "<C-j>", "<C-w>j", { desc = "switch window down" })
-map("n", "<C-k>", "<C-w>k", { desc = "switch window up" })
+vim.keymap.set({ "t", "i" }, "<A-h>", "<C-\\><C-n><C-w>h")
+vim.keymap.set({ "t", "i" }, "<A-j>", "<C-\\><C-n><C-w>j")
+vim.keymap.set({ "t", "i" }, "<A-k>", "<C-\\><C-n><C-w>k")
+vim.keymap.set({ "t", "i" }, "<A-l>", "<C-\\><C-n><C-w>l")
+vim.keymap.set({ "n" }, "<A-h>", "<C-w>h")
+vim.keymap.set({ "n" }, "<A-j>", "<C-w>j")
+vim.keymap.set({ "n" }, "<A-k>", "<C-w>k")
+vim.keymap.set({ "n" }, "<A-l>", "<C-w>l")
 -- terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
@@ -412,9 +416,9 @@ end, {
   nargs = "*",
   range = true,
 })
-map("n", "<A-k>", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
-map("i", "<A-k>", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
-map("v", "<A-k>", function()
+map("n", "<leader>k", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
+map("i", "<leader>k", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
+map("v", "<leader>k", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
   require("kide.gpt.chat").toggle_gpt({
