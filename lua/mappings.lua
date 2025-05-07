@@ -494,15 +494,6 @@ end, {
 if vim.fn.executable("cargo-owlsp") == 1 then
   map("n", "<A-o>", require("kide.lsp.rustowl").rustowl_cursor, { noremap = true, silent = true })
 end
-map({ "n", "i" }, "<A-h>", function()
-  local codecompanion = require("codecompanion")
-  codecompanion.chat({ fargs = { "toggle" } })
-end, { desc = "CodeCompanion chat" })
-map({ "n", "i" }, "<A-r>", function()
-  local codecompanion = require("codecompanion")
-  codecompanion.chat()
-end, { desc = "CodeCompanion chat" })
-map({ "v" }, "<A-e>", "<CMD>CodeCompanion /explain<CR>", { desc = "CodeCompanion explain" })
 
 require("kide.tools").setup()
 require("kide.tools.maven").setup()
