@@ -22,7 +22,7 @@ end
 
 M.on_attach = function(client, bufnr)
   if vim.lsp.document_color then
-    vim.lsp.document_color.enable(true, bufnr, { style= "virtual"})
+    vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
   end
   local kopts = { noremap = true, silent = true, buffer = bufnr }
   keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, kopts)

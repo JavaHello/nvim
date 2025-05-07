@@ -165,7 +165,6 @@ end
 local bundles = {}
 -- This bundles definition is the same as in the previous section (java-debug installation)
 
-
 local vscode_java_debug_path = (function()
   local p = vscode.find_one("/vscjava.vscode-java-debug-*/server")
   if p then
@@ -198,8 +197,8 @@ end)()
 if vscode_java_test_path then
   for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
     if
-        not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar")
-        and not vim.endswith(bundle, "jacocoagent.jar")
+      not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar")
+      and not vim.endswith(bundle, "jacocoagent.jar")
     then
       table.insert(bundles, bundle)
     end
@@ -441,15 +440,15 @@ local function test_with_profile(test_fn)
         },
         after_test = function()
           local result = vim
-              .system({
-                "java",
-                "-jar",
-                get_async_profiler_cov(),
-                "jfr2flame",
-                utils.tmpdir_file("profile.jfr"),
-                utils.tmpdir_file("profile.html"),
-              })
-              :wait()
+            .system({
+              "java",
+              "-jar",
+              get_async_profiler_cov(),
+              "jfr2flame",
+              utils.tmpdir_file("profile.jfr"),
+              utils.tmpdir_file("profile.html"),
+            })
+            :wait()
           if result.code == 0 then
             utils.open_fn(utils.tmpdir_file("profile.html"))
           end

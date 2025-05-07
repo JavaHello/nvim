@@ -520,3 +520,34 @@ require("kide.tools.mermaid").setup()
 require("kide.tools.curl").setup()
 require("kide.gpt.commit").setup()
 require("kide.gpt.code").setup()
+
+command("SpringBoot", function()
+  vim.ui.select({ "Annotations", "Beans", "RequestMappings", "Prototype" }, {
+    prompt = "Spring Navigation:",
+    format_item = function(item)
+      if item == "Annotations" then
+        return "shows all Spring annotations in the code"
+      elseif item == "Beans" then
+        return "shows all defined beans"
+      elseif item == "RequestMappings" then
+        return "shows all defined request mappings"
+      elseif item == "Prototype" then
+        return "shows all functions (prototype implementation)"
+      end
+    end,
+  }, function(choice)
+    if choice == "Annotations" then
+      vim.lsp.buf.workspace_symbol("@", { on_list = _on_list() })
+    elseif choice == "Beans" then
+      vim.lsp.buf.workspace_symbol("@+", { on_list = _on_list() })
+    elseif choice == "RequestMappings" then
+      vim.lsp.buf.workspace_symbol("@/", { on_list = _on_list() })
+    elseif choice == "Prototype" then
+      vim.lsp.buf.workspace_symbol("@>", { on_list = _on_list() })
+    end
+  end)
+end, {
+  desc = "Spring Boot",
+  nargs = 0,
+  range = false,
+})
