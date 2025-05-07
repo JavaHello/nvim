@@ -414,38 +414,6 @@ return {
     opts = {},
   },
   {
-    "brenoprata10/nvim-highlight-colors",
-    cmd = {
-      "HighlightColors",
-    },
-    config = function()
-      require("nvim-highlight-colors").setup({
-        ---@usage 'background'|'foreground'|'virtual'
-        render = "virtual",
-        virtual_symbol = "󱓻",
-      })
-      local last_status
-      vim.api.nvim_create_autocmd("InsertEnter", {
-        group = vim.api.nvim_create_augroup("hl_colors_i", { clear = true }),
-        pattern = "*",
-        callback = function()
-          last_status = require("nvim-highlight-colors").is_active()
-          require("nvim-highlight-colors").turnOff()
-        end,
-      })
-      vim.api.nvim_create_autocmd("InsertLeave", {
-        group = vim.api.nvim_create_augroup("hl_colors_n", { clear = true }),
-        pattern = "*",
-        callback = function()
-          if last_status then
-            require("nvim-highlight-colors").turnOn()
-          end
-        end,
-      })
-    end,
-  },
-
-  {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
@@ -668,10 +636,5 @@ return {
         },
       })
     end,
-  },
-  {
-    "sainnhe/everforest",
-    priority = 1000,
-    lazy = false,
   },
 }
