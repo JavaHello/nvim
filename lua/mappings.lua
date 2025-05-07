@@ -416,15 +416,6 @@ end, {
   nargs = "*",
   range = true,
 })
-map("n", "<leader>k", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
-map("i", "<leader>k", require("kide.gpt.chat").toggle_gpt, { desc = "Gpt" })
-map("v", "<leader>k", function()
-  vim.api.nvim_feedkeys("\027", "xt", false)
-  local text = require("kide.tools").get_visual_selection()
-  require("kide.gpt.chat").toggle_gpt({
-    code = text,
-  })
-end, { desc = "Gpt" })
 command("GptLast", function(opt)
   require("kide.gpt.chat").toggle_gpt({
     last = true,
