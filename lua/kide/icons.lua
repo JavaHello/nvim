@@ -28,7 +28,7 @@ return {
   Table = "",
   Object = "󰅩",
   Tag = "",
-  Array = "[]",
+  Array = "",
   Boolean = "",
   Number = "",
   Null = "󰟢",
