@@ -37,7 +37,7 @@ git clone  https://github.com/JavaHello/nvim.git
 |            查看实现             |       `Normal`       |           `gi`            |
 |            查看引用             |       `Normal`       |           `gr`            |
 |            查看声明             |       `Normal`       |           `gd`            |
-|      格式化(LSP 提供支持)       | `Normal` or `Visual` |          `<A-l>`          |
+|      格式化(LSP 提供支持)       | `Normal` or `Visual` |          `<C-l>`          |
 |             重命名              |       `Normal`       |       `<leader>rn`        |
 |           Code Action           |       `Normal`       |       `<leader>ca`        |
 |              Debug              |       `Normal`       |      `:DapContinue`       |
