@@ -1,10 +1,5 @@
--- 清理 jumps 列表，防止跳转整到其他项目
-vim.cmd([[
-  augroup kide_clearjumps
-    autocmd!
-    autocmd VimEnter * :clearjumps
-  augroup END
-]])
+-- 不保存 jumps 列表 '0
+vim.opt.shada = "!,'0,<50,s10,h"
 vim.opt_global.jumpoptions = "stack"
 vim.opt_global.encoding = "UTF-8"
 vim.opt.fileencoding = "UTF-8"
