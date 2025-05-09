@@ -1,11 +1,34 @@
 local M = {}
+
+local gpt_provide = require("kide.gpt.provide")
+---@type gpt.Client
+local client = nil
+
 ---@class kai.tools.TranslateRequest
 ---@field text string
 ---@field from string
 ---@field to string
 
-local request_json = {
-  messages = {
+
+---@param request kai.tools.TranslateRequest
+local function trans_system_prompt(request)
+  local from = request.from
+  if request.from == "auto" then
+    return "你会得到一个需要你检测语言的文本， 将他翻译为"
+        .. request.to
+        .. "。我只需要你翻译不要解释或回答我提供的文本"
+  end
+  return "你会得到一个"
+      .. from
+      .. "文本， 将他翻译为"
+      .. request.to
+      .. "。我只需要你翻译不要解释或回答我提供的文本"
+end
+
+---@param request kai.tools.TranslateRequest
+---@param callback fun(data: string)
+function M.translate(request, callback)
+  local messages = {
     {
       content = "",
       role = "system",
@@ -14,54 +37,17 @@ local request_json = {
       content = "Hi",
       role = "user",
     },
-  },
-  model = "deepseek-chat",
-  frequency_penalty = 0,
-  max_tokens = 4096 * 2,
-  presence_penalty = 0,
-  response_format = {
-    type = "text",
-  },
-  stop = nil,
-  stream = true,
-  stream_options = nil,
-  temperature = 1.3,
-  top_p = 1,
-  tools = nil,
-  tool_choice = "none",
-  logprobs = false,
-  top_logprobs = nil,
-}
-
----@param request kai.tools.TranslateRequest
-local function trans_system_prompt(request)
-  local from = request.from
-  if request.from == "auto" then
-    return "你会得到一个需要你检测语言的文本， 将他翻译为"
-      .. request.to
-      .. "。我只需要你翻译不要解释或回答我提供的文本"
-  end
-  return "你会得到一个"
-    .. from
-    .. "文本， 将他翻译为"
-    .. request.to
-    .. "。我只需要你翻译不要解释或回答我提供的文本"
-end
-
----@param request kai.tools.TranslateRequest
----@param callback fun(data: string)
-function M.translate(request, callback)
-  local json = request_json
-  json.messages[1].content = trans_system_prompt(request)
-  json.messages[2].content = request.text
-  return require("kide.gpt.sse").request(json, callback)
+  }
+  messages[1].content = trans_system_prompt(request)
+  messages[2].content = request.text
+  client = gpt_provide.new_client("translate")
+  client:request(messages, callback)
 end
 
 local max_width = 120
 local max_height = 40
 
 M.translate_float = function(request)
-  local job = nil
   local codebuf = vim.api.nvim_get_current_buf()
   local ctext = vim.fn.split(request.text, "\n")
   local width = math.min(max_width, vim.fn.strdisplaywidth(ctext[1]))
@@ -75,11 +61,11 @@ M.translate_float = function(request)
 
   local opts = {
     relative = "cursor",
-    row = 1, -- 相对于光标位置的行偏移
-    col = 0, -- 相对于光标位置的列偏移
-    width = width, -- 窗口的宽度
-    height = height, -- 窗口的高度
-    style = "minimal", -- 最小化样式
+    row = 1,            -- 相对于光标位置的行偏移
+    col = 0,            -- 相对于光标位置的列偏移
+    width = width,      -- 窗口的宽度
+    height = height,    -- 窗口的高度
+    style = "minimal",  -- 最小化样式
     border = "rounded", -- 窗口边框样式
   }
   local buf = vim.api.nvim_create_buf(false, true)
@@ -108,9 +94,8 @@ M.translate_float = function(request)
     callback = function()
       closed = true
       pcall(vim.api.nvim_win_close, win, true)
-      if job then
-        pcall(vim.fn.jobstop, job)
-        job = nil
+      if client then
+        client:close()
       end
     end,
   })
@@ -118,9 +103,8 @@ M.translate_float = function(request)
     buffer = buf,
     callback = function()
       closed = true
-      if job then
-        pcall(vim.fn.jobstop, job)
-        job = nil
+      if client then
+        client:close()
       end
     end,
   })
@@ -129,20 +113,20 @@ M.translate_float = function(request)
     callback = function()
       closed = true
       pcall(vim.api.nvim_win_close, win, true)
-      if job then
-        pcall(vim.fn.jobstop, job)
-        job = nil
+      if client then
+        client:close()
       end
     end,
   })
 
   local curlinelen = 0
   local count_line = 1
+  ---@param opt gpt.Event
   local callback = function(opt)
     local data = opt.data
     local done = opt.done
     if closed then
-      vim.fn.jobstop(opt.job)
+      client:close()
       return
     end
     if done then
@@ -153,7 +137,7 @@ M.translate_float = function(request)
 
     local put_data = {}
     if vim.api.nvim_buf_is_valid(buf) then
-      if data:match("\n") then
+      if data and data:match("\n") then
         put_data = vim.split(data, "\n")
       else
         put_data = { data }
@@ -185,7 +169,7 @@ M.translate_float = function(request)
       vim.api.nvim_put(put_data, "c", true, true)
     end
   end
-  job = M.translate(request, callback)
+  M.translate(request, callback)
 end
 
 return M

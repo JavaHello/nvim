@@ -1,4 +1,6 @@
 local M = {}
+---@param usage gpt.TokenUsage
+---@return string
 function M.usage_str(usage)
   local data = "[token usage: "
     .. vim.inspect(usage.prompt_cache_hit_tokens)

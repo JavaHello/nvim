@@ -1,40 +1,25 @@
 local M = {}
-local job = nil
-local request_json = {
-  messages = {
+
+local gpt_provide = require("kide.gpt.provide")
+---@type gpt.Client
+local client = nil
+
+function M.commit_message(diff, callback)
+  local messages = {
     {
       content = "",
       role = "system",
     },
     {
-      content = "Hi",
+      content = "",
       role = "user",
     },
-  },
-  model = "deepseek-chat",
-  frequency_penalty = 0,
-  max_tokens = 4096 * 2,
-  presence_penalty = 0,
-  response_format = {
-    type = "text",
-  },
-  stop = nil,
-  stream = true,
-  stream_options = nil,
-  temperature = 1.3,
-  top_p = 1,
-  tools = nil,
-  tool_choice = "none",
-  logprobs = false,
-  top_logprobs = nil,
-}
-
-function M.commit_message(diff, callback)
-  local json = request_json
-  json.messages[1].content =
-    "I want you to act as a commit message generator. I will provide you with information about the task and the prefix for the task code, and I would like you to generate an appropriate commit message using the conventional commit format. Do not write any explanations or other words, just reply with the commit message."
-  json.messages[2].content = diff
-  job = require("kide.gpt.sse").request(json, callback)
+  }
+  messages[1].content =
+  "I want you to act as a commit message generator. I will provide you with information about the task and the prefix for the task code, and I would like you to generate an appropriate commit message using the conventional commit format. Do not write any explanations or other words, just reply with the commit message."
+  messages[2].content = diff
+  client = gpt_provide.new_client("commit")
+  client:request(messages, callback)
 end
 
 M.commit_diff_msg = function()
@@ -53,17 +38,15 @@ M.commit_diff_msg = function()
     buffer = codebuf,
     callback = function()
       closed = true
-      if job then
-        pcall(vim.fn.jobstop, job)
-        job = nil
+      if client then
+        client:close()
       end
     end,
   })
   vim.keymap.set("n", "<C-c>", function()
     closed = true
-    if job then
-      pcall(vim.fn.jobstop, job)
-      job = nil
+    if client then
+      client:close()
     end
     vim.keymap.del("n", "<C-c>", { buffer = codebuf })
   end, { buffer = codebuf, noremap = true, silent = true })

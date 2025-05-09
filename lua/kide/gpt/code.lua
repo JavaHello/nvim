@@ -1,7 +1,10 @@
 local M = {}
-local job = nil
-local request_json = {
-  messages = {
+local gpt_provide = require("kide.gpt.provide")
+---@type gpt.Client
+local client = nil
+
+function M.completions(param, callback)
+  local messages = {
     {
       content = "帮我生成一个快速排序",
       role = "user",
@@ -11,19 +14,11 @@ local request_json = {
       prefix = true,
       role = "assistant",
     },
-  },
-  model = "deepseek-chat",
-  max_tokens = 4096 * 2,
-  stop = "```",
-  stream = true,
-  temperature = 0.0,
-}
-
-function M.completions(param, callback)
-  local json = request_json
-  json.messages[1].content = param.message
-  json.messages[2].content = "```" .. param.filetype .. "\n"
-  job = require("kide.gpt.sse").request(json, callback, { url = "https://api.deepseek.com/beta/v1/chat/completions" })
+  }
+  messages[1].content = param.message
+  messages[2].content = "```" .. param.filetype .. "\n"
+  client = gpt_provide.new_client("code")
+  client:request(messages, callback)
 end
 
 M.code_completions = function(opts)
@@ -42,18 +37,16 @@ M.code_completions = function(opts)
     buffer = codebuf,
     callback = function()
       closed = true
-      if job then
-        pcall(vim.fn.jobstop, job)
-        job = nil
+      if client then
+        client:close()
       end
     end,
   })
 
   vim.keymap.set("n", "<C-c>", function()
     closed = true
-    if job then
-      pcall(vim.fn.jobstop, job)
-      job = nil
+    if client then
+      client:close()
     end
     vim.keymap.del("n", "<C-c>", { buffer = codebuf })
   end, { buffer = codebuf, noremap = true, silent = true })

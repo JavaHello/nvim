@@ -1,9 +1,11 @@
 local M = {}
+local gpt_provide = require("kide.gpt.provide")
 
 ---@class kide.gpt.Chat
 ---@field icon string
 ---@field title string
----@field request_json table
+---@field client gpt.Client
+---@field type string
 ---@field job? number
 ---@field chatwin? number
 ---@field chatbuf? number
@@ -21,6 +23,7 @@ function M.new(opts)
   local self = setmetatable({}, Chat)
   self.icon = opts.icon
   self.title = opts.title
+  self.type = opts.type
   self.chatwin = nil
   self.chatbuf = nil
   self.codebuf = nil
@@ -28,7 +31,6 @@ function M.new(opts)
   self.cursormoved = false
   self.chatruning = false
   self.winleave = false
-  self.request_json = opts.request_json
   self.job = nil
   self.callback = opts.callback
   self.chat_last = {}
@@ -39,14 +41,14 @@ M.chat_config = {
   user_title = " :",
   system_title = " :",
   system_prompt = "You are a general AI assistant.\n\n"
-    .. "The user provided the additional info about how they would like you to respond:\n\n"
-    .. "- If you're unsure don't guess and say you don't know instead.\n"
-    .. "- Ask question if you need clarification to provide better answer.\n"
-    .. "- Think deeply and carefully from first principles step by step.\n"
-    .. "- Zoom out first to see the big picture and then zoom in to details.\n"
-    .. "- Use Socratic method to improve your thinking and coding skills.\n"
-    .. "- Don't elide any code from your output if the answer requires coding.\n"
-    .. "- Take a deep breath; You've got this!\n",
+      .. "The user provided the additional info about how they would like you to respond:\n\n"
+      .. "- If you're unsure don't guess and say you don't know instead.\n"
+      .. "- Ask question if you need clarification to provide better answer.\n"
+      .. "- Think deeply and carefully from first principles step by step.\n"
+      .. "- Zoom out first to see the big picture and then zoom in to details.\n"
+      .. "- Use Socratic method to improve your thinking and coding skills.\n"
+      .. "- Don't elide any code from your output if the answer requires coding.\n"
+      .. "- Take a deep breath; You've got this!\n",
 }
 
 function Chat:request()
@@ -60,15 +62,14 @@ function Chat:request()
   self.chatruning = true
   ---@diagnostic disable-next-line: param-type-mismatch
   local list = vim.api.nvim_buf_get_lines(self.chatbuf, 0, -1, false)
-  local json = self.request_json
-  json.messages = {
+  local messages = {
     {
       content = "",
       role = "system",
     },
   }
 
-  json.messages[1].content = M.chat_config.system_prompt
+  messages[1].content = M.chat_config.system_prompt
   -- 1 user, 2 assistant
   local flag = 0
   local chat_msg = ""
@@ -84,7 +85,7 @@ function Chat:request()
       chat_count = chat_count + 1
     else
       chat_msg = chat_msg .. "\n" .. v
-      json.messages[chat_count] = {
+      messages[chat_count] = {
         content = chat_msg,
         role = flag == 1 and "user" or "assistant",
       }
@@ -94,12 +95,13 @@ function Chat:request()
   vim.cmd("normal! G$")
   vim.api.nvim_put({ "", M.chat_config.system_title, "" }, "l", true, true)
 
-  self.job = require("kide.gpt.sse").request(json, self.callback(self), { title = self.title })
+  self.job = self.client:request(messages, self.callback(self))
 end
 
 ---@param state kide.gpt.Chat
 ---@return function
 local gpt_chat_callback = function(state)
+  ---@param opt gpt.Event
   return function(opt)
     local data = opt.data
     local done = opt.done
@@ -107,10 +109,10 @@ local gpt_chat_callback = function(state)
       require("kide").gpt_stl(state.chatbuf, state.icon, state.title, require("kide.gpt.toole").usage_str(opt.usage))
     end
     if state.chatclosed or state.chatruning == false then
-      vim.fn.jobstop(opt.job)
+      state.client:close()
       return
     end
-    if opt.err == 1 then
+    if opt.exit == 1 then
       vim.notify("AI respond Error: " .. opt.data, vim.log.levels.WARN)
       return
     end
@@ -131,7 +133,7 @@ local gpt_chat_callback = function(state)
       return
     end
     if state.chatbuf and vim.api.nvim_buf_is_valid(state.chatbuf) then
-      if data:match("\n") then
+      if data and data:match("\n") then
         local ln = vim.split(data, "\n")
         vim.api.nvim_put(ln, "c", true, true)
       else
@@ -208,12 +210,6 @@ end
 function Chat:close_gpt_win()
   if self.chatwin then
     pcall(vim.api.nvim_win_close, self.chatwin, true)
-    self.request_json.messages = {
-      {
-        content = "",
-        role = "system",
-      },
-    }
     self.chatwin = nil
     self.chatbuf = nil
     self.codebuf = nil
@@ -229,6 +225,7 @@ function Chat:close_gpt_win()
 end
 
 function Chat:create_gpt_win()
+  self.client = gpt_provide.new_client(self.type)
   self.codebuf = vim.api.nvim_get_current_buf()
   vim.cmd("belowright new")
   self.chatwin = vim.api.nvim_get_current_win()
@@ -310,6 +307,7 @@ function Chat:code_question(selection)
   table.insert(qs, "")
   vim.api.nvim_put(qs, "c", true, true)
 end
+
 function Chat:question(question)
   vim.api.nvim_put({ question, "" }, "c", true, true)
 end
@@ -318,54 +316,14 @@ local chat = M.new({
   icon = "󰭻",
   title = "GptChat",
   callback = gpt_chat_callback,
-  request_json = {
-    messages = {
-      {
-        content = "",
-        role = "system",
-      },
-    },
-    model = "deepseek-chat",
-    frequency_penalty = 0,
-    max_tokens = 4096 * 2,
-    presence_penalty = 0,
-    response_format = {
-      type = "text",
-    },
-    stop = nil,
-    stream = true,
-    stream_options = nil,
-    temperature = 1.3,
-    top_p = 1,
-    tools = nil,
-    tool_choice = "none",
-    logprobs = false,
-    top_logprobs = nil,
-  },
+  type = "chat"
 })
 
 local reasoner = M.new({
   icon = "󰍦",
   title = "GptReasoner",
   callback = gpt_reasoner_callback,
-  request_json = {
-    messages = {
-      {
-        content = "",
-        role = "system",
-      },
-    },
-    model = "deepseek-reasoner",
-    max_tokens = 4096 * 2,
-    response_format = {
-      type = "text",
-    },
-    stop = nil,
-    stream = true,
-    stream_options = nil,
-    tools = nil,
-    tool_choice = "none",
-  },
+  type = "reasoner"
 })
 
 ---@class kai.gpt.ChatParam
