@@ -451,7 +451,7 @@ command("GptProvider", function(opt)
     require("kide.gpt.provide").select_provide(opt.args)
   else
     vim.ui.select(require("kide.gpt.provide").provide_keys(), {
-      prompt = 'Select GPT Provides:',
+      prompt = "Select GPT Provides:",
       format_item = function(item)
         return item
       end,
@@ -465,12 +465,12 @@ end, {
   range = false,
   complete = function()
     return require("kide.gpt.provide").provide_keys()
-  end
+  end,
 })
 
 command("GptModels", function(_)
   vim.ui.select(require("kide.gpt.provide").models(), {
-    prompt = 'Select GPT Models:',
+    prompt = "Select GPT Models:",
     format_item = function(item)
       return item
     end,
