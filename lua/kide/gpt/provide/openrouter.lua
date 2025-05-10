@@ -149,6 +149,10 @@ function Openrouter:request(messages, callback)
   end
   local job
   local tmp = ""
+  local is_json = function(text)
+    return (vim.startswith(text, "{") and vim.endswith(text, "}"))
+        or (vim.startswith(text, "[") and vim.endswith(text, "]"))
+  end
   ---@param event http.SseEvent
   local callback_handle = function(_, event)
     if not event.data then
@@ -166,12 +170,11 @@ function Openrouter:request(messages, callback)
               done = true,
             })
           else
-            local ok, resp_json = pcall(vim.fn.json_decode, text)
-            if ok then
-              tmp = ""
+            tmp = tmp .. text
+            if is_json(tmp) then
+              local resp_json = vim.fn.json_decode(tmp)
               callback_data(resp_json)
-            else
-              tmp = text
+              tmp = ""
             end
           end
         elseif vim.startswith(value, ": keep-alive") then
@@ -181,14 +184,11 @@ function Openrouter:request(messages, callback)
           -- ignore
           -- vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "Openrouter" })
         else
-          if tmp ~= "" then
-            tmp = tmp .. value
-            local ok, resp_json = pcall(vim.fn.json_decode, tmp)
-            if ok then
-              callback_data(resp_json)
-            end
-          else
-            vim.notify("[SSE] parse error: " .. value, vim.log.levels.WARN)
+          tmp = tmp .. value
+          if is_json(tmp) then
+            local resp_json = vim.fn.json_decode(tmp)
+            callback_data(resp_json)
+            tmp = ""
           end
         end
       end
