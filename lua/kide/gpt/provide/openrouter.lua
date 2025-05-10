@@ -12,7 +12,7 @@ local code_json = {
       role = "assistant",
     },
   },
-  model = "openai/gpt-4o",
+  model = "google/gemini-2.0-flash-001",
   max_tokens = max_tokens,
   stop = "```",
   stream = true,
@@ -32,7 +32,7 @@ local chat_json = {
 local reasoner_json = {
   messages = {
   },
-  model = "openai/gpt-4o",
+  model = "deepseek/deepseek-r1:free",
   stream = true,
 }
 
@@ -47,7 +47,7 @@ local commit_json = {
       role = "user",
     },
   },
-  model = "openai/gpt-4o",
+  model = "google/gemini-2.0-flash-001",
   stream = true,
 }
 
@@ -62,7 +62,7 @@ local translate_json = {
       role = "user",
     },
   },
-  model = "openai/gpt-4o",
+  model = "google/gemini-2.0-flash-001",
   stream = true,
 }
 
@@ -79,7 +79,7 @@ local Openrouter = {
     "google/gemini-2.0-flash-001",
     "google/gemini-2.5-flash-preview",
     "deepseek/deepseek-chat-v3-0324:free",
-    "deepseek/deepseek-chat-v3-0324"
+    "deepseek/deepseek-chat-v3-0324",
   }
 }
 Openrouter.__index = Openrouter
@@ -134,6 +134,10 @@ end
 function Openrouter:request(messages, callback)
   local payload = self:payload_message(messages)
   local function callback_data(resp_json)
+    if resp_json.error then
+      vim.notify("Openrouter error: " .. vim.inspect(resp_json), vim.log.levels.ERROR)
+      return
+    end
     for _, message in ipairs(resp_json.choices) do
       callback({
         role = message.delta.role,

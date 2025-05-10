@@ -48,7 +48,9 @@ M.chat_config = {
       .. "- Zoom out first to see the big picture and then zoom in to details.\n"
       .. "- Use Socratic method to improve your thinking and coding skills.\n"
       .. "- Don't elide any code from your output if the answer requires coding.\n"
-      .. "- Take a deep breath; You've got this!\n",
+      .. "- Take a deep breath; You've got this!\n"
+      .. "- All non-code text responses must be written in the Chinese language indicated."
+  ,
 }
 
 function Chat:request()
@@ -106,7 +108,8 @@ local gpt_chat_callback = function(state)
     local data = opt.data
     local done = opt.done
     if opt.usage then
-      require("kide").gpt_stl(state.chatbuf, state.icon, state.title, require("kide.gpt.toole").usage_str(state.client.model,opt.usage))
+      require("kide").gpt_stl(state.chatbuf, state.icon, state.title,
+        require("kide.gpt.toole").usage_str(state.client.model, opt.usage))
     end
     if state.chatclosed or state.chatruning == false then
       state.client:close()
