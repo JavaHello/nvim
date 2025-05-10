@@ -12,11 +12,10 @@ local code_json = {
       role = "assistant",
     },
   },
-  model = "deepseek-chat",
+  model = "openai/gpt-4o",
   max_tokens = max_tokens,
   stop = "```",
   stream = true,
-  temperature = 0.0,
 }
 
 local chat_json = {
@@ -26,37 +25,15 @@ local chat_json = {
       role = "system",
     },
   },
-  model = "deepseek-chat",
-  frequency_penalty = 0,
-  max_tokens = 4096 * 2,
-  presence_penalty = 0,
-  response_format = {
-    type = "text",
-  },
-  stop = nil,
+  model = "google/gemini-2.0-flash-001",
   stream = true,
-  stream_options = nil,
-  temperature = 1.3,
-  top_p = 1,
-  tools = nil,
-  tool_choice = "none",
-  logprobs = false,
-  top_logprobs = nil,
 }
 
 local reasoner_json = {
   messages = {
   },
-  model = "deepseek-reasoner",
-  max_tokens = 4096 * 2,
-  response_format = {
-    type = "text",
-  },
-  stop = nil,
+  model = "openai/gpt-4o",
   stream = true,
-  stream_options = nil,
-  tools = nil,
-  tool_choice = "none",
 }
 
 local commit_json = {
@@ -70,22 +47,8 @@ local commit_json = {
       role = "user",
     },
   },
-  model = "deepseek-chat",
-  frequency_penalty = 0,
-  max_tokens = 4096 * 2,
-  presence_penalty = 0,
-  response_format = {
-    type = "text",
-  },
-  stop = nil,
+  model = "openai/gpt-4o",
   stream = true,
-  stream_options = nil,
-  temperature = 1.3,
-  top_p = 1,
-  tools = nil,
-  tool_choice = "none",
-  logprobs = false,
-  top_logprobs = nil,
 }
 
 local translate_json = {
@@ -99,41 +62,32 @@ local translate_json = {
       role = "user",
     },
   },
-  model = "deepseek-chat",
-  frequency_penalty = 0,
-  max_tokens = 4096 * 2,
-  presence_penalty = 0,
-  response_format = {
-    type = "text",
-  },
-  stop = nil,
+  model = "openai/gpt-4o",
   stream = true,
-  stream_options = nil,
-  temperature = 1.3,
-  top_p = 1,
-  tools = nil,
-  tool_choice = "none",
-  logprobs = false,
-  top_logprobs = nil,
 }
 
----@class gpt.DeepSeekClient : gpt.Client
+---@class gpt.OpenrouterClient : gpt.Client
 ---@field base_url string
 ---@field api_key string
 ---@field type string
 ---@field payload table
 ---@field sse http.SseClient?
-local DeepSeek = {
+local Openrouter = {
   models = {
-    "deepseek-chat",
+    "openai/gpt-4o",
+    "anthropic/claude-3.7-sonnet",
+    "google/gemini-2.0-flash-001",
+    "google/gemini-2.5-flash-preview",
+    "deepseek/deepseek-chat-v3-0324:free",
+    "deepseek/deepseek-chat-v3-0324"
   }
 }
-DeepSeek.__index = DeepSeek
+Openrouter.__index = Openrouter
 
-function DeepSeek.new(type)
-  local self = setmetatable({}, DeepSeek)
-  self.base_url = "https://api.deepseek.com"
-  self.api_key = vim.env["DEEPSEEK_API_KEY"]
+function Openrouter.new(type)
+  local self = setmetatable({}, Openrouter)
+  self.base_url = "https://openrouter.ai/api/v1"
+  self.api_key = vim.env["OPENROUTER_API_KEY"]
   self.type = type or "chat"
   if self.type == "chat" then
     self.payload = chat_json
@@ -149,18 +103,23 @@ function DeepSeek.new(type)
   return self
 end
 
-function DeepSeek.set_model(_)
-  --ignore
+function Openrouter.set_model(model)
+  Openrouter._c_model = model
 end
 
-function DeepSeek:payload_message(messages)
+function Openrouter:payload_message(messages)
+  self.model = self.payload.model
   local json = vim.deepcopy(self.payload);
+  if Openrouter._c_model then
+    json.model = Openrouter._c_model
+    vim.print(json.model)
+  end
   self.model = json.model
   json.messages = messages
   return json
 end
 
-function DeepSeek:url()
+function Openrouter:url()
   if self.type == "chat"
       or self.type == "reasoner"
       or self.type == "commit"
@@ -168,12 +127,12 @@ function DeepSeek:url()
   then
     return self.base_url .. "/chat/completions"
   elseif self.type == "code" then
-    return self.base_url .. "/beta/v1/chat/completions"
+    return self.base_url .. "/chat/completions"
   end
 end
 
 ---@param messages table<gpt.Message>
-function DeepSeek:request(messages, callback)
+function Openrouter:request(messages, callback)
   local payload = self:payload_message(messages)
   local function callback_data(resp_json)
     for _, message in ipairs(resp_json.choices) do
@@ -214,7 +173,10 @@ function DeepSeek:request(messages, callback)
           end
         elseif vim.startswith(value, ": keep-alive") then
           -- 这里可能是心跳检测报文, 输出提示
-          vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "DeepSeek" })
+          vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "Openrouter" })
+        elseif vim.startswith(value, ": OPENROUTER PROCESSING") then
+          -- ignore
+          -- vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "Openrouter" })
         else
           if tmp ~= "" then
             tmp = tmp .. value
@@ -239,10 +201,10 @@ function DeepSeek:request(messages, callback)
   job = self.sse.job
 end
 
-function DeepSeek:close()
+function Openrouter:close()
   if self.sse then
     self.sse:stop()
   end
 end
 
-return DeepSeek
+return Openrouter

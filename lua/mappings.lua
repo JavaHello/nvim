@@ -446,6 +446,43 @@ end, {
   range = true,
 })
 
+command("GptProvider", function(opt)
+  if opt.args and opt.args ~= "" then
+    require("kide.gpt.provide").select_provide(opt.args)
+  else
+    vim.ui.select(require("kide.gpt.provide").provide_keys(), {
+      prompt = 'Select GPT Provides:',
+      format_item = function(item)
+        return item
+      end,
+    }, function(c)
+      require("kide.gpt.provide").select_provide(c)
+    end)
+  end
+end, {
+  desc = "GptProvider",
+  nargs = "?",
+  range = false,
+  complete = function()
+    return require("kide.gpt.provide").provide_keys()
+  end
+})
+
+command("GptModels", function(_)
+  vim.ui.select(require("kide.gpt.provide").models(), {
+    prompt = 'Select GPT Models:',
+    format_item = function(item)
+      return item
+    end,
+  }, function(c)
+    require("kide.gpt.provide").select_model(c)
+  end)
+end, {
+  desc = "GptModels",
+  nargs = 0,
+  range = false,
+})
+
 command("LspInfo", function(_)
   require("kide.lspui").open_info()
 end, {

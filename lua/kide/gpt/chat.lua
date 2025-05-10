@@ -106,7 +106,7 @@ local gpt_chat_callback = function(state)
     local data = opt.data
     local done = opt.done
     if opt.usage then
-      require("kide").gpt_stl(state.chatbuf, state.icon, state.title, require("kide.gpt.toole").usage_str(opt.usage))
+      require("kide").gpt_stl(state.chatbuf, state.icon, state.title, require("kide.gpt.toole").usage_str(state.client.model,opt.usage))
     end
     if state.chatclosed or state.chatruning == false then
       state.client:close()
