@@ -112,7 +112,6 @@ function Openrouter:payload_message(messages)
   local json = vim.deepcopy(self.payload);
   if Openrouter._c_model then
     json.model = Openrouter._c_model
-    vim.print(json.model)
   end
   self.model = json.model
   json.messages = messages
