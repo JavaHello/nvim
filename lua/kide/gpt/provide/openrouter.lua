@@ -80,6 +80,7 @@ local Openrouter = {
     "google/gemini-2.5-flash-preview",
     "deepseek/deepseek-chat-v3-0324:free",
     "deepseek/deepseek-chat-v3-0324",
+    "qwen/qwen3-235b-a22b",
   }
 }
 Openrouter.__index = Openrouter
