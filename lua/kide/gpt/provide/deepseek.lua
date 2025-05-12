@@ -45,8 +45,7 @@ local chat_json = {
 }
 
 local reasoner_json = {
-  messages = {
-  },
+  messages = {},
   model = "deepseek-reasoner",
   max_tokens = 4096 * 2,
   response_format = {
@@ -126,7 +125,7 @@ local translate_json = {
 local DeepSeek = {
   models = {
     "deepseek-chat",
-  }
+  },
 }
 DeepSeek.__index = DeepSeek
 
@@ -154,18 +153,14 @@ function DeepSeek.set_model(_)
 end
 
 function DeepSeek:payload_message(messages)
-  local json = vim.deepcopy(self.payload);
+  local json = vim.deepcopy(self.payload)
   self.model = json.model
   json.messages = messages
   return json
 end
 
 function DeepSeek:url()
-  if self.type == "chat"
-      or self.type == "reasoner"
-      or self.type == "commit"
-      or self.type == "translate"
-  then
+  if self.type == "chat" or self.type == "reasoner" or self.type == "commit" or self.type == "translate" then
     return self.base_url .. "/chat/completions"
   elseif self.type == "code" then
     return self.base_url .. "/beta/v1/chat/completions"
@@ -187,6 +182,10 @@ function DeepSeek:request(messages, callback)
   end
   local job
   local tmp = ""
+  local is_json = function(text)
+    return (vim.startswith(text, "{") and vim.endswith(text, "}"))
+      or (vim.startswith(text, "[") and vim.endswith(text, "]"))
+  end
   ---@param event http.SseEvent
   local callback_handle = function(_, event)
     if not event.data then
@@ -204,26 +203,22 @@ function DeepSeek:request(messages, callback)
               done = true,
             })
           else
-            local ok, resp_json = pcall(vim.fn.json_decode, text)
-            if ok then
-              tmp = ""
+            tmp = tmp .. text
+            if is_json(tmp) then
+              local resp_json = vim.fn.json_decode(tmp)
               callback_data(resp_json)
-            else
-              tmp = text
+              tmp = ""
             end
           end
         elseif vim.startswith(value, ": keep-alive") then
           -- 这里可能是心跳检测报文, 输出提示
           vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "DeepSeek" })
         else
-          if tmp ~= "" then
-            tmp = tmp .. value
-            local ok, resp_json = pcall(vim.fn.json_decode, tmp)
-            if ok then
-              callback_data(resp_json)
-            end
-          else
-            vim.notify("[SSE] parse error: " .. value, vim.log.levels.WARN)
+          tmp = tmp .. value
+          if is_json(tmp) then
+            local resp_json = vim.fn.json_decode(tmp)
+            callback_data(resp_json)
+            tmp = ""
           end
         end
       end
