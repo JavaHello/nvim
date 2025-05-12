@@ -6,7 +6,6 @@ local gpt_provide = require("kide.gpt.provide")
 ---@field title string
 ---@field client gpt.Client
 ---@field type string
----@field job? number
 ---@field chatwin? number
 ---@field chatbuf? number
 ---@field codebuf? number
@@ -31,7 +30,6 @@ function M.new(opts)
   self.cursormoved = false
   self.chatruning = false
   self.winleave = false
-  self.job = nil
   self.callback = opts.callback
   self.chat_last = {}
   return self
@@ -41,24 +39,34 @@ M.chat_config = {
   user_title = " :",
   system_title = " :",
   system_prompt = "You are a general AI assistant.\n\n"
-      .. "The user provided the additional info about how they would like you to respond:\n\n"
-      .. "- If you're unsure don't guess and say you don't know instead.\n"
-      .. "- Ask question if you need clarification to provide better answer.\n"
-      .. "- Think deeply and carefully from first principles step by step.\n"
-      .. "- Zoom out first to see the big picture and then zoom in to details.\n"
-      .. "- Use Socratic method to improve your thinking and coding skills.\n"
-      .. "- Don't elide any code from your output if the answer requires coding.\n"
-      .. "- Take a deep breath; You've got this!\n"
-      .. "- All non-code text responses must be written in the Chinese language indicated."
-  ,
+    .. "The user provided the additional info about how they would like you to respond:\n\n"
+    .. "- If you're unsure don't guess and say you don't know instead.\n"
+    .. "- Ask question if you need clarification to provide better answer.\n"
+    .. "- Think deeply and carefully from first principles step by step.\n"
+    .. "- Zoom out first to see the big picture and then zoom in to details.\n"
+    .. "- Use Socratic method to improve your thinking and coding skills.\n"
+    .. "- Don't elide any code from your output if the answer requires coding.\n"
+    .. "- Take a deep breath; You've got this!\n"
+    .. "- All non-code text responses must be written in the Chinese language indicated.",
 }
+
+local function disable_start()
+  vim.cmd("TSBufDisable highlight")
+  vim.cmd("RenderMarkdown buf_disable")
+end
+
+local function enable_done()
+  vim.cmd("TSBufEnable highlight")
+  vim.cmd("RenderMarkdown buf_enable")
+  vim.cmd("normal! G$")
+end
 
 function Chat:request()
   if self.chatruning then
     vim.api.nvim_put({ "", M.chat_config.user_title, "" }, "c", true, true)
     self.chatruning = false
-    pcall(vim.fn.jobstop, self.job)
-    self.job = nil
+    self.client:close()
+    enable_done()
     return
   end
   self.chatruning = true
@@ -95,9 +103,10 @@ function Chat:request()
   end
   -- 跳转到最后一行
   vim.cmd("normal! G$")
+  disable_start()
   vim.api.nvim_put({ "", M.chat_config.system_title, "" }, "l", true, true)
 
-  self.job = self.client:request(messages, self.callback(self))
+  self.client:request(messages, self.callback(self))
 end
 
 ---@param state kide.gpt.Chat
@@ -108,15 +117,21 @@ local gpt_chat_callback = function(state)
     local data = opt.data
     local done = opt.done
     if opt.usage then
-      require("kide").gpt_stl(state.chatbuf, state.icon, state.title,
-        require("kide.gpt.toole").usage_str(state.client.model, opt.usage))
+      require("kide").gpt_stl(
+        state.chatbuf,
+        state.icon,
+        state.title,
+        require("kide.gpt.toole").usage_str(state.client.model, opt.usage)
+      )
     end
     if state.chatclosed or state.chatruning == false then
       state.client:close()
+      enable_done()
       return
     end
     if opt.exit == 1 then
       vim.notify("AI respond Error: " .. opt.data, vim.log.levels.WARN)
+      enable_done()
       return
     end
     if state.winleave then
@@ -133,6 +148,7 @@ local gpt_chat_callback = function(state)
       vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
       state.chatruning = false
       state.chat_last = vim.api.nvim_buf_get_lines(state.chatbuf, 0, -1, true)
+      enable_done()
       return
     end
     if state.chatbuf and vim.api.nvim_buf_is_valid(state.chatbuf) then
@@ -149,9 +165,15 @@ end
 ---@param state kide.gpt.Chat
 local gpt_reasoner_callback = function(state)
   local reasoning = 0
+  ---@param opt gpt.Event
   return function(opt)
     if opt.usage then
-      require("kide").gpt_stl(state.chatbuf, state.icon, state.title, require("kide.gpt.toole").usage_str(opt.usage))
+      require("kide").gpt_stl(
+        state.chatbuf,
+        state.icon,
+        state.title,
+        require("kide.gpt.toole").usage_str(state.client.model, opt.usage)
+      )
     end
     local data
     if opt.reasoning and opt.reasoning ~= vim.NIL then
@@ -167,11 +189,13 @@ local gpt_reasoner_callback = function(state)
     end
     local done = opt.done
     if state.chatclosed or state.chatruning == false then
-      vim.fn.jobstop(opt.job)
+      state.client:close()
+      enable_done()
       return
     end
-    if opt.err == 1 then
+    if opt.exit == 1 then
       vim.notify("AI respond Error: " .. opt.data, vim.log.levels.WARN)
+      enable_done()
       return
     end
     if state.winleave then
@@ -188,6 +212,7 @@ local gpt_reasoner_callback = function(state)
       vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
       state.chatruning = false
       state.chat_last = vim.api.nvim_buf_get_lines(state.chatbuf, 0, -1, true)
+      enable_done()
       return
     end
     if state.chatbuf and vim.api.nvim_buf_is_valid(state.chatbuf) then
@@ -220,10 +245,7 @@ function Chat:close_gpt_win()
     self.cursormoved = false
     self.chatruning = false
     self.winleave = false
-    if self.job then
-      pcall(vim.fn.jobstop, self.job)
-      self.job = nil
-    end
+    self.client:close()
   end
 end
 
@@ -319,14 +341,14 @@ local chat = M.new({
   icon = "󰭻",
   title = "GptChat",
   callback = gpt_chat_callback,
-  type = "chat"
+  type = "chat",
 })
 
 local reasoner = M.new({
   icon = "󰍦",
   title = "GptReasoner",
   callback = gpt_reasoner_callback,
-  type = "reasoner"
+  type = "reasoner",
 })
 
 ---@class kai.gpt.ChatParam

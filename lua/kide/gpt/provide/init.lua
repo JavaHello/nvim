@@ -13,6 +13,7 @@
 ---@field exit number?
 ---@field data string?
 ---@field usage gpt.TokenUsage?
+---@field reasoning string?
 
 ---@class gpt.Client
 ---@field model string?
