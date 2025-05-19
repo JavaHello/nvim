@@ -448,6 +448,8 @@ return {
             or ft == "text"
             or ft == ""
             or ft == "lazy"
+            or ft == "help"
+            or ft == "markdown"
           then
             return false
           end
