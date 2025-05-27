@@ -13,7 +13,15 @@ if jc.config then
   else
     config = jc.config
     jc.init = true
-    vim.list_extend(config["init_options"].bundles, require("spring_boot").java_extensions())
+    local boot_jar_path = vim.env["JDTLS_SPRING_TOOLS_PATH"]
+    if boot_jar_path then
+      vim.list_extend(
+        config["init_options"].bundles,
+        require("spring_boot").get_jars(vim.env["JDTLS_SPRING_TOOLS_PATH"] .. "/jars")
+      )
+    else
+      vim.list_extend(config["init_options"].bundles, require("spring_boot").java_extensions())
+    end
   end
   require("jdtls").start_or_attach(config, { dap = { config_overrides = {}, hotcodereplace = "auto" } })
 
