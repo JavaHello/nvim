@@ -172,14 +172,14 @@ local bundles = {}
 -- This bundles definition is the same as in the previous section (java-debug installation)
 
 local vscode_java_debug_path = (function()
-  local p = vscode.find_one("/vscjava.vscode-java-debug-*/server")
+  local p = vim.env["JDTLS_JAVA_DEBUG_PATH"]
+  p = p or vscode.find_one("/vscjava.vscode-java-debug-*/server")
   if p then
     return p
   end
   if mason and require("mason-registry").has_package("java-debug-adapter") then
     return require("mason-registry").get_package("java-debug-adapter"):get_install_path() .. "/extension/server"
   end
-  return vim.env["JDTLS_JAVA_DEBUG_PATH"]
 end)()
 if vscode_java_debug_path then
   vim.list_extend(
@@ -191,14 +191,14 @@ end
 -- /opt/software/lsp/java/vscode-java-test/server
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
 local vscode_java_test_path = (function()
-  local p = vscode.find_one("/vscjava.vscode-java-test-*/server")
+  local p = vim.env["JDTLS_JAVA_TEST_PATH"]
+  p = vscode.find_one("/vscjava.vscode-java-test-*/server")
   if p then
     return p
   end
   if mason and require("mason-registry").has_package("java-test") then
     return require("mason-registry").get_package("java-test"):get_install_path() .. "/extension/server"
   end
-  return vim.env["JDTLS_JAVA_TEST_PATH"]
 end)()
 if vscode_java_test_path then
   for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
@@ -213,11 +213,11 @@ end
 
 -- /opt/software/lsp/java/vscode-java-decompiler/server/
 local java_decoompiler_path = (function()
-  local p = vscode.find_one("/dgileadi.java-decompiler-*/server")
+  local p = vim.env["JDTLS_JAVA_DECOMPILER_PATH"]
+  p = p or vscode.find_one("/dgileadi.java-decompiler-*/server")
   if p then
     return p
   end
-  return vim.env["JDTLS_JAVA_DECOMPILER_PATH"]
 end)()
 if java_decoompiler_path then
   vim.list_extend(bundles, vim.split(vim.fn.glob(java_decoompiler_path .. "/*.jar"), "\n"))
@@ -227,11 +227,11 @@ end
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"), "\n"));
 -- /opt/software/lsp/java/vscode-java-dependency/server/
 local java_dependency_path = (function()
-  local p = vscode.find_one("/vscjava.vscode-java-dependency-*/server")
+  local p = vim.env["JDTLS_JAVA_DEPENDENCY_PATH"]
+  p = p or vscode.find_one("/vscjava.vscode-java-dependency-*/server")
   if p then
     return p
   end
-  return vim.env["JDTLS_JAVA_DEPENDENCY_PATH"]
 end)()
 if java_dependency_path then
   vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
