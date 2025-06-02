@@ -58,6 +58,8 @@ git clone  https://github.com/JavaHello/nvim.git
 
 - [NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE-vscode.html) 更新了配置，全部使用 vscode 扩展，简化安装步骤。
 
+- [手动编译 Java 开发环境](https://github.com/JavaHello/nvim/wiki) 这里提供了一个编译脚本
+
 ### Spring Boot LS
 
 - 依赖 vscode 插件 [VScode Spring Boot](https://marketplace.visualstudio.com/items?itemName=vmware.vscode-spring-boot)
