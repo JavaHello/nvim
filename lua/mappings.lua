@@ -426,6 +426,33 @@ end, {
   range = true,
 })
 
+command("GptAssistant", function(opt)
+  local args = opt.args
+  local code
+  if opt.range > 0 then
+    code = require("kide.tools").get_visual_selection()
+  end
+  if args and args ~= "" then
+    if args == "linux" then
+      require("kide.gpt.chat").toggle_gpt({
+        gpt = require("kide.gpt.chat").linux,
+        code = code,
+      })
+    else
+      vim.notify("没有指定助手类型: " .. args, vim.log.levels.WARN)
+    end
+  else
+    vim.notify("没有指定助手类型", vim.log.levels.WARN)
+  end
+end, {
+  desc = "Gpt Assistant",
+  nargs = 1,
+  range = true,
+  complete = function()
+    return { "linux" }
+  end,
+})
+
 command("GptReasoner", function(opt)
   local q
   local code
@@ -436,7 +463,7 @@ command("GptReasoner", function(opt)
     q = opt.args
   end
   require("kide.gpt.chat").toggle_gpt({
-    reasoner = true,
+    gpt = require("kide.gpt.chat").reasoner,
     code = code,
     question = q,
   })

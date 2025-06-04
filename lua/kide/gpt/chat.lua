@@ -15,6 +15,9 @@ local gpt_provide = require("kide.gpt.provide")
 ---@field winleave? boolean
 ---@field callback function
 ---@field chat_last string[]
+---@field system_prompt string
+---@field user_title string
+---@field system_title string
 local Chat = {}
 Chat.__index = Chat
 
@@ -32,6 +35,9 @@ function M.new(opts)
   self.winleave = false
   self.callback = opts.callback
   self.chat_last = {}
+  self.system_prompt = opts.system_prompt
+  self.user_title = opts.user_title or M.chat_config.user_title
+  self.system_title = opts.system_title or M.chat_config.system_title
   return self
 end
 
@@ -39,15 +45,15 @@ M.chat_config = {
   user_title = " :",
   system_title = " :",
   system_prompt = "You are a general AI assistant.\n\n"
-    .. "The user provided the additional info about how they would like you to respond:\n\n"
-    .. "- If you're unsure don't guess and say you don't know instead.\n"
-    .. "- Ask question if you need clarification to provide better answer.\n"
-    .. "- Think deeply and carefully from first principles step by step.\n"
-    .. "- Zoom out first to see the big picture and then zoom in to details.\n"
-    .. "- Use Socratic method to improve your thinking and coding skills.\n"
-    .. "- Don't elide any code from your output if the answer requires coding.\n"
-    .. "- Take a deep breath; You've got this!\n"
-    .. "- All non-code text responses must be written in the Chinese language indicated.",
+      .. "The user provided the additional info about how they would like you to respond:\n\n"
+      .. "- If you're unsure don't guess and say you don't know instead.\n"
+      .. "- Ask question if you need clarification to provide better answer.\n"
+      .. "- Think deeply and carefully from first principles step by step.\n"
+      .. "- Zoom out first to see the big picture and then zoom in to details.\n"
+      .. "- Use Socratic method to improve your thinking and coding skills.\n"
+      .. "- Don't elide any code from your output if the answer requires coding.\n"
+      .. "- Take a deep breath; You've got this!\n"
+      .. "- All non-code text responses must be written in the Chinese language indicated.",
 }
 
 local function disable_start()
@@ -63,7 +69,7 @@ end
 
 function Chat:request()
   if self.chatruning then
-    vim.api.nvim_put({ "", M.chat_config.user_title, "" }, "c", true, true)
+    vim.api.nvim_put({ "", self.user_title, "" }, "c", true, true)
     self.chatruning = false
     self.client:close()
     enable_done()
@@ -79,17 +85,17 @@ function Chat:request()
     },
   }
 
-  messages[1].content = M.chat_config.system_prompt
+  messages[1].content = self.system_prompt
   -- 1 user, 2 assistant
   local flag = 0
   local chat_msg = ""
   local chat_count = 1
   for _, v in ipairs(list) do
-    if vim.startswith(v, M.chat_config.system_title) then
+    if vim.startswith(v, self.system_title) then
       flag = 2
       chat_msg = ""
       chat_count = chat_count + 1
-    elseif vim.startswith(v, M.chat_config.user_title) then
+    elseif vim.startswith(v, self.user_title) then
       chat_msg = ""
       flag = 1
       chat_count = chat_count + 1
@@ -104,7 +110,7 @@ function Chat:request()
   -- 跳转到最后一行
   vim.cmd("normal! G$")
   disable_start()
-  vim.api.nvim_put({ "", M.chat_config.system_title, "" }, "l", true, true)
+  vim.api.nvim_put({ "", self.system_title, "" }, "l", true, true)
 
   self.client:request(messages, self.callback(self))
 end
@@ -145,7 +151,7 @@ local gpt_chat_callback = function(state)
       state.cursormoved = false
     end
     if done then
-      vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
+      vim.api.nvim_put({ "", "", state.user_title, "" }, "c", true, true)
       state.chatruning = false
       state.chat_last = vim.api.nvim_buf_get_lines(state.chatbuf, 0, -1, true)
       enable_done()
@@ -209,7 +215,7 @@ local gpt_reasoner_callback = function(state)
       state.cursormoved = false
     end
     if done then
-      vim.api.nvim_put({ "", "", M.chat_config.user_title, "" }, "c", true, true)
+      vim.api.nvim_put({ "", "", state.user_title, "" }, "c", true, true)
       state.chatruning = false
       state.chat_last = vim.api.nvim_buf_get_lines(state.chatbuf, 0, -1, true)
       enable_done()
@@ -260,7 +266,7 @@ function Chat:create_gpt_win()
   vim.bo[self.chatbuf].buflisted = false
   vim.bo[self.chatbuf].swapfile = false
   vim.bo[self.chatbuf].filetype = "markdown"
-  vim.api.nvim_put({ M.chat_config.user_title, "" }, "c", true, true)
+  vim.api.nvim_put({ self.user_title, "" }, "c", true, true)
   self.chatclosed = false
 
   vim.keymap.set("n", "q", function()
@@ -337,34 +343,47 @@ function Chat:question(question)
   vim.api.nvim_put({ question, "" }, "c", true, true)
 end
 
-local chat = M.new({
+M.chat = M.new({
   icon = "󰭻",
   title = "GptChat",
   callback = gpt_chat_callback,
   type = "chat",
+  system_prompt = M.chat_config.system_prompt,
 })
 
-local reasoner = M.new({
+M.reasoner = M.new({
   icon = "󰍦",
   title = "GptReasoner",
   callback = gpt_reasoner_callback,
   type = "reasoner",
 })
 
+
+M.linux = M.new({
+  icon = "󰭻",
+  title = "GptLinux",
+  callback = gpt_chat_callback,
+  type = "chat",
+  system_prompt = "你是一个 Linux 内核专家。\n\n"
+      .. "帮助我阅读 Linux 内核源代码：\n\n"
+      .. "- 你需要详细地解释我提供的每行代码。\n"
+      .. "- 如果你不确定，请不要猜测，而是说你不知道。\n"
+      .. "- 所有非代码文本回答必须用中文。",
+})
+
 ---@class kai.gpt.ChatParam
 ---@field code? string[]
 ---@field question? string
 ---@field last? boolean
----@field reasoner? boolean
+---@field gpt? kide.gpt.Chat
 
----@param param kai.gpt.ChatParam
-M.toggle_gpt = function(param)
+
+
+---@param gpt kide.gpt.Chat
+function M.toggle(param, gpt)
   param = param or {}
-  local gpt
-  if param.reasoner then
-    gpt = reasoner
-  else
-    gpt = chat
+  if not gpt.client then
+    gpt.client = gpt_provide.new_client(gpt.type)
   end
   if gpt.chatwin then
     gpt:close_gpt_win()
@@ -381,6 +400,16 @@ M.toggle_gpt = function(param)
       gpt:question(param.question)
     end
   end
+end
+
+---@param param kai.gpt.ChatParam
+M.toggle_gpt = function(param)
+  param = param or {}
+  local gpt = param.gpt
+  if not gpt then
+    gpt = M.chat
+  end
+  M.toggle(param, gpt)
 end
 
 function Chat:gpt_last(buf)
