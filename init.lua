@@ -36,6 +36,7 @@ vim.fn.sign_define("DapStopped", { text = "", texthl = "Debug", linehl = "", 
 vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "Debug", linehl = "", numhl = "" })
 
 if vim.g.neovide then
+  vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.opt_global.guifont = "CaskaydiaCove Nerd Font Mono:h15"
   vim.g.neovide_fullscreen = true
