@@ -411,7 +411,7 @@ local function get_async_profiler_ddl()
 end
 local function get_async_profiler_cov()
   if M.async_profiler_home then
-    return vim.fn.glob(M.async_profiler_home .. "/target/async-profiler-converter-3.0.jar")
+    return vim.fn.glob(M.async_profiler_home .. "/target/jfr-converter-4.0.jar")
   end
 end
 
@@ -450,7 +450,6 @@ local function test_with_profile(test_fn)
               "java",
               "-jar",
               get_async_profiler_cov(),
-              "jfr2flame",
               utils.tmpdir_file("profile.jfr"),
               utils.tmpdir_file("profile.html"),
             })
@@ -538,6 +537,23 @@ M.config.on_attach = function(client, buffer)
   create_command(buffer, "JdtTestGenerate", require("jdtls.tests").generate, { nargs = 0 })
   create_command(buffer, "JdtTestGoto", require("jdtls.tests").goto_subjects, { nargs = 0 })
 
+  create_command(buffer, "Jol", function(o)
+    --           externals: Show object externals: objects reachable from a given instance
+    --           footprint: Show the footprint of all objects reachable from a sample instance
+    --           internals: Show object internals: field layout, default contents, object header
+    -- internals-estimates: Same as 'internals', but simulate class layout in different VM modes
+    jdtls.jol(o.args)
+  end, {
+    nargs = 1,
+    complete = function()
+      return {
+        "externals",
+        "footprint",
+        "internals",
+        "internals-estimates"
+      }
+    end
+  })
   me.on_attach(client, buffer)
 end
 
