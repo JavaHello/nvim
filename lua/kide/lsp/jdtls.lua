@@ -192,7 +192,7 @@ end
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
 local vscode_java_test_path = (function()
   local p = vim.env["JDTLS_JAVA_TEST_PATH"]
-  p = vscode.find_one("/vscjava.vscode-java-test-*/server")
+  p = p or vscode.find_one("/vscjava.vscode-java-test-*/server")
   if p then
     return p
   end
