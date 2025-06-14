@@ -1,3 +1,8 @@
+local yc = require("kide.lsp.yamlls").config
+if yc then
+  vim.lsp.start(yc)
+end
+
 if vim.g.enable_spring_boot == true then
   local c = require("kide.lsp.spring-boot").config
   if c and require("spring_boot.util").is_application_yml_buf(0) then
@@ -10,4 +15,6 @@ if vim.g.enable_quarkus == true then
   vim.lsp.start(qc)
   local mc = require("kide.lsp.microprofile").config
   vim.lsp.start(mc)
+  local buf = vim.api.nvim_get_current_buf()
+  require("microprofile.yaml").registerYamlSchema(buf)
 end
