@@ -200,6 +200,33 @@ return {
     end,
   },
   {
+    "JavaHello/microprofile.nvim",
+    lazy = true,
+    config = function()
+      require("microprofile").setup({
+        ls_path = vim.env["NVIM_MICROPROFILE_LS_PATH"],
+        jdt_extensions_path = vim.env["NVIM_MICROPROFILE_JDT_EXTENSIONS_PATH"],
+      })
+    end,
+  },
+  {
+    "JavaHello/quarkus.nvim",
+    ft = { "java", "yaml", "jproperties", "html" },
+    dependencies = {
+      "JavaHello/microprofile.nvim",
+      "mfussenegger/nvim-jdtls",
+    },
+    config = function()
+      if vim.g.enable_quarkus then
+        require("quarkus").setup({
+          ls_path = vim.env["NVIM_QUARKUS_LS_PATH"],
+          jdt_extensions_path = vim.env["NVIM_QUARKUS_JDT_EXTENSIONS_PATH"],
+          microprofile_ext_path = vim.env["NVIM_QUARKUS_MICROPROFILE_EXT_PATH"],
+        })
+      end
+    end,
+  },
+  {
     "aklt/plantuml-syntax",
     ft = "plantuml",
   },
