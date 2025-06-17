@@ -25,7 +25,7 @@ M.on_attach = function(client, bufnr)
     vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
   end
   local kopts = { noremap = true, silent = true, buffer = bufnr }
-  keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, kopts)
+  keymap.set({"n", "v"}, "<leader>ca", vim.lsp.buf.code_action, kopts)
   keymap.set("n", "K", function()
     lsp.buf.hover({ border = "rounded" })
   end, kopts)
