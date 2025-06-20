@@ -398,7 +398,7 @@ creat_trans_command("TransEnZh", "英语", "中文")
 creat_trans_command("TransZhEn", "中文", "英语")
 creat_trans_command("TransIdZh", "印尼语", "中文")
 
-command("Gpt", function(opt)
+command("GptChat", function(opt)
   local q
   local code
   if opt.range > 0 then
@@ -412,7 +412,7 @@ command("Gpt", function(opt)
     question = q,
   })
 end, {
-  desc = "Gpt",
+  desc = "GptChat",
   nargs = "*",
   range = true,
 })
@@ -426,7 +426,7 @@ end, {
   range = true,
 })
 
-command("GptAssistant", function(opt)
+command("Gpt", function(opt)
   local args = opt.args
   local code
   if opt.range > 0 then
@@ -438,6 +438,20 @@ command("GptAssistant", function(opt)
         gpt = require("kide.gpt.chat").linux,
         code = code,
       })
+    elseif args == "lsp" then
+      local cursor = vim.api.nvim_win_get_cursor(0)
+      local diagnostics = vim.diagnostic.get(0, {
+        lnum = cursor[1] - 1,
+      })
+      if #diagnostics > 0 then
+        require("kide.gpt.chat").toggle_gpt({
+          gpt = require("kide.gpt.chat").lsp,
+          code = code,
+          diagnostics = diagnostics,
+        })
+      else
+        vim.notify("没有诊断信息", vim.log.levels.INFO)
+      end
     else
       vim.notify("没有指定助手类型: " .. args, vim.log.levels.WARN)
     end
@@ -449,7 +463,7 @@ end, {
   nargs = 1,
   range = true,
   complete = function()
-    return { "linux" }
+    return { "linux", "lsp" }
   end,
 })
 

@@ -208,4 +208,7 @@ hl({
   BlinkCmpDocBorder = { link = "FloatBorder" },
 
   SnacksPickerBorder = { fg = gray_245 },
+
+  MarkviewCode = { bg = dark_ext1 },
+  MarkviewInlineCode = { bg = dark_ext1 },
 })

@@ -424,15 +424,20 @@ return {
   },
 
   {
-    "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown", "Avante", "codecompanion" },
+    "OXY2DEV/markview.nvim",
+    lazy = false,
     opts = {
-      enabled = true,
-      file_types = { "markdown", "Avante", "copilot-chat", "codecompanion" },
-    },
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-tree/nvim-web-devicons",
+      preview = {
+        filetypes = { "markdown" },
+        ignore_buftypes = {},
+      },
+      markdown = {
+        enable = true,
+        tables = {
+          enable = true,
+          use_virt_lines = true,
+        },
+      },
     },
   },
   {

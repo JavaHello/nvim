@@ -27,7 +27,7 @@ end
 
 ---@return http.SseClient
 function SseClient:body(body)
-  self.payload = body;
+  self.payload = body
   return self
 end
 
@@ -59,7 +59,7 @@ local function _cmd(client)
     "Authorization: Bearer " .. client.token,
     "-d",
     body,
-    client.url
+    client.url,
   }
   return cmd
 end
@@ -73,7 +73,8 @@ local function handle_sse_events(client)
         data = data,
       })
     end,
-    on_stderr = function(_, _, _)
+    on_stderr = function(_, err, _)
+      vim.notify("[SSE] " .. table.concat(err, "\n"), vim.log.levels.ERROR)
     end,
     on_exit = function(_, code, _)
       require("kide").clean_stl_status(sid, code)

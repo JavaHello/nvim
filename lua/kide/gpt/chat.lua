@@ -45,25 +45,25 @@ M.chat_config = {
   user_title = " :",
   system_title = " :",
   system_prompt = "You are a general AI assistant.\n\n"
-      .. "The user provided the additional info about how they would like you to respond:\n\n"
-      .. "- If you're unsure don't guess and say you don't know instead.\n"
-      .. "- Ask question if you need clarification to provide better answer.\n"
-      .. "- Think deeply and carefully from first principles step by step.\n"
-      .. "- Zoom out first to see the big picture and then zoom in to details.\n"
-      .. "- Use Socratic method to improve your thinking and coding skills.\n"
-      .. "- Don't elide any code from your output if the answer requires coding.\n"
-      .. "- Take a deep breath; You've got this!\n"
-      .. "- All non-code text responses must be written in the Chinese language indicated.",
+    .. "The user provided the additional info about how they would like you to respond:\n\n"
+    .. "- If you're unsure don't guess and say you don't know instead.\n"
+    .. "- Ask question if you need clarification to provide better answer.\n"
+    .. "- Think deeply and carefully from first principles step by step.\n"
+    .. "- Zoom out first to see the big picture and then zoom in to details.\n"
+    .. "- Use Socratic method to improve your thinking and coding skills.\n"
+    .. "- Don't elide any code from your output if the answer requires coding.\n"
+    .. "- Take a deep breath; You've got this!\n"
+    .. "- All non-code text responses must be written in the Chinese language indicated.",
 }
 
 local function disable_start()
   vim.cmd("TSBufDisable highlight")
-  vim.cmd("RenderMarkdown buf_disable")
+  vim.cmd("Markview disable")
 end
 
 local function enable_done()
   vim.cmd("TSBufEnable highlight")
-  vim.cmd("RenderMarkdown buf_enable")
+  vim.cmd("Markview enable")
   vim.cmd("normal! G$")
 end
 
@@ -343,6 +343,47 @@ function Chat:question(question)
   vim.api.nvim_put({ question, "" }, "c", true, true)
 end
 
+---@param param kai.gpt.ChatParam
+function Chat:diagnostics(param)
+  local diagnostics = param.diagnostics
+  if not diagnostics then
+    return
+  end
+  local need_code = not param.code
+  local qs = {
+    "请解释以下诊断信息并给出修复方案:",
+  }
+  local filetype = vim.bo[self.codebuf].filetype or "text"
+  for _, diagnostic in ipairs(diagnostics) do
+    local code = diagnostic.code or "Unknown Code"
+    local severity = diagnostic.severity == 1 and "ERROR" or diagnostic.severity == 2 and "WARN" or "INFO"
+    table.insert(qs, "## " .. severity .. ": " .. code)
+    if need_code then
+      local lines = vim.api.nvim_buf_get_lines(self.codebuf, diagnostic.lnum, diagnostic.end_lnum + 1, false)
+      if #lines > 0 then
+        table.insert(qs, "- Code Snippet")
+        table.insert(qs, "```" .. filetype)
+        for _, line in ipairs(lines) do
+          table.insert(qs, line)
+        end
+        table.insert(qs, "```")
+      end
+    end
+
+    table.insert(qs, "- Source: " .. (diagnostic.source or "Unknown Source"))
+    local message = diagnostic.message or "No message provided"
+    table.insert(qs, "- Diagnostic Message")
+    table.insert(qs, "```text")
+    local lines = vim.split(message, "\n")
+    for _, line in ipairs(lines) do
+      table.insert(qs, line)
+    end
+    table.insert(qs, "```")
+  end
+  table.insert(qs, "")
+  vim.api.nvim_put(qs, "c", true, true)
+end
+
 M.chat = M.new({
   icon = "󰭻",
   title = "GptChat",
@@ -358,26 +399,36 @@ M.reasoner = M.new({
   type = "reasoner",
 })
 
-
 M.linux = M.new({
   icon = "󰭻",
   title = "GptLinux",
   callback = gpt_chat_callback,
   type = "chat",
   system_prompt = "你是一个 Linux 内核专家。\n\n"
-      .. "帮助我阅读 Linux 内核源代码：\n\n"
-      .. "- 你需要详细地解释我提供的每行代码。\n"
-      .. "- 如果你不确定，请不要猜测，而是说你不知道。\n"
-      .. "- 所有非代码文本回答必须用中文。",
+    .. "帮助我阅读 Linux 内核源代码：\n\n"
+    .. "- 你需要详细地解释我提供的每行代码。\n"
+    .. "- 如果你不确定，请不要猜测，而是说你不知道。\n"
+    .. "- 所有非代码文本回答必须用中文。",
+})
+
+M.lsp = M.new({
+  icon = "󰭻",
+  title = "GptLsp",
+  callback = gpt_chat_callback,
+  type = "chat",
+  system_prompt = "你是一个编程专家。\n\n"
+    .. "帮助我解决代码编译问题：\n\n"
+    .. "- 你需要详细地解释我提供的编译问题。\n"
+    .. "- 如果你不确定，请不要猜测，而是说你不知道。\n"
+    .. "- 所有非代码文本回答必须用中文。",
 })
 
 ---@class kai.gpt.ChatParam
 ---@field code? string[]
 ---@field question? string
+---@field diagnostics? vim.Diagnostic[]
 ---@field last? boolean
 ---@field gpt? kide.gpt.Chat
-
-
 
 ---@param gpt kide.gpt.Chat
 function M.toggle(param, gpt)
@@ -395,6 +446,9 @@ function M.toggle(param, gpt)
     end
     if param.code then
       gpt:code_question(param.code)
+    end
+    if param.diagnostics then
+      gpt:diagnostics(param)
     end
     if param.question then
       gpt:question(param.question)
