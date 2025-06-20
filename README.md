@@ -70,6 +70,6 @@ git clone  https://github.com/JavaHello/nvim.git
 
 依赖 `DeepSeek` API
 
-- 命令 `:Gpt` 开启对话窗, `<Enter>` 发送请求
+- 命令 `:GptChat` 开启对话窗, `<Enter>` 发送请求
 - 命令 `:TransXXX` 翻译文本
 - 在 `git` 提交窗口，快捷键 `<leader>cm` 生成 `git` 提交消息
