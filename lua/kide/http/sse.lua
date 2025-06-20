@@ -73,8 +73,7 @@ local function handle_sse_events(client)
         data = data,
       })
     end,
-    on_stderr = function(_, err, _)
-      vim.notify("[SSE] " .. table.concat(err, "\n"), vim.log.levels.ERROR)
+    on_stderr = function(_, _, _)
     end,
     on_exit = function(_, code, _)
       require("kide").clean_stl_status(sid, code)
