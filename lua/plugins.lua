@@ -424,21 +424,10 @@ return {
   },
 
   {
-    "OXY2DEV/markview.nvim",
-    lazy = false,
-    opts = {
-      preview = {
-        filetypes = { "markdown" },
-        ignore_buftypes = {},
-      },
-      markdown = {
-        enable = true,
-        tables = {
-          enable = true,
-          use_virt_lines = true,
-        },
-      },
-    },
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    ft = { "markdown" },
+    opts = {},
   },
   {
     "HakonHarnes/img-clip.nvim",
