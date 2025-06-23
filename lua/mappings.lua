@@ -190,22 +190,8 @@ command("CodeLensClear", function()
   vim.lsp.codelens.clear()
 end, { desc = "LSP CodeLens" })
 
-local function _on_list()
-  local templist = {}
-  local tempctx = {}
-  return function(ctx)
-    vim.list_extend(templist, ctx.items)
-    tempctx = vim.tbl_extend("keep", tempctx, ctx)
-    tempctx.items = templist
-    vim.fn.setqflist({}, " ", tempctx)
-    vim.cmd("botright copen")
-  end
-end
-
 command("LspDocumentSymbols", function(_)
-  vim.lsp.buf.document_symbol({
-    on_list = _on_list(),
-  })
+  vim.lsp.buf.document_symbol()
 end, {
   desc = "Lsp Document Symbols",
   nargs = 0,
@@ -215,9 +201,9 @@ end, {
 command("LspWorkspaceSymbols", function(opts)
   if opts.range > 0 then
     local text = require("kide.tools").get_visual_selection()
-    vim.lsp.buf.workspace_symbol(text[1], { on_list = _on_list() })
+    vim.lsp.buf.workspace_symbol(text[1])
   else
-    vim.lsp.buf.workspace_symbol(opts.args, { on_list = _on_list() })
+    vim.lsp.buf.workspace_symbol(opts.args)
   end
 end, {
   desc = "Lsp Workspace Symbols",
@@ -580,34 +566,3 @@ require("kide.tools.mermaid").setup()
 require("kide.tools.curl").setup()
 require("kide.gpt.commit").setup()
 require("kide.gpt.code").setup()
-
-command("SpringBoot", function()
-  vim.ui.select({ "Annotations", "Beans", "RequestMappings", "Prototype" }, {
-    prompt = "Spring Navigation:",
-    format_item = function(item)
-      if item == "Annotations" then
-        return "shows all Spring annotations in the code"
-      elseif item == "Beans" then
-        return "shows all defined beans"
-      elseif item == "RequestMappings" then
-        return "shows all defined request mappings"
-      elseif item == "Prototype" then
-        return "shows all functions (prototype implementation)"
-      end
-    end,
-  }, function(choice)
-    if choice == "Annotations" then
-      vim.lsp.buf.workspace_symbol("@", { on_list = _on_list() })
-    elseif choice == "Beans" then
-      vim.lsp.buf.workspace_symbol("@+", { on_list = _on_list() })
-    elseif choice == "RequestMappings" then
-      vim.lsp.buf.workspace_symbol("@/", { on_list = _on_list() })
-    elseif choice == "Prototype" then
-      vim.lsp.buf.workspace_symbol("@>", { on_list = _on_list() })
-    end
-  end)
-end, {
-  desc = "Spring Boot",
-  nargs = 0,
-  range = false,
-})
