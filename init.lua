@@ -60,6 +60,7 @@ if vim.g.neovide then
   vim.g.neovide_padding_left = 0
 end
 require("global")
+require("experimental")
 
 require("options")
 -- Bootstrap lazy.nvim
