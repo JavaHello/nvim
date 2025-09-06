@@ -149,6 +149,8 @@ local function jdtls_launcher()
     "-Dlog.level=ALL",
     "-Xmx4g",
     "-XX:+UseZGC",
+    "-XX:+UseTransparentHugePages",
+    "-XX:+AlwaysPreTouch",
     "--enable-native-access=ALL-UNNAMED",
     "--add-modules=ALL-SYSTEM",
     "--add-opens",
@@ -273,7 +275,7 @@ M.config = {
         settings = fmt_config(),
       },
       autobuild = { enabled = false },
-      maxConcurrentBuilds = 1,
+      maxConcurrentBuilds = 8,
       home = env.JAVA_HOME,
       project = {
         encoding = "UTF-8",
@@ -355,6 +357,9 @@ M.config = {
           starThreshold = 9999,
           staticStarThreshold = 9999,
         },
+      },
+      saveActions = {
+        organizeImports = true,
       },
       configuration = {
         maven = {
@@ -550,9 +555,9 @@ M.config.on_attach = function(client, buffer)
         "externals",
         "footprint",
         "internals",
-        "internals-estimates"
+        "internals-estimates",
       }
-    end
+    end,
   })
   me.on_attach(client, buffer)
 end
