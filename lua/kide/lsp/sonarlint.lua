@@ -42,8 +42,15 @@ M.setup = function()
   require("sonarlint").setup({
     server = {
       cmd = cmd,
+      init_options = {
+        connections = {},
+        rules = {},
+      },
       settings = {
         sonarlint = {
+          connectedMode = {
+            connections = {},
+          },
           disableTelemetry = true,
         },
         -- https://github.com/SonarSource/sonarlint-language-server/blob/351c430da636462a39ddeecc5a40ae04c832d73c/src/main/java/org/sonarsource/sonarlint/ls/settings/SettingsManager.java#L322
