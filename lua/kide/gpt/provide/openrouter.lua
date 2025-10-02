@@ -74,6 +74,9 @@ local translate_json = {
 ---@field sse http.SseClient?
 local Openrouter = {
   models = {
+    "anthropic/claude-sonnet-4.5",
+    "anthropic/claude-sonnet-4",
+    "anthropic/claude-opus-4.1",
     "anthropic/claude-opus-4",
     "openai/gpt-4o",
     "anthropic/claude-3.7-sonnet",
