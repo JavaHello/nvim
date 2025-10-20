@@ -188,6 +188,10 @@ hl({
   ["@markup.link.label"] = { fg = bright_aqua },
   ["@markup.link.url"] = { underline = true, fg = bright_orange },
   ["@markup.raw"] = { fg = bright_orange },
+  -- lsp semanticTokens
+  -- ["@lsp.type.macro.rust"] = { link = "@lsp" },
+  ["@lsp.type.modifier.java"] = { link = "@lsp" },
+  ["@lsp.type.namespace.java"] = { link = "@variable" },
 
   LspReferenceWrite = { fg = "#e78a4e" },
   LspReferenceText = { fg = "#e78a4e" },

@@ -46,9 +46,11 @@ M.on_attach = function(client, bufnr)
 end
 
 M.on_init = function(client, _)
-  if client.supports_method("textDocument/semanticTokens") then
-    client.server_capabilities.semanticTokensProvider = nil
-  end
+  -- 由于卡顿，暂时禁用semanticTokens
+  -- 看起来已经修复了，可以试试
+  -- if client.supports_method("textDocument/semanticTokens") then
+  --   client.server_capabilities.semanticTokensProvider = nil
+  -- end
 end
 M.capabilities = function(opt)
   local capabilities = vim.lsp.protocol.make_client_capabilities()
