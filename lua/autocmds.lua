@@ -116,7 +116,9 @@ autocmd("TermOpen", {
   callback = function(event)
     -- mac 下 t 模式执行 bd! dap 终端会导致 nvim 退出
     -- 这里使用 n 模式下执行
-    vim.keymap.set("n", "q", "<cmd>bd!<cr>", { buffer = event.buf, silent = true })
+    if vim.b[event.buf].q_close == nil or vim.b[event.buf].q_close == true then
+      vim.keymap.set("n", "q", "<cmd>bd!<cr>", { buffer = event.buf, silent = true })
+    end
   end,
 })
 

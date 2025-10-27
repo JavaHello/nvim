@@ -552,6 +552,18 @@ if vim.fn.executable("cargo-owlsp") == 1 then
   map("n", "<A-o>", require("kide.lsp.rustowl").rustowl_cursor, { noremap = true, silent = true })
 end
 
+command("Codex", function()
+  require("kide.codex").codex()
+end, {
+  desc = "Codex cmd",
+  nargs = 0,
+  range = false,
+})
+
+map({ "i", "n", "t" }, "<A-;>", function()
+  require("kide.codex").codex()
+end, { desc = "Codex cmd" })
+
 require("kide.tools").setup()
 require("kide.tools.maven").setup()
 require("kide.tools.plantuml").setup()
