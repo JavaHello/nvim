@@ -250,13 +250,6 @@ end, {
   end,
 })
 
-command("Bn", function()
-  require("nvchad.tabufline").next()
-end, { desc = "buffer goto next" })
-command("Bp", function()
-  require("nvchad.tabufline").prev()
-end, { desc = "buffer goto prev" })
-
 -- find files
 if vim.fn.executable("fd") == 1 then
   command("Fd", function(opt)

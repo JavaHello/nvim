@@ -195,8 +195,14 @@ function M.tabline()
   local devicons = require("nvim-web-devicons")
   for i = 1, vim.fn.tabpagenr("$") do
     local tabpage = vim.fn.gettabinfo(i)[1]
-    local winnr = tabpage.windows[1]
-    local bufnr = vim.fn.winbufnr(winnr)
+    local winid = tabpage.windows[1]
+    if not winid or not vim.api.nvim_win_is_valid(winid) then
+      goto continue
+    end
+    local bufnr = vim.api.nvim_win_get_buf(winid)
+    if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+      goto continue
+    end
     local bufname = vim.fn.bufname(bufnr)
     local filename = vim.fn.fnamemodify(bufname, ":t")
 
@@ -213,6 +219,7 @@ function M.tabline()
       filename = "[No Name]"
     end
     table.insert(parts, filename)
+    ::continue::
   end
   return table.concat(parts, "")
 end
