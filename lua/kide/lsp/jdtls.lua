@@ -416,7 +416,11 @@ local function get_async_profiler_ddl()
 end
 local function get_async_profiler_cov()
   if M.async_profiler_home then
-    return vim.fn.glob(M.async_profiler_home .. "/target/jfr-converter-4.0.jar")
+    for _, value in ipairs(vim.split(vim.fn.glob(M.async_profiler_home .. "/target/jfr-converter-*.jar"), "\n")) do
+      if not (vim.endswith(value, "-javadoc.jar") or vim.endswith(value, "-sources.jar")) then
+        return value
+      end
+    end
   end
 end
 
@@ -461,6 +465,8 @@ local function test_with_profile(test_fn)
             :wait()
           if result.code == 0 then
             utils.open_fn(utils.tmpdir_file("profile.html"))
+          else
+            vim.notify("Async Profiler conversion failed: " .. result.stderr, vim.log.levels.ERROR)
           end
         end,
       })

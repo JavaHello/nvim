@@ -213,16 +213,16 @@ M.tmpdir = function()
   local tmpdir = vim.env["TMPDIR"] or vim.env["TEMP"]
   if not tmpdir then
     if M.is_win then
-      tmpdir = "C:\\Windows\\Temp"
+      tmpdir = "C:\\Windows\\Temp\\"
     else
-      tmpdir = "/tmp"
+      tmpdir = "/tmp/"
     end
   end
   return tmpdir
 end
 
 M.tmpdir_file = function(file)
-  return M.tmpdir() .. "/" .. file
+  return M.tmpdir() .. file
 end
 
 M.java_bin = function()
