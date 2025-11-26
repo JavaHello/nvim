@@ -4,9 +4,7 @@ local vfn = vim.fn
 local M = {}
 local kide = require("kide")
 
-function notify_progress()
-  ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
-  local progress = vim.defaulttable()
+local function notify_progress()
   vim.api.nvim_create_autocmd("LspProgress", {
     ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
     callback = function(ev)
@@ -25,7 +23,7 @@ M.on_attach = function(client, bufnr)
     vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
   end
   local kopts = { noremap = true, silent = true, buffer = bufnr }
-  keymap.set({"n", "v"}, "<leader>ca", vim.lsp.buf.code_action, kopts)
+  keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, kopts)
   keymap.set("n", "K", function()
     lsp.buf.hover({ border = "rounded" })
   end, kopts)
@@ -61,8 +59,9 @@ M.capabilities = function(opt)
   return require("blink.cmp").get_lsp_capabilities(capabilities)
 end
 
-M.init_lsp_progress = function()
+M.init_lsp = function()
   notify_progress()
+  vim.lsp.enable("copilot")
 end
 
 function M.global_node_modules()

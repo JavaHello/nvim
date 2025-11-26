@@ -548,19 +548,4 @@ return {
       },
     },
   },
-
-  -- copilot
-  {
-    "github/copilot.vim",
-    enabled = vim.env["COPILOT_ENABLE"] == "Y",
-    lazy = false,
-    config = function()
-      vim.g.copilot_no_tab_map = true
-
-      vim.keymap.set("i", "<C-J>", 'copilot#Accept("\\<CR>")', {
-        expr = true,
-        replace_keycodes = false,
-      })
-    end,
-  },
 }

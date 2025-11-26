@@ -122,4 +122,4 @@ autocmd("TermOpen", {
   end,
 })
 
-require("kide.melspconfig").init_lsp_progress()
+require("kide.melspconfig").init_lsp()
