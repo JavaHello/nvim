@@ -61,7 +61,9 @@ end
 
 M.init_lsp = function()
   notify_progress()
-  vim.lsp.enable("copilot")
+  if vim.env["COPILOT_ENABLE"] == "Y" then
+    vim.lsp.enable("copilot")
+  end
 end
 
 function M.global_node_modules()
