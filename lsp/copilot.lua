@@ -3,7 +3,7 @@
 ---@param client vim.lsp.Client
 local function sign_in(bufnr, client)
   client:request(
-    ---@diagnostic disable-next-line: param-type-mismatch
+  ---@diagnostic disable-next-line: param-type-mismatch
     "signIn",
     vim.empty_dict(),
     function(err, result)
@@ -45,7 +45,7 @@ end
 ---@param client vim.lsp.Client
 local function sign_out(_, client)
   client:request(
-    ---@diagnostic disable-next-line: param-type-mismatch
+  ---@diagnostic disable-next-line: param-type-mismatch
     "signOut",
     vim.empty_dict(),
     function(err, result)
@@ -89,20 +89,22 @@ return {
     end, { desc = "Sign out Copilot with GitHub" })
 
     if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, bufnr) then
-      vim.lsp.inline_completion.enable(true, { bufnr = bufnr })
+      if vim.lsp.inline_completion then
+        vim.lsp.inline_completion.enable(true, { bufnr = bufnr })
 
-      vim.keymap.set(
-        "i",
-        "<C-j>",
-        vim.lsp.inline_completion.get,
-        { desc = "LSP: accept inline completion", buffer = bufnr }
-      )
-      vim.keymap.set(
-        "i",
-        "<C-k>",
-        vim.lsp.inline_completion.select,
-        { desc = "LSP: switch inline completion", buffer = bufnr }
-      )
+        vim.keymap.set(
+          "i",
+          "<C-j>",
+          vim.lsp.inline_completion.get,
+          { desc = "LSP: accept inline completion", buffer = bufnr }
+        )
+        vim.keymap.set(
+          "i",
+          "<C-k>",
+          vim.lsp.inline_completion.select,
+          { desc = "LSP: switch inline completion", buffer = bufnr }
+        )
+      end
     end
   end,
 }
