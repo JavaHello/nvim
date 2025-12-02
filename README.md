@@ -8,7 +8,7 @@
 
 ```sh
 cd ~/.config
-git clone  https://github.com/JavaHello/nvim.git
+git clone https://github.com/JavaHello/nvim.git
 ```
 
 ## 依赖
