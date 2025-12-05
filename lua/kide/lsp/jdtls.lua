@@ -393,13 +393,13 @@ end
 local jdtls = require("jdtls")
 jdtls.jol_path = get_jol_jar()
 
-local extendedClientCapabilities = jdtls.extendedClientCapabilities
-extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
-extendedClientCapabilities.progressReportProvider = false
+-- local extendedClientCapabilities = jdtls.extendedClientCapabilities
+-- extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
+-- extendedClientCapabilities.progressReportProvider = false
 
 M.config["init_options"] = {
   bundles = bundles,
-  extendedClientCapabilities = extendedClientCapabilities,
+  extendedClientCapabilities = require("jdtls.capabilities"),
 }
 
 M.async_profiler_home = vim.env["ASYNC_PROFILER_HOME"]
@@ -528,6 +528,9 @@ M.config.on_attach = function(client, buffer)
   })
 
   create_command(buffer, "JavaProjects", require("java-deps").toggle_outline, {
+    nargs = 0,
+  })
+  create_command(buffer, "JdtExtendedSymbols", require("jdtls").extended_symbols, {
     nargs = 0,
   })
 
