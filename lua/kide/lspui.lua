@@ -29,11 +29,21 @@ function M.open_info()
     "Lsp Clients:",
     "",
   }
+  local function lsp_buffers(id)
+    local client = vim.lsp.get_client_by_id(id)
+    local bfs = {}
+    if client then
+      for k, _ in pairs(client.attached_buffers) do
+        table.insert(bfs, k)
+      end
+    end
+    return bfs
+  end
   for _, client in pairs(clients) do
     vim.list_extend(client_info, {
       "Name: " .. client.name,
       "  Id: " .. client.id,
-      "  buffers: " .. vim.inspect(vim.lsp.get_buffers_by_client_id(client.id)),
+      "  buffers: " .. vim.inspect(lsp_buffers(client.id)),
       "  filetype: " .. vim.inspect(client.config.filetypes),
       "  root_dir: " .. vim.inspect(client.config.root_dir),
       "  cmd: " .. vim.inspect(client.config.cmd),
