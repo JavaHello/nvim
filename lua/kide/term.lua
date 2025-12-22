@@ -55,7 +55,7 @@ function M.repl()
   api.nvim_set_current_win(win)
 end
 
-function M.toggle(cmd)
+function M.toggle(cmd, opts)
   if cmd then
     sid = require("kide").timer_stl_status("")
   end
@@ -63,7 +63,7 @@ function M.toggle(cmd)
     close_term()
   else
     cmd = cmd or (vim.env["SHELL"] or "sh")
-    launch_term(cmd)
+    launch_term(cmd, opts)
   end
 end
 
