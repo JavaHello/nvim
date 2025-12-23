@@ -228,7 +228,7 @@ end
 M.java_bin = function()
   local java_home = vim.env["JAVA_HOME"]
   if java_home then
-    return java_home .. "/bin/java"
+    return vim.fs.joinpath(java_home, "bin", "java")
   end
   return "java"
 end
