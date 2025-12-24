@@ -564,6 +564,10 @@ map({ "i", "n", "t" }, "<A-;>", function()
   require("kide.codex").codex()
 end, { desc = "Codex cmd" })
 
+map({ "n", "t" }, "<A-g>", function()
+  require("kide.gitui").gitui()
+end, { desc = "gitui" })
+
 require("kide.tools").setup()
 require("kide.tools.maven").setup()
 require("kide.tools.plantuml").setup()
