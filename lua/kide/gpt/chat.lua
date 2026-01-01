@@ -11,7 +11,7 @@ local gpt_provide = require("kide.gpt.provide")
 ---@field codebuf? number
 ---@field chatclosed? boolean
 ---@field cursormoved? boolean
----@field chatruning? boolean
+---@field chatrunning? boolean
 ---@field winleave? boolean
 ---@field callback function
 ---@field chat_last string[]
@@ -31,7 +31,7 @@ function M.new(opts)
   self.codebuf = nil
   self.chatclosed = true
   self.cursormoved = false
-  self.chatruning = false
+  self.chatrunning = false
   self.winleave = false
   self.callback = opts.callback
   self.chat_last = {}
@@ -68,14 +68,14 @@ local function enable_done()
 end
 
 function Chat:request()
-  if self.chatruning then
+  if self.chatrunning then
     vim.api.nvim_put({ "", self.user_title, "" }, "c", true, true)
-    self.chatruning = false
+    self.chatrunning = false
     self.client:close()
     enable_done()
     return
   end
-  self.chatruning = true
+  self.chatrunning = true
   ---@diagnostic disable-next-line: param-type-mismatch
   local list = vim.api.nvim_buf_get_lines(self.chatbuf, 0, -1, false)
   local messages = {
@@ -127,10 +127,10 @@ local gpt_chat_callback = function(state)
         state.chatbuf,
         state.icon,
         state.title,
-        require("kide.gpt.toole").usage_str(state.client.model, opt.usage)
+        require("kide.gpt.tool").usage_str(state.client.model, opt.usage)
       )
     end
-    if state.chatclosed or state.chatruning == false then
+    if state.chatclosed or state.chatrunning == false then
       state.client:close()
       enable_done()
       return
@@ -152,7 +152,7 @@ local gpt_chat_callback = function(state)
     end
     if done then
       vim.api.nvim_put({ "", "", state.user_title, "" }, "c", true, true)
-      state.chatruning = false
+      state.chatrunning = false
       state.chat_last = vim.api.nvim_buf_get_lines(state.chatbuf, 0, -1, true)
       enable_done()
       return
@@ -178,7 +178,7 @@ local gpt_reasoner_callback = function(state)
         state.chatbuf,
         state.icon,
         state.title,
-        require("kide.gpt.toole").usage_str(state.client.model, opt.usage)
+        require("kide.gpt.tool").usage_str(state.client.model, opt.usage)
       )
     end
     local data
@@ -194,7 +194,7 @@ local gpt_reasoner_callback = function(state)
       data = opt.data
     end
     local done = opt.done
-    if state.chatclosed or state.chatruning == false then
+    if state.chatclosed or state.chatrunning == false then
       state.client:close()
       enable_done()
       return
@@ -216,7 +216,7 @@ local gpt_reasoner_callback = function(state)
     end
     if done then
       vim.api.nvim_put({ "", "", state.user_title, "" }, "c", true, true)
-      state.chatruning = false
+      state.chatrunning = false
       state.chat_last = vim.api.nvim_buf_get_lines(state.chatbuf, 0, -1, true)
       enable_done()
       return
@@ -249,7 +249,7 @@ function Chat:close_gpt_win()
     self.codebuf = nil
     self.chatclosed = true
     self.cursormoved = false
-    self.chatruning = false
+    self.chatrunning = false
     self.winleave = false
     self.client:close()
   end

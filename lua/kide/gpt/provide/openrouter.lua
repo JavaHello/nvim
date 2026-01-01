@@ -3,7 +3,7 @@ local max_tokens = 4096 * 2
 local code_json = {
   messages = {
     {
-      content = "帮我生成一个快速排序",
+      content = "",
       role = "user",
     },
     {
