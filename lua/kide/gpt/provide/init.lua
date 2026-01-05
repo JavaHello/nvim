@@ -25,11 +25,24 @@
 local M = {}
 local deepseek = require("kide.gpt.provide.deepseek")
 local openrouter = require("kide.gpt.provide.openrouter")
+local openai = require("kide.gpt.provide.openai")
 
-M.gpt_provide = deepseek
+local function default_provide()
+  local provide = vim.env["NVIM_AI_DEFAULT_PROVIDE"]
+  if provide == "openai" then
+    return openai
+  elseif provide == "deepseek" then
+    return deepseek
+  elseif provide == "openrouter" then
+    return openrouter
+  end
+end
+
+M.gpt_provide = default_provide() or deepseek
 local _list = {
   deepseek = deepseek,
-  openrouter = openrouter
+  openrouter = openrouter,
+  openai = openai,
 }
 M.provide_keys = function()
   local keys = {}

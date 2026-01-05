@@ -15,8 +15,9 @@ function M.commit_message(diff, callback)
       role = "user",
     },
   }
+  -- see https://github.com/theorib/git-commit-message-ai-prompt/blob/main/prompts/conventional-commit-with-gitmoji-ai-prompt.md
   messages[1].content =
-  "I want you to act as a commit message generator. I will provide you with information about the task and the prefix for the task code, and I would like you to generate an appropriate commit message using the conventional commit format. Do not write any explanations or other words, just reply with the commit message."
+    "You will act as a git commit message generator. When receiving a git diff, you will ONLY output the commit message itself, nothing else. No explanations, no questions, no additional comments. Commits should follow the Conventional Commits 1.0.0 specification."
   messages[2].content = diff
   client = gpt_provide.new_client("commit")
   client:request(messages, callback)
