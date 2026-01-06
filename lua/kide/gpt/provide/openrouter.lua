@@ -1,5 +1,6 @@
 local sse = require("kide.http.sse")
 local max_tokens = 4096 * 2
+local model = "openai/gpt-5.2"
 local code_json = {
   messages = {
     {
@@ -12,7 +13,7 @@ local code_json = {
       role = "assistant",
     },
   },
-  model = "google/gemini-2.0-flash-001",
+  model = model,
   max_tokens = max_tokens,
   stop = "```",
   stream = true,
@@ -25,14 +26,14 @@ local chat_json = {
       role = "system",
     },
   },
-  model = "google/gemini-2.0-flash-001",
+  model = model,
   stream = true,
 }
 
 local reasoner_json = {
   messages = {
   },
-  model = "deepseek/deepseek-r1:free",
+  model = model,
   stream = true,
 }
 
@@ -47,7 +48,7 @@ local commit_json = {
       role = "user",
     },
   },
-  model = "google/gemini-2.0-flash-001",
+  model = model,
   stream = true,
 }
 
@@ -62,7 +63,7 @@ local translate_json = {
       role = "user",
     },
   },
-  model = "google/gemini-2.0-flash-001",
+  model = model,
   stream = true,
 }
 
@@ -78,10 +79,13 @@ local Openrouter = {
     "anthropic/claude-sonnet-4",
     "anthropic/claude-opus-4.1",
     "anthropic/claude-opus-4",
+    "anthropic/claude-opus-4.5",
+    "openai/gpt-5.2",
     "openai/gpt-4o",
     "anthropic/claude-3.7-sonnet",
     "google/gemini-2.0-flash-001",
     "google/gemini-2.5-flash-preview",
+    "google/gemini-3-pro-preview",
     "deepseek/deepseek-chat-v3-0324:free",
     "deepseek/deepseek-chat-v3-0324",
     "qwen/qwen3-235b-a22b",
