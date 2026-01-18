@@ -58,10 +58,11 @@ vim.opt.autoread = true
 vim.opt.splitbelow = false
 vim.opt.splitright = true
 
-vim.opt.foldlevelstart = 99
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldnestmax = 10
+-- 大文件打开慢原因
+-- vim.opt.foldlevelstart = 99
+-- vim.opt.foldmethod = "expr"
+-- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- vim.opt.foldnestmax = 10
 -- 默认不要折叠
 vim.opt.foldenable = false
 vim.opt.foldlevel = 1
