@@ -187,7 +187,7 @@ end)()
 if vscode_java_debug_path then
   vim.list_extend(
     bundles,
-    vim.split(vim.fn.glob(vscode_java_debug_path .. "/com.microsoft.java.debug.plugin-*.jar"), "\n")
+    vim.split(vim.fn.glob(vim.fs.joinpath(vscode_java_debug_path, "com.microsoft.java.debug.plugin-*.jar")), "\n")
   )
 end
 
@@ -203,13 +203,43 @@ local vscode_java_test_path = (function()
     return require("mason-registry").get_package("java-test"):get_install_path() .. "/extension/server"
   end
 end)()
+
+local javaTestBundleList = {
+  'com.microsoft.java.test.plugin',
+  'org.eclipse.jdt.junit4.runtime_',
+  'org.eclipse.jdt.junit5.runtime_',
+  'org.eclipse.jdt.junit6.runtime_',
+  'junit-jupiter-api_',
+  'junit-jupiter-engine_',
+  'junit-jupiter-migrationsupport_',
+  'junit-jupiter-params_',
+  'junit-vintage-engine_',
+  'org.opentest4j_',
+  'junit-platform-commons_',
+  'junit-platform-engine_',
+  'junit-platform-launcher_',
+  'junit-platform-runner_',
+  'junit-platform-suite-api_',
+  'junit-platform-suite-commons_',
+  'junit-platform-suite-engine_',
+  'org.apiguardian.api_',
+  'org.jacoco.core_'
+};
 if vscode_java_test_path then
-  for _, bundle in ipairs(vim.split(vim.fn.glob(vscode_java_test_path .. "/*.jar"), "\n")) do
+  local function some(jarPath)
+    for _, bundle in ipairs(javaTestBundleList) do
+      local bundlePath = vim.fs.joinpath(vscode_java_test_path, bundle)
+      if vim.startswith(jarPath, bundlePath) then
+        return true
+      end
+    end
+    return false
+  end
+  for _, jar_file in ipairs(vim.split(vim.fn.glob(vim.fs.joinpath(vscode_java_test_path, "*.jar")), "\n")) do
     if
-      not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar")
-      and not vim.endswith(bundle, "jacocoagent.jar")
+        some(jar_file)
     then
-      table.insert(bundles, bundle)
+      table.insert(bundles, jar_file)
     end
   end
 end
@@ -456,14 +486,14 @@ local function test_with_profile(test_fn)
         },
         after_test = function()
           local result = vim
-            .system({
-              "java",
-              "-jar",
-              get_async_profiler_cov(),
-              utils.tmpdir_file("profile.jfr"),
-              utils.tmpdir_file("profile.html"),
-            })
-            :wait()
+              .system({
+                "java",
+                "-jar",
+                get_async_profiler_cov(),
+                utils.tmpdir_file("profile.jfr"),
+                utils.tmpdir_file("profile.html"),
+              })
+              :wait()
           if result.code == 0 then
             utils.open_fn(utils.tmpdir_file("profile.html"))
           else
