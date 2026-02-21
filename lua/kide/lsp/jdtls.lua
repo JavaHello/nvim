@@ -522,6 +522,8 @@ local me = require("kide.melspconfig")
 M.config.capabilities = me.capabilities()
 M.config.on_init = me.on_init
 
+---@param client vim.lsp.Client
+---@param buffer number
 M.config.on_attach = function(client, buffer)
   local function desc_opts(desc)
     return { silent = true, buffer = buffer, desc = desc }
@@ -532,7 +534,7 @@ M.config.on_attach = function(client, buffer)
       if vim.bo.modified then
         vim.cmd("w")
       end
-      client.request_sync("java/buildWorkspace", false, 5000, buffer)
+      client:request_sync("java/buildWorkspace", {}, 5000, buffer)
       fn()
     end
   end
