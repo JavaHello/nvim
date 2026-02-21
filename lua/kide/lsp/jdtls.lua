@@ -534,8 +534,11 @@ M.config.on_attach = function(client, buffer)
       if vim.bo.modified then
         vim.cmd("w")
       end
-      client:request_sync("java/buildWorkspace", {}, 5000, buffer)
-      fn()
+      local sid = require("kide").timer_stl_status("󰒓")
+      client:request("java/buildWorkspace", false, function()
+        fn()
+        require("kide").clean_stl_status(sid, 0)
+      end)
     end
   end
   vim.keymap.set("n", "<leader>dl", with_compile(require("dap").run_last), desc_opts("Run last"))
