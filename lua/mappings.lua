@@ -367,15 +367,55 @@ local function creat_trans_command(name, from, to)
   })
 end
 
+local function creat_trans_vt_command(name, from, to)
+  command(name, function(opt)
+    local text
+    local anchor_lnum
+    if opt.range > 0 then
+      text = require("kide.tools").get_visual_selection()
+      text = table.concat(text, "\n")
+      anchor_lnum = opt.line2
+    else
+      text = opt.args
+      anchor_lnum = vim.api.nvim_win_get_cursor(0)[1]
+    end
+    require("kide.gpt.translate").translate_virtual_text({
+      text = text,
+      from = from,
+      to = to,
+      anchor_lnum = anchor_lnum,
+    })
+  end, {
+    desc = "translate virtual text",
+    nargs = "?",
+    range = true,
+  })
+end
+
 creat_trans_command("TransAutoZh", "auto", "中文")
+creat_trans_vt_command("TransAutoZhVT", "auto", "中文")
 map("v", "<leader>tc", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
   require("kide.gpt.translate").translate_float({ text = table.concat(text, "\n"), from = "auto", to = "中文" })
 end, {})
 creat_trans_command("TransEnZh", "英语", "中文")
+creat_trans_vt_command("TransEnZhVT", "英语", "中文")
 creat_trans_command("TransZhEn", "中文", "英语")
+creat_trans_vt_command("TransZhEnVT", "中文", "英语")
 creat_trans_command("TransIdZh", "印尼语", "中文")
+creat_trans_vt_command("TransIdZhVT", "印尼语", "中文")
+command("TransClearVT", function(opt)
+  local req = {}
+  if opt.range > 0 then
+    req.start_lnum = opt.line1
+    req.end_lnum = opt.line2
+  end
+  require("kide.gpt.translate").clear_virtual_text(req)
+end, {
+  desc = "clear translate virtual text",
+  range = true,
+})
 
 command("GptChat", function(opt)
   local q

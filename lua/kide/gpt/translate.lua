@@ -3,6 +3,7 @@ local M = {}
 local gpt_provide = require("kide.gpt.provide")
 ---@type gpt.Client
 local client = nil
+local translate_ns = vim.api.nvim_create_namespace("kide_translate")
 
 ---@class kai.tools.TranslateRequest
 ---@field text string
@@ -171,6 +172,90 @@ M.translate_float = function(request)
     end
   end
   M.translate(request, callback)
+end
+
+---@param request kai.tools.TranslateRequest|{ anchor_lnum?: integer }
+---@return integer ns
+---@return integer extmark_id
+M.translate_virtual_text = function(request)
+  local buf = vim.api.nvim_get_current_buf()
+  local win = vim.api.nvim_get_current_win()
+  local line_count = vim.api.nvim_buf_line_count(buf)
+  local anchor_lnum = request.anchor_lnum or vim.api.nvim_win_get_cursor(0)[1]
+  anchor_lnum = math.max(1, math.min(anchor_lnum, line_count))
+  local anchor_row = anchor_lnum - 1
+  local extmark_id = anchor_lnum
+  local translated = ""
+
+  local function to_virt_lines(text)
+    local width = vim.api.nvim_win_get_width(win)
+    width = math.max(20, width - 4)
+    local rows = {}
+    for _, raw_line in ipairs(vim.split(text, "\n", { plain = true, trimempty = false })) do
+      local line = raw_line
+      if line == "" then
+        table.insert(rows, { { " ", "Comment" } })
+      else
+        while line ~= "" do
+          local part = ""
+          local chars = vim.fn.strchars(line)
+          for i = 1, chars do
+            local candidate = vim.fn.strcharpart(line, 0, i)
+            if vim.fn.strdisplaywidth(candidate) > width then
+              break
+            end
+            part = candidate
+          end
+          if part == "" then
+            part = vim.fn.strcharpart(line, 0, 1)
+          end
+          table.insert(rows, { { " " .. part, "Comment" } })
+          line = vim.fn.strcharpart(line, vim.fn.strchars(part))
+        end
+      end
+    end
+    if #rows == 0 then
+      return { { { " ", "Comment" } } }
+    end
+    return rows
+  end
+
+  ---@param opt gpt.Event
+  local callback = function(opt)
+    if not vim.api.nvim_buf_is_valid(buf) then
+      if client then
+        client:close()
+      end
+      return
+    end
+    if opt.data and opt.data ~= "" then
+      translated = translated .. opt.data
+    end
+
+    vim.api.nvim_buf_set_extmark(buf, translate_ns, anchor_row, 0, {
+      id = extmark_id,
+      virt_lines = to_virt_lines(translated),
+      hl_mode = "combine",
+    })
+  end
+
+  M.translate(request, callback)
+  return translate_ns, extmark_id
+end
+
+---@param opts? { start_lnum?: integer, end_lnum?: integer, buf?: integer }
+function M.clear_virtual_text(opts)
+  local opt = opts or {}
+  local buf = opt.buf or vim.api.nvim_get_current_buf()
+  if not vim.api.nvim_buf_is_valid(buf) then
+    return
+  end
+  local start_row = opt.start_lnum and math.max(0, opt.start_lnum - 1) or 0
+  local end_row = opt.end_lnum and math.max(start_row, opt.end_lnum) or -1
+  vim.api.nvim_buf_clear_namespace(buf, translate_ns, start_row, end_row)
+  if client then
+    client:close()
+  end
 end
 
 return M
