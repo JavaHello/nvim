@@ -110,7 +110,8 @@ end, {
 })
 
 map("n", "<leader>e", function()
-  Snacks.explorer.open({})
+  -- Snacks.explorer.open({})
+  require('oil').open_float()
 end, { desc = "files", silent = true, noremap = true })
 
 -- outline
