@@ -3,7 +3,7 @@
 ---@param client vim.lsp.Client
 local function sign_in(bufnr, client)
   client:request(
-  ---@diagnostic disable-next-line: param-type-mismatch
+    ---@diagnostic disable-next-line: param-type-mismatch
     "signIn",
     vim.empty_dict(),
     function(err, result)
@@ -45,7 +45,7 @@ end
 ---@param client vim.lsp.Client
 local function sign_out(_, client)
   client:request(
-  ---@diagnostic disable-next-line: param-type-mismatch
+    ---@diagnostic disable-next-line: param-type-mismatch
     "signOut",
     vim.empty_dict(),
     function(err, result)
@@ -63,6 +63,30 @@ return {
   cmd = {
     "copilot-language-server",
     "--stdio",
+  },
+  filetypes = {
+    "markdown",
+    "plantuml",
+
+    "html",
+    "css",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "python",
+    "go",
+    "rust",
+    "lua",
+    "java",
+    "c",
+    "cpp",
+    "csharp",
+    "php",
+    "ruby",
+    "swift",
+    "kotlin",
+    "zig",
   },
   root_markers = { ".git" },
   init_options = {
