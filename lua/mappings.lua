@@ -3,6 +3,40 @@
 local map = vim.keymap.set
 local command = vim.api.nvim_create_user_command
 
+local function codex_edit_selection(opt)
+  local code
+  if opt.range > 0 then
+    code = require("kide.tools").get_visual_selection()
+  end
+  if not code or vim.tbl_isempty(code) then
+    vim.notify("请先选择要交给 Codex 修改的代码", vim.log.levels.WARN)
+    return
+  end
+  local prompt = opt.args
+  if not prompt or prompt == "" then
+    prompt = vim.fn.input("Codex edit: ")
+  end
+  if not prompt or prompt == "" then
+    return
+  end
+
+  local filetype = vim.bo.filetype
+  local filename = vim.api.nvim_buf_get_name(0)
+  local line_info = nil
+  if opt.range > 0 then
+    line_info = opt.line1 == opt.line2 and tostring(opt.line1) or (opt.line1 .. "-" .. opt.line2)
+  end
+  local message = table.concat({
+    prompt,
+    filename ~= "" and ("文件: " .. filename .. (line_info and (":" .. line_info) or "")) or nil,
+    "```" .. (filetype ~= "" and filetype or ""),
+    table.concat(code, "\n"),
+    "```",
+  }, "\n")
+
+  require("kide.codex").send(message)
+end
+
 map("n", "<A-i>", function()
   require("kide.term").toggle()
   vim.cmd("startinsert")
@@ -110,8 +144,8 @@ end, {
 })
 
 map("n", "<leader>e", function()
-  -- Snacks.explorer.open({})
-  require('oil').open_float()
+  Snacks.explorer.open({})
+  -- require('oil').open_float()
 end, { desc = "files", silent = true, noremap = true })
 
 -- outline
@@ -601,9 +635,23 @@ end, {
   range = false,
 })
 
+command("CodexEdit", codex_edit_selection, {
+  desc = "Send selected code to Codex for editing",
+  nargs = "*",
+  range = true,
+})
+
 map({ "i", "n", "t" }, "<A-;>", function()
   require("kide.codex").codex()
 end, { desc = "Codex cmd" })
+
+map("v", "<leader>ce", function()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+  codex_edit_selection({
+    range = 1,
+    args = "",
+  })
+end, { desc = "Codex edit selection" })
 
 map({ "n", "t" }, "<A-g>", function()
   require("kide.gitui").gitui()
