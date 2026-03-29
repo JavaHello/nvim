@@ -167,7 +167,7 @@ local function start_ready_watch()
       end
     end,
     on_detach = function()
-      return true
+      -- No return value is expected for on_detach.
     end,
   })
 
@@ -273,6 +273,94 @@ function M.send(text, opt)
   end
   table.insert(state.pending, text)
   return true
+end
+
+---@param diagnostics vim.Diagnostic[]
+---@param opt? { code?: string[], extra_prompt?: string, bufnr?: number }
+---@return string?
+function M.build_fix_message(diagnostics, opt)
+  opt = opt or {}
+  if not diagnostics or vim.tbl_isempty(diagnostics) then
+    return nil
+  end
+
+  local bufnr = opt.bufnr or vim.api.nvim_get_current_buf()
+  local filename = vim.api.nvim_buf_get_name(bufnr)
+  local filetype = vim.bo[bufnr].filetype or "text"
+  local need_code = not opt.code
+  local message = {
+    "请根据下面的 LSP/编译诊断直接修复代码。",
+    "要求:",
+    "1. 先给出明确的修改方案。",
+    "2. 然后给出可直接应用的代码修改。",
+    "3. 如果信息不足，明确说明缺少什么。",
+  }
+
+  if opt.extra_prompt and opt.extra_prompt ~= "" then
+    table.insert(message, "附加要求: " .. opt.extra_prompt)
+  end
+  if filename ~= "" then
+    table.insert(message, "文件: " .. filename)
+  end
+
+  for _, diagnostic in ipairs(diagnostics) do
+    local code = diagnostic.code or "Unknown Code"
+    local severity = diagnostic.severity == 1 and "ERROR" or diagnostic.severity == 2 and "WARN" or "INFO"
+    table.insert(message, "")
+    table.insert(message, "## " .. severity .. ": " .. code)
+    table.insert(message, "- Source: " .. (diagnostic.source or "Unknown Source"))
+    table.insert(message, "- Range: " .. (diagnostic.lnum + 1) .. ":" .. (diagnostic.col + 1) .. " - "
+      .. (diagnostic.end_lnum + 1) .. ":" .. (diagnostic.end_col + 1))
+
+    if need_code then
+      local lines = vim.api.nvim_buf_get_lines(bufnr, diagnostic.lnum, diagnostic.end_lnum + 1, false)
+      if #lines > 0 then
+        table.insert(message, "- Code Snippet")
+        table.insert(message, "```" .. filetype)
+        vim.list_extend(message, lines)
+        table.insert(message, "```")
+      end
+    end
+
+    table.insert(message, "- Diagnostic Message")
+    table.insert(message, "```text")
+    vim.list_extend(message, vim.split(diagnostic.message or "No message provided", "\n"))
+    table.insert(message, "```")
+  end
+
+  if opt.code and not vim.tbl_isempty(opt.code) then
+    table.insert(message, "")
+    table.insert(message, "## Selected Code")
+    table.insert(message, "```" .. filetype)
+    vim.list_extend(message, opt.code)
+    table.insert(message, "```")
+  end
+
+  return table.concat(message, "\n")
+end
+
+---@param opt? { code?: string[], extra_prompt?: string, bufnr?: number, diagnostics?: vim.Diagnostic[] }
+---@return boolean
+function M.fix_diagnostics(opt)
+  opt = opt or {}
+  local bufnr = opt.bufnr or vim.api.nvim_get_current_buf()
+  local diagnostics = opt.diagnostics or vim.diagnostic.get(bufnr, {
+    lnum = vim.api.nvim_win_get_cursor(0)[1] - 1,
+  })
+  if vim.tbl_isempty(diagnostics) then
+    vim.notify("没有诊断信息", vim.log.levels.INFO)
+    return false
+  end
+
+  local message = M.build_fix_message(diagnostics, {
+    bufnr = bufnr,
+    code = opt.code,
+    extra_prompt = opt.extra_prompt,
+  })
+  if not message then
+    return false
+  end
+  return M.send(message)
 end
 
 return M

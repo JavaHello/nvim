@@ -357,8 +357,8 @@ if vim.base64 then
   command("Base64Encode", function(opt)
     local text
     if opt.range > 0 then
-      text = require("kide.tools").get_visual_selection()
-      text = table.concat(text, "\n")
+      local lines = require("kide.tools").get_visual_selection()
+      text = table.concat(lines, "\n")
     else
       text = opt.args
     end
@@ -371,8 +371,8 @@ if vim.base64 then
   command("Base64Decode", function(opt)
     local text
     if opt.range > 0 then
-      text = require("kide.tools").get_visual_selection()
-      text = table.concat(text, "\n")
+      local lines = require("kide.tools").get_visual_selection()
+      text = table.concat(lines, "\n")
     else
       text = opt.args
     end
@@ -389,8 +389,8 @@ local function creat_trans_command(name, from, to)
   command(name, function(opt)
     local text
     if opt.range > 0 then
-      text = require("kide.tools").get_visual_selection()
-      text = table.concat(text, "\n")
+      local lines = require("kide.tools").get_visual_selection()
+      text = table.concat(lines, "\n")
     else
       text = opt.args
     end
@@ -407,8 +407,8 @@ local function creat_trans_vt_command(name, from, to)
     local text
     local anchor_lnum
     if opt.range > 0 then
-      text = require("kide.tools").get_visual_selection()
-      text = table.concat(text, "\n")
+      local lines = require("kide.tools").get_visual_selection()
+      text = table.concat(lines, "\n")
       anchor_lnum = opt.line2
     else
       text = opt.args
@@ -637,6 +637,21 @@ end, {
 
 command("CodexEdit", codex_edit_selection, {
   desc = "Send selected code to Codex for editing",
+  nargs = "*",
+  range = true,
+})
+
+command("CodexFix", function(opt)
+  local code
+  if opt.range > 0 then
+    code = require("kide.tools").get_visual_selection()
+  end
+  require("kide.codex").fix_diagnostics({
+    code = code,
+    extra_prompt = opt.args,
+  })
+end, {
+  desc = "Send diagnostics to Codex for fixing",
   nargs = "*",
   range = true,
 })

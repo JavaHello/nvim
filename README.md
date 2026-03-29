@@ -73,3 +73,9 @@ git clone https://github.com/JavaHello/nvim.git
 - 命令 `:GptChat` 开启对话窗, `<Enter>` 发送请求
 - 命令 `:TransXXX` 翻译文本
 - 在 `git` 提交窗口，快捷键 `<leader>cm` 生成 `git` 提交消息
+
+## Codex 功能
+
+- 命令 `:Codex` 打开 Codex 终端
+- 命令 `:CodexEdit` 发送选中代码给 Codex 修改
+- 命令 `:CodexFix` 发送当前光标位置的诊断信息给 Codex 修复
