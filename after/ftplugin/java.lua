@@ -62,9 +62,10 @@ end
 
 -- see mfussenegger/dotfiles
 local checkstyle_config = vim.fs.joinpath(vim.uv.cwd(), "checkstyle.xml")
-local has_checkstyle = vim.uv.fs_stat(checkstyle_config) and vim.fn.executable("checkstyle")
+local has_checkstyle = vim.fn.filereadable(checkstyle_config) == 1
+local checkstyle_bin = vim.fn.executable("checkstyle") == 1
 local is_main = vim.api.nvim_buf_get_name(0):find("src/main/java") ~= nil
-if has_checkstyle and is_main then
+if has_checkstyle and checkstyle_bin and is_main then
   local bufnr = vim.api.nvim_get_current_buf()
   require("lint.linters.checkstyle").config_file = checkstyle_config
   vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
