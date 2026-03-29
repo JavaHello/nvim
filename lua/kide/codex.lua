@@ -290,10 +290,6 @@ function M.build_fix_message(diagnostics, opt)
   local need_code = not opt.code
   local message = {
     "请根据下面的 LSP/编译诊断直接修复代码。",
-    "要求:",
-    "1. 先给出明确的修改方案。",
-    "2. 然后给出可直接应用的代码修改。",
-    "3. 如果信息不足，明确说明缺少什么。",
   }
 
   if opt.extra_prompt and opt.extra_prompt ~= "" then

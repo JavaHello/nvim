@@ -2,6 +2,7 @@
 
 local map = vim.keymap.set
 local command = vim.api.nvim_create_user_command
+local Snacks = require("snacks")
 
 local function codex_edit_selection(opt)
   local code
@@ -470,7 +471,7 @@ end, {
   nargs = "*",
   range = true,
 })
-command("GptLast", function(opt)
+command("GptLast", function()
   require("kide.gpt.chat").toggle_gpt({
     last = true,
   })

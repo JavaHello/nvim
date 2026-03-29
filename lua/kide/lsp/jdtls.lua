@@ -507,7 +507,7 @@ M.config.flags = {
   debounce_text_changes = 150,
 }
 M.config.handlers = {}
-M.config.handlers["language/status"] = function(err, msg)
+M.config.handlers["language/status"] = function(_, _)
   -- 使用 progress 查看状态
   -- print("jdtls " .. s.type .. ": " .. s.message)
   -- ServiceReady 不能用来判断是否完全启动
@@ -533,7 +533,7 @@ M.config.on_attach = function(client, buffer)
         vim.cmd("w")
       end
       local sid = require("kide").timer_stl_status("󰒓")
-      client:request("java/buildWorkspace", false, function()
+      client:request("java/buildWorkspace", nil, function()
         fn()
         require("kide").clean_stl_status(sid, 0)
       end)

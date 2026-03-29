@@ -3,6 +3,7 @@ local keymap = vim.keymap
 local vfn = vim.fn
 local M = {}
 local kide = require("kide")
+local Snacks = require("snacks")
 
 local function notify_progress()
   vim.api.nvim_create_autocmd("LspProgress", {
@@ -18,7 +19,7 @@ local function notify_progress()
   })
 end
 
-M.on_attach = function(client, bufnr)
+M.on_attach = function(_, bufnr)
   if vim.lsp.document_color then
     vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
   end
@@ -43,7 +44,7 @@ M.on_attach = function(client, bufnr)
   end, kopts)
 end
 
-M.on_init = function(client, _)
+M.on_init = function(_, _)
   -- 由于卡顿，暂时禁用semanticTokens
   -- 看起来已经修复了，可以试试
   -- if client.supports_method("textDocument/semanticTokens") then

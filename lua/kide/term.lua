@@ -1,5 +1,6 @@
 -- 使用 https://github.com/mfussenegger/dotfiles/blob/master/vim/dot-config/nvim/lua/me/term.lua
 local api = vim.api
+local bit = require("bit")
 
 local M = {}
 

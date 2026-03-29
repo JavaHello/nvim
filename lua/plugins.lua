@@ -64,7 +64,6 @@ return {
     dependencies = "rafamadriz/friendly-snippets",
     version = "*",
     ---@module 'blink.cmp'
-    ---@type blink.cmp.Config
     opts = {
       keymap = {
         preset = "default",
@@ -205,6 +204,7 @@ return {
     enabled = vim.g.enable_quarkus == true,
     lazy = true,
     config = function()
+      ---@diagnostic disable-next-line: different-requires
       require("microprofile").setup({
         ls_path = vim.env["NVIM_MICROPROFILE_LS_PATH"],
         jdt_extensions_path = vim.env["NVIM_MICROPROFILE_JDT_EXTENSIONS_PATH"],
@@ -220,6 +220,7 @@ return {
       "mfussenegger/nvim-jdtls",
     },
     config = function()
+      ---@diagnostic disable-next-line: different-requires
       require("quarkus").setup({
         ls_path = vim.env["NVIM_QUARKUS_LS_PATH"],
         jdt_extensions_path = vim.env["NVIM_QUARKUS_JDT_EXTENSIONS_PATH"],
@@ -438,7 +439,6 @@ return {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
-    ---@type snacks.Config
     opts = {
       styles = {
         input = {
@@ -461,16 +461,16 @@ return {
           --   and vim.bo[buf].buftype == ""
           local ft = vim.bo[buf].filetype
           if
-            ft == "snacks_picker_preview"
-            or ft == "snacks_picker_list"
-            or ft == "snacks_picker_input"
-            or ft == "Outline"
-            or ft == "JavaProjects"
-            or ft == "text"
-            or ft == ""
-            or ft == "lazy"
-            or ft == "help"
-            or ft == "markdown"
+              ft == "snacks_picker_preview"
+              or ft == "snacks_picker_list"
+              or ft == "snacks_picker_input"
+              or ft == "Outline"
+              or ft == "JavaProjects"
+              or ft == "text"
+              or ft == ""
+              or ft == "lazy"
+              or ft == "help"
+              or ft == "markdown"
           then
             return false
           end
@@ -496,9 +496,9 @@ return {
               border = "rounded",
               title = "{title} {live} {flags}",
               title_pos = "center",
-              { win = "input", height = 1, border = "bottom" },
-              { win = "list", border = "none" },
-              { win = "preview", height = 0.6, border = "top" },
+              { win = "input",   height = 1,     border = "bottom" },
+              { win = "list",    border = "none" },
+              { win = "preview", height = 0.6,   border = "top" },
             },
           },
         },

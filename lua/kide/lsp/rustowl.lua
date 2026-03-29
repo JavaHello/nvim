@@ -10,14 +10,14 @@ vim.api.nvim_set_hl(0, "outlive", { undercurl = true, sp = "#cc0000" })
 local function show_rustowl(bufnr)
   local clients = vim.lsp.get_clients({ bufnr = bufnr, name = "rustowl" })
   for _, client in ipairs(clients) do
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    client.request("rustowl/cursor", {
+    local line, col = table.unpack(vim.api.nvim_win_get_cursor(0))
+    client:request("rustowl/cursor", {
       position = {
         line = line - 1,
         character = col,
       },
       document = vim.lsp.util.make_text_document_params(),
-    }, function(err, result, ctx)
+    }, function(_, result, _)
       if result ~= nil then
         for _, deco in ipairs(result["decorations"]) do
           if deco["is_display"] == true then
@@ -31,7 +31,7 @@ local function show_rustowl(bufnr)
   end
 end
 
-local function rustowl_on_attach(hover, client, bufnr, idle_time_ms)
+local function rustowl_on_attach(hover, _, bufnr, idle_time_ms)
   local timer = nil
   local augroup = vim.api.nvim_create_augroup("RustOwlCmd", { clear = true })
 
@@ -46,6 +46,9 @@ local function rustowl_on_attach(hover, client, bufnr, idle_time_ms)
   local function start_timer()
     clear_timer()
     timer = vim.uv.new_timer()
+    if not timer then
+      return
+    end
     timer:start(
       idle_time_ms,
       0,
