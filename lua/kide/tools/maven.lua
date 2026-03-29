@@ -8,8 +8,11 @@ local function maven_settings()
     return vim.fn.expand("~/.m2/settings.xml")
   end
   local maven_home = vim.env["MAVEN_HOME"]
-  if maven_home and vim.fn.filereadable(maven_home .. "/conf/settings.xml") then
-    return maven_home .. "/conf/settings.xml"
+  if maven_home then
+    local settings_xml = vim.fs.joinpath(maven_home, "conf", "settings.xml")
+    if vim.fn.filereadable(settings_xml) then
+      return settings_xml
+    end
   end
 end
 

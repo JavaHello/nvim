@@ -437,17 +437,17 @@ M.async_profiler_home = vim.env["ASYNC_PROFILER_HOME"]
 local function get_async_profiler_ddl()
   if M.async_profiler_home then
     if utils.is_mac then
-      return vim.fn.glob(M.async_profiler_home .. "/build/lib/libasyncProfiler.dylib")
+      return vim.fn.glob(vim.fs.joinpath(M.async_profiler_home, "build", "lib", "libasyncProfiler.dylib"))
     elseif utils.is_linux then
-      return vim.fn.glob(M.async_profiler_home .. "/build/lib/libasyncProfiler.so")
+      return vim.fn.glob(vim.fs.joinpath(M.async_profiler_home, "build", "lib", "libasyncProfiler.so"))
     else
-      return vim.fn.glob(M.async_profiler_home .. "/build/lib/libasyncProfiler.dll")
+      return vim.fn.glob(vim.fs.joinpath(M.async_profiler_home, "build", "lib", "libasyncProfiler.dll"))
     end
   end
 end
 local function get_async_profiler_cov()
   if M.async_profiler_home then
-    for _, value in ipairs(vim.split(vim.fn.glob(M.async_profiler_home .. "/target/jfr-converter-*.jar"), "\n")) do
+    for _, value in ipairs(vim.split(vim.fn.glob(vim.fs.joinpath(M.async_profiler_home, "target", "jfr-converter-*.jar")), "\n")) do
       if not (vim.endswith(value, "-javadoc.jar") or vim.endswith(value, "-sources.jar")) then
         return value
       end

@@ -18,7 +18,7 @@ M.config = {
         library = {
           vim.fn.expand("$VIMRUNTIME/lua"),
           vim.fn.expand("$VIMRUNTIME/lua/vim/lsp"),
-          vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy",
+          vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "lazy.nvim", "lua", "lazy"),
           "${3rd}/luv/library",
         },
         maxPreload = 100000,

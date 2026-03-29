@@ -5,7 +5,7 @@ if lemminx_home then
   local utils = require("kide.tools")
   local me = require("kide.melspconfig")
   local lemminx_jars = {}
-  for _, bundle in ipairs(vim.split(vim.fn.glob(lemminx_home .. "/*.jar"), "\n")) do
+  for _, bundle in ipairs(vim.split(vim.fn.glob(vim.fs.joinpath(lemminx_home, "*.jar")), "\n")) do
     table.insert(lemminx_jars, bundle)
   end
   vim.fn.join(lemminx_jars, utils.is_win and ";" or ":")

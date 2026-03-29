@@ -5,7 +5,7 @@ local function ls_path()
   if path == nil or path == "" then
     return nil
   end
-  return require("spring_boot").get_boot_ls(path .. "/language-server")
+  return require("spring_boot").get_boot_ls(vim.fs.joinpath(path, "language-server"))
 end
 local lspath = ls_path()
 if lspath == nil then

@@ -14,7 +14,8 @@ if jc.config then
     if vim.g.enable_spring_boot == true then
       local boot_jar_path = vim.env["JDTLS_SPRING_TOOLS_PATH"]
       if boot_jar_path then
-        vim.list_extend(config["init_options"].bundles, require("spring_boot").get_jars(boot_jar_path .. "/jars"))
+        vim.list_extend(config["init_options"].bundles,
+          require("spring_boot").get_jars(vim.fs.joinpath(boot_jar_path, "jars")))
       else
         vim.list_extend(config["init_options"].bundles, require("spring_boot").java_extensions())
       end
@@ -62,7 +63,7 @@ if jc.config then
 end
 
 -- see mfussenegger/dotfiles
-local checkstyle_config = vim.uv.cwd() .. "/checkstyle.xml"
+local checkstyle_config = vim.fs.joinpath(vim.uv.cwd(), "checkstyle.xml")
 local has_checkstyle = vim.uv.fs_stat(checkstyle_config) and vim.fn.executable("checkstyle")
 local is_main = vim.api.nvim_buf_get_name(0):find("src/main/java") ~= nil
 if has_checkstyle and is_main then
