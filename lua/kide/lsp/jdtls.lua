@@ -185,7 +185,7 @@ end)()
 if vscode_java_debug_path then
   vim.list_extend(
     bundles,
-    vim.split(vim.fn.glob(vim.fs.joinpath(vscode_java_debug_path, "com.microsoft.java.debug.plugin-*.jar")), "\n")
+    vim.split(vim.fn.glob(vim.fs.joinpath(vscode_java_debug_path, "com.microsoft.java.debug.plugin*.jar")), "\n")
   )
 end
 
