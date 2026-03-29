@@ -40,10 +40,18 @@ local function win_opts()
 end
 
 local function close_window(force)
+  local closed = false
   if state.win and vim.api.nvim_win_is_valid(state.win) then
-    pcall(vim.api.nvim_win_close, state.win, force or false)
+    closed = pcall(vim.api.nvim_win_close, state.win, force or false)
   end
   state.win = nil
+  if closed then
+    vim.schedule(function()
+      pcall(function()
+        vim.cmd("checktime")
+      end)
+    end)
+  end
 end
 
 local function clear_buffer()
