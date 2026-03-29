@@ -11,7 +11,7 @@ local vscode = require("kide.tools.vscode")
 local mason, _ = pcall(require, "mason-registry")
 -- local jdtls_path = vscode.find_one("/redhat.java-*/server")
 local function get_jdtls_path()
-  local jdtls_path = env.JDTLS_HOME or vscode.find_one("/redhat.java-*/server")
+  local jdtls_path = env.JDTLS_HOME or vscode.find_one("redhat.java-*", "server")
 
   if not jdtls_path then
     if mason and require("mason-registry").has_package("jdtls") then
@@ -36,7 +36,7 @@ local jdtls_java = (function()
   end
   local java_home = env.JAVA_HOME
   if java_home then
-    return java_home .. "/bin/java"
+    return vim.fs.joinpath(java_home, "bin", "java")
   end
   return "java"
 end)()
@@ -49,7 +49,7 @@ local function get_java_ver_sources(v, dv)
 end
 
 local function get_jdtls_workspace()
-  return env.JDTLS_WORKSPACE or env.HOME .. "/.jdtls-workspace/"
+  return env.JDTLS_WORKSPACE or vim.fs.joinpath(vim.fn.stdpath("cache"), "jdtls-workspace")
 end
 
 local function get_jol_jar()
@@ -100,7 +100,8 @@ local runtimes = (function()
     if java_home then
       local java_sources = get_java_ver_sources(
         version,
-        fglob(vim.fn.glob(java_home .. "/src.zip")) or fglob(vim.fn.glob(java_home .. "/lib/src.zip"))
+        fglob(vim.fn.glob(vim.fs.joinpath(java_home, "src.zip"))) or
+        fglob(vim.fn.glob(vim.fs.joinpath(java_home, "lib", "src.zip")))
       )
       if ExecutionEnvironment.JavaSE_17 == value then
         default_jdk = true
@@ -122,16 +123,16 @@ end)()
 -- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
 local rwdir = root_dir or vim.fn.getcwd()
-local workspace_dir = get_jdtls_workspace() .. require("kide.tools").base64_url_safe(rwdir)
+local workspace_dir = vim.fs.joinpath(get_jdtls_workspace(), vim.fn.sha256(rwdir))
 
 local function jdtls_launcher()
   local jdtls_config = nil
   if utils.is_mac then
-    jdtls_config = "/config_mac"
+    jdtls_config = "config_mac"
   elseif utils.is_linux then
-    jdtls_config = "/config_linux"
+    jdtls_config = "config_linux"
   elseif utils.is_win then
-    jdtls_config = "/config_win"
+    jdtls_config = "config_win"
   else
     vim.notify("jdtls: unknown os", vim.log.levels.ERROR)
     return nil
@@ -143,7 +144,7 @@ local function jdtls_launcher()
     "-Dosgi.bundles.defaultStartLevel=4",
     "-Declipse.product=org.eclipse.jdt.ls.core.product",
     "-Dosgi.checkConfiguration=true",
-    "-Dosgi.sharedConfiguration.area=" .. vim.fn.glob(jdtls_path .. jdtls_config),
+    "-Dosgi.sharedConfiguration.area=" .. vim.fs.joinpath(jdtls_path, jdtls_config),
     "-Dosgi.sharedConfiguration.area.readOnly=true",
     "-Dosgi.configuration.cascaded=true",
     "-Dlog.protocol=true",
@@ -163,7 +164,7 @@ local function jdtls_launcher()
     table.insert(cmd, "-javaagent:" .. lombok_jar)
   end
   table.insert(cmd, "-jar")
-  table.insert(cmd, vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar"))
+  table.insert(cmd, vim.fn.glob(vim.fs.joinpath(jdtls_path, "plugins", "org.eclipse.equinox.launcher_*.jar")))
   table.insert(cmd, "-data")
   table.insert(cmd, workspace_dir)
   return cmd
@@ -174,12 +175,13 @@ local bundles = {}
 
 local vscode_java_debug_path = (function()
   local p = vim.env["JDTLS_JAVA_DEBUG_PATH"]
-  p = p or vscode.find_one("/vscjava.vscode-java-debug-*/server")
+  p = p or vscode.find_one("vscjava.vscode-java-debug-*", "server")
   if p then
     return p
   end
   if mason and require("mason-registry").has_package("java-debug-adapter") then
-    return require("mason-registry").get_package("java-debug-adapter"):get_install_path() .. "/extension/server"
+    return vim.fs.joinpath(require("mason-registry").get_package("java-debug-adapter"):get_install_path(),
+      "extension", "server")
   end
 end)()
 if vscode_java_debug_path then
@@ -193,12 +195,12 @@ end
 -- vim.list_extend(bundles, vim.split(vim.fn.glob("/opt/software/lsp/java/vscode-java-test/server/*.jar"), "\n"));
 local vscode_java_test_path = (function()
   local p = vim.env["JDTLS_JAVA_TEST_PATH"]
-  p = p or vscode.find_one("/vscjava.vscode-java-test-*/server")
+  p = p or vscode.find_one("vscjava.vscode-java-test-*", "server")
   if p then
     return p
   end
   if mason and require("mason-registry").has_package("java-test") then
-    return require("mason-registry").get_package("java-test"):get_install_path() .. "/extension/server"
+    return vim.fs.joinpath(require("mason-registry").get_package("java-test"):get_install_path(), "extension", "server")
   end
 end)()
 
@@ -245,13 +247,13 @@ end
 -- /opt/software/lsp/java/vscode-java-decompiler/server/
 local java_decoompiler_path = (function()
   local p = vim.env["JDTLS_JAVA_DECOMPILER_PATH"]
-  p = p or vscode.find_one("/dgileadi.java-decompiler-*/server")
+  p = p or vscode.find_one("dgileadi.java-decompiler-*", "server")
   if p then
     return p
   end
 end)()
 if java_decoompiler_path then
-  vim.list_extend(bundles, vim.split(vim.fn.glob(java_decoompiler_path .. "/*.jar"), "\n"))
+  vim.list_extend(bundles, vim.split(vim.fn.glob(vim.fs.joinpath(java_decoompiler_path, "*.jar")), "\n"))
 end
 
 -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
@@ -259,23 +261,23 @@ end
 -- /opt/software/lsp/java/vscode-java-dependency/server/
 local java_dependency_path = (function()
   local p = vim.env["JDTLS_JAVA_DEPENDENCY_PATH"]
-  p = p or vscode.find_one("/vscjava.vscode-java-dependency-*/server")
+  p = p or vscode.find_one("vscjava.vscode-java-dependency-*", "server")
   if p then
     return p
   end
 end)()
 if java_dependency_path then
-  vim.list_extend(bundles, vim.split(vim.fn.glob(java_dependency_path .. "/*.jar"), "\n"))
+  vim.list_extend(bundles, vim.split(vim.fn.glob(vim.fs.joinpath(java_dependency_path, "*.jar")), "\n"))
 end
 
-local vscode_pde_path = vscode.find_one("/yaozheng.vscode-pde-*/server")
+local vscode_pde_path = vscode.find_one("yaozheng.vscode-pde-*", "server")
 if vscode_pde_path and "Y" == vim.env["VSCODE_PDE_ENABLE"] then
-  vim.list_extend(bundles, vim.split(vim.fn.glob(vscode_pde_path .. "/*.jar"), "\n"))
+  vim.list_extend(bundles, vim.split(vim.fn.glob(vim.fs.joinpath(vscode_pde_path, "*.jar")), "\n"))
 end
 
 -- or "https://raw.githubusercontent.com/redhat-developer/vscode-java/refs/heads/main/formatters/eclipse-formatter.xml"
 local function fmt_config()
-  local fmt_path = vim.uv.cwd() .. "/eclipse-formatter.xml"
+  local fmt_path = vim.fs.joinpath(vim.uv.cwd(), "eclipse-formatter.xml")
   local has_fmt = vim.uv.fs_stat(fmt_path)
   if has_fmt then
     return {
