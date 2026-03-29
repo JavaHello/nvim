@@ -533,7 +533,8 @@ M.config.on_attach = function(client, buffer)
         vim.cmd("w")
       end
       local sid = require("kide").timer_stl_status("󰒓")
-      client:request("java/buildWorkspace", nil, function()
+      ---@diagnostic disable-next-line: param-type-mismatch
+      client:request("java/buildWorkspace", false, function()
         fn()
         require("kide").clean_stl_status(sid, 0)
       end)
