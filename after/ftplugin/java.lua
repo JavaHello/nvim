@@ -1,6 +1,4 @@
 local jc = require("kide.lsp.jdtls")
----@diagnostic disable-next-line: different-requires
-local jdtls = require("jdtls")
 if jc.config then
   local config
   -- 防止 start_or_attach 重复修改 config
@@ -46,7 +44,7 @@ if jc.config then
       end
     end
   end
-  jdtls.start_or_attach(config, { dap = { config_overrides = {}, hotcodereplace = "auto" } })
+  jc.start(config)
 
   if vim.g.enable_spring_boot == true then
     local sc = require("kide.lsp.spring-boot").config

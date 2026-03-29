@@ -422,6 +422,9 @@ M.config.commands["_java.reloadBundles.command"] = function()
 end
 
 local jdtls = require("jdtls")
+M.start = function(config)
+  jdtls.start_or_attach(config, { dap = { config_overrides = {}, hotcodereplace = "auto" } })
+end
 jdtls.jol_path = get_jol_jar()
 
 -- local extendedClientCapabilities = jdtls.extendedClientCapabilities
