@@ -15,12 +15,26 @@ function M.gpt_stl(buf, icon, title, usage)
     M.set_buf_stl(buf, { " %#DiagnosticInfo#", icon, " %#StatusLine#", title })
   end
 end
+
 function M.term_stl(buf, cmd)
-  local cmd_0 = cmd[1]
+  local cmd_type = type(cmd)
+  local cmd_0
+  if cmd_type == "table" then
+    cmd_0 = cmd[1]
+  elseif cmd_type == "string" then
+    cmd_0 = cmd
+  else
+    vim.notify("不支持的 cmd 类型", vim.log.levels.ERROR)
+    return
+  end
   if cmd_0 == "curl" then
     M.set_buf_stl(buf, { " %#DiagnosticInfo#", "󰢩", " %#StatusLine#", "cURL" })
   elseif cmd_0 == "mvn" then
     M.set_buf_stl(buf, { " %#DiagnosticError#", "", " %#StatusLine#", "Maven (" .. table.concat(cmd, " ") .. ")" })
+  elseif cmd_0 == "Codex" then
+    M.set_buf_stl(buf, { " %#DiagnosticInfo#", "", " %#StatusLine#", "Codex" })
+  else
+    M.set_buf_stl(buf, { " %#DiagnosticInfo#", "", " %#StatusLine#", cmd_0 })
   end
 end
 

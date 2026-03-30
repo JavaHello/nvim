@@ -205,6 +205,7 @@ local function ensure_job()
   vim.bo[state.buf].modified = false
   vim.b[state.buf].q_close = false
 
+  require("kide").term_stl(state.buf, "Codex")
   vim.api.nvim_create_autocmd("WinLeave", {
     buffer = state.buf,
     callback = function()
