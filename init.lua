@@ -61,6 +61,22 @@ if vim.g.neovide then
   vim.keymap.set({ "n", "i", "v" }, "<D-s>", save, { desc = "Save" })
   vim.keymap.set("v", "<D-c>", copy, { silent = true, desc = "Copy" })
   vim.keymap.set({ "n", "i", "v", "c", "t" }, "<D-v>", paste, { silent = true, desc = "Paste" })
+
+  vim.g.neovide_scale_factor = 1.0
+  local change_scale_factor = function(delta)
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+  end
+
+  vim.keymap.set("n", "<C-0>", function()
+    vim.g.neovide_scale_factor = 1.0
+  end)
+  vim.keymap.set("n", "<C-=>", function()
+    change_scale_factor(1.25)
+  end)
+  vim.keymap.set("n", "<C-->", function()
+    change_scale_factor(1 / 1.25)
+  end)
+
 end
 require("global")
 require("experimental")
