@@ -121,7 +121,7 @@ local runtimes = (function()
 end)()
 
 -- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
+local root_dir = vim.fs.root(0, { ".git", "mvnw", "gradlew" })
 local rwdir = root_dir or vim.fn.getcwd()
 local workspace_dir = vim.fs.joinpath(get_jdtls_workspace(), vim.fn.sha256(rwdir))
 

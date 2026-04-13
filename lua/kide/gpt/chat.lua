@@ -57,12 +57,10 @@ M.chat_config = {
 }
 
 local function disable_start()
-  vim.cmd("TSBufDisable highlight")
   vim.cmd("RenderMarkdown disable")
 end
 
 local function enable_done()
-  vim.cmd("TSBufEnable highlight")
   vim.cmd("RenderMarkdown enable")
   vim.cmd("normal! G$")
 end
