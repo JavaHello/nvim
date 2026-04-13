@@ -38,15 +38,9 @@ vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "Debug", li
 if vim.g.neovide then
   vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
   vim.g.neovide_cursor_vfx_mode = "railgun"
-  vim.opt_global.guifont = vim.env["NVIM_GUI_FONT"] or "CaskaydiaMono Nerd Font Mono:h13"
+  vim.opt_global.guifont = vim.env["NVIM_GUI_FONT"] or "CaskaydiaMono Nerd Font Mono:h15"
   vim.g.neovide_fullscreen = true
   vim.g.transparency = 1.0
-  local alpha = function()
-    return string.format("%x", math.floor(255 * (vim.g.transparency or 0.8)))
-  end
-  -- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
-  vim.g.neovide_opacity = 1.0
-  vim.g.neovide_background_color = "#282828" .. alpha()
 
   vim.g.neovide_floating_blur_amount_x = 2.0
   vim.g.neovide_floating_blur_amount_y = 2.0
