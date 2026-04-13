@@ -36,7 +36,7 @@ vim.fn.sign_define("DapStopped", { text = "", texthl = "Debug", linehl = "", 
 vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "Debug", linehl = "", numhl = "" })
 
 if vim.g.neovide then
-  vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
+  vim.g.neovide_input_macos_option_key_is_meta = "only_left"
   vim.g.neovide_cursor_vfx_mode = "railgun"
   vim.opt_global.guifont = vim.env["NVIM_GUI_FONT"] or "CaskaydiaMono Nerd Font Mono:h15"
   vim.g.neovide_fullscreen = true
@@ -52,6 +52,15 @@ if vim.g.neovide then
   vim.g.neovide_padding_bottom = 0
   vim.g.neovide_padding_right = 0
   vim.g.neovide_padding_left = 0
+
+  local function save() vim.cmd.write() end
+  local function copy() vim.cmd([[normal! "+y]]) end
+  local function paste() vim.api.nvim_paste(vim.fn.getreg("+"), true, -1) end
+
+  -- https://neovide.dev/faq.html
+  vim.keymap.set({ "n", "i", "v" }, "<D-s>", save, { desc = "Save" })
+  vim.keymap.set("v", "<D-c>", copy, { silent = true, desc = "Copy" })
+  vim.keymap.set({ "n", "i", "v", "c", "t" }, "<D-v>", paste, { silent = true, desc = "Paste" })
 end
 require("global")
 require("experimental")
