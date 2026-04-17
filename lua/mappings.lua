@@ -6,8 +6,14 @@ local Snacks = require("snacks")
 
 local function codex_edit_selection(opt)
   local code
+  local line_info = nil
   if opt.range > 0 then
     code = require("kide.tools").get_visual_selection()
+    line_info = opt.line1 == opt.line2 and tostring(opt.line1) or (opt.line1 .. "-" .. opt.line2)
+  else
+    local line = vim.api.nvim_win_get_cursor(0)[1]
+    code = vim.api.nvim_buf_get_lines(0, line - 1, line, false)
+    line_info = tostring(line)
   end
   if not code or vim.tbl_isempty(code) then
     vim.notify("请先选择要交给 Codex 修改的代码", vim.log.levels.WARN)
@@ -17,25 +23,22 @@ local function codex_edit_selection(opt)
   if not prompt or prompt == "" then
     prompt = vim.fn.input("Codex edit: ")
   end
-  if not prompt or prompt == "" then
-    return
-  end
 
   local filetype = vim.bo.filetype
-  local filename = vim.api.nvim_buf_get_name(0)
-  local line_info = nil
-  if opt.range > 0 then
-    line_info = opt.line1 == opt.line2 and tostring(opt.line1) or (opt.line1 .. "-" .. opt.line2)
-  end
-  local message = table.concat({
-    prompt,
-    filename ~= "" and ("文件: " .. filename .. (line_info and (":" .. line_info) or "")) or nil,
-    "```" .. (filetype ~= "" and filetype or ""),
-    table.concat(code, "\n"),
-    "```",
-  }, "\n")
+  local filename = require("kide.codex").buffer_path(0)
 
-  require("kide.codex").send(message)
+  local message = {}
+  if prompt and prompt ~= "" then
+    table.insert(message, prompt)
+  end
+  if filename ~= "" then
+    table.insert(message, "文件: " .. filename .. (line_info and (":" .. line_info) or ""))
+  end
+  table.insert(message, "```" .. (filetype ~= "" and filetype or ""))
+  table.insert(message, table.concat(code, "\n"))
+  table.insert(message, "```")
+
+  require("kide.codex").send(table.concat(message, "\n"))
 end
 
 map("n", "<A-i>", function()

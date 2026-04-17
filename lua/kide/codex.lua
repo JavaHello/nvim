@@ -20,6 +20,33 @@ local state = {
   output_seen = false,
 }
 
+---@param bufnr? integer
+---@return string
+function M.buffer_path(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  local filename = vim.api.nvim_buf_get_name(bufnr)
+  if filename == "" then
+    return ""
+  end
+
+  local cwd = vim.uv.cwd()
+  if not cwd or cwd == "" then
+    return filename
+  end
+
+  local relative = vim.fn.fnamemodify(filename, ":.")
+  if relative ~= "." and relative ~= filename and not relative:match("^%.%.") then
+    return relative
+  end
+
+  local cwd_prefix = cwd:sub(-1) == "/" and cwd or (cwd .. "/")
+  if filename:sub(1, #cwd_prefix) == cwd_prefix then
+    return filename:sub(#cwd_prefix + 1)
+  end
+
+  return filename
+end
+
 local function win_opts()
   local columns = vim.o.columns
   local lines = vim.o.lines
@@ -194,6 +221,13 @@ local function open_window()
   end
 end
 
+local function focus_insert()
+  if state.win and vim.api.nvim_win_is_valid(state.win) then
+    vim.api.nvim_set_current_win(state.win)
+    vim.cmd("startinsert!")
+  end
+end
+
 local function ensure_job()
   if is_job_running() then
     return true
@@ -253,9 +287,12 @@ function M.codex()
       return
     end
     open_window()
+    focus_insert()
     return
   end
-  ensure_job()
+  if ensure_job() then
+    focus_insert()
+  end
 end
 
 function M.send(text, opt)
@@ -272,6 +309,9 @@ function M.send(text, opt)
   end
   if opt.focus ~= false and (state.win == nil or not vim.api.nvim_win_is_valid(state.win)) then
     open_window()
+  end
+  if opt.focus ~= false then
+    focus_insert()
   end
   if state.ready then
     vim.fn.chansend(state.job, text)
@@ -294,7 +334,7 @@ function M.build_fix_message(diagnostics, opt)
   end
 
   local bufnr = opt.bufnr or vim.api.nvim_get_current_buf()
-  local filename = vim.api.nvim_buf_get_name(bufnr)
+  local filename = M.buffer_path(bufnr)
   local filetype = vim.bo[bufnr].filetype or "text"
   local need_code = not opt.code
   local message = {
