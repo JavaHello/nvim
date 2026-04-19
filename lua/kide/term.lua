@@ -96,7 +96,7 @@ local function launch_term(cmd, opts)
   local bufnr = vim.api.nvim_get_current_buf()
   -- vim.wo.winfixbuf = true
   require("kide").term_stl(bufnr, cmd)
-  vim.keymap.set({ "t", "n" }, "<CR>", open_file_under_cursor, { silent = true, buffer = bufnr })
+  vim.keymap.set({ "n" }, "<CR>", open_file_under_cursor, { silent = true, buffer = bufnr })
   vim.bo.path = path
   vim.bo.buftype = "nofile"
   vim.bo.bufhidden = "wipe"
@@ -186,7 +186,7 @@ function M.input_run()
   })
   if ok then
     if cmd == "" then
-      M.toggle()
+      vim.notify("No command entered", vim.log.levels.WARN)
     else
       M.last_input = cmd
       M.toggle(cmd)
