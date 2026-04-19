@@ -87,6 +87,8 @@ return {
     "swift",
     "kotlin",
     "zig",
+
+    "make",
   },
   root_markers = { ".git" },
   init_options = {
