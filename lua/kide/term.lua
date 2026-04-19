@@ -46,6 +46,45 @@ local function fish_complete(arglead, cmdline, cursorpos)
   return items
 end
 
+local function open_file_under_cursor()
+  local mode = vim.api.nvim_get_mode().mode
+  if mode == "t" then
+    vim.cmd("stopinsert")
+  end
+
+  local file = vim.fn.expand("<cfile>")
+  if file == nil or file == "" then
+    return
+  end
+
+  local current_win = vim.api.nvim_get_current_win()
+  local fallback_win = nil
+  local file_path = vim.fn.fnamemodify(file, ":p")
+
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if win ~= current_win and vim.api.nvim_win_is_valid(win) then
+      local win_buf = vim.api.nvim_win_get_buf(win)
+      if vim.api.nvim_buf_is_valid(win_buf) and vim.api.nvim_buf_get_name(win_buf) == file_path then
+        vim.api.nvim_set_current_win(win)
+        return
+      end
+
+      local cfg = vim.api.nvim_win_get_config(win)
+      if fallback_win == nil and cfg.relative == "" and vim.bo[win_buf].buftype == "" then
+        fallback_win = win
+      end
+    end
+  end
+
+  if fallback_win ~= nil then
+    vim.api.nvim_set_current_win(fallback_win)
+    vim.cmd("edit " .. vim.fn.fnameescape(file))
+    return
+  end
+
+  vim.cmd("split " .. vim.fn.fnameescape(file))
+end
+
 local function launch_term(cmd, opts)
   opts = opts or {}
 
@@ -54,7 +93,10 @@ local function launch_term(cmd, opts)
   vim.cmd("belowright new")
 
   termwin = api.nvim_get_current_win()
-  require("kide").term_stl(vim.api.nvim_get_current_buf(), cmd)
+  local bufnr = vim.api.nvim_get_current_buf()
+  -- vim.wo.winfixbuf = true
+  require("kide").term_stl(bufnr, cmd)
+  vim.keymap.set({ "t", "n" }, "<CR>", open_file_under_cursor, { silent = true, buffer = bufnr })
   vim.bo.path = path
   vim.bo.buftype = "nofile"
   vim.bo.bufhidden = "wipe"
