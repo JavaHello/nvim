@@ -156,13 +156,18 @@ end, { desc = "files", silent = true, noremap = true })
 map("n", "<leader>o", "<CMD>Outline<CR>", { desc = "Symbols Outline" })
 
 -- task
-command("TaskRun", function()
-  require("kide.term").input_run(false)
-end, { desc = "Task Run" })
-
-command("TaskRunLast", function()
-  require("kide.term").input_run(true)
-end, { desc = "Restart Last Task" })
+command("Run", function(opt)
+  if opt.args ~= "" then
+    require("kide.term").last_input = opt.args
+    require("kide.term").toggle(opt.args)
+    return
+  end
+  require("kide.term").input_run()
+end, {
+  desc = "Run Task",
+  nargs = "*",
+  complete = "customlist,v:lua.kide_term_run_complete",
+})
 
 map("n", "<C-l>", function()
   require("conform").format({ lsp_fallback = true })

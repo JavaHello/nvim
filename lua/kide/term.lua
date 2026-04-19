@@ -12,6 +12,40 @@ local repls = {
 }
 local sid
 
+local function is_fish_shell()
+  local shell = vim.o.shell or vim.env.SHELL or ""
+  return vim.endswith(shell, "fish")
+end
+
+local function fish_complete(arglead, cmdline, cursorpos)
+  if not is_fish_shell() then
+    return vim.fn.getcompletion(arglead, "shellcmd")
+  end
+
+  local line = cmdline or arglead or ""
+  if cursorpos and cursorpos > 0 then
+    line = line:sub(1, cursorpos)
+  end
+
+  local ok, output = pcall(vim.fn.systemlist, {
+    vim.o.shell,
+    "-c",
+    "complete -C " .. vim.fn.shellescape(line),
+  })
+  if not ok or vim.v.shell_error ~= 0 then
+    return {}
+  end
+
+  local items = {}
+  for _, item in ipairs(output) do
+    local text = vim.split(item, "\t", { plain = true })[1]
+    if text and text ~= "" then
+      table.insert(items, text)
+    end
+  end
+  return items
+end
+
 local function launch_term(cmd, opts)
   opts = opts or {}
 
@@ -99,11 +133,15 @@ function M.send_line(line)
 end
 
 M.last_input = nil
-function M.input_run(last)
-  if last then
-    return M.toggle(M.last_input)
-  end
-  local ok, cmd = pcall(vim.fn.input, "CMD: ")
+M.complete = fish_complete
+_G.kide_term_run_complete = fish_complete
+
+function M.input_run()
+  local ok, cmd = pcall(vim.fn.input, {
+    prompt = "CMD: ",
+    default = M.last_input or "",
+    completion = "customlist,v:lua.kide_term_run_complete",
+  })
   if ok then
     if cmd == "" then
       M.toggle()
