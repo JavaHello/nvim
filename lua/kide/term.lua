@@ -12,40 +12,6 @@ local repls = {
 }
 local sid
 
-local function is_fish_shell()
-  local shell = vim.o.shell or vim.env.SHELL or ""
-  return vim.endswith(shell, "fish")
-end
-
-local function fish_complete(arglead, cmdline, cursorpos)
-  if not is_fish_shell() then
-    return vim.fn.getcompletion(arglead, "shellcmd")
-  end
-
-  local line = cmdline or arglead or ""
-  if cursorpos and cursorpos > 0 then
-    line = line:sub(1, cursorpos)
-  end
-
-  local ok, output = pcall(vim.fn.systemlist, {
-    vim.o.shell,
-    "-c",
-    "complete -C " .. vim.fn.shellescape(line),
-  })
-  if not ok or vim.v.shell_error ~= 0 then
-    return {}
-  end
-
-  local items = {}
-  for _, item in ipairs(output) do
-    local text = vim.split(item, "\t", { plain = true })[1]
-    if text and text ~= "" then
-      table.insert(items, text)
-    end
-  end
-  return items
-end
-
 local function open_file_under_cursor()
   local mode = vim.api.nvim_get_mode().mode
   if mode == "t" then
@@ -175,23 +141,49 @@ function M.send_line(line)
 end
 
 M.last_input = nil
-M.complete = fish_complete
-_G.kide_term_run_complete = fish_complete
-
-function M.input_run()
-  local ok, cmd = pcall(vim.fn.input, {
-    prompt = "CMD: ",
-    default = M.last_input or "",
-    completion = "customlist,v:lua.kide_term_run_complete",
-  })
-  if ok then
-    if cmd == "" then
-      vim.notify("No command entered", vim.log.levels.WARN)
-    else
-      M.last_input = cmd
-      M.toggle(cmd)
+M.complete = function(arglead, cmdline, cursorpos)
+  local line = cmdline or arglead or ""
+  if vim.trim(line) == "Run" then
+    if M.last_input and M.last_input ~= "" then
+      return { M.last_input }
     end
+    return {}
   end
+  line = line:sub(4)
+
+  local shell = vim.o.shell or vim.env.SHELL or ""
+  local is_fish = vim.endswith(shell, "fish")
+
+  local cursor = cursorpos or #line
+  if cursor > 0 then
+    line = line:sub(1, cursor)
+  end
+
+
+
+  local shell_items
+  if is_fish then
+    local ok, output = pcall(vim.fn.systemlist, {
+      vim.o.shell,
+      "-c",
+      "complete -C " .. vim.fn.shellescape(line),
+    })
+    if ok and vim.v.shell_error == 0 then
+      shell_items = {}
+      for _, item in ipairs(output) do
+        local text = vim.split(item, "\t", { plain = true })[1]
+        if text and text ~= "" then
+          table.insert(shell_items, text)
+        end
+      end
+    else
+      shell_items = {}
+    end
+  else
+    shell_items = vim.fn.getcompletion(line, "shellcmdline")
+  end
+
+  return shell_items
 end
 
 return M

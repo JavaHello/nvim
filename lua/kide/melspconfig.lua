@@ -19,7 +19,7 @@ local function notify_progress()
   })
 end
 
-M.on_attach = function(_, bufnr)
+M.on_attach = function(client, bufnr)
   if vim.lsp.document_color then
     vim.lsp.document_color.enable(true, { bufnr = bufnr }, { style = "virtual" })
   end
@@ -42,6 +42,14 @@ M.on_attach = function(_, bufnr)
   vim.keymap.set("n", "[r", function()
     Snacks.words.jump(-1)
   end, kopts)
+  if client:supports_method("textDocument/completion") then
+    -- vim.keymap.set("i", "<C-Space>", function()
+    --   vim.lsp.completion.get()
+    -- end, { silent = true, buffer = bufnr, desc = "LSP completion" })
+    vim.lsp.completion.enable(true, client.id, bufnr, {
+      autotrigger = true,
+    })
+  end
 end
 
 M.on_init = function(_, _)
@@ -57,7 +65,7 @@ M.capabilities = function(opt)
     capabilities = vim.tbl_deep_extend("force", capabilities, opt)
   end
 
-  return require("blink.cmp").get_lsp_capabilities(capabilities)
+  return capabilities
 end
 
 M.init_lsp = function()

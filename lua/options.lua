@@ -25,6 +25,14 @@ vim.opt.secure = false
 vim.opt.ttyfast = true
 vim.opt.scrollback = 100000
 
+-- 行为
+vim.opt.completeopt = { "menuone", "noselect", "popup", "fuzzy", "preview" }
+
+-- UI
+vim.o.winborder = "rounded"
+vim.o.pumblend = 20
+vim.o.pumborder = "rounded"
+
 -- 高亮所在行
 vim.opt.cursorline = true
 
@@ -43,7 +51,8 @@ vim.opt.smartcase = true
 vim.opt.showmode = true
 
 -- 菜单最多显示20行
-vim.opt.pumheight = 20
+vim.o.pumheight = 20
+vim.o.pummaxwidth = 100
 
 vim.opt.updatetime = 300
 vim.opt.timeout = true

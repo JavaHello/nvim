@@ -93,6 +93,7 @@ hl({
 
   WinSeparator = { fg = gray_ext2 },
   Pmenu = { fg = light2, bg = dark0 },
+  PmenuBorder = { fg = gray_ext3 },
   PmenuSel = { fg = dark0, bg = bright_blue },
   PmenuMatch = { bold = true },
   PmenuMatchSel = { bold = true },

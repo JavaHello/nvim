@@ -157,16 +157,23 @@ map("n", "<leader>o", "<CMD>Outline<CR>", { desc = "Symbols Outline" })
 
 -- task
 command("Run", function(opt)
+  local term = require("kide.term")
   if opt.args ~= "" then
-    require("kide.term").last_input = opt.args
-    require("kide.term").toggle(opt.args)
+    term.last_input = opt.args
+    term.toggle(opt.args)
     return
   end
-  require("kide.term").input_run()
+  if term.last_input and term.last_input ~= "" then
+    term.toggle(term.last_input)
+    return
+  end
+  vim.notify("No command to run", vim.log.levels.WARN)
 end, {
   desc = "Run Task",
   nargs = "*",
-  complete = "customlist,v:lua.kide_term_run_complete",
+  complete = function(arglead, cmdline, cursorpos)
+    return require("kide.term").complete(arglead, cmdline, cursorpos)
+  end,
 })
 
 map("n", "<C-l>", function()
@@ -680,6 +687,31 @@ end, { desc = "Codex edit selection" })
 map({ "n", "t" }, "<A-g>", function()
   require("kide.gitui").gitui()
 end, { desc = "gitui" })
+
+
+-- vim.keymap.set("i", "<C-k>", function()
+--   vim.snippet.expand([[
+-- function ${1:name}(${2:args}) {
+--   ${0}
+-- }
+-- ]])
+-- end)
+-- 跳到下一个占位符
+-- inoremap <expr> <cr> pumvisible() ? '<c-y>' : '<cr>'
+vim.keymap.set({ "i", "s" }, "<Tab>", function()
+  if vim.snippet.active({ direction = 1 }) then
+    return "<Cmd>lua vim.snippet.jump(1)<CR>"
+  end
+  return "<Tab>"
+end, { expr = true })
+
+-- 跳回上一个
+vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
+  if vim.snippet.active({ direction = -1 }) then
+    return "<Cmd>lua vim.snippet.jump(-1)<CR>"
+  end
+  return "<S-Tab>"
+end, { expr = true })
 
 require("kide.tools").setup()
 require("kide.tools.maven").setup()
