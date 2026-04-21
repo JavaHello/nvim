@@ -57,11 +57,9 @@ M.chat_config = {
 }
 
 local function disable_start()
-  vim.cmd("RenderMarkdown disable")
 end
 
 local function enable_done()
-  vim.cmd("RenderMarkdown enable")
   vim.cmd("normal! G$")
 end
 

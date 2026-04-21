@@ -68,14 +68,6 @@ return {
     end,
   },
   {
-    "https://gitlab.com/schrieveslaach/sonarlint.nvim.git",
-    lazy = false,
-    enabled = vim.env["SONARLINT_ENABLE"] == "Y",
-    config = function()
-      require("kide.lsp.sonarlint").setup()
-    end,
-  },
-  {
     "JavaHello/microprofile.nvim",
     enabled = vim.g.enable_quarkus == true,
     lazy = true,
@@ -292,24 +284,7 @@ return {
     lazy = true,
     cmd = { "VBox" },
   },
-  {
-    "windwp/nvim-ts-autotag",
-    ft = { "html" },
-    config = function()
-      require("nvim-ts-autotag").setup({})
-    end,
-  },
 
-  {
-    "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown" },
-    opts = {},
-  },
-  {
-    "HakonHarnes/img-clip.nvim",
-    cmd = { "PasteImage" },
-    opts = {},
-  },
   {
     "folke/snacks.nvim",
     priority = 1000,
