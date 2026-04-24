@@ -12,7 +12,7 @@ local code_json = {
       role = "assistant",
     },
   },
-  model = "deepseek-chat",
+  model = "deepseek-v4-flash",
   max_tokens = max_tokens,
   stop = "```",
   stream = true,
@@ -26,7 +26,7 @@ local chat_json = {
       role = "system",
     },
   },
-  model = "deepseek-chat",
+  model = "deepseek-v4-flash",
   frequency_penalty = 0,
   max_tokens = 4096 * 2,
   presence_penalty = 0,
@@ -46,7 +46,7 @@ local chat_json = {
 
 local reasoner_json = {
   messages = {},
-  model = "deepseek-reasoner",
+  model = "deepseek-v4-pro",
   max_tokens = 4096 * 2,
   response_format = {
     type = "text",
@@ -69,7 +69,7 @@ local commit_json = {
       role = "user",
     },
   },
-  model = "deepseek-chat",
+  model = "deepseek-v4-flash",
   frequency_penalty = 0,
   max_tokens = 4096 * 2,
   presence_penalty = 0,
@@ -98,7 +98,7 @@ local translate_json = {
       role = "user",
     },
   },
-  model = "deepseek-chat",
+  model = "deepseek-v4-flash",
   frequency_penalty = 0,
   max_tokens = 4096 * 2,
   presence_penalty = 0,
@@ -124,7 +124,7 @@ local translate_json = {
 ---@field sse http.SseClient?
 local DeepSeek = {
   models = {
-    "deepseek-chat",
+    "deepseek-v4-flash",
   },
 }
 DeepSeek.__index = DeepSeek
