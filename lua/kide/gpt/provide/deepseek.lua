@@ -13,6 +13,9 @@ local code_json = {
     },
   },
   model = "deepseek-v4-flash",
+  thinking = {
+    type = "disabled",
+  },
   max_tokens = max_tokens,
   stop = "```",
   stream = true,
@@ -27,6 +30,9 @@ local chat_json = {
     },
   },
   model = "deepseek-v4-flash",
+  thinking = {
+    type = "disabled",
+  },
   frequency_penalty = 0,
   max_tokens = 4096 * 2,
   presence_penalty = 0,
@@ -70,6 +76,9 @@ local commit_json = {
     },
   },
   model = "deepseek-v4-flash",
+  thinking = {
+    type = "disabled",
+  },
   frequency_penalty = 0,
   max_tokens = 4096 * 2,
   presence_penalty = 0,
@@ -99,6 +108,9 @@ local translate_json = {
     },
   },
   model = "deepseek-v4-flash",
+  thinking = {
+    type = "disabled",
+  },
   frequency_penalty = 0,
   max_tokens = 4096 * 2,
   presence_penalty = 0,
@@ -225,12 +237,7 @@ function DeepSeek:request(messages, callback)
     end
   end
 
-  self.sse = sse.new(self:url())
-      :POST()
-      :auth(self.api_key)
-      :body(payload)
-      :handle(callback_handle)
-      :send()
+  self.sse = sse.new(self:url()):POST():auth(self.api_key):body(payload):handle(callback_handle):send()
   job = self.sse.job
 end
 
