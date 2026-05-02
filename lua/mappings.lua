@@ -714,7 +714,7 @@ vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
 end, { expr = true })
 
 require("kide.tools").setup()
-require("kide.tools.maven").setup()
+require("kide.tools.infer").setup()
 require("kide.tools.plantuml").setup()
 require("kide.tools.mermaid").setup()
 require("kide.tools.curl").setup()

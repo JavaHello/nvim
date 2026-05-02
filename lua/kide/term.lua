@@ -141,20 +141,32 @@ function M.send_line(line)
 end
 
 M.last_input = nil
-M.complete = function(arglead, cmdline, cursorpos)
+M.complete = function(arglead, cmdline, cursorpos, opts)
+  opts = opts or {}
+  local command_name = opts.command_name or "Run"
+  local last_input = opts.last_input or M.last_input
   local line = cmdline or arglead or ""
-  if vim.trim(line) == "Run" then
-    if M.last_input and M.last_input ~= "" then
-      return { M.last_input }
+  if vim.trim(line) == command_name then
+    if last_input and last_input ~= "" then
+      return { last_input }
     end
     return {}
   end
-  line = line:sub(4)
+  local prefix = command_name .. " "
+  if vim.startswith(line, prefix) then
+    line = line:sub(#prefix + 1)
+  end
 
   local shell = vim.o.shell or vim.env.SHELL or ""
   local is_fish = vim.endswith(shell, "fish")
 
   local cursor = cursorpos or #line
+  if vim.startswith(cmdline or "", prefix) then
+    cursor = cursor - #prefix
+  end
+  if cursor < 0 then
+    cursor = 0
+  end
   if cursor > 0 then
     line = line:sub(1, cursor)
   end
