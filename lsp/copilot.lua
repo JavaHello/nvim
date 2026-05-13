@@ -88,6 +88,7 @@ return {
     "kotlin",
     "zig",
 
+    "sql",
     "make",
   },
   root_markers = { ".git" },
