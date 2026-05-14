@@ -153,11 +153,15 @@ local function apply_selection(state)
   end
   vim.api.nvim_buf_clear_namespace(state.result_buf, selection_ns, 0, -1)
   if vim.tbl_isempty(state.items) then
+    if state.result_win and vim.api.nvim_win_is_valid(state.result_win) then
+      vim.wo[state.result_win].cursorline = false
+    end
     return
   end
 
   state.selected = math.max(1, math.min(state.selected, #state.items))
   if state.result_win and vim.api.nvim_win_is_valid(state.result_win) then
+    vim.wo[state.result_win].cursorline = true
     pcall(vim.api.nvim_win_set_cursor, state.result_win, { state.selected, 0 })
   end
 end
