@@ -26,7 +26,7 @@ local function select_opts(title)
       col = col,
       width = width,
       height = 1,
-      focusable = false,
+      focusable = true,
       border = { "╭", "─", "╮", "│", "┤", "─", "├", "│" },
       title = title,
       title_pos = "center",
@@ -63,12 +63,6 @@ local function set_lines(buf, lines)
   vim.bo[buf].modified = false
 end
 
-local function set_line_highlight(buf, ns, hl_group, row)
-  vim.api.nvim_buf_set_extmark(buf, ns, row, 0, {
-    line_hl_group = hl_group,
-    priority = 50,
-  })
-end
 
 local function set_range_highlight(buf, ns, hl_group, row, start_col, end_col)
   if end_col <= start_col then
@@ -82,6 +76,13 @@ local function set_range_highlight(buf, ns, hl_group, row, start_col, end_col)
 end
 
 local function close_window(state)
+  if state.closed then
+    return
+  end
+  state.closed = true
+  if state.group then
+    pcall(vim.api.nvim_del_augroup_by_id, state.group)
+  end
   if state.input_win and vim.api.nvim_win_is_valid(state.input_win) then
     pcall(vim.api.nvim_win_close, state.input_win, true)
   end
@@ -104,6 +105,9 @@ local function open_file(filename, open)
 end
 
 local function render(state)
+  if state.closed then
+    return
+  end
   if not state.input_buf or not vim.api.nvim_buf_is_valid(state.input_buf) then
     return
   end
@@ -133,11 +137,7 @@ local function render(state)
     state.index = 1
   end
 
-  set_lines(state.input_buf, { query })
   vim.api.nvim_buf_clear_namespace(state.input_buf, count_ns, 0, -1)
-  if query ~= "" then
-    set_range_highlight(state.input_buf, count_ns, "Search", 0, 0, #query)
-  end
   vim.api.nvim_buf_set_extmark(state.input_buf, count_ns, 0, 0, {
     virt_text = { { ("  %d/%d"):format(#matches, #state.items), "Comment" } },
     virt_text_pos = "eol",
@@ -150,7 +150,7 @@ local function render(state)
   end
 
   local lines = {}
-  for i, item in ipairs(matches) do
+  for _, item in ipairs(matches) do
     table.insert(lines, item)
   end
 
@@ -158,9 +158,6 @@ local function render(state)
   vim.api.nvim_buf_clear_namespace(state.result_buf, selection_ns, 0, -1)
   vim.api.nvim_buf_clear_namespace(state.result_buf, match_ns, 0, -1)
 
-  if #matches > 0 then
-    set_line_highlight(state.result_buf, selection_ns, "CursorLine", state.index - 1)
-  end
 
   for i, pos_list in ipairs(positions) do
     for _, pos in ipairs(pos_list or {}) do
@@ -174,8 +171,26 @@ local function render(state)
   end
 end
 
+local function current_query(state)
+  if not state.input_buf or not vim.api.nvim_buf_is_valid(state.input_buf) then
+    return ""
+  end
+  return vim.api.nvim_buf_get_lines(state.input_buf, 0, 1, false)[1] or ""
+end
+
+local function refresh_query(state)
+  local query = current_query(state)
+  if query == state.query then
+    return
+  end
+  state.query = query
+  state.index = 1
+  render(state)
+end
+
 local function accept(state)
   local choice = state.matches and state.matches[state.index]
+  stopinsert()
   close_window(state)
 
   if choice and choice ~= "" and state.on_choice then
@@ -202,22 +217,6 @@ local function move(state, delta)
   render(state)
 end
 
-local function feed_query(state, char)
-  state.query = state.query .. char
-  state.index = 1
-  render(state)
-end
-
-local function backspace(state)
-  if state.query == "" then
-    return
-  end
-
-  state.query = state.query:sub(1, -2)
-  state.index = 1
-  render(state)
-end
-
 local function run_lines(lines, opts)
   opts = opts or {}
 
@@ -238,27 +237,50 @@ local function run_lines(lines, opts)
     index = 1,
     max_results = math.max(1, win_opts.result.height),
     on_choice = opts.on_choice,
+    closed = false,
   }
 
   state.input_buf = vim.api.nvim_create_buf(false, true)
   state.result_buf = vim.api.nvim_create_buf(false, true)
   set_scratch_options(state.input_buf)
   set_scratch_options(state.result_buf)
-  vim.bo[state.input_buf].modifiable = false
   vim.bo[state.result_buf].modifiable = false
 
-  state.input_win = vim.api.nvim_open_win(state.input_buf, false, win_opts.input)
-  state.result_win = vim.api.nvim_open_win(state.result_buf, true, win_opts.result)
+  state.input_win = vim.api.nvim_open_win(state.input_buf, true, win_opts.input)
+  state.result_win = vim.api.nvim_open_win(state.result_buf, false, win_opts.result)
   vim.wo[state.input_win].number = false
   vim.wo[state.input_win].relativenumber = false
   vim.wo[state.result_win].number = false
   vim.wo[state.result_win].relativenumber = false
   vim.wo[state.result_win].wrap = false
   vim.wo[state.result_win].cursorline = true
-  vim.wo[state.result_win].winhighlight = "Cursor:CursorLine"
 
-  local function map_all(lhs, rhs)
-    vim.keymap.set("n", lhs, rhs, {
+  vim.api.nvim_buf_set_lines(state.input_buf, 0, -1, false, { state.query })
+  vim.api.nvim_win_set_cursor(state.input_win, { 1, #state.query })
+
+  local function focus_input(insert)
+    if state.input_win and vim.api.nvim_win_is_valid(state.input_win) then
+      vim.api.nvim_set_current_win(state.input_win)
+      if insert then
+        vim.cmd("startinsert!")
+      end
+    end
+  end
+
+  local function map(buf, mode, lhs, rhs)
+    vim.keymap.set(mode, lhs, rhs, {
+      buffer = buf,
+      nowait = true,
+      silent = true,
+    })
+  end
+
+  local function map_result(lhs, rhs)
+    map(state.result_buf, "n", lhs, rhs)
+  end
+
+  local function map_both(mode, lhs, rhs)
+    vim.keymap.set(mode, lhs, rhs, {
       buffer = state.input_buf,
       nowait = true,
       silent = true,
@@ -270,68 +292,79 @@ local function run_lines(lines, opts)
     })
   end
 
-  map_all("<CR>", function()
+  map_both({ "i", "n" }, "<CR>", function()
     accept(state)
   end)
 
-  map_all("<Esc>", function()
+  map_both({ "i", "n" }, "<Esc>", function()
     close_window(state)
   end)
 
-  map_all("q", function()
+  map_both("n", "q", function()
     close_window(state)
   end)
 
-  map_all("<C-c>", function()
+  map_both({ "i", "n" }, "<C-c>", function()
     close_window(state)
   end)
 
-  map_all("j", function()
+  map_both("n", "j", function()
     move(state, 1)
   end)
 
-  map_all("k", function()
+  map_both("n", "k", function()
     move(state, -1)
   end)
 
-  map_all("<Down>", function()
+  map_both({ "i", "n" }, "<Down>", function()
     move(state, 1)
   end)
 
-  map_all("<Up>", function()
+  map_both({ "i", "n" }, "<Up>", function()
     move(state, -1)
   end)
 
-  map_all("<C-n>", function()
+  map_both({ "i", "n" }, "<C-n>", function()
     move(state, 1)
   end)
 
-  map_all("<C-p>", function()
+  map_both({ "i", "n" }, "<C-p>", function()
     move(state, -1)
   end)
 
-  map_all("<BS>", function()
-    backspace(state)
+  map_result("i", function()
+    focus_input(true)
   end)
 
-  map_all("<C-h>", function()
-    backspace(state)
+  map_result("/", function()
+    focus_input(true)
   end)
 
-  map_all("<Space>", function()
-    feed_query(state, " ")
-  end)
-
-  for i = 32, 126 do
-    local ch = string.char(i)
-    if ch ~= " " then
-      map_all(ch, function()
-        feed_query(state, ch)
-      end)
-    end
-  end
+  state.group = vim.api.nvim_create_augroup("kide-fzy-" .. state.input_buf, { clear = true })
+  vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
+    group = state.group,
+    buffer = state.input_buf,
+    callback = function()
+      refresh_query(state)
+    end,
+  })
+  vim.api.nvim_create_autocmd("BufWipeout", {
+    group = state.group,
+    buffer = state.input_buf,
+    callback = function()
+      close_window(state)
+    end,
+  })
+  vim.api.nvim_create_autocmd("BufWipeout", {
+    group = state.group,
+    buffer = state.result_buf,
+    callback = function()
+      close_window(state)
+    end,
+  })
 
   render(state)
+  focus_input(true)
 end
 
 function M.select(lines, opts)
