@@ -26,7 +26,7 @@ local function select_opts(title)
       col = col,
       width = width,
       height = 1,
-      focusable = true,
+      focusable = false,
       border = { "╭", "─", "╮", "│", "┤", "─", "├", "│" },
       title = title,
       title_pos = "center",
@@ -151,15 +151,7 @@ local function render(state)
 
   local lines = {}
   for i, item in ipairs(matches) do
-    table.insert(lines, "  " .. item)
-  end
-
-  if #matches == 0 then
-    if query == "" then
-      table.insert(lines, "  输入内容开始筛选")
-    else
-      table.insert(lines, "  没有匹配结果")
-    end
+    table.insert(lines, item)
   end
 
   set_lines(state.result_buf, lines)
@@ -171,10 +163,8 @@ local function render(state)
   end
 
   for i, pos_list in ipairs(positions) do
-    local prefix_len = 2
-
     for _, pos in ipairs(pos_list or {}) do
-      local col = prefix_len + pos
+      local col = pos
       set_range_highlight(state.result_buf, match_ns, "Search", i - 1, col, col + 1)
     end
   end
@@ -257,22 +247,15 @@ local function run_lines(lines, opts)
   vim.bo[state.input_buf].modifiable = false
   vim.bo[state.result_buf].modifiable = false
 
-  state.input_win = vim.api.nvim_open_win(state.input_buf, true, win_opts.input)
-  state.result_win = vim.api.nvim_open_win(state.result_buf, false, win_opts.result)
+  state.input_win = vim.api.nvim_open_win(state.input_buf, false, win_opts.input)
+  state.result_win = vim.api.nvim_open_win(state.result_buf, true, win_opts.result)
   vim.wo[state.input_win].number = false
   vim.wo[state.input_win].relativenumber = false
   vim.wo[state.result_win].number = false
   vim.wo[state.result_win].relativenumber = false
   vim.wo[state.result_win].wrap = false
   vim.wo[state.result_win].cursorline = true
-
-  local function map(buf, lhs, rhs)
-    vim.keymap.set("n", lhs, rhs, {
-      buffer = buf,
-      nowait = true,
-      silent = true,
-    })
-  end
+  vim.wo[state.result_win].winhighlight = "Cursor:CursorLine"
 
   local function map_all(lhs, rhs)
     vim.keymap.set("n", lhs, rhs, {
@@ -327,22 +310,22 @@ local function run_lines(lines, opts)
     move(state, -1)
   end)
 
-  map(state.input_buf, "<BS>", function()
+  map_all("<BS>", function()
     backspace(state)
   end)
 
-  map(state.input_buf, "<C-h>", function()
+  map_all("<C-h>", function()
     backspace(state)
   end)
 
-  map(state.input_buf, "<Space>", function()
+  map_all("<Space>", function()
     feed_query(state, " ")
   end)
 
   for i = 32, 126 do
     local ch = string.char(i)
     if ch ~= " " then
-      map(state.input_buf, ch, function()
+      map_all(ch, function()
         feed_query(state, ch)
       end)
     end
