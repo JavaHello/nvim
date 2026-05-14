@@ -441,7 +441,9 @@ local function render(state)
   set_result_lines(state.result_buf, lines)
   apply_highlights(state)
   apply_selection(state)
-  update_preview(state)
+  if not state.running then
+    update_preview(state)
+  end
 end
 
 local function schedule_render(state)
