@@ -328,15 +328,18 @@ end, {
 })
 
 map("n", "<leader>fq", function()
-  Snacks.picker.qflist()
+  require("kide.fzy").quickfix()
 end, { desc = "Quickfix" })
 
 map("n", "<leader>fb", function()
-  Snacks.picker.buffers()
+  require("kide.fzy").buffers()
 end, { desc = "Find buffer" })
 map("n", "<leader>ff", function()
-  Snacks.picker.files()
+  require("kide.fzy").files()
 end, { desc = "Find files" })
+map("n", "<leader>fo", function()
+  require("kide.fzy").oldfiles()
+end, { desc = "Find oldfiles" })
 
 map("n", "<leader>fd", function()
   Snacks.picker.diagnostics()
@@ -346,17 +349,17 @@ map("v", "<leader>ff", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
   local param = text[1]
-  Snacks.picker.files({ search = param })
+  require("kide.fzy").files({ query = param })
 end, { desc = "find files", silent = true, noremap = true })
 
 map("v", "<leader>fw", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
   local param = text[1]
-  Snacks.picker.grep({ search = param })
+  require("kide.rg").live_grep({ query = param })
 end, { desc = "live grep", silent = true, noremap = true })
 map("n", "<leader>fw", function()
-  Snacks.picker.grep()
+  require("kide.rg").live_grep()
 end, { desc = "live grep", silent = true, noremap = true })
 
 if vim.base64 then

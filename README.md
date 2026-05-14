@@ -15,6 +15,7 @@ git clone https://github.com/JavaHello/nvim.git
 
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
 - [fd](https://github.com/sharkdp/fd)
+- [fzy](https://github.com/jhawthorn/fzy)
 - [yazi](https://github.com/sxyazi/yazi)
 - [JDK](https://openjdk.org/) 8/17+
 - [maven](https://maven.apache.org/)
@@ -31,6 +32,8 @@ git clone https://github.com/JavaHello/nvim.git
 | :-----------------------------: | :------------------: | :-----------------------: |
 |            文件管理             |       `Normal`       |        `<leader>e`        |
 |            文件搜索             |       `Normal`       |       `<leader>ff`        |
+|           Buffer 搜索           |       `Normal`       |       `<leader>fb`        |
+|           历史文件搜索          |       `Normal`       |       `<leader>fo`        |
 |            全局搜索             | `Normal` or `Visual` |       `<leader>fw`        |
 |            Git 操作             |      `Command`       |          `:Git`           |
 |             Outline             |       `Normal`       |        `<leader>o`        |
