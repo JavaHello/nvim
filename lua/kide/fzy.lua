@@ -133,11 +133,10 @@ local function render(state)
     state.index = 1
   end
 
-  local input_line = (state.prompt or "> ") .. query
-  set_lines(state.input_buf, { input_line })
+  set_lines(state.input_buf, { query })
   vim.api.nvim_buf_clear_namespace(state.input_buf, count_ns, 0, -1)
   if query ~= "" then
-    set_range_highlight(state.input_buf, count_ns, "Search", 0, #state.prompt, #state.prompt + #query)
+    set_range_highlight(state.input_buf, count_ns, "Search", 0, 0, #query)
   end
   vim.api.nvim_buf_set_extmark(state.input_buf, count_ns, 0, 0, {
     virt_text = { { ("  %d/%d"):format(#matches, #state.items), "Comment" } },
@@ -246,7 +245,6 @@ local function run_lines(lines, opts)
     items = lines,
     matches = {},
     query = opts.query or "",
-    prompt = opts.prompt or "> ",
     index = 1,
     max_results = math.max(1, win_opts.result.height),
     on_choice = opts.on_choice,
@@ -388,7 +386,6 @@ function M.files(opts)
 
   run_source(file_source(), {
     title = "Files",
-    prompt = "Files> ",
     query = opts.query,
     empty_message = "没有文件",
     on_choice = function(choice)
@@ -423,7 +420,6 @@ function M.buffers(opts)
 
   run_lines(buffer_lines(), {
     title = "Buffers",
-    prompt = "Buffers> ",
     query = opts.query,
     empty_message = "没有 listed buffer",
     on_choice = function(choice)
@@ -455,7 +451,6 @@ function M.oldfiles(opts)
 
   run_lines(oldfile_lines(), {
     title = "Oldfiles",
-    prompt = "Oldfiles> ",
     query = opts.query,
     empty_message = "没有 oldfiles",
     on_choice = function(choice)
@@ -501,7 +496,6 @@ function M.quickfix(opts)
 
   run_lines(qflist_lines(), {
     title = "Quickfix",
-    prompt = "Quickfix> ",
     query = opts.query,
     empty_message = "quickfix 为空",
     on_choice = function(choice)

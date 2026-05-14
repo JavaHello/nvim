@@ -752,7 +752,6 @@ local function fzy_selection(state)
   close(state)
   require("kide.fzy").select(lines, {
     title = "Live Grep Results",
-    prompt = "Rg> ",
     empty_message = "没有 rg 结果",
     on_choice = function(choice)
       open_item(item_by_line[choice])
