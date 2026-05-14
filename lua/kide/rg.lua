@@ -136,7 +136,7 @@ local function update_input_count(state)
   end
 
   local suffix = state.truncated and "+" or ""
-  local text = ("%d%s 条"):format(#state.items, suffix)
+  local text = ("%d%s"):format(#state.items, suffix)
   if state.running then
     text = text .. " · 搜索中"
   end
