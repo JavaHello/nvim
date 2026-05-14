@@ -176,21 +176,11 @@ end, {
   end,
 })
 
-map("n", "<C-l>", function()
-  require("conform").format({ lsp_fallback = true })
+map({ "n", "v" }, "<C-l>", function()
+  vim.lsp.buf.format({
+    async = false,
+  });
 end, { desc = "format file" })
-map("v", "<C-l>", function()
-  vim.api.nvim_feedkeys("\027", "xt", false)
-  local start_pos = vim.api.nvim_buf_get_mark(0, "<")
-  local end_pos = vim.api.nvim_buf_get_mark(0, ">")
-  require("conform").format({
-    range = {
-      start = start_pos,
-      ["end"] = end_pos,
-    },
-    lsp_fallback = true,
-  })
-end, { desc = "format range", silent = true, noremap = true })
 
 -- Git
 map("n", "]c", function()

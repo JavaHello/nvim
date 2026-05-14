@@ -17,25 +17,6 @@ return {
   },
 
   {
-    "stevearc/conform.nvim",
-    lazy = false,
-    opts = {
-      formatters_by_ft = {
-        lua = { "stylua" },
-        css = { "prettier" },
-        html = { "prettier" },
-        json = { "jq" },
-        json5 = { "prettier" },
-        markdown = { "prettier" },
-        sql = { "sql_formatter" },
-        python = { "black" },
-        bash = { "shfmt" },
-        sh = { "shfmt" },
-        toml = { "taplo" },
-      },
-    },
-  },
-  {
     "lewis6991/gitsigns.nvim",
     lazy = false,
     opts = {
