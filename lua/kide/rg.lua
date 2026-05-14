@@ -137,9 +137,6 @@ local function update_input_count(state)
 
   local suffix = state.truncated and "+" or ""
   local text = ("%d%s"):format(#state.items, suffix)
-  if state.running then
-    text = text .. " · 搜索中"
-  end
 
   vim.api.nvim_buf_clear_namespace(state.input_buf, count_ns, 0, -1)
   vim.api.nvim_buf_set_extmark(state.input_buf, count_ns, 0, 0, {
@@ -160,7 +157,6 @@ local function apply_selection(state)
   end
 
   state.selected = math.max(1, math.min(state.selected, #state.items))
-  set_line_highlight(state.result_buf, selection_ns, "Visual", state.selected - 1)
   if state.result_win and vim.api.nvim_win_is_valid(state.result_win) then
     pcall(vim.api.nvim_win_set_cursor, state.result_win, { state.selected, 0 })
   end
@@ -430,11 +426,11 @@ local function render(state)
     if state.query == "" then
       lines = {}
     elseif state.running then
-      lines = { "Searching: " .. state.query }
+      lines = {}
     elseif not vim.tbl_isempty(state.stderr) then
       lines = { state.stderr[#state.stderr] }
     else
-      lines = { "No matches" }
+      lines = {}
     end
   end
 
