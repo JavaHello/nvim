@@ -116,18 +116,25 @@ local function detect_filetype(filename)
   return ft
 end
 
-local function set_preview_syntax(buf, filename)
+local function set_preview_syntax(state, filename)
+  local buf = state.preview_buf
   if not buf or not vim.api.nvim_buf_is_valid(buf) then
     return
   end
 
   local ft = filename and detect_filetype(filename) or ""
-  pcall(vim.treesitter.stop, buf)
-  vim.bo[buf].syntax = ""
+  if state.preview_ft == ft then
+    return
+  end
+
+  if state.preview_ft and state.preview_ft ~= "" then
+    pcall(vim.treesitter.stop, buf)
+  end
   if ft ~= "" then
     pcall(vim.treesitter.start, buf, ft)
-    vim.bo[buf].syntax = ft
   end
+  vim.bo[buf].syntax = ft
+  state.preview_ft = ft
 end
 
 local function update_input_count(state)
@@ -209,7 +216,7 @@ local function set_preview_error(state, request_id, lines)
       return
     end
     reset_preview_state(state)
-    set_preview_syntax(state.preview_buf)
+    set_preview_syntax(state)
     set_result_lines(state.preview_buf, lines)
     apply_preview_highlights(state)
   end)
@@ -223,7 +230,7 @@ local function set_preview_entries(state, request_id, item, entries)
 
     reset_preview_state(state)
     if vim.tbl_isempty(entries) then
-      set_preview_syntax(state.preview_buf)
+      set_preview_syntax(state)
       set_result_lines(state.preview_buf, { "" })
       apply_preview_highlights(state)
       return
@@ -242,7 +249,7 @@ local function set_preview_entries(state, request_id, item, entries)
     end
 
     set_result_lines(state.preview_buf, lines)
-    set_preview_syntax(state.preview_buf, item.file)
+    set_preview_syntax(state, item.file)
     apply_preview_highlights(state)
   end)
 end
@@ -364,25 +371,35 @@ local function read_preview_lines(state, request_id, item, preview_height)
   end)
 end
 
+local function preview_item_key(item)
+  return ("%s:%d:%d:%s"):format(item.file, item.lnum, item.col or 0, item.text or "")
+end
+
 local function update_preview(state)
   if not state.preview_buf or not vim.api.nvim_buf_is_valid(state.preview_buf) then
     return
   end
 
-  state.preview_id = (state.preview_id or 0) + 1
-  local request_id = state.preview_id
   local item = state.items[state.selected]
-  reset_preview_state(state)
-
   if not item then
-    set_preview_syntax(state.preview_buf)
+    state.preview_id = (state.preview_id or 0) + 1
+    state.preview_key = nil
+    reset_preview_state(state)
+    set_preview_syntax(state)
     set_result_lines(state.preview_buf, {})
     apply_preview_highlights(state)
     return
   end
+
+  local key = preview_item_key(item)
+  if state.preview_key == key then
+    return
+  end
+
+  state.preview_id = (state.preview_id or 0) + 1
+  state.preview_key = key
+  local request_id = state.preview_id
   local preview_height = math.max(1, state.preview_height or 12)
-  set_result_lines(state.preview_buf, {})
-  apply_preview_highlights(state)
   read_preview_lines(state, request_id, item, preview_height)
 end
 
@@ -562,6 +579,8 @@ local function start_search(state)
   state.stderr_partial = ""
   state.selected = 1
   state.truncated = false
+  state.preview_id = (state.preview_id or 0) + 1
+  state.preview_key = nil
   state.running = query ~= ""
   render(state)
 
@@ -681,7 +700,11 @@ local function move_selection(state, delta)
   if vim.tbl_isempty(state.items) then
     return
   end
-  state.selected = math.max(1, math.min(state.selected + delta, #state.items))
+  local selected = math.max(1, math.min(state.selected + delta, #state.items))
+  if selected == state.selected then
+    return
+  end
+  state.selected = selected
   apply_selection(state)
   update_preview(state)
 end
