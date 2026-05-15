@@ -1,6 +1,7 @@
 local fn = vim.fn
 local opt = vim.opt
 local o = vim.o
+local path = require("kide.path")
 
 vim.opt.statusline = "%!v:lua.require('kide.stl').statusline()"
 
@@ -101,7 +102,7 @@ function _G.qftf(info)
   else
     items = fn.getloclist(info.winid, { id = info.id, items = 0 }).items
   end
-  local limit = 44
+  local limit = 40
   local fnameFmt1, fnameFmt2 = "%-" .. limit .. "s", "…%." .. (limit - 1) .. "s"
   local validFmt = "%s │%5d:%-3d│%s %s"
   local fmt = true
@@ -129,6 +130,7 @@ function _G.qftf(info)
           fmt = false
         else
           fname = vim.fn.fnamemodify(fname, ":.")
+          fname = path.shorten(fname, limit)
         end
         -- char in fname may occur more than 1 width, ignore this issue in order to keep performance
         if fmt then

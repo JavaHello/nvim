@@ -79,6 +79,7 @@ local function close_window(state)
   if state.closed then
     return
   end
+  stopinsert()
   state.closed = true
   if state.group then
     pcall(vim.api.nvim_del_augroup_by_id, state.group)
@@ -219,11 +220,7 @@ end
 
 local function run_lines(lines, opts)
   opts = opts or {}
-
-  if vim.tbl_isempty(lines) then
-    vim.notify(opts.empty_message or "没有可供查找的内容", vim.log.levels.INFO)
-    return
-  end
+  lines = lines or {}
 
   stopinsert()
 
@@ -477,6 +474,7 @@ end
 
 local function qflist_lines()
   local lines = {}
+  local path = require("kide.path")
 
   for idx, item in ipairs(vim.fn.getqflist()) do
     if item.valid == 1 then
@@ -494,7 +492,7 @@ local function qflist_lines()
           lines,
           ("%d\t%s:%d:%d\t%s"):format(
             idx,
-            vim.fn.fnamemodify(filename, ":~:."),
+            path.shorten(vim.fn.fnamemodify(filename, ":~:."), 40),
             item.lnum or 1,
             item.col or 1,
             text

@@ -6,6 +6,9 @@ local count_ns = vim.api.nvim_create_namespace("kide_rg_live_grep_count")
 local preview_ns = vim.api.nvim_create_namespace("kide_rg_live_grep_preview")
 local session = 0
 local uv = vim.uv or vim.loop
+local path_utils = require("kide.path")
+
+local file_path_limit = 40
 
 local function stopinsert()
   if vim.api.nvim_get_mode().mode == "i" then
@@ -481,11 +484,11 @@ local function parse_json(line)
   end
 
   local data = item.data or {}
-  local path = data.path or {}
+  local result_path = data.path or {}
   local lines = data.lines or {}
   local submatches = data.submatches or {}
   local first_match = submatches[1] or {}
-  local filename = path.text
+  local filename = result_path.text
   local lnum = data.line_number
   if not filename or not lnum then
     return nil
@@ -495,7 +498,8 @@ local function parse_json(line)
   local text = lines.text or ""
   text = text:gsub("[\r\n]+$", "")
   local col = (first_match.start or 0) + 1
-  local prefix = ("%s:%d:%d:"):format(filename, lnum, col)
+  local display_file = path_utils.shorten(filename, file_path_limit)
+  local prefix = ("%s:%d:%d:"):format(display_file, lnum, col)
   local matches = {}
   for _, match in ipairs(submatches) do
     if match.start and match["end"] then
@@ -508,10 +512,11 @@ local function parse_json(line)
 
   return {
     file = filename,
+    display_file = display_file,
     lnum = lnum,
     col = col,
     text = text,
-    file_len = #filename,
+    file_len = #display_file,
     prefix_len = #prefix,
     matches = matches,
     display = prefix .. text,
@@ -741,7 +746,8 @@ local function truncate_text(text, max_width)
 end
 
 local function fzy_item_line(item, index, max_width)
-  local line = ("%04d %s:%d:%d: %s"):format(index, item.file, item.lnum, item.col, terminal_safe_text(item.text))
+  local display_file = item.display_file or path_utils.shorten(item.file, file_path_limit)
+  local line = ("%04d %s:%d:%d: %s"):format(index, display_file, item.lnum, item.col, terminal_safe_text(item.text))
   return truncate_text(line, max_width)
 end
 

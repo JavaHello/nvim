@@ -11,6 +11,8 @@ local dark4_256 = "#7c6f64"
 
 local dark_ext1 = "#2e2e2e"
 local dark_ext2 = "#2c2c2c"
+local dark_ext3 = "#343434"
+local dark_ext4 = "#444040"
 
 local gray_ext1 = "#423e3c"
 local gray_ext2 = "#4b4b4b"
@@ -84,7 +86,7 @@ hl({
   NvimLightGrey2 = { fg = light2 },
 
   Normal = { fg = light2, bg = dark0 },
-  CursorLine = { bg = dark_ext1 },
+  CursorLine = { bg = dark_ext4 },
   CursorLineNr = {},
   WildMenu = { fg = bright_red, bg = bright_yellow },
 
