@@ -90,13 +90,6 @@ local function stop_job(state)
   end
 end
 
-local function set_line_highlight(buf, ns, hl_group, row)
-  vim.api.nvim_buf_set_extmark(buf, ns, row, 0, {
-    line_hl_group = hl_group,
-    priority = 50,
-  })
-end
-
 local function set_range_highlight(buf, ns, hl_group, row, start_col, end_col)
   if end_col <= start_col then
     return
@@ -183,26 +176,25 @@ local function apply_preview_highlights(state)
 
   vim.api.nvim_buf_clear_namespace(state.preview_buf, preview_ns, 0, -1)
   for row, prefix in ipairs(state.preview_prefixes or {}) do
+    local virt_text = { { prefix, "LineNr" } }
+    if row == state.preview_target_row then
+      virt_text[1][2] = "Normal"
+    end
     vim.api.nvim_buf_set_extmark(state.preview_buf, preview_ns, row - 1, 0, {
-      virt_text = { { prefix, "LineNr" } },
+      virt_text = virt_text,
       virt_text_pos = "inline",
       hl_mode = "combine",
       priority = 90,
     })
   end
   if state.preview_target_row then
-    set_line_highlight(state.preview_buf, preview_ns, "CursorLine", state.preview_target_row - 1)
-  end
-  if state.preview_target_row then
     for _, match in ipairs(state.preview_matches or {}) do
-      set_range_highlight(
-        state.preview_buf,
-        preview_ns,
-        "Search",
-        state.preview_target_row - 1,
-        match.start,
-        match.finish
-      )
+      vim.api.nvim_buf_set_extmark(state.preview_buf, preview_ns, state.preview_target_row - 1, match.start, {
+        end_col = match.finish,
+        hl_group = "Search",
+        -- hl_mode = "replace",
+        priority = 200,
+      })
     end
   end
 end
@@ -720,7 +712,7 @@ local function open_item(item)
   end
 
   vim.cmd("edit " .. vim.fn.fnameescape(item.file))
-  pcall(vim.api.nvim_win_set_cursor, 0, { item.lnum, math.max(item.col - 1, 0) })
+  pcall(vim.api.nvim_win_set_cursor, 0, { item.lnum, math.max(item.col, 0) })
   vim.cmd("normal! zv")
 end
 
