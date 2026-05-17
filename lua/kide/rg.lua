@@ -5,7 +5,6 @@ local match_ns = vim.api.nvim_create_namespace("kide_rg_live_grep_matches")
 local count_ns = vim.api.nvim_create_namespace("kide_rg_live_grep_count")
 local preview_ns = vim.api.nvim_create_namespace("kide_rg_live_grep_preview")
 local session = 0
-local uv = vim.uv or vim.loop
 local path_utils = require("kide.path")
 
 local file_path_limit = 40
@@ -249,125 +248,14 @@ local function set_preview_entries(state, request_id, item, entries)
   end)
 end
 
-local function trim_ring(ring, limit)
-  while #ring > limit do
-    table.remove(ring, 1)
+local function trim_entries(entries, limit)
+  while #entries > limit do
+    table.remove(entries, 1)
   end
-end
-
-local function read_preview_lines(state, request_id, item, preview_height)
-  local desired_count = math.max(1, preview_height)
-  local before = math.floor((desired_count - 1) * 0.5)
-  local start_lnum = math.max(1, item.lnum - before)
-  local end_lnum = start_lnum + desired_count - 1
-  local before_ring = {}
-  local entries = {}
-  local current_lnum = 1
-  local partial = ""
-  local offset = 0
-  local chunk_size = 64 * 1024
-
-  local function stale()
-    return state.closed or request_id ~= state.preview_id
-  end
-
-  local function close_fd(fd)
-    if fd then
-      pcall(uv.fs_close, fd, function() end)
-    end
-  end
-
-  local function process_line(line)
-    line = line:gsub("\r$", "")
-    if current_lnum < start_lnum then
-      table.insert(before_ring, { lnum = current_lnum, text = line })
-      trim_ring(before_ring, desired_count)
-    elseif current_lnum <= end_lnum then
-      table.insert(entries, { lnum = current_lnum, text = line })
-    end
-    current_lnum = current_lnum + 1
-  end
-
-  local function finish(fd)
-    close_fd(fd)
-    if #entries < desired_count and #before_ring > 0 then
-      local needed = math.min(desired_count - #entries, #before_ring)
-      local fill = {}
-      for i = #before_ring - needed + 1, #before_ring do
-        table.insert(fill, before_ring[i])
-      end
-      vim.list_extend(fill, entries)
-      entries = fill
-    end
-    set_preview_entries(state, request_id, item, entries)
-  end
-
-  uv.fs_open(item.file, "r", 438, function(open_err, fd)
-    if stale() then
-      close_fd(fd)
-      return
-    end
-    if open_err or not fd then
-      set_preview_error(state, request_id, { "Cannot read: " .. item.file })
-      return
-    end
-
-    local function read_next()
-      if stale() then
-        close_fd(fd)
-        return
-      end
-      if current_lnum > end_lnum and #entries >= desired_count then
-        finish(fd)
-        return
-      end
-
-      uv.fs_read(fd, chunk_size, offset, function(read_err, data)
-        if stale() then
-          close_fd(fd)
-          return
-        end
-        if read_err then
-          close_fd(fd)
-          set_preview_error(state, request_id, { "Cannot read: " .. item.file })
-          return
-        end
-        if not data or data == "" then
-          if partial ~= "" then
-            process_line(partial)
-            partial = ""
-          end
-          finish(fd)
-          return
-        end
-
-        offset = offset + #data
-        data = partial .. data
-        local from = 1
-        while true do
-          local nl = data:find("\n", from, true)
-          if not nl then
-            partial = data:sub(from)
-            break
-          end
-          process_line(data:sub(from, nl - 1))
-          from = nl + 1
-          if current_lnum > end_lnum and #entries >= desired_count then
-            partial = ""
-            finish(fd)
-            return
-          end
-        end
-        read_next()
-      end)
-    end
-
-    read_next()
-  end)
 end
 
 local function preview_item_key(item)
-  return ("%s:%d:%d:%s"):format(item.file, item.lnum, item.col or 0, item.text or "")
+  return ("%s:%d:%d:%d:%s"):format(item.file, item.lnum, item.col or 0, item.preview_version or 0, item.text or "")
 end
 
 local function update_preview(state)
@@ -394,8 +282,9 @@ local function update_preview(state)
   state.preview_id = (state.preview_id or 0) + 1
   state.preview_key = key
   local request_id = state.preview_id
-  local preview_height = math.max(1, state.preview_height or 12)
-  read_preview_lines(state, request_id, item, preview_height)
+  set_preview_entries(state, request_id, item, item.preview_entries or {
+    { lnum = item.lnum, text = item.text },
+  })
 end
 
 local function apply_highlights(state)
@@ -469,29 +358,57 @@ local function schedule_render(state)
   end, 40)
 end
 
-local function parse_json(line)
-  local ok, item = pcall(vim.json.decode, line)
-  if not ok or type(item) ~= "table" or item.type ~= "match" then
-    return nil
-  end
-
-  local data = item.data or {}
+local function parse_entry(data)
   local result_path = data.path or {}
   local lines = data.lines or {}
-  local submatches = data.submatches or {}
-  local first_match = submatches[1] or {}
   local filename = result_path.text
   local lnum = data.line_number
   if not filename or not lnum then
     return nil
   end
-  filename = filename:gsub("^%./", "")
 
+  filename = filename:gsub("^%./", "")
   local text = lines.text or ""
   text = text:gsub("[\r\n]+$", "")
+  return {
+    file = filename,
+    lnum = lnum,
+    text = text,
+  }
+end
+
+local function parse_json(line)
+  local ok, item = pcall(vim.json.decode, line)
+  if not ok or type(item) ~= "table" then
+    return nil
+  end
+
+  local data = item.data or {}
+  if item.type == "context" then
+    local entry = parse_entry(data)
+    if not entry then
+      return nil
+    end
+    return {
+      kind = "context",
+      entry = entry,
+    }
+  end
+
+  if item.type ~= "match" then
+    return nil
+  end
+
+  local entry = parse_entry(data)
+  if not entry then
+    return nil
+  end
+
+  local submatches = data.submatches or {}
+  local first_match = submatches[1] or {}
   local col = (first_match.start or 0) + 1
-  local display_file = path_utils.shorten(filename, file_path_limit)
-  local prefix = ("%s:%d:%d:"):format(display_file, lnum, col)
+  local display_file = path_utils.shorten(entry.file, file_path_limit)
+  local prefix = ("%s:%d:%d:"):format(display_file, entry.lnum, col)
   local matches = {}
   for _, match in ipairs(submatches) do
     if match.start and match["end"] then
@@ -503,16 +420,66 @@ local function parse_json(line)
   end
 
   return {
-    file = filename,
+    kind = "match",
+    file = entry.file,
     display_file = display_file,
-    lnum = lnum,
+    lnum = entry.lnum,
     col = col,
-    text = text,
+    text = entry.text,
     file_len = #display_file,
     prefix_len = #prefix,
     matches = matches,
-    display = prefix .. text,
+    preview_entries = {},
+    preview_version = 0,
+    display = prefix .. entry.text,
   }
+end
+
+local function append_preview_entry(item, entry)
+  if not item.preview_seen then
+    item.preview_seen = {}
+  end
+  local key = ("%s:%d"):format(entry.file, entry.lnum)
+  if item.preview_seen[key] then
+    return false
+  end
+  item.preview_seen[key] = true
+  table.insert(item.preview_entries, {
+    lnum = entry.lnum,
+    text = entry.text,
+  })
+  item.preview_version = (item.preview_version or 0) + 1
+  return true
+end
+
+local function entry_from_match(item)
+  return {
+    file = item.file,
+    lnum = item.lnum,
+    text = item.text,
+  }
+end
+
+local function add_recent_entry(state, entry)
+  table.insert(state.recent_entries, entry)
+  trim_entries(state.recent_entries, state.context_lines or 3)
+end
+
+local function add_entry_to_pending_previews(state, entry)
+  local context_lines = state.context_lines or 3
+  local pending = {}
+  for _, pending_item in ipairs(state.pending_preview_items or {}) do
+    if pending_item.file == entry.file and entry.lnum > pending_item.lnum then
+      local distance = entry.lnum - pending_item.lnum
+      if distance <= context_lines then
+        append_preview_entry(pending_item, entry)
+        table.insert(pending, pending_item)
+      end
+    elseif pending_item.file == entry.file and entry.lnum <= pending_item.lnum + context_lines then
+      table.insert(pending, pending_item)
+    end
+  end
+  state.pending_preview_items = pending
 end
 
 local function append_result(state, line)
@@ -524,6 +491,25 @@ local function append_result(state, line)
   if not item then
     return
   end
+
+  if item.kind == "context" then
+    local entry = item.entry
+    add_entry_to_pending_previews(state, entry)
+    add_recent_entry(state, entry)
+    return
+  end
+
+  local match_entry = entry_from_match(item)
+  add_entry_to_pending_previews(state, match_entry)
+
+  for _, entry in ipairs(state.recent_entries) do
+    if entry.file == item.file and entry.lnum < item.lnum and item.lnum - entry.lnum <= (state.context_lines or 3) then
+      append_preview_entry(item, entry)
+    end
+  end
+  append_preview_entry(item, match_entry)
+  add_recent_entry(state, match_entry)
+  table.insert(state.pending_preview_items, item)
 
   table.insert(state.items, item)
   table.insert(state.display_lines, item.display)
@@ -571,6 +557,8 @@ local function start_search(state)
 
   state.items = {}
   state.display_lines = {}
+  state.recent_entries = {}
+  state.pending_preview_items = {}
   state.stderr = {}
   state.stdout_partial = ""
   state.stderr_partial = ""
@@ -596,6 +584,8 @@ local function start_search(state)
     "--line-buffered",
     "--max-columns=500",
     "--max-columns-preview",
+    "--context",
+    tostring(state.context_lines or 3),
     "--",
     query,
     ".",
@@ -814,6 +804,7 @@ function M.live_grep(opts)
     debounce_id = 0,
     debounce = opts.debounce or 150,
     limit = opts.limit or 1000,
+    context_lines = opts.context,
     running = false,
     closed = false,
   }
@@ -833,6 +824,7 @@ function M.live_grep(opts)
   state.result_win = vim.api.nvim_open_win(state.result_buf, false, opts_layout.result)
   state.preview_win = vim.api.nvim_open_win(state.preview_buf, false, opts_layout.preview)
   state.preview_height = opts_layout.preview.height
+  state.context_lines = state.context_lines or math.max(2, math.floor((state.preview_height - 1) * 0.5))
   vim.wo[state.input_win].number = false
   vim.wo[state.input_win].relativenumber = false
   vim.wo[state.result_win].number = false
