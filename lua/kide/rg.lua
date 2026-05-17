@@ -719,7 +719,11 @@ local function open_item(item)
   end
 
   vim.cmd("edit " .. vim.fn.fnameescape(item.file))
-  pcall(vim.api.nvim_win_set_cursor, 0, { item.lnum, math.max(item.col, 0) })
+  local col = math.max(item.col - 1, 0)
+  pcall(vim.api.nvim_win_set_cursor, 0, { item.lnum, col })
+  if col > 0 then
+    vim.cmd("normal! l")
+  end
   vim.cmd("normal! zv")
 end
 
