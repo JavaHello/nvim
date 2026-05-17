@@ -63,7 +63,6 @@ local function set_lines(buf, lines)
   vim.bo[buf].modified = false
 end
 
-
 local function set_range_highlight(buf, ns, hl_group, row, start_col, end_col)
   if end_col <= start_col then
     return
@@ -96,6 +95,22 @@ local function close_window(state)
   if state.result_buf and vim.api.nvim_buf_is_valid(state.result_buf) then
     pcall(vim.api.nvim_buf_delete, state.result_buf, { force = true })
   end
+end
+
+local function state_has_window(state, win)
+  return (state.input_win and vim.api.nvim_win_is_valid(state.input_win) and win == state.input_win)
+    or (state.result_win and vim.api.nvim_win_is_valid(state.result_win) and win == state.result_win)
+end
+
+local function close_on_focus_lost(state)
+  vim.schedule(function()
+    if state.closed then
+      return
+    end
+    if not state_has_window(state, vim.api.nvim_get_current_win()) then
+      close_window(state)
+    end
+  end)
 end
 
 local function open_file(filename, open)
@@ -158,7 +173,6 @@ local function render(state)
   set_lines(state.result_buf, lines)
   vim.api.nvim_buf_clear_namespace(state.result_buf, selection_ns, 0, -1)
   vim.api.nvim_buf_clear_namespace(state.result_buf, match_ns, 0, -1)
-
 
   for i, pos_list in ipairs(positions) do
     for _, pos in ipairs(pos_list or {}) do
@@ -359,6 +373,12 @@ local function run_lines(lines, opts)
       close_window(state)
     end,
   })
+  vim.api.nvim_create_autocmd("WinLeave", {
+    group = state.group,
+    callback = function()
+      close_on_focus_lost(state)
+    end,
+  })
 
   render(state)
   focus_input(true)
@@ -367,7 +387,6 @@ end
 function M.select(lines, opts)
   run_lines(lines, opts or {})
 end
-
 
 local function file_source()
   if vim.fn.executable("fd") == 1 then

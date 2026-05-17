@@ -683,6 +683,23 @@ local function close(state)
   end
 end
 
+local function state_has_window(state, win)
+  return (state.input_win and vim.api.nvim_win_is_valid(state.input_win) and win == state.input_win)
+    or (state.result_win and vim.api.nvim_win_is_valid(state.result_win) and win == state.result_win)
+    or (state.preview_win and vim.api.nvim_win_is_valid(state.preview_win) and win == state.preview_win)
+end
+
+local function close_on_focus_lost(state)
+  vim.schedule(function()
+    if state.closed then
+      return
+    end
+    if not state_has_window(state, vim.api.nvim_get_current_win()) then
+      close(state)
+    end
+  end)
+end
+
 local function move_selection(state, delta)
   if vim.tbl_isempty(state.items) then
     return
@@ -866,6 +883,12 @@ function M.live_grep(opts)
     buffer = state.preview_buf,
     callback = function()
       close(state)
+    end,
+  })
+  vim.api.nvim_create_autocmd("WinLeave", {
+    group = state.group,
+    callback = function()
+      close_on_focus_lost(state)
     end,
   })
 
