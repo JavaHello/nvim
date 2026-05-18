@@ -225,26 +225,31 @@ local function set_preview_entries(state, request_id, item, entries)
     reset_preview_state(state)
     if vim.tbl_isempty(entries) then
       set_preview_syntax(state)
-      set_result_lines(state.preview_buf, { "" })
+      set_result_lines(state.preview_buf, {})
       apply_preview_highlights(state)
       return
     end
 
     local number_width = #tostring(entries[#entries].lnum)
     local lines = {}
+    local match_lnum = item.lnum
+    local start_lnum = math.max(1, match_lnum - math.floor((state.context_lines) * 0.5))
     for _, entry in ipairs(entries) do
-      local prefix = string.format("%" .. number_width .. "d  ", entry.lnum)
-      table.insert(lines, entry.text)
-      table.insert(state.preview_prefixes, prefix)
+      if entry.lnum >= start_lnum then
+        local prefix = string.format("%" .. number_width .. "d  ", entry.lnum)
+        table.insert(lines, entry.text)
+        table.insert(state.preview_prefixes, prefix)
+      end
       if entry.lnum == item.lnum then
         state.preview_target_row = #lines
         state.preview_matches = item.matches or {}
       end
     end
-
-    set_result_lines(state.preview_buf, lines)
-    set_preview_syntax(state, item.file)
-    apply_preview_highlights(state)
+    if state.preview_target_row then
+      set_result_lines(state.preview_buf, lines)
+      set_preview_syntax(state, item.file)
+      apply_preview_highlights(state)
+    end
   end)
 end
 
@@ -685,8 +690,8 @@ end
 
 local function state_has_window(state, win)
   return (state.input_win and vim.api.nvim_win_is_valid(state.input_win) and win == state.input_win)
-    or (state.result_win and vim.api.nvim_win_is_valid(state.result_win) and win == state.result_win)
-    or (state.preview_win and vim.api.nvim_win_is_valid(state.preview_win) and win == state.preview_win)
+      or (state.result_win and vim.api.nvim_win_is_valid(state.result_win) and win == state.result_win)
+      or (state.preview_win and vim.api.nvim_win_is_valid(state.preview_win) and win == state.preview_win)
 end
 
 local function close_on_focus_lost(state)
@@ -845,7 +850,7 @@ function M.live_grep(opts)
   state.result_win = vim.api.nvim_open_win(state.result_buf, false, opts_layout.result)
   state.preview_win = vim.api.nvim_open_win(state.preview_buf, false, opts_layout.preview)
   state.preview_height = opts_layout.preview.height
-  state.context_lines = state.context_lines or math.max(2, math.floor((state.preview_height - 1) * 0.5))
+  state.context_lines = state.context_lines or math.max(2, state.preview_height - 1)
   vim.wo[state.input_win].number = false
   vim.wo[state.input_win].relativenumber = false
   vim.wo[state.result_win].number = false
