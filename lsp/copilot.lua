@@ -88,6 +88,8 @@ return {
     "kotlin",
     "zig",
 
+    "bash",
+    "sh",
     "sql",
     "make",
   },
