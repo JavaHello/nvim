@@ -1,8 +1,7 @@
 if vim.g.enable_spring_boot == true then
-  local c = require("kide.lsp.spring-boot").config
   local buf = vim.api.nvim_get_current_buf()
-  if c and require("spring_boot.util").is_application_properties_buf(buf) then
-    vim.lsp.start(c)
+  if require("spring_boot.util").is_application_properties_buf(buf) then
+    require("kide.lsp.spring-boot").start()
   end
 end
 

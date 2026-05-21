@@ -7,6 +7,13 @@ local function ls_path()
   end
   return require("spring_boot").get_boot_ls(vim.fs.joinpath(path, "language-server"))
 end
+M.start = function()
+  if M.config then
+    vim.lsp.start(M.config)
+  else
+    vim.notify("Spring Boot LS config not found", vim.log.levels.WARN)
+  end
+end
 local lspath = ls_path()
 if lspath == nil then
   return M
