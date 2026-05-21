@@ -36,7 +36,19 @@ vim.o.pumborder = "rounded"
 
 -- 高亮所在行
 vim.opt.cursorline = true
-
+if vim.env.SSH_TTY ~= nil or vim.env.SSH_CONNECTION ~= nil then
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    },
+    paste = {
+      ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+    },
+  }
+end
 vim.opt.clipboard = "unnamedplus"
 vim.opt.cursorlineopt = "number,line"
 -- Indenting
