@@ -47,8 +47,7 @@ if jc.config then
   jc.start(config)
 
   if vim.g.enable_spring_boot == true then
-    local sc = require("kide.lsp.spring-boot").config
-    require("spring_boot.launch").start(sc)
+    require("kide.lsp.spring-boot").start()
   end
   if vim.g.enable_quarkus == true then
     ---@diagnostic disable-next-line: different-requires
