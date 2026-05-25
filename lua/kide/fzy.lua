@@ -40,8 +40,6 @@ local function select_opts(title)
       height = result_height,
       focusable = true,
       border = { "├", "─", "┤", "│", "╯", "─", "╰", "│" },
-      title = "Results",
-      title_pos = "center",
     },
   }
 end

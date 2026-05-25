@@ -48,8 +48,6 @@ local function live_grep_opts()
       height = result_height,
       focusable = true,
       border = { "├", "─", "┤", "│", "┤", "─", "├", "│" },
-      title = "Results",
-      title_pos = "center",
     },
     preview = {
       relative = "editor",
