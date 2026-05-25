@@ -202,6 +202,7 @@ return {
   -- mackdown 预览插件
   {
     "iamcco/markdown-preview.nvim",
+    enabled = vim.fn.executable("yarn") == 1,
     ft = "markdown",
     build = "cd app && yarn install",
     init = function()
