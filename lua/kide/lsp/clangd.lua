@@ -1,6 +1,13 @@
 local M = {}
-
+local has_clangd = vim.fn.executable("clangd") == 1
 local me = require("kide.melspconfig")
+
+M.start = function()
+  if has_clangd then
+    vim.lsp.start(M.config)
+  end
+end
+
 M.config = {
   name = "clangd",
   cmd = { "clangd" },
