@@ -231,6 +231,9 @@ M.translate_virtual_text = function(request)
     if opt.data and opt.data ~= "" then
       translated = translated .. opt.data
     end
+    if opt.done then
+      return
+    end
 
     vim.api.nvim_buf_set_extmark(buf, translate_ns, anchor_row, 0, {
       id = extmark_id,
