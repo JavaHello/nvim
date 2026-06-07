@@ -86,7 +86,7 @@ hl({
   NvimLightGrey2 = { fg = light2 },
 
   Normal = { fg = light2, bg = dark0 },
-  CursorLine = { bg = dark_ext4 },
+  CursorLine = { bg = dark_ext3 },
   CursorLineNr = {},
   WildMenu = { fg = bright_red, bg = bright_yellow },
 
