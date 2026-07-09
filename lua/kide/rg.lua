@@ -202,18 +202,6 @@ local function reset_preview_state(state)
   state.preview_target_row = nil
 end
 
-local function set_preview_error(state, request_id, lines)
-  vim.schedule(function()
-    if state.closed or request_id ~= state.preview_id then
-      return
-    end
-    reset_preview_state(state)
-    set_preview_syntax(state)
-    set_result_lines(state.preview_buf, lines)
-    apply_preview_highlights(state)
-  end)
-end
-
 local function set_preview_entries(state, request_id, item, entries)
   vim.schedule(function()
     if state.closed or request_id ~= state.preview_id then
