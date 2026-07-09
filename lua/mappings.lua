@@ -225,10 +225,7 @@ command("InlayHint", function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}))
 end, { desc = "LSP Inlay Hint" })
 command("CodeLens", function()
-  vim.lsp.codelens.refresh()
-end, { desc = "LSP CodeLens" })
-command("CodeLensClear", function()
-  vim.lsp.codelens.clear()
+  vim.lsp.codelens.enable(not vim.lsp.codelens.is_enabled({}))
 end, { desc = "LSP CodeLens" })
 
 command("LspDocumentSymbols", function(_)
@@ -263,7 +260,7 @@ command("DiagnosticsWorkspace", function(opts)
   if level == nil or level == "" then
     vim.diagnostic.setqflist()
   else
-    vim.diagnostic.setqflist({ severity = level })
+    vim.diagnostic.setqflist({ severity = vim.diagnostic.severity[string.upper(level)] })
   end
 end, {
   desc = "Diagnostics Workspace",
@@ -279,7 +276,7 @@ command("DiagnosticsDocument", function(opts)
   if level == nil or level == "" then
     vim.diagnostic.setloclist()
   else
-    vim.diagnostic.setloclist({ severity = level })
+    vim.diagnostic.setloclist({ severity = vim.diagnostic.severity[string.upper(level)] })
   end
 end, {
   desc = "Diagnostics Document",

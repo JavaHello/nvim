@@ -63,6 +63,7 @@ M.bootls_user_command = function(buf)
           elseif item == "Prototype" then
             return "shows all functions (prototype implementation)"
           end
+          return item
         end,
       }, on_choice)
     end
