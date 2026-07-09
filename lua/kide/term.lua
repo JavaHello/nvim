@@ -143,17 +143,20 @@ end
 M.last_input = nil
 M.complete = function(arglead, cmdline, cursorpos, opts)
   opts = opts or {}
-  local command_name = opts.command_name or "Run"
+  local prefix = opts.prefix
+  local cmd = opts.cmd
   local last_input = opts.last_input or M.last_input
   local line = cmdline or arglead or ""
-  if vim.trim(line) == command_name then
+  if vim.trim(line) == prefix then
     if last_input and last_input ~= "" then
       return { last_input }
     end
     return {}
   end
-  local prefix = command_name .. " "
-  if vim.startswith(line, prefix) then
+  if cmd ~= nil then
+    line = cmd .. line:sub(#cmd + 1)
+  end
+  if prefix ~= nil and vim.startswith(line, prefix) then
     line = line:sub(#prefix + 1)
   end
 
@@ -161,7 +164,7 @@ M.complete = function(arglead, cmdline, cursorpos, opts)
   local is_fish = vim.endswith(shell, "fish")
 
   local cursor = cursorpos or #line
-  if vim.startswith(cmdline or "", prefix) then
+  if prefix ~= nil and vim.startswith(cmdline or "", prefix) then
     cursor = cursor - #prefix
   end
   if cursor < 0 then

@@ -172,7 +172,7 @@ end, {
   desc = "Run Task",
   nargs = "*",
   complete = function(arglead, cmdline, cursorpos)
-    return require("kide.term").complete(arglead, cmdline, cursorpos)
+    return require("kide.term").complete(arglead, cmdline, cursorpos, { prefix = "Run" })
   end,
 })
 
