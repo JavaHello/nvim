@@ -41,6 +41,7 @@ autocmd("FileType", {
     "tsplayground",
     "checkhealth",
     "fugitive",
+    "fugitive://*",
     "git",
     "dbui",
     "dbout",
@@ -49,16 +50,15 @@ autocmd("FileType", {
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
-    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-  end,
-})
-
-autocmd({ "BufReadCmd" }, {
-  group = augroup("git_close_with_q"),
-  pattern = "fugitive://*",
-  callback = function(event)
-    vim.bo[event.buf].buflisted = false
-    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+    vim.keymap.set("n", "q",
+      function()
+        if vim.fn.winnr("$") == 1 then
+          vim.cmd("bd!")
+        else
+          vim.cmd("close")
+        end
+      end
+      , { buffer = event.buf, silent = true })
   end,
 })
 
