@@ -50,7 +50,7 @@ local function _cmd(client)
   local cmd = {
     "curl",
     "--no-buffer",
-    "-s",
+    "-sS",
     "-X",
     client.method,
     "-H",
