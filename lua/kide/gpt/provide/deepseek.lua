@@ -194,9 +194,13 @@ function DeepSeek:request(messages, callback)
   end
   local job
   local tmp = ""
-  local is_json = function(text)
-    return (vim.startswith(text, "{") and vim.endswith(text, "}"))
-      or (vim.startswith(text, "[") and vim.endswith(text, "]"))
+
+  local function safe_json_decode(text)
+    local ok, obj = pcall(vim.fn.json_decode, text)
+    if ok and type(obj) == "table" and obj.choices then
+      return obj
+    end
+    return nil
   end
   ---@param event http.SseEvent
   local callback_handle = function(_, event)
@@ -216,7 +220,7 @@ function DeepSeek:request(messages, callback)
             })
           else
             tmp = tmp .. text
-            if is_json(tmp) then
+            if safe_json_decode(tmp) then
               local resp_json = vim.fn.json_decode(tmp)
               callback_data(resp_json)
               tmp = ""
@@ -227,7 +231,7 @@ function DeepSeek:request(messages, callback)
           vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "DeepSeek" })
         else
           tmp = tmp .. value
-          if is_json(tmp) then
+          if safe_json_decode(tmp) then
             local resp_json = vim.fn.json_decode(tmp)
             callback_data(resp_json)
             tmp = ""
