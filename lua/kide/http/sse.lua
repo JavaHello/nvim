@@ -57,6 +57,7 @@ local function _cmd(client)
     "Content-Type: application/json",
     "-H",
     "Authorization: Bearer " .. client.token,
+    "-H", "Accept: text/event-stream",
     "-d",
     body,
     client.url,
