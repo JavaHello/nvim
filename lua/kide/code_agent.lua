@@ -340,7 +340,11 @@ local codex = M.new({
   title = "Codex",
   ready_patterns = { "esc to toggle", "cwd:", "model:", "tokens" },
 })
-local opencode = M.new({ command = { "opencode" }, title = "OpenCode" })
+local opencode = M.new({
+  command = { "opencode" },
+  title = "OpenCode",
+  ready_patterns = { "ask anything", "ctrl+p", "commands" },
+})
 M.current = nil
 
 ---@param bufnr? integer
@@ -363,12 +367,18 @@ function M.buffer_path(bufnr)
 end
 
 function M.send(text, opt)
+  if M.current == nil then
+    M.toggle()
+  end
+  if M.current == nil then
+    vim.notify("No code agent selected", vim.log.levels.ERROR)
+    return false
+  end
   return M.current:send(text, opt)
 end
 
 local function _select_launcher()
   vim.ui.select({ "Codex", "OpenCode" }, { prompt = "Select code agent:" }, function(choice)
-    print("Selected code agent:", choice)
     if choice == "Codex" then
       M.current = codex
     elseif choice == "OpenCode" then
