@@ -9,6 +9,20 @@
 local M = {}
 local DEFAULT_TIMEOUT_MS, DEFAULT_SETTLE_MS = 8000, 300
 
+---@class KideLauncherState
+---@field buf? integer
+---@field win? integer
+---@field job? integer
+---@field ready boolean
+---@field pending string[]
+---@field generation integer
+---@field startup_timer? table
+---@field settle_timer? table
+---@field output_seen boolean
+
+---@class KideLauncher
+---@field options KideLauncherOptions
+---@field state KideLauncherState
 local Launcher = {}
 Launcher.__index = Launcher
 
@@ -92,7 +106,9 @@ function Launcher:_close_window(force)
   self.state.win = nil
   if closed then
     vim.schedule(function()
-      pcall(vim.cmd, "checktime")
+      pcall(function()
+        vim.cmd("checktime")
+      end)
     end)
   end
 end
