@@ -23,7 +23,14 @@ local function show_rustowl(bufnr)
           if deco["is_display"] == true then
             local start = { deco["range"]["start"]["line"], deco["range"]["start"]["character"] }
             local finish = { deco["range"]["end"]["line"], deco["range"]["end"]["character"] }
-            vim.highlight.range(bufnr, hlns, deco["type"], start, finish, { regtype = "v", inclusive = true })
+            vim.highlight.range(
+              bufnr,
+              hlns,
+              deco["type"],
+              start,
+              finish,
+              { regtype = "v", inclusive = true }
+            )
           end
         end
       end

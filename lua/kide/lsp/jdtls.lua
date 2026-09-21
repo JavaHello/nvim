@@ -100,8 +100,8 @@ local runtimes = (function()
     if java_home then
       local java_sources = get_java_ver_sources(
         version,
-        fglob(vim.fn.glob(vim.fs.joinpath(java_home, "src.zip"))) or
-        fglob(vim.fn.glob(vim.fs.joinpath(java_home, "lib", "src.zip")))
+        fglob(vim.fn.glob(vim.fs.joinpath(java_home, "src.zip")))
+          or fglob(vim.fn.glob(vim.fs.joinpath(java_home, "lib", "src.zip")))
       )
       if ExecutionEnvironment.JavaSE_17 == value then
         default_jdk = true
@@ -164,7 +164,10 @@ local function jdtls_launcher()
     table.insert(cmd, "-javaagent:" .. lombok_jar)
   end
   table.insert(cmd, "-jar")
-  table.insert(cmd, vim.fn.glob(vim.fs.joinpath(jdtls_path, "plugins", "org.eclipse.equinox.launcher_*.jar")))
+  table.insert(
+    cmd,
+    vim.fn.glob(vim.fs.joinpath(jdtls_path, "plugins", "org.eclipse.equinox.launcher_*.jar"))
+  )
   table.insert(cmd, "-data")
   table.insert(cmd, workspace_dir)
   return cmd
@@ -180,14 +183,20 @@ local vscode_java_debug_path = (function()
     return p
   end
   if mason and require("mason-registry").has_package("java-debug-adapter") then
-    return vim.fs.joinpath(require("mason-registry").get_package("java-debug-adapter"):get_install_path(),
-      "extension", "server")
+    return vim.fs.joinpath(
+      require("mason-registry").get_package("java-debug-adapter"):get_install_path(),
+      "extension",
+      "server"
+    )
   end
 end)()
 if vscode_java_debug_path then
   vim.list_extend(
     bundles,
-    vim.split(vim.fn.glob(vim.fs.joinpath(vscode_java_debug_path, "com.microsoft.java.debug.plugin*.jar")), "\n")
+    vim.split(
+      vim.fn.glob(vim.fs.joinpath(vscode_java_debug_path, "com.microsoft.java.debug.plugin*.jar")),
+      "\n"
+    )
   )
 end
 
@@ -200,31 +209,35 @@ local vscode_java_test_path = (function()
     return p
   end
   if mason and require("mason-registry").has_package("java-test") then
-    return vim.fs.joinpath(require("mason-registry").get_package("java-test"):get_install_path(), "extension", "server")
+    return vim.fs.joinpath(
+      require("mason-registry").get_package("java-test"):get_install_path(),
+      "extension",
+      "server"
+    )
   end
 end)()
 
 local javaTestBundleList = {
-  'com.microsoft.java.test.plugin',
-  'org.eclipse.jdt.junit4.runtime_',
-  'org.eclipse.jdt.junit5.runtime_',
-  'org.eclipse.jdt.junit6.runtime_',
-  'junit-jupiter-api_',
-  'junit-jupiter-engine_',
-  'junit-jupiter-migrationsupport_',
-  'junit-jupiter-params_',
-  'junit-vintage-engine_',
-  'org.opentest4j_',
-  'junit-platform-commons_',
-  'junit-platform-engine_',
-  'junit-platform-launcher_',
-  'junit-platform-runner_',
-  'junit-platform-suite-api_',
-  'junit-platform-suite-commons_',
-  'junit-platform-suite-engine_',
-  'org.apiguardian.api_',
-  'org.jacoco.core_'
-};
+  "com.microsoft.java.test.plugin",
+  "org.eclipse.jdt.junit4.runtime_",
+  "org.eclipse.jdt.junit5.runtime_",
+  "org.eclipse.jdt.junit6.runtime_",
+  "junit-jupiter-api_",
+  "junit-jupiter-engine_",
+  "junit-jupiter-migrationsupport_",
+  "junit-jupiter-params_",
+  "junit-vintage-engine_",
+  "org.opentest4j_",
+  "junit-platform-commons_",
+  "junit-platform-engine_",
+  "junit-platform-launcher_",
+  "junit-platform-runner_",
+  "junit-platform-suite-api_",
+  "junit-platform-suite-commons_",
+  "junit-platform-suite-engine_",
+  "org.apiguardian.api_",
+  "org.jacoco.core_",
+}
 if vscode_java_test_path then
   local function some(jarPath)
     for _, bundle in ipairs(javaTestBundleList) do
@@ -235,10 +248,10 @@ if vscode_java_test_path then
     end
     return false
   end
-  for _, jar_file in ipairs(vim.split(vim.fn.glob(vim.fs.joinpath(vscode_java_test_path, "*.jar")), "\n")) do
-    if
-        some(jar_file)
-    then
+  for _, jar_file in
+    ipairs(vim.split(vim.fn.glob(vim.fs.joinpath(vscode_java_test_path, "*.jar")), "\n"))
+  do
+    if some(jar_file) then
       table.insert(bundles, jar_file)
     end
   end
@@ -253,7 +266,10 @@ local java_decoompiler_path = (function()
   end
 end)()
 if java_decoompiler_path then
-  vim.list_extend(bundles, vim.split(vim.fn.glob(vim.fs.joinpath(java_decoompiler_path, "*.jar")), "\n"))
+  vim.list_extend(
+    bundles,
+    vim.split(vim.fn.glob(vim.fs.joinpath(java_decoompiler_path, "*.jar")), "\n")
+  )
 end
 
 -- /opt/software/lsp/java/vscode-java-dependency/jdtls.ext/
@@ -267,7 +283,10 @@ local java_dependency_path = (function()
   end
 end)()
 if java_dependency_path then
-  vim.list_extend(bundles, vim.split(vim.fn.glob(vim.fs.joinpath(java_dependency_path, "*.jar")), "\n"))
+  vim.list_extend(
+    bundles,
+    vim.split(vim.fn.glob(vim.fs.joinpath(java_dependency_path, "*.jar")), "\n")
+  )
 end
 
 local vscode_pde_path = vscode.find_one("yaozheng.vscode-pde-*", "server")
@@ -440,17 +459,30 @@ M.async_profiler_home = vim.env["ASYNC_PROFILER_HOME"]
 local function get_async_profiler_ddl()
   if M.async_profiler_home then
     if utils.is_mac then
-      return vim.fn.glob(vim.fs.joinpath(M.async_profiler_home, "build", "lib", "libasyncProfiler.dylib"))
+      return vim.fn.glob(
+        vim.fs.joinpath(M.async_profiler_home, "build", "lib", "libasyncProfiler.dylib")
+      )
     elseif utils.is_linux then
-      return vim.fn.glob(vim.fs.joinpath(M.async_profiler_home, "build", "lib", "libasyncProfiler.so"))
+      return vim.fn.glob(
+        vim.fs.joinpath(M.async_profiler_home, "build", "lib", "libasyncProfiler.so")
+      )
     else
-      return vim.fn.glob(vim.fs.joinpath(M.async_profiler_home, "build", "lib", "libasyncProfiler.dll"))
+      return vim.fn.glob(
+        vim.fs.joinpath(M.async_profiler_home, "build", "lib", "libasyncProfiler.dll")
+      )
     end
   end
 end
 local function get_async_profiler_cov()
   if M.async_profiler_home then
-    for _, value in ipairs(vim.split(vim.fn.glob(vim.fs.joinpath(M.async_profiler_home, "target", "jfr-converter-*.jar")), "\n")) do
+    for _, value in
+      ipairs(
+        vim.split(
+          vim.fn.glob(vim.fs.joinpath(M.async_profiler_home, "target", "jfr-converter-*.jar")),
+          "\n"
+        )
+      )
+    do
       if not (vim.endswith(value, "-javadoc.jar") or vim.endswith(value, "-sources.jar")) then
         return value
       end
@@ -489,14 +521,14 @@ local function test_with_profile(test_fn)
         },
         after_test = function()
           local result = vim
-              .system({
-                "java",
-                "-jar",
-                get_async_profiler_cov(),
-                utils.tmpdir_file("profile.jfr"),
-                utils.tmpdir_file("profile.html"),
-              })
-              :wait()
+            .system({
+              "java",
+              "-jar",
+              get_async_profiler_cov(),
+              utils.tmpdir_file("profile.jfr"),
+              utils.tmpdir_file("profile.html"),
+            })
+            :wait()
           if result.code == 0 then
             utils.open_fn(utils.tmpdir_file("profile.html"))
           else
@@ -547,10 +579,20 @@ M.config.on_attach = function(client, buffer)
   end
   vim.keymap.set("n", "<leader>dl", with_compile(require("dap").run_last), desc_opts("Run last"))
   vim.keymap.set("n", "<leader>dc", with_compile(jdtls.test_class), desc_opts("Test class"))
-  vim.keymap.set("n", "<leader>dm", with_compile(jdtls.test_nearest_method), desc_opts("Test method"))
+  vim.keymap.set(
+    "n",
+    "<leader>dm",
+    with_compile(jdtls.test_nearest_method),
+    desc_opts("Test method")
+  )
   vim.keymap.set("n", "<leader>ds", with_compile(jdtls.pick_test), desc_opts("Select test"))
   vim.keymap.set("n", "crv", jdtls.extract_variable, desc_opts("Extract variable"))
-  vim.keymap.set("v", "crm", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]], desc_opts("Extract method"))
+  vim.keymap.set(
+    "v",
+    "crm",
+    [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]],
+    desc_opts("Extract method")
+  )
   vim.keymap.set("n", "crc", jdtls.extract_constant, desc_opts("Extract constant"))
 
   if M.async_profiler_home then

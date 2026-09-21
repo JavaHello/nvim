@@ -16,16 +16,16 @@ local function codex_edit_selection(opt)
     line_info = tostring(line)
   end
   if not code or vim.tbl_isempty(code) then
-    vim.notify("请先选择要交给 Codex 修改的代码", vim.log.levels.WARN)
+    vim.notify("请先选择要交给 Code 修改的代码", vim.log.levels.WARN)
     return
   end
   local prompt = opt.args
   if not prompt or prompt == "" then
-    prompt = vim.fn.input("Codex edit: ")
+    prompt = vim.fn.input("Code edit: ")
   end
 
   local filetype = vim.bo.filetype
-  local filename = require("kide.codex").buffer_path(0)
+  local filename = require("kide.code_agent").buffer_path(0)
 
   local message = {}
   if prompt and prompt ~= "" then
@@ -38,7 +38,7 @@ local function codex_edit_selection(opt)
   table.insert(message, table.concat(code, "\n"))
   table.insert(message, "```")
 
-  require("kide.codex").send(table.concat(message, "\n"))
+  require("kide.code_agent").send(table.concat(message, "\n"))
 end
 
 map("n", "<A-i>", function()
@@ -179,7 +179,7 @@ end, {
 map({ "n", "v" }, "<C-l>", function()
   vim.lsp.buf.format({
     async = false,
-  });
+  })
 end, { desc = "format file" })
 
 -- Git
@@ -291,7 +291,11 @@ end, {
 -- find files
 if vim.fn.executable("fd") == 1 then
   command("Fd", function(opt)
-    vim.fn.setqflist({}, " ", { lines = vim.fn.systemlist("fd --type file " .. opt.args), efm = "%f" })
+    vim.fn.setqflist(
+      {},
+      " ",
+      { lines = vim.fn.systemlist("fd --type file " .. opt.args), efm = "%f" }
+    )
     vim.cmd("botright copen")
   end, {
     desc = "find files",
@@ -300,7 +304,11 @@ if vim.fn.executable("fd") == 1 then
 end
 if vim.fn.executable("find") == 1 then
   command("Find", function(opt)
-    vim.fn.setqflist({}, " ", { lines = vim.fn.systemlist("find . -type f -iname '" .. opt.args .. "'"), efm = "%f" })
+    vim.fn.setqflist(
+      {},
+      " ",
+      { lines = vim.fn.systemlist("find . -type f -iname '" .. opt.args .. "'"), efm = "%f" }
+    )
     vim.cmd("botright copen")
   end, {
     desc = "find files",
@@ -438,7 +446,11 @@ creat_trans_vt_command("TransAutoZhVT", "auto", "中文")
 map("v", "<leader>tc", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
   local text = require("kide.tools").get_visual_selection()
-  require("kide.gpt.translate").translate_float({ text = table.concat(text, "\n"), from = "auto", to = "中文" })
+  require("kide.gpt.translate").translate_float({
+    text = table.concat(text, "\n"),
+    from = "auto",
+    to = "中文",
+  })
 end, {})
 creat_trans_command("TransEnZh", "英语", "中文")
 creat_trans_vt_command("TransEnZhVT", "英语", "中文")
@@ -633,38 +645,53 @@ if vim.fn.executable("cargo-owlsp") == 1 then
   map("n", "<A-o>", require("kide.lsp.rustowl").rustowl_cursor, { noremap = true, silent = true })
 end
 
+command("CodeAgent", function()
+  require("kide.code_agent").toggle()
+end, {
+  desc = "CodeAgent cmd",
+  nargs = 0,
+  range = false,
+})
+
 command("Codex", function()
-  require("kide.codex").codex()
+  require("kide.code_agent").codex()
 end, {
   desc = "Codex cmd",
   nargs = 0,
   range = false,
 })
+command("OpenCode", function()
+  require("kide.code_agent").opencode()
+end, {
+  desc = "OpenCode cmd",
+  nargs = 0,
+  range = false,
+})
 
-command("CodexEdit", codex_edit_selection, {
-  desc = "Send selected code to Codex for editing",
+command("CodeEdit", codex_edit_selection, {
+  desc = "Send selected code to Code for editing",
   nargs = "*",
   range = true,
 })
 
-command("CodexFix", function(opt)
+command("CodeFix", function(opt)
   local code
   if opt.range > 0 then
     code = require("kide.tools").get_visual_selection()
   end
-  require("kide.codex").fix_diagnostics({
+  require("kide.code_agent").fix_diagnostics({
     code = code,
     extra_prompt = opt.args,
   })
 end, {
-  desc = "Send diagnostics to Codex for fixing",
+  desc = "Send diagnostics to Code for fixing",
   nargs = "*",
   range = true,
 })
 
 map({ "i", "n", "t" }, "<A-;>", function()
-  require("kide.codex").codex()
-end, { desc = "Codex cmd" })
+  require("kide.code_agent").toggle()
+end, { desc = "Code Agent" })
 
 map("v", "<leader>ce", function()
   vim.api.nvim_feedkeys("\027", "xt", false)
@@ -672,12 +699,11 @@ map("v", "<leader>ce", function()
     range = 1,
     args = "",
   })
-end, { desc = "Codex edit selection" })
+end, { desc = "Code edit selection" })
 
 map({ "n", "t" }, "<A-g>", function()
   require("kide.gitui").gitui()
 end, { desc = "gitui" })
-
 
 -- vim.keymap.set("i", "<C-k>", function()
 --   vim.snippet.expand([[

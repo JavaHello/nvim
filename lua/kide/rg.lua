@@ -186,12 +186,18 @@ local function apply_preview_highlights(state)
   end
   if state.preview_target_row then
     for _, match in ipairs(state.preview_matches or {}) do
-      vim.api.nvim_buf_set_extmark(state.preview_buf, preview_ns, state.preview_target_row - 1, match.start, {
-        end_col = match.finish,
-        hl_group = "Search",
-        -- hl_mode = "replace",
-        priority = 200,
-      })
+      vim.api.nvim_buf_set_extmark(
+        state.preview_buf,
+        preview_ns,
+        state.preview_target_row - 1,
+        match.start,
+        {
+          end_col = match.finish,
+          hl_group = "Search",
+          -- hl_mode = "replace",
+          priority = 200,
+        }
+      )
     end
   end
 end
@@ -219,7 +225,7 @@ local function set_preview_entries(state, request_id, item, entries)
     local number_width = #tostring(entries[#entries].lnum)
     local lines = {}
     local match_lnum = item.lnum
-    local start_lnum = math.max(1, match_lnum - math.floor((state.context_lines) * 0.5))
+    local start_lnum = math.max(1, match_lnum - math.floor(state.context_lines * 0.5))
     for _, entry in ipairs(entries) do
       if entry.lnum >= start_lnum then
         local prefix = string.format("%" .. number_width .. "d  ", entry.lnum)
@@ -246,7 +252,13 @@ local function trim_entries(entries, limit)
 end
 
 local function preview_item_key(item)
-  return ("%s:%d:%d:%d:%s"):format(item.file, item.lnum, item.col or 0, item.preview_version or 0, item.text or "")
+  return ("%s:%d:%d:%d:%s"):format(
+    item.file,
+    item.lnum,
+    item.col or 0,
+    item.preview_version or 0,
+    item.text or ""
+  )
 end
 
 local function update_preview(state)
@@ -287,7 +299,14 @@ local function apply_highlights(state)
   for row, item in ipairs(state.items) do
     if item.file_len and item.prefix_len then
       set_range_highlight(state.result_buf, match_ns, "Directory", row - 1, 0, item.file_len)
-      set_range_highlight(state.result_buf, match_ns, "LineNr", row - 1, item.file_len, item.prefix_len)
+      set_range_highlight(
+        state.result_buf,
+        match_ns,
+        "LineNr",
+        row - 1,
+        item.file_len,
+        item.prefix_len
+      )
     end
 
     local prefix_len = item.prefix_len or 0
@@ -494,7 +513,11 @@ local function append_result(state, line)
   add_entry_to_pending_previews(state, match_entry)
 
   for _, entry in ipairs(state.recent_entries) do
-    if entry.file == item.file and entry.lnum < item.lnum and item.lnum - entry.lnum <= (state.context_lines or 3) then
+    if
+      entry.file == item.file
+      and entry.lnum < item.lnum
+      and item.lnum - entry.lnum <= (state.context_lines or 3)
+    then
       append_preview_entry(item, entry)
     end
   end
@@ -676,8 +699,12 @@ end
 
 local function state_has_window(state, win)
   return (state.input_win and vim.api.nvim_win_is_valid(state.input_win) and win == state.input_win)
-      or (state.result_win and vim.api.nvim_win_is_valid(state.result_win) and win == state.result_win)
-      or (state.preview_win and vim.api.nvim_win_is_valid(state.preview_win) and win == state.preview_win)
+    or (state.result_win and vim.api.nvim_win_is_valid(state.result_win) and win == state.result_win)
+    or (
+      state.preview_win
+      and vim.api.nvim_win_is_valid(state.preview_win)
+      and win == state.preview_win
+    )
 end
 
 local function close_on_focus_lost(state)
@@ -741,7 +768,13 @@ end
 
 local function fzy_item_line(item, index, max_width)
   local display_file = item.display_file or path_utils.shorten(item.file, file_path_limit)
-  local line = ("%04d %s:%d:%d: %s"):format(index, display_file, item.lnum, item.col, terminal_safe_text(item.text))
+  local line = ("%04d %s:%d:%d: %s"):format(
+    index,
+    display_file,
+    item.lnum,
+    item.col,
+    terminal_safe_text(item.text)
+  )
   return truncate_text(line, max_width)
 end
 

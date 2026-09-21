@@ -3,9 +3,8 @@ return {
     "romus204/tree-sitter-manager.nvim",
     dependencies = {}, -- tree-sitter CLI must be installed system-wide
     config = function()
-      require("tree-sitter-manager").setup({
-      })
-    end
+      require("tree-sitter-manager").setup({})
+    end,
   },
   {
     "nvim-lua/plenary.nvim",
@@ -301,16 +300,16 @@ return {
           --   and vim.bo[buf].buftype == ""
           local ft = vim.bo[buf].filetype
           if
-              ft == "snacks_picker_preview"
-              or ft == "snacks_picker_list"
-              or ft == "snacks_picker_input"
-              or ft == "Outline"
-              or ft == "JavaProjects"
-              or ft == "text"
-              or ft == ""
-              or ft == "lazy"
-              or ft == "help"
-              or ft == "markdown"
+            ft == "snacks_picker_preview"
+            or ft == "snacks_picker_list"
+            or ft == "snacks_picker_input"
+            or ft == "Outline"
+            or ft == "JavaProjects"
+            or ft == "text"
+            or ft == ""
+            or ft == "lazy"
+            or ft == "help"
+            or ft == "markdown"
           then
             return false
           end
@@ -336,9 +335,9 @@ return {
               border = "rounded",
               title = "{title} {live} {flags}",
               title_pos = "center",
-              { win = "input",   height = 1,     border = "bottom" },
-              { win = "list",    border = "none" },
-              { win = "preview", height = 0.6,   border = "top" },
+              { win = "input", height = 1, border = "bottom" },
+              { win = "list", border = "none" },
+              { win = "preview", height = 0.6, border = "top" },
             },
           },
         },

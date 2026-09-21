@@ -56,8 +56,7 @@ M.chat_config = {
     .. "- All non-code text responses must be written in the Chinese language indicated.",
 }
 
-local function disable_start()
-end
+local function disable_start() end
 
 local function enable_done()
   vim.cmd("normal! G$")
@@ -352,10 +351,13 @@ function Chat:diagnostics(param)
   local filetype = vim.bo[self.codebuf].filetype or "text"
   for _, diagnostic in ipairs(diagnostics) do
     local code = diagnostic.code or "Unknown Code"
-    local severity = diagnostic.severity == 1 and "ERROR" or diagnostic.severity == 2 and "WARN" or "INFO"
+    local severity = diagnostic.severity == 1 and "ERROR"
+      or diagnostic.severity == 2 and "WARN"
+      or "INFO"
     table.insert(qs, "## " .. severity .. ": " .. code)
     if need_code then
-      local lines = vim.api.nvim_buf_get_lines(self.codebuf, diagnostic.lnum, diagnostic.end_lnum + 1, false)
+      local lines =
+        vim.api.nvim_buf_get_lines(self.codebuf, diagnostic.lnum, diagnostic.end_lnum + 1, false)
       if #lines > 0 then
         table.insert(qs, "- Code Snippet")
         table.insert(qs, "```" .. filetype)

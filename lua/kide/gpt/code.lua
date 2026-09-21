@@ -28,7 +28,12 @@ M.code_completions = function(opts)
   local closed = false
   local message
   if opts.inputcode then
-    message = "```" .. filetype .. "\n" .. table.concat(opts.inputcode, "\n") .. "```\n" .. opts.message
+    message = "```"
+      .. filetype
+      .. "\n"
+      .. table.concat(opts.inputcode, "\n")
+      .. "```\n"
+      .. opts.message
     vim.api.nvim_win_set_cursor(codewin, { vim.fn.getpos("'>")[2] + 1, 0 })
   else
     message = opts.message

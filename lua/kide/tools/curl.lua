@@ -132,7 +132,9 @@ M.setup = function()
     desc = "Run current .http file with hurl and show response on the right",
   })
 
-  vim.cmd([[cnoreabbrev <expr> hurl getcmdtype() == ':' && getcmdline() ==# 'hurl' ? 'Hurl' : 'hurl']])
+  vim.cmd(
+    [[cnoreabbrev <expr> hurl getcmdtype() == ':' && getcmdline() ==# 'hurl' ? 'Hurl' : 'hurl']]
+  )
 end
 
 return M

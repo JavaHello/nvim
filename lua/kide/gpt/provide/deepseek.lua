@@ -172,7 +172,12 @@ function DeepSeek:payload_message(messages)
 end
 
 function DeepSeek:url()
-  if self.type == "chat" or self.type == "reasoner" or self.type == "commit" or self.type == "translate" then
+  if
+    self.type == "chat"
+    or self.type == "reasoner"
+    or self.type == "commit"
+    or self.type == "translate"
+  then
     return self.base_url .. "/chat/completions"
   elseif self.type == "code" then
     return self.base_url .. "/beta/v1/chat/completions"
@@ -228,7 +233,11 @@ function DeepSeek:request(messages, callback)
           end
         elseif vim.startswith(value, ": keep-alive") then
           -- 这里可能是心跳检测报文, 输出提示
-          vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "DeepSeek" })
+          vim.notify(
+            "[SSE] " .. value,
+            vim.log.levels.INFO,
+            { id = "gpt:" .. job, title = "DeepSeek" }
+          )
         else
           tmp = tmp .. value
           if safe_json_decode(tmp) then
@@ -241,7 +250,8 @@ function DeepSeek:request(messages, callback)
     end
   end
 
-  self.sse = sse.new(self:url()):POST():auth(self.api_key):body(payload):handle(callback_handle):send()
+  self.sse =
+    sse.new(self:url()):POST():auth(self.api_key):body(payload):handle(callback_handle):send()
   job = self.sse.job
 end
 

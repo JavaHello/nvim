@@ -51,9 +51,24 @@ M.config = {
   root_dir = vim.fs.root(0, { ".git", "requirements.txt", "pyproject.toml" }) or vim.uv.cwd(),
   on_attach = function(client, bufnr)
     local dap_py = require("dap-python")
-    vim.keymap.set("n", "<leader>dc", dap_py.test_class, { desc = "Dap Test Class", buffer = bufnr })
-    vim.keymap.set("n", "<leader>dm", dap_py.test_method, { desc = "Dap Test Method", buffer = bufnr })
-    vim.keymap.set("v", "<leader>ds", dap_py.debug_selection, { desc = "Dap Debug Selection", buffer = bufnr })
+    vim.keymap.set(
+      "n",
+      "<leader>dc",
+      dap_py.test_class,
+      { desc = "Dap Test Class", buffer = bufnr }
+    )
+    vim.keymap.set(
+      "n",
+      "<leader>dm",
+      dap_py.test_method,
+      { desc = "Dap Test Method", buffer = bufnr }
+    )
+    vim.keymap.set(
+      "v",
+      "<leader>ds",
+      dap_py.debug_selection,
+      { desc = "Dap Debug Selection", buffer = bufnr }
+    )
 
     local create_command = vim.api.nvim_buf_create_user_command
     create_command(bufnr, "OR", M.organize_imports, {

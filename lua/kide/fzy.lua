@@ -97,7 +97,11 @@ end
 
 local function state_has_window(state, win)
   return (state.input_win and vim.api.nvim_win_is_valid(state.input_win) and win == state.input_win)
-    or (state.result_win and vim.api.nvim_win_is_valid(state.result_win) and win == state.result_win)
+    or (
+      state.result_win
+      and vim.api.nvim_win_is_valid(state.result_win)
+      and win == state.result_win
+    )
 end
 
 local function close_on_focus_lost(state)

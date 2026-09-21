@@ -96,7 +96,10 @@ local function infer_run(opts)
   local root = project_root(buf)
   local args = vim.split(opts.args or "", " ", { trimempty = true })
   if #args == 0 then
-    vim.notify("Infer: 请输入要执行的命令，例如 InferRun mvn clean compile", vim.log.levels.WARN)
+    vim.notify(
+      "Infer: 请输入要执行的命令，例如 InferRun mvn clean compile",
+      vim.log.levels.WARN
+    )
     return
   end
   if args[1] == "mvn" then
@@ -155,7 +158,12 @@ M.setup = function()
   end, {
     nargs = "*",
     complete = function(arglead, cmdline, cursorpos)
-      return require("kide.term").complete(arglead, cmdline, cursorpos, { command_name = "InferRun" })
+      return require("kide.term").complete(
+        arglead,
+        cmdline,
+        cursorpos,
+        { command_name = "InferRun" }
+      )
     end,
   })
 end

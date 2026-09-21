@@ -44,8 +44,12 @@ if vim.env.SSH_TTY ~= nil or vim.env.SSH_CONNECTION ~= nil then
       ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
     },
     paste = {
-      ["+"] = function() return vim.fn.getreg('+'), 'v' end,
-      ["*"] = function() return vim.fn.getreg('*'), 'v' end,
+      ["+"] = function()
+        return vim.fn.getreg("+"), "v"
+      end,
+      ["*"] = function()
+        return vim.fn.getreg("*"), "v"
+      end,
     },
   }
 end

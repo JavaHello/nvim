@@ -57,7 +57,8 @@ local function _cmd(client)
     "Content-Type: application/json",
     "-H",
     "Authorization: Bearer " .. client.token,
-    "-H", "Accept: text/event-stream",
+    "-H",
+    "Accept: text/event-stream",
     "-d",
     body,
     client.url,
@@ -74,8 +75,7 @@ local function handle_sse_events(client)
         data = data,
       })
     end,
-    on_stderr = function(_, _, _)
-    end,
+    on_stderr = function(_, _, _) end,
     on_exit = function(_, code, _)
       require("kide").clean_stl_status(sid, code)
       client.callback(nil, {

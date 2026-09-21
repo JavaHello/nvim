@@ -50,15 +50,13 @@ autocmd("FileType", {
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
-    vim.keymap.set("n", "q",
-      function()
-        if vim.fn.winnr("$") == 1 then
-          vim.cmd("bd!")
-        else
-          vim.cmd("close")
-        end
+    vim.keymap.set("n", "q", function()
+      if vim.fn.winnr("$") == 1 then
+        vim.cmd("bd!")
+      else
+        vim.cmd("close")
       end
-      , { buffer = event.buf, silent = true })
+    end, { buffer = event.buf, silent = true })
   end,
 })
 

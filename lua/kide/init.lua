@@ -10,7 +10,10 @@ end
 
 function M.gpt_stl(buf, icon, title, usage)
   if usage then
-    M.set_buf_stl(buf, { " %#DiagnosticInfo#", icon, " %#StatusLine#", title, " %#Comment#", usage })
+    M.set_buf_stl(
+      buf,
+      { " %#DiagnosticInfo#", icon, " %#StatusLine#", title, " %#Comment#", usage }
+    )
   else
     M.set_buf_stl(buf, { " %#DiagnosticInfo#", icon, " %#StatusLine#", title })
   end
@@ -30,7 +33,10 @@ function M.term_stl(buf, cmd)
   if cmd_0 == "curl" then
     M.set_buf_stl(buf, { " %#DiagnosticInfo#", "󰢩", " %#StatusLine#", "cURL" })
   elseif cmd_0 == "mvn" then
-    M.set_buf_stl(buf, { " %#DiagnosticError#", "", " %#StatusLine#", "Maven (" .. table.concat(cmd, " ") .. ")" })
+    M.set_buf_stl(
+      buf,
+      { " %#DiagnosticError#", "", " %#StatusLine#", "Maven (" .. table.concat(cmd, " ") .. ")" }
+    )
   elseif cmd_0 == "Codex" then
     M.set_buf_stl(buf, { " %#DiagnosticInfo#", "", " %#StatusLine#", "Codex" })
   else

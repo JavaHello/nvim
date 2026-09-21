@@ -174,8 +174,6 @@ M.complete = function(arglead, cmdline, cursorpos, opts)
     line = line:sub(1, cursor)
   end
 
-
-
   local shell_items
   if is_fish then
     local ok, output = pcall(vim.fn.systemlist, {

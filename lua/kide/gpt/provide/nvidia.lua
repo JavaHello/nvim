@@ -190,7 +190,11 @@ function Nvidia:request(messages, callback)
             end
           end
         elseif vim.startswith(value, ": keep-alive") then
-          vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "NVIDIA" })
+          vim.notify(
+            "[SSE] " .. value,
+            vim.log.levels.INFO,
+            { id = "gpt:" .. job, title = "NVIDIA" }
+          )
         else
           tmp = tmp .. value
           if is_json(tmp) then
@@ -203,7 +207,8 @@ function Nvidia:request(messages, callback)
     end
   end
 
-  self.sse = sse.new(self:url()):POST():auth(self.api_key):body(payload):handle(callback_handle):send()
+  self.sse =
+    sse.new(self:url()):POST():auth(self.api_key):body(payload):handle(callback_handle):send()
   job = self.sse.job
 end
 

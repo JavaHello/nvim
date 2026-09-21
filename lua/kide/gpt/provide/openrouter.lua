@@ -31,8 +31,7 @@ local chat_json = {
 }
 
 local reasoner_json = {
-  messages = {
-  },
+  messages = {},
   model = model,
   stream = true,
 }
@@ -89,7 +88,7 @@ local Openrouter = {
     "deepseek/deepseek-chat-v3-0324:free",
     "deepseek/deepseek-chat-v3-0324",
     "qwen/qwen3-235b-a22b",
-  }
+  },
 }
 Openrouter.__index = Openrouter
 
@@ -118,7 +117,7 @@ end
 
 function Openrouter:payload_message(messages)
   self.model = self.payload.model
-  local json = vim.deepcopy(self.payload);
+  local json = vim.deepcopy(self.payload)
   if Openrouter._c_model then
     json.model = Openrouter._c_model
   end
@@ -128,10 +127,11 @@ function Openrouter:payload_message(messages)
 end
 
 function Openrouter:url()
-  if self.type == "chat"
-      or self.type == "reasoner"
-      or self.type == "commit"
-      or self.type == "translate"
+  if
+    self.type == "chat"
+    or self.type == "reasoner"
+    or self.type == "commit"
+    or self.type == "translate"
   then
     return self.base_url .. "/chat/completions"
   elseif self.type == "code" then
@@ -160,7 +160,7 @@ function Openrouter:request(messages, callback)
   local tmp = ""
   local is_json = function(text)
     return (vim.startswith(text, "{") and vim.endswith(text, "}"))
-        or (vim.startswith(text, "[") and vim.endswith(text, "]"))
+      or (vim.startswith(text, "[") and vim.endswith(text, "]"))
   end
   ---@param event http.SseEvent
   local callback_handle = function(_, event)
@@ -188,7 +188,11 @@ function Openrouter:request(messages, callback)
           end
         elseif vim.startswith(value, ": keep-alive") then
           -- 这里可能是心跳检测报文, 输出提示
-          vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "Openrouter" })
+          vim.notify(
+            "[SSE] " .. value,
+            vim.log.levels.INFO,
+            { id = "gpt:" .. job, title = "Openrouter" }
+          )
         elseif vim.startswith(value, ": OPENROUTER PROCESSING") then
           -- ignore
           -- vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "Openrouter" })
@@ -204,12 +208,8 @@ function Openrouter:request(messages, callback)
     end
   end
 
-  self.sse = sse.new(self:url())
-      :POST()
-      :auth(self.api_key)
-      :body(payload)
-      :handle(callback_handle)
-      :send()
+  self.sse =
+    sse.new(self:url()):POST():auth(self.api_key):body(payload):handle(callback_handle):send()
   job = self.sse.job
 end
 

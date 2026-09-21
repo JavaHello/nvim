@@ -10,7 +10,6 @@ local translate_ns = vim.api.nvim_create_namespace("kide_translate")
 ---@field from string
 ---@field to string
 
-
 ---@param request kai.tools.TranslateRequest
 local function trans_system_prompt(request)
   local from = request.from
@@ -18,7 +17,12 @@ local function trans_system_prompt(request)
   if request.from == "auto" then
     message = message .. "当收到文本时，请检测语言并翻译为" .. request.to .. "。"
   else
-    message = message .. "当收到" .. from .. "语言的文本时，请翻译为" .. request.to .. "。"
+    message = message
+      .. "当收到"
+      .. from
+      .. "语言的文本时，请翻译为"
+      .. request.to
+      .. "。"
   end
   message = message
     .. "安全规则（必须遵守）：\n"
@@ -63,11 +67,11 @@ M.translate_float = function(request)
 
   local opts = {
     relative = "cursor",
-    row = 1,            -- 相对于光标位置的行偏移
-    col = 0,            -- 相对于光标位置的列偏移
-    width = width,      -- 窗口的宽度
-    height = height,    -- 窗口的高度
-    style = "minimal",  -- 最小化样式
+    row = 1, -- 相对于光标位置的行偏移
+    col = 0, -- 相对于光标位置的列偏移
+    width = width, -- 窗口的宽度
+    height = height, -- 窗口的高度
+    style = "minimal", -- 最小化样式
     border = "rounded", -- 窗口边框样式
   }
   local buf = vim.api.nvim_create_buf(false, true)

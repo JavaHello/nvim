@@ -219,7 +219,11 @@ function OpenAI:request(messages, callback)
           end
         elseif vim.startswith(value, ": keep-alive") then
           -- 这里可能是心跳检测报文, 输出提示
-          vim.notify("[SSE] " .. value, vim.log.levels.INFO, { id = "gpt:" .. job, title = "OpenAI" })
+          vim.notify(
+            "[SSE] " .. value,
+            vim.log.levels.INFO,
+            { id = "gpt:" .. job, title = "OpenAI" }
+          )
         else
           tmp = tmp .. value
           if is_json(tmp) then
@@ -233,12 +237,8 @@ function OpenAI:request(messages, callback)
     end
   end
 
-  self.sse = sse.new(self:url())
-      :POST()
-      :auth(self.api_key)
-      :body(payload)
-      :handle(callback_handle)
-      :send()
+  self.sse =
+    sse.new(self:url()):POST():auth(self.api_key):body(payload):handle(callback_handle):send()
   job = self.sse.job
 end
 
