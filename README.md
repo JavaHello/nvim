@@ -77,8 +77,9 @@ git clone https://github.com/JavaHello/nvim.git
 - 命令 `:TransXXX` 翻译文本
 - 在 `git` 提交窗口，快捷键 `<leader>cm` 生成 `git` 提交消息
 
-## Codex 功能
+## Code Agent 功能
 
-- 命令 `:Codex` 打开 Codex 终端
-- 命令 `:CodexEdit` 发送选中代码给 Codex 修改
-- 命令 `:CodexFix` 发送当前光标位置的诊断信息给 Codex 修复
+- 命令 `:CodeAgent`（快捷键 `<A-;>`）选择并切换 Code Agent
+- 命令 `:Codex` / `:OpenCode` / `:Claude` 直接打开对应的 Code Agent 终端
+- 命令 `:CodeEdit` 发送选中代码给当前 Code Agent 修改
+- 命令 `:CodeFix` 发送当前光标位置的诊断信息给当前 Code Agent 修复

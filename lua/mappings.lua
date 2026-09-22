@@ -667,6 +667,13 @@ end, {
   nargs = 0,
   range = false,
 })
+command("Claude", function()
+  require("kide.code_agent").claude()
+end, {
+  desc = "Claude cmd",
+  nargs = 0,
+  range = false,
+})
 
 command("CodeEdit", codex_edit_selection, {
   desc = "Send selected code to Code for editing",

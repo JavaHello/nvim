@@ -345,6 +345,11 @@ local opencode = M.new({
   title = "OpenCode",
   ready_patterns = { "ask anything", "ctrl+p", "commands" },
 })
+local claude = M.new({
+  command = { "claude" },
+  title = "Claude",
+  ready_patterns = { "welcome to claude code", "? for shortcuts" },
+})
 M.current = nil
 
 ---@param bufnr? integer
@@ -378,16 +383,22 @@ function M.send(text, opt)
 end
 
 local function _select_launcher()
-  vim.ui.select({ "Codex", "OpenCode" }, { prompt = "Select code agent:" }, function(choice)
-    if choice == "Codex" then
-      M.current = codex
-    elseif choice == "OpenCode" then
-      M.current = opencode
+  vim.ui.select(
+    { "Codex", "OpenCode", "Claude" },
+    { prompt = "Select code agent:" },
+    function(choice)
+      if choice == "Codex" then
+        M.current = codex
+      elseif choice == "OpenCode" then
+        M.current = opencode
+      elseif choice == "Claude" then
+        M.current = claude
+      end
+      if M.current ~= nil then
+        M.current:toggle()
+      end
     end
-    if M.current ~= nil then
-      M.current:toggle()
-    end
-  end)
+  )
 end
 
 function M.toggle()
@@ -405,6 +416,11 @@ end
 
 function M.opencode()
   M.current = opencode
+  M.current:toggle()
+end
+
+function M.claude()
+  M.current = claude
   M.current:toggle()
 end
 
