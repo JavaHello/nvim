@@ -30,13 +30,12 @@ function M.term_stl(buf, cmd)
     vim.notify("不支持的 cmd 类型", vim.log.levels.ERROR)
     return
   end
+  -- 字符串命令时 cmd 不是表, table.concat 会报错
+  local full = cmd_type == "table" and table.concat(cmd, " ") or cmd
   if cmd_0 == "curl" then
     M.set_buf_stl(buf, { " %#DiagnosticInfo#", "󰢩", " %#StatusLine#", "cURL" })
   elseif cmd_0 == "mvn" then
-    M.set_buf_stl(
-      buf,
-      { " %#DiagnosticError#", "", " %#StatusLine#", "Maven (" .. table.concat(cmd, " ") .. ")" }
-    )
+    M.set_buf_stl(buf, { " %#DiagnosticError#", "", " %#StatusLine#", "Maven (" .. full .. ")" })
   elseif cmd_0 == "Codex" then
     M.set_buf_stl(buf, { " %#DiagnosticInfo#", "", " %#StatusLine#", "Codex" })
   else
@@ -58,13 +57,28 @@ function M.lsp_stl(message)
   )
 end
 
+---停掉重绘定时器, 但只在没有其它 pending 状态时(否则它们的 spinner 会卡住)
+local function stop_stl_timer_if_idle()
+  if not require("kide.stl").has_pending() then
+    M.stl_stop = true
+    M.stl_timer:stop()
+  end
+end
+
 ---清理全局状态
 ---@param id number stl id
 ---@param code number exit code
 function M.clean_stl_status(id, code)
-  M.stl_stop = true
-  M.stl_timer:stop()
+  -- exit_status 会把该状态标记为已结束, 必须先调用再判断是否还有其它 pending
   require("kide.stl").exit_status(id, code)
+  stop_stl_timer_if_idle()
+end
+
+---丢弃状态(进程被主动结束/重启时用, 不留退出结果)
+---@param id number stl id
+function M.drop_stl_status(id)
+  require("kide.stl").remove_status(id)
+  stop_stl_timer_if_idle()
 end
 
 ---@param title string

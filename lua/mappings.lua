@@ -75,7 +75,10 @@ end
 
 map("n", "<A-i>", function()
   require("kide.term").toggle()
-  vim.cmd("startinsert")
+  -- 只有真正显示终端时才进入终端插入模式, 关闭/隐藏时不要误进 insert
+  if vim.bo.buftype == "terminal" then
+    vim.cmd("startinsert")
+  end
 end, { desc = "toggle term" })
 map("t", "<A-i>", require("kide.term").toggle, { desc = "toggle term" })
 map("i", "<A-i>", function()
@@ -84,11 +87,11 @@ map("i", "<A-i>", function()
 end, { desc = "toggle term" })
 map("v", "<A-i>", function()
   local text = visual_selection()
-  require("kide.term").toggle()
+  require("kide.term").open()
   vim.defer_fn(function()
     require("kide.term").send_line(text[1])
   end, 500)
-end, { desc = "toggle term" })
+end, { desc = "send selection to term" })
 
 map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
 map("n", "<ESC>", "<CMD>noh<CR>", { desc = "Clear Highlight" })
@@ -695,6 +698,7 @@ vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
 end, { expr = true })
 
 tools.setup()
+require("kide.term").setup()
 require("kide.tools.infer").setup()
 require("kide.tools.plantuml").setup()
 require("kide.tools.mermaid").setup()

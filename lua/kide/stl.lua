@@ -88,6 +88,24 @@ function M.exit_status(id, code)
   vim.cmd.redrawstatus()
 end
 
+---直接丢弃某个状态, 不显示退出结果(进程被主动结束/重启时用)
+---@param id number stl id
+function M.remove_status(id)
+  glob_stl[id] = nil
+  vim.cmd.redrawstatus()
+end
+
+---是否还有未结束的状态(已结束的条目会滞留 2s, 所以以 code 为准)
+---@return boolean
+function M.has_pending()
+  for _, cstl in pairs(glob_stl) do
+    if cstl.code == nil then
+      return true
+    end
+  end
+  return false
+end
+
 -- 参考 https://github.com/mfussenegger/dotfiles
 function M.statusline()
   local parts = {

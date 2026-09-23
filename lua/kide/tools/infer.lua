@@ -158,12 +158,7 @@ M.setup = function()
   end, {
     nargs = "*",
     complete = function(arglead, cmdline, cursorpos)
-      return require("kide.term").complete(
-        arglead,
-        cmdline,
-        cursorpos,
-        { command_name = "InferRun" }
-      )
+      return require("kide.term").complete(arglead, cmdline, cursorpos, { prefix = "InferRun" })
     end,
   })
 end
