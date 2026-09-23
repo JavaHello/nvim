@@ -160,12 +160,15 @@ function DeepSeek.new(type)
   return self
 end
 
-function DeepSeek.set_model(_)
-  --ignore
+function DeepSeek.set_model(model)
+  DeepSeek._c_model = model
 end
 
 function DeepSeek:payload_message(messages)
   local json = vim.deepcopy(self.payload)
+  if DeepSeek._c_model then
+    json.model = DeepSeek._c_model
+  end
   self.model = json.model
   json.messages = messages
   return json

@@ -55,7 +55,7 @@ M.commit_diff_msg = function()
   local callback = function(opt)
     local data = opt.data
     if closed then
-      vim.fn.jobstop(opt.job)
+      -- 关闭路径已 close 过 client, 这里直接丢掉后续数据
       return
     end
     if opt.done then

@@ -12,6 +12,7 @@ autocmd({ "TextYankPost" }, {
 
 -- https://nvchad.com/docs/recipes
 autocmd("BufReadPost", {
+  group = augroup("restore_cursor"),
   pattern = "*",
   callback = function()
     local line = vim.fn.line("'\"")
@@ -27,6 +28,7 @@ autocmd("BufReadPost", {
 })
 
 -- close some filetypes with <q>
+-- 最后一个窗口时用 bd! 关掉, 否则 close
 autocmd("FileType", {
   group = augroup("close_with_q"),
   pattern = {
@@ -46,7 +48,7 @@ autocmd("FileType", {
     "dbui",
     "dbout",
     "httpResult",
-    "dap-repl",
+    -- dap-repl 不在这里: 下面的 dap-* 会覆盖它, 这里写了也是死配置
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -86,6 +88,15 @@ autocmd("FileType", {
   },
   callback = function(_)
     vim.api.nvim_set_option_value("signcolumn", "no", { win = vim.api.nvim_get_current_win() })
+  end,
+})
+
+-- ts-ls 同时服务这 4 个 filetype; 用一条 autocmd 代替 4 个内容相同的 ftplugin
+autocmd("FileType", {
+  group = augroup("ts_ls"),
+  pattern = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+  callback = function()
+    vim.lsp.start(require("kide.lsp.ts-ls").config)
   end,
 })
 

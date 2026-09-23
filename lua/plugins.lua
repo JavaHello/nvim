@@ -1,14 +1,23 @@
+-- 这些 filetype 下不画缩进线
+local no_indent_ft = {
+  [""] = true,
+  JavaProjects = true,
+  Outline = true,
+  help = true,
+  lazy = true,
+  markdown = true,
+  snacks_picker_input = true,
+  snacks_picker_list = true,
+  snacks_picker_preview = true,
+  text = true,
+}
+
 return {
   {
     "romus204/tree-sitter-manager.nvim",
-    dependencies = {}, -- tree-sitter CLI must be installed system-wide
     config = function()
       require("tree-sitter-manager").setup({})
     end,
-  },
-  {
-    "nvim-lua/plenary.nvim",
-    lazy = true,
   },
   {
     "nvim-tree/nvim-web-devicons",
@@ -207,7 +216,6 @@ return {
     init = function()
       vim.g.mkdp_page_title = "${name}"
     end,
-    config = function() end,
   },
 
   -- databases
@@ -295,25 +303,7 @@ return {
       indent = {
         enabled = true,
         filter = function(buf)
-          -- return not vim.g.snacks_indent
-          --   and not vim.b[buf].snacks_indent
-          --   and vim.bo[buf].buftype == ""
-          local ft = vim.bo[buf].filetype
-          if
-            ft == "snacks_picker_preview"
-            or ft == "snacks_picker_list"
-            or ft == "snacks_picker_input"
-            or ft == "Outline"
-            or ft == "JavaProjects"
-            or ft == "text"
-            or ft == ""
-            or ft == "lazy"
-            or ft == "help"
-            or ft == "markdown"
-          then
-            return false
-          end
-          return true
+          return not no_indent_ft[vim.bo[buf].filetype]
         end,
       },
       input = { enabled = true },

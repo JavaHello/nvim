@@ -5,7 +5,7 @@
 ---   local lazygit = Launcher.new({ command = { "lazygit" }, title = "Lazygit" })
 ---   lazygit:toggle()
 ---
---- The Codex-specific public functions at the end are kept for backwards compatibility.
+--- Supported agents are declared in `AGENTS` below; `M.select(name)` switches to one.
 local M = {}
 local DEFAULT_TIMEOUT_MS, DEFAULT_SETTLE_MS = 8000, 300
 
@@ -335,21 +335,45 @@ function Launcher:send(text, opt)
 end
 
 M.Launcher = Launcher
-local codex = M.new({
-  command = { "codex" },
-  title = "Codex",
-  ready_patterns = { "esc to toggle", "cwd:", "model:", "tokens" },
-})
-local opencode = M.new({
-  command = { "opencode" },
-  title = "OpenCode",
-  ready_patterns = { "ask anything", "ctrl+p", "commands" },
-})
-local claude = M.new({
-  command = { "claude" },
-  title = "Claude",
-  ready_patterns = { "welcome to claude code", "? for shortcuts" },
-})
+
+--- 支持的 code agent。顺序即选择菜单顺序, `name` 同时是 `M.select` / `:Codex` 等入口名。
+local AGENTS = {
+  {
+    name = "Codex",
+    command = { "codex" },
+    ready_patterns = { "esc to toggle", "cwd:", "model:", "tokens" },
+  },
+  {
+    name = "OpenCode",
+    command = { "opencode" },
+    ready_patterns = { "ask anything", "ctrl+p", "commands" },
+  },
+  {
+    name = "Claude",
+    command = { "claude" },
+    ready_patterns = { "welcome to claude code", "? for shortcuts" },
+  },
+  {
+    name = "Pi",
+    command = { "pi" },
+    ready_patterns = { "escape interrupt", "/ commands", "ctrl+o" },
+  },
+}
+
+--- 选择菜单用的名字, 与 `M.agents` 的键一一对应
+M.agent_names = {}
+---@type table<string, KideLauncher>
+M.agents = {}
+for _, agent in ipairs(AGENTS) do
+  local name = agent.name
+  M.agent_names[#M.agent_names + 1] = name
+  M.agents[name] = M.new({
+    command = agent.command,
+    title = name,
+    ready_patterns = agent.ready_patterns,
+  })
+end
+
 M.current = nil
 
 ---@param bufnr? integer
@@ -382,23 +406,26 @@ function M.send(text, opt)
   return M.current:send(text, opt)
 end
 
+--- 把某个 agent 设为当前 agent 并打开
+---@param name string
+---@return boolean
+function M.select(name)
+  local launcher = M.agents[name]
+  if not launcher then
+    vim.notify("Unknown code agent: " .. name, vim.log.levels.ERROR)
+    return false
+  end
+  M.current = launcher
+  launcher:toggle()
+  return true
+end
+
 local function _select_launcher()
-  vim.ui.select(
-    { "Codex", "OpenCode", "Claude" },
-    { prompt = "Select code agent:" },
-    function(choice)
-      if choice == "Codex" then
-        M.current = codex
-      elseif choice == "OpenCode" then
-        M.current = opencode
-      elseif choice == "Claude" then
-        M.current = claude
-      end
-      if M.current ~= nil then
-        M.current:toggle()
-      end
+  vim.ui.select(M.agent_names, { prompt = "Select code agent:" }, function(choice)
+    if choice then
+      M.select(choice)
     end
-  )
+  end)
 end
 
 function M.toggle()
@@ -407,21 +434,6 @@ function M.toggle()
   else
     M.current:toggle()
   end
-end
-
-function M.codex()
-  M.current = codex
-  M.current:toggle()
-end
-
-function M.opencode()
-  M.current = opencode
-  M.current:toggle()
-end
-
-function M.claude()
-  M.current = claude
-  M.current:toggle()
 end
 
 ---@param diagnostics vim.Diagnostic[]

@@ -1,5 +1,4 @@
 local M = {}
-local selection_ns = vim.api.nvim_create_namespace("builtin_fuzzy_select_selection")
 local match_ns = vim.api.nvim_create_namespace("builtin_fuzzy_select_matches")
 local count_ns = vim.api.nvim_create_namespace("builtin_fuzzy_select_count")
 
@@ -173,7 +172,6 @@ local function render(state)
   end
 
   set_lines(state.result_buf, lines)
-  vim.api.nvim_buf_clear_namespace(state.result_buf, selection_ns, 0, -1)
   vim.api.nvim_buf_clear_namespace(state.result_buf, match_ns, 0, -1)
 
   for i, pos_list in ipairs(positions) do
@@ -421,7 +419,6 @@ function M.files(opts)
   run_source(file_source(), {
     title = "Files",
     query = opts.query,
-    empty_message = "没有文件",
     on_choice = function(choice)
       open_file(choice, opts.open)
     end,
@@ -455,7 +452,6 @@ function M.buffers(opts)
   run_lines(buffer_lines(), {
     title = "Buffers",
     query = opts.query,
-    empty_message = "没有 listed buffer",
     on_choice = function(choice)
       local bufnr = tonumber(choice:match("^(%d+)\t"))
 
@@ -486,7 +482,6 @@ function M.oldfiles(opts)
   run_lines(oldfile_lines(), {
     title = "Oldfiles",
     query = opts.query,
-    empty_message = "没有 oldfiles",
     on_choice = function(choice)
       open_file(choice, opts.open)
     end,
@@ -532,7 +527,6 @@ function M.quickfix(opts)
   run_lines(qflist_lines(), {
     title = "Quickfix",
     query = opts.query,
-    empty_message = "quickfix 为空",
     on_choice = function(choice)
       local idx = tonumber(choice:match("^(%d+)\t"))
 

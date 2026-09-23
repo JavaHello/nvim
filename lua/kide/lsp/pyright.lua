@@ -8,9 +8,10 @@ local function get_python_path()
   if vim.env.PY_BIN then
     return vim.env.PY_BIN
   end
-  local cwd = vim.loop.cwd()
-  if vim.fn.executable(vim.fs.joinpath(cwd, ".venv")) then
-    return vim.fs.joinpath(cwd, ".venv", "bin", "python")
+  local cwd = vim.uv.cwd()
+  local venv_python = cwd and vim.fs.joinpath(cwd, ".venv", "bin", "python")
+  if venv_python and vim.fn.executable(venv_python) == 1 then
+    return venv_python
   end
   local python = vim.fn.exepath("python3")
   if python == nil or python == "" then

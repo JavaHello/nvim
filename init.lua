@@ -1,7 +1,6 @@
 -- 不保存 jumps 列表 '0
 vim.opt.shada = "!,'0,<50,s10,h"
 vim.opt_global.jumpoptions = "stack"
-vim.opt_global.encoding = "UTF-8"
 vim.opt.fileencoding = "UTF-8"
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -29,17 +28,16 @@ vim.diagnostic.config({
   },
 })
 
-vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })
-vim.fn.sign_define(
-  "DapBreakpointCondition",
-  { text = "", texthl = "Debug", linehl = "", numhl = "" }
-)
-vim.fn.sign_define("DapLogPoint", { text = "", texthl = "Debug", linehl = "", numhl = "" })
-vim.fn.sign_define("DapStopped", { text = "", texthl = "Debug", linehl = "", numhl = "" })
-vim.fn.sign_define(
-  "DapBreakpointRejected",
-  { text = "", texthl = "Debug", linehl = "", numhl = "" }
-)
+-- DAP 断点等标记的图标
+for name, text in pairs({
+  DapBreakpoint = "",
+  DapBreakpointCondition = "",
+  DapLogPoint = "",
+  DapStopped = "",
+  DapBreakpointRejected = "",
+}) do
+  vim.fn.sign_define(name, { text = text, texthl = "Debug", linehl = "", numhl = "" })
+end
 
 if vim.g.neovide then
   vim.g.neovide_input_macos_option_key_is_meta = "only_left"

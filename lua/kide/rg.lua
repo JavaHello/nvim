@@ -1,6 +1,5 @@
 local M = {}
 
-local selection_ns = vim.api.nvim_create_namespace("kide_rg_live_grep")
 local match_ns = vim.api.nvim_create_namespace("kide_rg_live_grep_matches")
 local count_ns = vim.api.nvim_create_namespace("kide_rg_live_grep_count")
 local preview_ns = vim.api.nvim_create_namespace("kide_rg_live_grep_preview")
@@ -151,7 +150,6 @@ local function apply_selection(state)
   if not state.result_buf or not vim.api.nvim_buf_is_valid(state.result_buf) then
     return
   end
-  vim.api.nvim_buf_clear_namespace(state.result_buf, selection_ns, 0, -1)
   if vim.tbl_isempty(state.items) then
     if state.result_win and vim.api.nvim_win_is_valid(state.result_win) then
       vim.wo[state.result_win].cursorline = false
@@ -808,7 +806,6 @@ local function fzy_selection(state)
   close(state)
   require("kide.fzy").select(lines, {
     title = "Live Grep Results",
-    empty_message = "没有 rg 结果",
     on_choice = function(choice)
       open_item(item_by_line[choice])
     end,

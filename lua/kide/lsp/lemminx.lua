@@ -4,17 +4,14 @@ local lemminx_home = vim.env["LEMMINX_HOME"]
 if lemminx_home then
   local utils = require("kide.tools")
   local me = require("kide.melspconfig")
-  local lemminx_jars = {}
-  for _, bundle in ipairs(vim.split(vim.fn.glob(vim.fs.joinpath(lemminx_home, "*.jar")), "\n")) do
-    table.insert(lemminx_jars, bundle)
-  end
-  vim.fn.join(lemminx_jars, utils.is_win and ";" or ":")
+  local lemminx_jars = vim.split(vim.fn.glob(vim.fs.joinpath(lemminx_home, "*.jar")), "\n")
   M.config = {
     name = "lemminx",
     cmd = {
       utils.java_bin(),
       "-cp",
-      vim.fn.join(lemminx_jars, ":"),
+      -- 类路径分隔符: Windows 是分号, 其余是冒号
+      vim.fn.join(lemminx_jars, utils.is_win and ";" or ":"),
       "org.eclipse.lemminx.XMLServerLauncher",
     },
     settings = {

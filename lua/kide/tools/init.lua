@@ -4,9 +4,6 @@ M.is_upper = function(c)
   return c >= 65 and c <= 90
 end
 
-M.is_lower = function(c)
-  return c >= 97 and c <= 122
-end
 M.char_size = function(c)
   local code = c
   if code < 127 then
@@ -224,23 +221,6 @@ M.base64_url_safe_to_std = function(msg)
     if padding > 0 then
       msg = msg .. string.rep("=", 4 - padding)
     end
-  end
-  return msg
-end
-
-M.base64_url_safe = function(msg)
-  return M.base64_std_to_url_safe(vim.base64.encode(msg))
-end
-
-M.base64_std_to_url_safe = function(msg)
-  if string.match(msg, "+") then
-    msg = string.gsub(msg, "+", "-")
-  end
-  if string.match(msg, "/") then
-    msg = string.gsub(msg, "/", "_")
-  end
-  if string.match(msg, "=") then
-    msg = string.gsub(msg, "=", "")
   end
   return msg
 end

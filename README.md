@@ -80,6 +80,6 @@ git clone https://github.com/JavaHello/nvim.git
 ## Code Agent 功能
 
 - 命令 `:CodeAgent`（快捷键 `<A-;>`）选择并切换 Code Agent
-- 命令 `:Codex` / `:OpenCode` / `:Claude` 直接打开对应的 Code Agent 终端
+- 命令 `:Codex` / `:OpenCode` / `:Claude` / `:Pi` 直接打开对应的 Code Agent 终端
 - 命令 `:CodeEdit` 发送选中代码给当前 Code Agent 修改
 - 命令 `:CodeFix` 发送当前光标位置的诊断信息给当前 Code Agent 修复

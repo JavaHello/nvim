@@ -3,12 +3,44 @@
 local map = vim.keymap.set
 local command = vim.api.nvim_create_user_command
 local Snacks = require("snacks")
+local tools = require("kide.tools")
+
+--- 退出可视模式, 让后续能安全操作 buffer
+local function exit_visual()
+  vim.api.nvim_feedkeys("\027", "xt", false)
+end
+
+--- 可视模式映射用: 退出可视模式后取整个选区
+---@return string[]
+local function visual_selection()
+  exit_visual()
+  return tools.get_visual_selection()
+end
+
+--- 命令回调取可视选区, 无 range 时返回 nil
+---@param opt table
+---@return string[]?
+local function visual_lines(opt)
+  if opt.range > 0 then
+    return tools.get_visual_selection()
+  end
+end
+
+--- 命令回调取文本: 有 range 时用可视选区, 否则用命令行参数
+---@param opt table
+---@return string
+local function text_of(opt)
+  if opt.range > 0 then
+    return table.concat(tools.get_visual_selection(), "\n")
+  end
+  return opt.args or ""
+end
 
 local function codex_edit_selection(opt)
   local code
   local line_info = nil
   if opt.range > 0 then
-    code = require("kide.tools").get_visual_selection()
+    code = tools.get_visual_selection()
     line_info = opt.line1 == opt.line2 and tostring(opt.line1) or (opt.line1 .. "-" .. opt.line2)
   else
     local line = vim.api.nvim_win_get_cursor(0)[1]
@@ -51,8 +83,7 @@ map("i", "<A-i>", function()
   require("kide.term").toggle()
 end, { desc = "toggle term" })
 map("v", "<A-i>", function()
-  vim.api.nvim_feedkeys("\027", "xt", false)
-  local text = require("kide.tools").get_visual_selection()
+  local text = visual_selection()
   require("kide.term").toggle()
   vim.defer_fn(function()
     require("kide.term").send_line(text[1])
@@ -237,8 +268,8 @@ end, {
 })
 
 command("LspWorkspaceSymbols", function(opts)
-  if opts.range > 0 then
-    local text = require("kide.tools").get_visual_selection()
+  local text = visual_lines(opts)
+  if text then
     vim.lsp.buf.workspace_symbol(text[1])
   else
     vim.lsp.buf.workspace_symbol(opts.args)
@@ -351,17 +382,13 @@ map("n", "<leader>fd", function()
 end, { desc = "Find diagnostics" })
 
 map("v", "<leader>ff", function()
-  vim.api.nvim_feedkeys("\027", "xt", false)
-  local text = require("kide.tools").get_visual_selection()
-  local param = text[1]
-  require("kide.fzy").files({ query = param })
+  local text = visual_selection()
+  require("kide.fzy").files({ query = text[1] })
 end, { desc = "find files", silent = true, noremap = true })
 
 map("v", "<leader>fw", function()
-  vim.api.nvim_feedkeys("\027", "xt", false)
-  local text = require("kide.tools").get_visual_selection()
-  local param = text[1]
-  require("kide.rg").live_grep({ query = param })
+  local text = visual_selection()
+  require("kide.rg").live_grep({ query = text[1] })
 end, { desc = "live grep", silent = true, noremap = true })
 map("n", "<leader>fw", function()
   require("kide.rg").live_grep()
@@ -369,28 +396,14 @@ end, { desc = "live grep", silent = true, noremap = true })
 
 if vim.base64 then
   command("Base64Encode", function(opt)
-    local text
-    if opt.range > 0 then
-      local lines = require("kide.tools").get_visual_selection()
-      text = table.concat(lines, "\n")
-    else
-      text = opt.args
-    end
-    vim.notify(vim.base64.encode(text), vim.log.levels.INFO)
+    vim.notify(vim.base64.encode(text_of(opt)), vim.log.levels.INFO)
   end, {
     desc = "base64 encode",
     nargs = "?",
     range = true,
   })
   command("Base64Decode", function(opt)
-    local text
-    if opt.range > 0 then
-      local lines = require("kide.tools").get_visual_selection()
-      text = table.concat(lines, "\n")
-    else
-      text = opt.args
-    end
-    text = require("kide.tools").base64_url_safe_to_std(text)
+    local text = tools.base64_url_safe_to_std(text_of(opt))
     vim.notify(vim.base64.decode(text), vim.log.levels.INFO)
   end, {
     desc = "base64 decode",
@@ -399,65 +412,37 @@ if vim.base64 then
   })
 end
 
-local function creat_trans_command(name, from, to)
-  command(name, function(opt)
-    local text
-    if opt.range > 0 then
-      local lines = require("kide.tools").get_visual_selection()
-      text = table.concat(lines, "\n")
-    else
-      text = opt.args
-    end
-    require("kide.gpt.translate").translate_float({ text = text, from = from, to = to })
-  end, {
-    desc = "translate",
-    nargs = "?",
-    range = true,
-  })
-end
+--- 注册一对翻译命令: `:Trans<name>` 弹浮窗, `:Trans<name>VT` 写虚拟文本
+---@param name string 命令名中缀
+---@param from string
+---@param to string
+local function creat_trans_commands(name, from, to)
+  command("Trans" .. name, function(opt)
+    require("kide.gpt.translate").translate_float({ text = text_of(opt), from = from, to = to })
+  end, { desc = "translate", nargs = "?", range = true })
 
-local function creat_trans_vt_command(name, from, to)
-  command(name, function(opt)
-    local text
-    local anchor_lnum
+  command("Trans" .. name .. "VT", function(opt)
+    local anchor_lnum = vim.api.nvim_win_get_cursor(0)[1]
     if opt.range > 0 then
-      local lines = require("kide.tools").get_visual_selection()
-      text = table.concat(lines, "\n")
       anchor_lnum = opt.line2
-    else
-      text = opt.args
-      anchor_lnum = vim.api.nvim_win_get_cursor(0)[1]
     end
     require("kide.gpt.translate").translate_virtual_text({
-      text = text,
+      text = text_of(opt),
       from = from,
       to = to,
       anchor_lnum = anchor_lnum,
     })
-  end, {
-    desc = "translate virtual text",
-    nargs = "?",
-    range = true,
-  })
+  end, { desc = "translate virtual text", nargs = "?", range = true })
 end
 
-creat_trans_command("TransAutoZh", "auto", "中文")
-creat_trans_vt_command("TransAutoZhVT", "auto", "中文")
-map("v", "<leader>tc", function()
-  vim.api.nvim_feedkeys("\027", "xt", false)
-  local text = require("kide.tools").get_visual_selection()
-  require("kide.gpt.translate").translate_float({
-    text = table.concat(text, "\n"),
-    from = "auto",
-    to = "中文",
-  })
-end, {})
-creat_trans_command("TransEnZh", "英语", "中文")
-creat_trans_vt_command("TransEnZhVT", "英语", "中文")
-creat_trans_command("TransZhEn", "中文", "英语")
-creat_trans_vt_command("TransZhEnVT", "中文", "英语")
-creat_trans_command("TransIdZh", "印尼语", "中文")
-creat_trans_vt_command("TransIdZhVT", "印尼语", "中文")
+for _, trans in ipairs({
+  { "AutoZh", "auto", "中文" },
+  { "EnZh", "英语", "中文" },
+  { "ZhEn", "中文", "英语" },
+  { "IdZh", "印尼语", "中文" },
+}) do
+  creat_trans_commands(trans[1], trans[2], trans[3])
+end
 command("TransClearVT", function(opt)
   local req = {}
   if opt.range > 0 then
@@ -472,10 +457,7 @@ end, {
 
 command("GptChat", function(opt)
   local q
-  local code
-  if opt.range > 0 then
-    code = require("kide.tools").get_visual_selection()
-  end
+  local code = visual_lines(opt)
   if opt.args and opt.args ~= "" then
     q = opt.args
   end
@@ -500,10 +482,7 @@ end, {
 
 command("Gpt", function(opt)
   local args = opt.args
-  local code
-  if opt.range > 0 then
-    code = require("kide.tools").get_visual_selection()
-  end
+  local code = visual_lines(opt)
   if args and args ~= "" then
     if args == "linux" then
       require("kide.gpt.chat").toggle_gpt({
@@ -541,10 +520,7 @@ end, {
 
 command("GptReasoner", function(opt)
   local q
-  local code
-  if opt.range > 0 then
-    code = require("kide.tools").get_visual_selection()
-  end
+  local code = visual_lines(opt)
   if opt.args and opt.args ~= "" then
     q = opt.args
   end
@@ -653,27 +629,12 @@ end, {
   range = false,
 })
 
-command("Codex", function()
-  require("kide.code_agent").codex()
-end, {
-  desc = "Codex cmd",
-  nargs = 0,
-  range = false,
-})
-command("OpenCode", function()
-  require("kide.code_agent").opencode()
-end, {
-  desc = "OpenCode cmd",
-  nargs = 0,
-  range = false,
-})
-command("Claude", function()
-  require("kide.code_agent").claude()
-end, {
-  desc = "Claude cmd",
-  nargs = 0,
-  range = false,
-})
+-- 每个 code agent 一个同名命令: :Codex / :OpenCode / :Claude / :Pi
+for _, name in ipairs(require("kide.code_agent").agent_names) do
+  command(name, function()
+    require("kide.code_agent").select(name)
+  end, { desc = name .. " cmd", nargs = 0, range = false })
+end
 
 command("CodeEdit", codex_edit_selection, {
   desc = "Send selected code to Code for editing",
@@ -682,10 +643,7 @@ command("CodeEdit", codex_edit_selection, {
 })
 
 command("CodeFix", function(opt)
-  local code
-  if opt.range > 0 then
-    code = require("kide.tools").get_visual_selection()
-  end
+  local code = visual_lines(opt)
   require("kide.code_agent").fix_diagnostics({
     code = code,
     extra_prompt = opt.args,
@@ -701,7 +659,7 @@ map({ "i", "n", "t" }, "<A-;>", function()
 end, { desc = "Code Agent" })
 
 map("v", "<leader>ce", function()
-  vim.api.nvim_feedkeys("\027", "xt", false)
+  exit_visual()
   codex_edit_selection({
     range = 1,
     args = "",
@@ -736,7 +694,7 @@ vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
   return "<S-Tab>"
 end, { expr = true })
 
-require("kide.tools").setup()
+tools.setup()
 require("kide.tools.infer").setup()
 require("kide.tools.plantuml").setup()
 require("kide.tools.mermaid").setup()

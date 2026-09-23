@@ -40,7 +40,8 @@ end
 
 local function rustowl_on_attach(hover, _, bufnr, idle_time_ms)
   local timer = nil
-  local augroup = vim.api.nvim_create_augroup("RustOwlCmd", { clear = true })
+  -- 按 buffer 隔离, 否则开第二个 Rust buffer 会清掉第一个的 autocmd
+  local augroup = vim.api.nvim_create_augroup("RustOwlCmd" .. bufnr, { clear = true })
 
   local function clear_timer()
     if timer then

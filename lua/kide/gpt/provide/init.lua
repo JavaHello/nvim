@@ -73,8 +73,4 @@ function M.new_client(type)
   return M.gpt_provide.new(type)
 end
 
-M.GptType = {
-  chat = "chat",
-  reasoner = "reasoner",
-}
 return M

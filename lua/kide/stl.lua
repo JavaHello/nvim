@@ -178,18 +178,6 @@ function M.format_uri(uri)
     return fname
   end
 end
-function M.dap_status()
-  local ok, dap = pcall(require, "dap")
-  if not ok then
-    return ""
-  end
-  local status = dap.status()
-  if status ~= "" then
-    return status .. " | "
-  end
-  return ""
-end
-
 function M.tabline()
   local parts = {}
   local devicons = require("nvim-web-devicons")

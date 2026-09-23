@@ -22,8 +22,6 @@ opt.fillchars = { eob = " " }
 
 vim.opt.title = true
 vim.opt.exrc = true
-vim.opt.secure = false
-vim.opt.ttyfast = true
 vim.opt.scrollback = 100000
 
 -- 行为
@@ -65,20 +63,14 @@ vim.opt.softtabstop = 2
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
-vim.opt.showmode = true
-
 -- 菜单最多显示20行
 vim.o.pumheight = 20
 vim.o.pummaxwidth = 100
 
 vim.opt.updatetime = 300
-vim.opt.timeout = true
 vim.opt.timeoutlen = 450
 
 vim.opt.confirm = true
-
--- 当文件被外部程序修改时，自动加载
-vim.opt.autoread = true
 
 -- split window 从下边和右边出现
 vim.opt.splitbelow = false
@@ -91,7 +83,6 @@ vim.opt.splitright = true
 -- vim.opt.foldnestmax = 10
 -- 默认不要折叠
 vim.opt.foldenable = false
-vim.opt.foldlevel = 1
 
 -- toggle invisible characters
 vim.opt.list = true
@@ -106,8 +97,6 @@ vim.opt.list = true
 -- jk移动时光标下上方保留8行
 vim.opt.scrolloff = 3
 vim.opt.sidescrolloff = 3
-
-vim.opt.linespace = 0
 
 -- quickfix 美化
 function _G.qftf(info)
@@ -176,11 +165,7 @@ vim.opt.splitkeep = "screen"
 
 -- lsp 时常出现 swapfile 冲突提示, 关闭 swapfile
 vim.opt.swapfile = false
-vim.opt.backup = false
 
 -- see noice
 -- vim.opt.cmdheight=0
--- 1 只有多个 tab 时显示
--- 2 一直显示（99% 情况下不需要)
-vim.opt.showtabline = 1
 vim.opt.tabline = "%!v:lua.require('kide.stl').tabline()"

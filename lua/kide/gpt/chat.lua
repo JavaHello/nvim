@@ -56,8 +56,6 @@ M.chat_config = {
     .. "- All non-code text responses must be written in the Chinese language indicated.",
 }
 
-local function disable_start() end
-
 local function enable_done()
   vim.cmd("normal! G$")
 end
@@ -104,7 +102,6 @@ function Chat:request()
   end
   -- 跳转到最后一行
   vim.cmd("normal! G$")
-  disable_start()
   vim.api.nvim_put({ "", self.system_title, "" }, "l", true, true)
 
   self.client:request(messages, self.callback(self))
@@ -127,11 +124,6 @@ local gpt_chat_callback = function(state)
     end
     if state.chatclosed or state.chatrunning == false then
       state.client:close()
-      enable_done()
-      return
-    end
-    if opt.exit == 1 then
-      vim.notify("AI respond Error: " .. opt.data, vim.log.levels.WARN)
       enable_done()
       return
     end
@@ -191,11 +183,6 @@ local gpt_reasoner_callback = function(state)
     local done = opt.done
     if state.chatclosed or state.chatrunning == false then
       state.client:close()
-      enable_done()
-      return
-    end
-    if opt.exit == 1 then
-      vim.notify("AI respond Error: " .. opt.data, vim.log.levels.WARN)
       enable_done()
       return
     end
