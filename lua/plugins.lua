@@ -51,7 +51,6 @@ return {
   {
     "JavaHello/spring-boot.nvim",
     enabled = vim.g.enable_spring_boot == true,
-    branch = "0.2",
     ft = { "java", "yaml", "jproperties" },
     dependencies = {
       "mfussenegger/nvim-jdtls",
