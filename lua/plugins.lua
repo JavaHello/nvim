@@ -51,11 +51,14 @@ return {
   {
     "JavaHello/spring-boot.nvim",
     enabled = vim.g.enable_spring_boot == true,
-    lazy = true,
+    branch = "0.2",
+    ft = { "java", "yaml", "jproperties" },
     dependencies = {
       "mfussenegger/nvim-jdtls",
     },
-    config = false,
+    config = function()
+      require("kide.lsp.spring-boot").setup()
+    end,
   },
   {
     "JavaHello/java-deps.nvim",

@@ -69,6 +69,15 @@ git clone https://github.com/JavaHello/nvim.git
 - [x] 查找`symbols`,`bean`定义，`bean`引用，`bean`实现等。
 - [x] `application.properties`, `application.yml` 文件提示
 
+使用 `spring-boot.nvim` 的 `0.2` 分支，需要 `Neovim 0.12+`：插件在 `runtimepath` 上提供
+`lsp/spring-boot.lua`，客户端由 `vim.lsp.enable("spring-boot")` 接管，配置见
+[lua/kide/lsp/spring-boot.lua](./lua/kide/lsp/spring-boot.lua)。
+
+- `JDTLS_SPRING_TOOLS_PATH` 指定语言服务器目录（默认从 mason / vscode 扩展目录查找）
+- `NVIM_SPRING_BOOT=N` 关闭该功能
+- 只在真正的 Spring Boot 工程里启动（按 `pom.xml` / `build.gradle` 判断）
+- 排查问题用 `:checkhealth spring_boot`
+
 ## GPT 功能
 
 依赖 `DeepSeek` API

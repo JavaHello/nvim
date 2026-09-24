@@ -10,22 +10,14 @@ if jc.config then
     config = jc.config
     jc.init = true
     if vim.g.enable_spring_boot == true then
-      local boot_jar_path = vim.env["JDTLS_SPRING_TOOLS_PATH"]
-      if boot_jar_path then
-        vim.list_extend(
-          config["init_options"].bundles,
-          require("spring_boot").get_jars(vim.fs.joinpath(boot_jar_path, "jars"))
-        )
-      else
-        vim.list_extend(config["init_options"].bundles, require("spring_boot").java_extensions())
-      end
+      local sb = require("kide.lsp.spring-boot")
+      vim.list_extend(
+        config["init_options"].bundles,
+        sb.jars() or require("spring_boot").java_extensions()
+      )
     end
   end
   jc.start(config)
-
-  if vim.g.enable_spring_boot == true then
-    require("kide.lsp.spring-boot").start()
-  end
 end
 
 -- see mfussenegger/dotfiles
