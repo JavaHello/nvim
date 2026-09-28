@@ -354,21 +354,21 @@ local function run_lines(lines, opts)
   state.group = vim.api.nvim_create_augroup("kide-fzy-" .. state.input_buf, { clear = true })
   vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
     group = state.group,
-    buffer = state.input_buf,
+    buf = state.input_buf,
     callback = function()
       refresh_query(state)
     end,
   })
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = state.group,
-    buffer = state.input_buf,
+    buf = state.input_buf,
     callback = function()
       close_window(state)
     end,
   })
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = state.group,
-    buffer = state.result_buf,
+    buf = state.result_buf,
     callback = function()
       close_window(state)
     end,

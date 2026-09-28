@@ -252,14 +252,14 @@ function Launcher:start()
   vim.b[state.buf].q_close = false
   pcall(require("kide").term_stl, state.buf, self:_title())
   vim.api.nvim_create_autocmd("WinLeave", {
-    buffer = state.buf,
+    buf = state.buf,
     callback = function()
       self:_close_window(false)
     end,
   })
   vim.api.nvim_create_autocmd(
     "TermOpen",
-    { buffer = state.buf, command = "startinsert!", once = true }
+    { buf = state.buf, command = "startinsert!", once = true }
   )
   self:_open_window()
   local ok, job = pcall(vim.fn.jobstart, command, {

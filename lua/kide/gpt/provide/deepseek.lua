@@ -190,8 +190,24 @@ end
 ---@param messages table<gpt.Message>
 function DeepSeek:request(messages, callback)
   local payload = self:payload_message(messages)
+  local job
+  local tmp = ""
+
   local function callback_data(resp_json)
-    for _, message in ipairs(resp_json.choices) do
+    -- 401/429/模型名写错等返回的是 {"error": {...}}, 没有 choices.
+    -- 只认带 choices 的对象会把这些响应静默吞掉: 不显示内容也不报错,
+    -- 所以这里显式提示, 并补 done 结束等待
+    if resp_json.error then
+      local err = resp_json.error
+      local msg = type(err) == "table" and (err.message or vim.inspect(err)) or tostring(err)
+      vim.notify("DeepSeek error: " .. msg, vim.log.levels.ERROR, {
+        id = "gpt:" .. job,
+        title = "DeepSeek",
+      })
+      callback({ done = true, data = "" })
+      return
+    end
+    for _, message in ipairs(resp_json.choices or {}) do
       callback({
         role = message.delta.role,
         reasoning = message.delta.reasoning_content,
@@ -200,12 +216,12 @@ function DeepSeek:request(messages, callback)
       })
     end
   end
-  local job
-  local tmp = ""
 
-  local function safe_json_decode(text)
+  -- 返回解码后的对象; 流式分片还没拼完整时 json_decode 会失败, 返回 nil 继续累积.
+  -- 只接受 table, 免得半截数据里的裸数字/字符串被当成完整响应
+  local function decode_complete(text)
     local ok, obj = pcall(vim.fn.json_decode, text)
-    if ok and type(obj) == "table" and obj.choices then
+    if ok and type(obj) == "table" then
       return obj
     end
     return nil
@@ -213,6 +229,16 @@ function DeepSeek:request(messages, callback)
   ---@param event http.SseEvent
   local callback_handle = function(_, event)
     if not event.data then
+      -- curl 异常退出(网络中断/HTTP 错误/被 kill)时不会再有 [DONE], 不补 done
+      -- 的话调用方的 chatrunning 一直为 true, 下一次 <Enter> 会被当成取消
+      if event.exit and event.exit ~= 0 and not event.stopped then
+        vim.notify(
+          ("请求中断 (curl exit %d)"):format(event.exit),
+          vim.log.levels.ERROR,
+          { id = "gpt:" .. job, title = "DeepSeek" }
+        )
+        callback({ done = true, data = "" })
+      end
       return
     end
     for _, value in ipairs(event.data) do
@@ -228,8 +254,8 @@ function DeepSeek:request(messages, callback)
             })
           else
             tmp = tmp .. text
-            if safe_json_decode(tmp) then
-              local resp_json = vim.fn.json_decode(tmp)
+            local resp_json = decode_complete(tmp)
+            if resp_json then
               callback_data(resp_json)
               tmp = ""
             end
@@ -243,8 +269,8 @@ function DeepSeek:request(messages, callback)
           )
         else
           tmp = tmp .. value
-          if safe_json_decode(tmp) then
-            local resp_json = vim.fn.json_decode(tmp)
+          local resp_json = decode_complete(tmp)
+          if resp_json then
             callback_data(resp_json)
             tmp = ""
           end

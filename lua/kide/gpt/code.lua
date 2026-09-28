@@ -39,7 +39,7 @@ M.code_completions = function(opts)
     message = opts.message
   end
   vim.api.nvim_create_autocmd("BufWipeout", {
-    buffer = codebuf,
+    buf = codebuf,
     callback = function()
       closed = true
       if client then

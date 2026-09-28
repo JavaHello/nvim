@@ -268,27 +268,27 @@ function Chat:create_gpt_win()
   end, { desc = "Gpt Send" })
 
   vim.api.nvim_create_autocmd("BufWipeout", {
-    buffer = self.chatbuf,
+    buf = self.chatbuf,
     callback = function()
       self:close_gpt_win()
     end,
   })
 
   vim.api.nvim_create_autocmd("WinClosed", {
-    buffer = self.chatbuf,
+    buf = self.chatbuf,
     callback = function()
       self:close_gpt_win()
     end,
   })
   vim.api.nvim_create_autocmd("WinLeave", {
-    buffer = self.chatbuf,
+    buf = self.chatbuf,
     callback = function()
       self.winleave = true
     end,
   })
 
   vim.api.nvim_create_autocmd("CursorMoved", {
-    buffer = self.chatbuf,
+    buf = self.chatbuf,
     callback = function()
       self.cursormoved = true
     end,

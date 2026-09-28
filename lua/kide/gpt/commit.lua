@@ -36,7 +36,7 @@ M.commit_diff_msg = function()
   vim.cmd("normal! gg0")
 
   vim.api.nvim_create_autocmd("BufWipeout", {
-    buffer = codebuf,
+    buf = codebuf,
     callback = function()
       closed = true
       if client then

@@ -884,28 +884,28 @@ function M.live_grep(opts)
   state.group = vim.api.nvim_create_augroup("kide-rg-live-grep-" .. state.id, { clear = true })
   vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
     group = state.group,
-    buffer = state.input_buf,
+    buf = state.input_buf,
     callback = function()
       schedule_search(state)
     end,
   })
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = state.group,
-    buffer = state.input_buf,
+    buf = state.input_buf,
     callback = function()
       close(state)
     end,
   })
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = state.group,
-    buffer = state.result_buf,
+    buf = state.result_buf,
     callback = function()
       close(state)
     end,
   })
   vim.api.nvim_create_autocmd("BufWipeout", {
     group = state.group,
-    buffer = state.preview_buf,
+    buf = state.preview_buf,
     callback = function()
       close(state)
     end,

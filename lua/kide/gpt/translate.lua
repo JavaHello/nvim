@@ -96,7 +96,7 @@ M.translate_float = function(request)
   end, { noremap = true, silent = true, buffer = buf })
 
   vim.api.nvim_create_autocmd("BufWipeout", {
-    buffer = buf,
+    buf = buf,
     callback = function()
       closed = true
       pcall(vim.api.nvim_win_close, win, true)
@@ -106,7 +106,7 @@ M.translate_float = function(request)
     end,
   })
   vim.api.nvim_create_autocmd("WinClosed", {
-    buffer = buf,
+    buf = buf,
     callback = function()
       closed = true
       if client then
@@ -115,7 +115,7 @@ M.translate_float = function(request)
     end,
   })
   vim.api.nvim_create_autocmd("WinLeave", {
-    buffer = buf,
+    buf = buf,
     callback = function()
       closed = true
       pcall(vim.api.nvim_win_close, win, true)

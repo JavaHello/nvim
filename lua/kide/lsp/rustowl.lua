@@ -68,7 +68,7 @@ local function rustowl_on_attach(hover, _, bufnr, idle_time_ms)
 
   vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
     group = augroup,
-    buffer = bufnr,
+    buf = bufnr,
     callback = function()
       vim.api.nvim_buf_clear_namespace(bufnr, hlns, 0, -1)
       if hover == true then
@@ -79,7 +79,7 @@ local function rustowl_on_attach(hover, _, bufnr, idle_time_ms)
 
   vim.api.nvim_create_autocmd("BufUnload", {
     group = augroup,
-    buffer = bufnr,
+    buf = bufnr,
     callback = clear_timer,
   })
 

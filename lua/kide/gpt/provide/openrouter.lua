@@ -165,6 +165,16 @@ function Openrouter:request(messages, callback)
   ---@param event http.SseEvent
   local callback_handle = function(_, event)
     if not event.data then
+      -- curl 异常退出(网络中断/HTTP 错误/被 kill)时不会再有 [DONE], 不补 done
+      -- 的话调用方的 chatrunning 一直为 true, 下一次 <Enter> 会被当成取消
+      if event.exit and event.exit ~= 0 and not event.stopped then
+        vim.notify(
+          ("请求中断 (curl exit %d)"):format(event.exit),
+          vim.log.levels.ERROR,
+          { id = "gpt:" .. job, title = "Openrouter" }
+        )
+        callback({ done = true, data = "" })
+      end
       return
     end
     for _, value in ipairs(event.data) do

@@ -1,6 +1,7 @@
 ---@class http.SseEvent
 ---@field data table<string>?
 ---@field exit number?
+---@field stopped boolean? 是否是主动 stop 导致的退出
 
 ---@class http.SseClient
 ---@field url string
@@ -80,6 +81,7 @@ local function handle_sse_events(client)
       client.callback(nil, {
         data = nil,
         exit = code,
+        stopped = client.stopped or false,
       })
     end,
   })
@@ -93,6 +95,8 @@ end
 
 function SseClient:stop()
   if self.job then
+    -- 主动停止时 on_exit 同样会带非 0 退出码, 标记一下免得被当成请求中断
+    self.stopped = true
     pcall(vim.fn.jobstop, self.job)
   end
 end

@@ -62,13 +62,13 @@ function M.gitui()
   vim.b[state.buf].q_close = false
 
   vim.api.nvim_create_autocmd("WinLeave", {
-    buffer = state.buf,
+    buf = state.buf,
     callback = function()
       close_window(false)
     end,
   })
   vim.api.nvim_create_autocmd({ "TermOpen", "BufEnter" }, {
-    buffer = state.buf,
+    buf = state.buf,
     command = "startinsert!",
   })
 

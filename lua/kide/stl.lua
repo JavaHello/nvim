@@ -106,6 +106,40 @@ function M.has_pending()
   return false
 end
 
+-- statusline 里有 %l:%c, 光标一动整个状态栏就会重算; 在里面直接调
+-- vim.diagnostic.count 等于每移动一次光标都遍历该 buffer 的全部诊断.
+-- 所以按 buffer 缓存, 只在 DiagnosticChanged 时刷新.
+local diag_cache = {}
+
+local function refresh_diag(buf)
+  local counts = vim.diagnostic.count(buf, { severity = { min = vim.diagnostic.severity.WARN } })
+  diag_cache[buf] = {
+    errors = counts[vim.diagnostic.severity.ERROR] or 0,
+    warnings = counts[vim.diagnostic.severity.WARN] or 0,
+  }
+end
+
+local function diag_counts(buf)
+  if not diag_cache[buf] then
+    refresh_diag(buf)
+  end
+  return diag_cache[buf]
+end
+
+local diag_augroup = vim.api.nvim_create_augroup("kide_stl_diag", { clear = true })
+vim.api.nvim_create_autocmd("DiagnosticChanged", {
+  group = diag_augroup,
+  callback = function(args)
+    refresh_diag(args.buf)
+  end,
+})
+vim.api.nvim_create_autocmd("BufWipeout", {
+  group = diag_augroup,
+  callback = function(args)
+    diag_cache[args.buf] = nil
+  end,
+})
+
 -- 参考 https://github.com/mfussenegger/dotfiles
 function M.statusline()
   local parts = {
@@ -139,9 +173,9 @@ function M.statusline()
     local fstatus = M.file()
     vim.list_extend(parts, fstatus)
 
-    local counts = vim.diagnostic.count(0, { severity = { min = vim.diagnostic.severity.WARN } })
-    local num_errors = counts[vim.diagnostic.severity.ERROR] or 0
-    local num_warnings = counts[vim.diagnostic.severity.WARN] or 0
+    local counts = diag_counts(vim.api.nvim_get_current_buf())
+    local num_errors = counts.errors
+    local num_warnings = counts.warnings
     table.insert(parts, " %#DiagnosticWarn#%r%m")
     if num_errors > 0 then
       vim.list_extend(parts, { "%#DiagnosticError#", " 󰅙 ", tostring(num_errors), " " })
