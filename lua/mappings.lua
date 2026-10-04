@@ -93,7 +93,9 @@ map("v", "<A-i>", function()
   end, 500)
 end, { desc = "send selection to term" })
 
-map("n", "<leader>gb", require("gitsigns").blame_line, { desc = "gitsigns blame line" })
+map("n", "<leader>gb", function()
+  require("gitsigns").blame_line()
+end, { desc = "gitsigns blame line" })
 map("n", "<ESC>", "<CMD>noh<CR>", { desc = "Clear Highlight" })
 
 map("n", "<up>", "<CMD>res +5<CR>", { desc = "Resize +5" })

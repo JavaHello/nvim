@@ -15,6 +15,9 @@ local no_indent_ft = {
 return {
   {
     "romus204/tree-sitter-manager.nvim",
+    -- 延迟到读文件前, 保证 filetype/treesitter 注册先于 ftdetect 生效
+    event = { "BufReadPre", "BufNewFile" },
+    cmd = { "TSManager", "TSInstall", "TSUninstall", "TSUpdate" },
     config = function()
       require("tree-sitter-manager").setup({})
     end,
@@ -26,7 +29,8 @@ return {
 
   {
     "lewis6991/gitsigns.nvim",
-    lazy = false,
+    event = { "BufReadPre", "BufNewFile" },
+    cmd = "Gitsigns",
     opts = {
       signs = {
         delete = { text = "󰍵" },
