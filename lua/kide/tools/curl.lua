@@ -1,4 +1,5 @@
-local outfmt = "\n┌─────────────────────────\n"
+local outfmt = "\n"
+  .. "┌─────────────────────────\n"
   .. "│ dnslookup     : %{time_namelookup}\n"
   .. "│ connect       : %{time_connect}\n"
   .. "│ appconnect    : %{time_appconnect}\n"
@@ -14,17 +15,18 @@ local exec = function(cmd)
   require("kide.term").toggle(cmd)
 end
 
+---右侧开一列结果窗口 (焦点不变), 关窗即销毁
 local function result_buffer()
-  local current_win = vim.api.nvim_get_current_win()
-  vim.cmd("rightbelow vertical new")
-
-  local buf = vim.api.nvim_get_current_buf()
+  local buf = vim.api.nvim_create_buf(false, true)
   vim.bo[buf].buftype = "nofile"
   vim.bo[buf].bufhidden = "wipe"
   vim.bo[buf].swapfile = false
   vim.bo[buf].filetype = "httpResult"
   vim.api.nvim_buf_set_name(buf, ("hurl://response/%d"):format(buf))
-  vim.api.nvim_set_current_win(current_win)
+
+  -- split 显式给出新窗口方位, 不受 'splitright'/'splitbelow' 影响, 焦点也不变
+  local current_win = vim.api.nvim_get_current_win()
+  vim.api.nvim_open_win(buf, false, { split = "right", win = current_win })
 
   return buf
 end
@@ -100,6 +102,27 @@ local function run_http_file()
   end)
 end
 
+---Hurl 仅在 http/hurl 文件中提供, 避免污染全局命令
+local function init_hurl()
+  local group = vim.api.nvim_create_augroup("kide_hurl", { clear = true })
+  vim.api.nvim_create_autocmd("FileType", {
+    group = group,
+    pattern = { "http", "hurl" },
+    desc = "Run current http/hurl file with hurl",
+    callback = function(o)
+      vim.api.nvim_buf_create_user_command(o.buf, "Hurl", run_http_file, {
+        desc = "Run current .http/.hurl file with hurl and show response on the right",
+      })
+      -- 缓冲区局部缩写, 离开该 buffer 后不再生效
+      vim.api.nvim_buf_call(o.buf, function()
+        vim.cmd(
+          [[cnoreabbrev <buffer> <expr> hurl getcmdtype() == ':' && getcmdline() ==# 'hurl' ? 'Hurl' : 'hurl']]
+        )
+      end)
+    end,
+  })
+end
+
 M.setup = function()
   vim.api.nvim_create_user_command("Curl", function(opt)
     if opt.args == "" then
@@ -128,13 +151,7 @@ M.setup = function()
     end,
   })
 
-  vim.api.nvim_create_user_command("Hurl", run_http_file, {
-    desc = "Run current .http file with hurl and show response on the right",
-  })
-
-  vim.cmd(
-    [[cnoreabbrev <expr> hurl getcmdtype() == ':' && getcmdline() ==# 'hurl' ? 'Hurl' : 'hurl']]
-  )
+  init_hurl()
 end
 
 return M
