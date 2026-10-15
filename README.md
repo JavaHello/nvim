@@ -57,9 +57,7 @@ git clone https://github.com/JavaHello/nvim.git
 
 ## Java 配置
 
-- `maven pom.xml` 自动补全(目前需要[手动打包](https://www.bilibili.com/video/BV12N4y1f7Bh/))
-
-- [NVIM 打造 Java IDE](https://javahello.github.io/dev/tools/NVIM-LSP-Java-IDE-vscode.html) 更新了配置，全部使用 vscode 扩展，简化安装步骤。
+- `maven pom.xml` 自动补全[lemminx-maven.nvim](https://github.com/JavaHello/lemminx-maven.nvim)
 
 - [手动编译 Java 开发环境](https://github.com/JavaHello/nvim/wiki) 这里提供了一个编译脚本
 
