@@ -224,6 +224,12 @@ return {
     },
     init = function()
       vim.g.db_ui_use_nerd_fonts = 1
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "sql", "mysql", "plsql" },
+        callback = function()
+          vim.bo.omnifunc = "vim_dadbod_completion#omni"
+        end,
+      })
     end,
   },
 
@@ -309,9 +315,9 @@ return {
               border = "rounded",
               title = "{title} {live} {flags}",
               title_pos = "center",
-              { win = "input", height = 1, border = "bottom" },
-              { win = "list", border = "none" },
-              { win = "preview", height = 0.6, border = "top" },
+              { win = "input",   height = 1,     border = "bottom" },
+              { win = "list",    border = "none" },
+              { win = "preview", height = 0.6,   border = "top" },
             },
           },
         },
