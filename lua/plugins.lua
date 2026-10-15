@@ -64,6 +64,13 @@ return {
     end,
   },
   {
+    "JavaHello/lemminx-maven.nvim",
+    ft = { "xml", "xsd", "xsl", "xslt", "svg" },
+    config = function()
+      require("kide.lsp.lemminx").setup()
+    end,
+  },
+  {
     "JavaHello/java-deps.nvim",
     lazy = true,
     config = function()
