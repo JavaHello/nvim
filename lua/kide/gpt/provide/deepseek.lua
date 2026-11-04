@@ -12,7 +12,7 @@ local code_json = {
       role = "assistant",
     },
   },
-  model = "deepseek-v4-flash",
+  model = "deepseek-flash",
   thinking = {
     type = "disabled",
   },
@@ -29,7 +29,7 @@ local chat_json = {
       role = "system",
     },
   },
-  model = "deepseek-v4-flash",
+  model = "deepseek-flash",
   thinking = {
     type = "disabled",
   },
@@ -75,7 +75,7 @@ local commit_json = {
       role = "user",
     },
   },
-  model = "deepseek-v4-flash",
+  model = "deepseek-flash",
   thinking = {
     type = "disabled",
   },
@@ -107,7 +107,7 @@ local translate_json = {
       role = "user",
     },
   },
-  model = "deepseek-v4-flash",
+  model = "deepseek-flash",
   thinking = {
     type = "disabled",
   },
@@ -136,7 +136,7 @@ local translate_json = {
 ---@field sse http.SseClient?
 local DeepSeek = {
   models = {
-    "deepseek-v4-flash",
+    "deepseek-flash",
   },
 }
 DeepSeek.__index = DeepSeek
